@@ -1,0 +1,2 @@
+#GAMENAME=experiment
+GAMENAME=collision

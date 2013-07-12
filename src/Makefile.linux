@@ -1,0 +1,41 @@
+include ../config/config.linux.Mk
+include ../config/config.Mk
+
+LIBDIR=../lib
+BINDIR=../bin
+
+MUTINYCPP=$(shell find mutiny -name '*.cpp')
+MUTINYOBJ=$(MUTINYCPP:.cpp=.o)
+MUTINYLIB=../lib/libmutiny.so
+
+GAMECPP=$(shell find ${GAMENAME} -name '*.cpp')
+GAMEOBJ=$(GAMECPP:.cpp=.o)
+GAMEBIN=../bin/${GAMENAME}
+
+.SUFFIXES: .o .cpp
+
+all: ${GAMEBIN}
+
+${LIBDIR}:
+	mkdir ${LIBDIR}
+
+${BINDIR}:
+	mkdir ${BINDIR}
+
+${MUTINYLIB}: ${MUTINYOBJ} ${LIBDIR}
+	${LD} -shared -o ${MUTINYLIB} ${MUTINYOBJ} -lGLEW -lSDL -lSDL_image -lGL -lpng ${LDFLAGS}
+
+${GAMEBIN}: ${GAMEOBJ} ${MUTINYLIB} ${BINDIR}
+	${LD} -o ${GAMEBIN} ${GAMEOBJ} -lGLEW -lSDL -lSDL_image -lGL -lpng ${LDFLAGS} -L../lib -lmutiny
+
+.cpp.o:
+	${CXX} -fPIC -c -I. ${CXXFLAGS} -DGAMENAME=\"${GAMENAME}\" -o $@ $<
+
+clean:
+	rm -f ${MUTINYOBJ}
+	rm -f ${MUTINYLIB}
+	rm -f ${GAMEOBJ}
+	rm -f ${GAMEBIN}
+	rm -r -f ${LIBDIR}
+	rm -r -f ${BINDIR}
+

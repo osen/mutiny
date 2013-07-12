@@ -1,0 +1,5 @@
+all:
+	@cd src && ${MAKE} -f Makefile.linux
+
+clean:
+	@cd src && ${MAKE} -f Makefile.linux clean

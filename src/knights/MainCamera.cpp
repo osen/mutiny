@@ -1,0 +1,71 @@
+#include "MainCamera.h"
+
+#include <vector>
+
+using namespace mutiny::engine;
+
+MainCamera* MainCamera::create()
+{
+  GameObject* cameraGo = new GameObject("MainCamera");
+  MainCamera* camera = cameraGo->addComponent<MainCamera>();
+
+  return camera;
+}
+
+void MainCamera::onAwake()
+{
+  Debug::log("MainCamera awoken");
+
+  Camera* camera = getGameObject()->addComponent<Camera>();
+  originalPass.reset(new RenderTexture(512, 512));
+  camera->setTargetTexture(originalPass.get());
+
+  blurPass1.reset(new RenderTexture(64, 64));
+  blurPass2.reset(new RenderTexture(128, 128));
+  blurPass3.reset(new RenderTexture(256, 256));
+  lightKeyPass.reset(new RenderTexture(512, 512));
+  mergePass.reset(new RenderTexture(512, 512));
+
+  getGameObject()->getTransform()->setPosition(Vector3(0, 0, -8));
+
+  texturedMaterial.reset(Resources::load<Material>("shaders/simple_2d"));
+  lightKeyMaterial.reset(Resources::load<Material>("shaders/light_key"));
+  mergeMaterial.reset(Resources::load<Material>("shaders/merge"));
+}
+
+void MainCamera::onUpdate()
+{
+  getGameObject()->getTransform()->rotateAround(Vector3(0, 0, 0), Vector3(0, 1, 0), 100.0f * Time::getDeltaTime());
+  getGameObject()->getTransform()->lookAt(Vector3(0, 0, 0));
+
+  Graphics::setRenderTarget(blurPass1.get());
+  Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), originalPass.get(), texturedMaterial.get());
+  Graphics::setRenderTarget(NULL);
+
+  Graphics::setRenderTarget(blurPass2.get());
+  Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), blurPass1.get(), texturedMaterial.get());
+  Graphics::setRenderTarget(NULL);
+
+  Graphics::setRenderTarget(blurPass3.get());
+  Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), blurPass2.get(), texturedMaterial.get());
+  Graphics::setRenderTarget(NULL);
+
+  Graphics::setRenderTarget(lightKeyPass.get());
+  Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), blurPass3.get(), lightKeyMaterial.get());
+  Graphics::setRenderTarget(NULL);
+
+  Graphics::setRenderTarget(mergePass.get());
+  mergeMaterial->setTexture("in_Merge", lightKeyPass.get());
+  Graphics::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), originalPass.get(), mergeMaterial.get());
+  Graphics::setRenderTarget(NULL);
+}
+
+void MainCamera::onGui()
+{
+  //Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), originalPass.get());
+  //Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), blurPass1.get());
+  //Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), blurPass2.get());
+  //Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), lightKeyPass.get());
+  Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), mergePass.get());
+}
+
