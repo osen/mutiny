@@ -18,8 +18,8 @@ void Player::onAwake()
   Debug::log("Player awoken");
 
   Texture2d* texture = Resources::load<Texture2d>("textures/box");
-  Mesh* mesh = Resources::load<Mesh>("models/mower/mower");
-  getGameObject()->addComponent<MeshFilter>()->setMesh(mesh);
+  //Mesh* mesh = Resources::load<Mesh>("models/mower/mower");
+  //getGameObject()->addComponent<MeshFilter>()->setMesh(mesh);
   //Material* material = Resources::load<Material>("shaders/textured");
   material = Resources::load<Material>("shaders/mower");
   //material->setFloat("in_Replace", 1.0f);
