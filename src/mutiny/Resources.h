@@ -45,7 +45,11 @@ public:
 
     if(t == NULL)
     {
-      t = T::load(Application::engineDataPath + "/" + path);
+      try
+      {
+        t = T::load(Application::engineDataPath + "/" + path);
+      }
+      catch(std::exception& e){}
     }
 
     if(t == NULL)

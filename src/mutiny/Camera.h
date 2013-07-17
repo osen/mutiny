@@ -38,9 +38,11 @@ private:
   static Camera* current;
   static std::vector<Camera*> allCameras;
 
-  bool orthographic;
   float fieldOfView;
+  bool orthographic;
   float orthographicSize;
+  float nearClipPlane;
+  float farClipPlane;
   std::shared_ptr<Matrix4x4> projectionMatrix;
   RenderTexture* targetTexture;
 

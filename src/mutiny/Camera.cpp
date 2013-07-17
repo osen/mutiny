@@ -47,7 +47,7 @@ Matrix4x4 Camera::getProjectionMatrix()
   }
   else
   {
-    return Matrix4x4::perspective(fieldOfView, (float)Screen::getWidth() / (float)Screen::getHeight(), 0.3f, 1000.0f);
+    return Matrix4x4::perspective(fieldOfView, (float)Screen::getWidth() / (float)Screen::getHeight(), nearClipPlane, farClipPlane);
   }
 }
 
@@ -67,6 +67,8 @@ void Camera::onAwake()
   fieldOfView = 60.0f;
   orthographicSize = 100;
   targetTexture = NULL;
+  nearClipPlane = 0.3f;
+  farClipPlane = 1000.0f;
 }
 
 void Camera::setTargetTexture(RenderTexture* targetTexture)
