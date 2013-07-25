@@ -18,7 +18,7 @@ void MainCamera::onAwake()
 
   Camera* camera = getGameObject()->addComponent<Camera>();
 
-  getGameObject()->getTransform()->setPosition(Vector3(0, 0, -10));
+  getGameObject()->getTransform()->setPosition(Vector3(0, 2.5, -10));
 }
 
 void MainCamera::onUpdate()

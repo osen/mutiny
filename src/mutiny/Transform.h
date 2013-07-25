@@ -4,6 +4,8 @@
 #include "Behaviour.h"
 #include "Vector3.h"
 
+#include <vector>
+
 namespace mutiny
 {
 
@@ -19,8 +21,16 @@ public:
   Vector3 getRotation();
   void setPosition(Vector3 position);
   void setRotation(Vector3 rotation);
+
+  Vector3 getLocalPosition();
+  Vector3 getLocalRotation();
+  void setLocalPosition(Vector3 position);
+  void setLocalRotation(Vector3 rotation);
+
   Transform* getParent();
   void setParent(Transform* transform);
+  int getChildCount();
+  Transform* getChild(int index);
   Transform* getRoot();
 
   void rotate(Vector3 eulerAngles);
@@ -32,6 +42,7 @@ private:
   Vector3 localPosition;
   Vector3 localRotation;
   Transform* parent;
+  std::vector<Transform*> children;
 
   virtual void onAwake();
 

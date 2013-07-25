@@ -1,5 +1,6 @@
 #include "Transform.h"
 #include "Vector2.h"
+#include "Matrix4x4.h"
 #include "Debug.h"
 
 #include "glm/glm.hpp"
@@ -22,6 +23,27 @@ void Transform::onAwake()
   parent = NULL;
 }
 
+void Transform::setLocalRotation(Vector3 rotation)
+{
+  localRotation = rotation;
+}
+
+void Transform::setLocalPosition(Vector3 position)
+{
+  // Take off parent's existing position. Use setLocalPosition to set directly.
+  localPosition = position;
+}
+
+Vector3 Transform::getLocalPosition()
+{
+  return localPosition;
+}
+
+Vector3 Transform::getLocalRotation()
+{
+  return localRotation;
+}
+
 void Transform::setRotation(Vector3 rotation)
 {
   localRotation = rotation;
@@ -35,12 +57,30 @@ void Transform::setPosition(Vector3 position)
 
 Vector3 Transform::getPosition()
 {
-  return localPosition;
+  Matrix4x4 trs = Matrix4x4::getIdentity();
+  Transform* trans = this;
+
+  while(trans != NULL)
+  {
+    trs = trs * Matrix4x4::getTrs(trans->localPosition, trans->localRotation, Vector3(1, 1, 1));
+    trans = trans->getParent();
+  }
+
+  return trs * Vector3();
 }
 
 Vector3 Transform::getRotation()
 {
-  return localRotation;
+  Transform* trans = this;
+  Vector3 rotation;
+
+  while(trans != NULL)
+  {
+    rotation = rotation + trans->localRotation;
+    trans = trans->getParent();
+  }
+
+  return rotation;
 }
 
 Transform* Transform::getParent()
@@ -53,16 +93,28 @@ void Transform::setParent(Transform* transform)
   this->parent = transform;
 }
 
+int Transform::getChildCount()
+{
+  return children.size();
+}
+
+Transform* Transform::getChild(int index)
+{
+  return children.at(index);
+}
+
 Transform* Transform::getRoot()
 {
+  Transform* root = this;
   Transform* trans = parent;
 
   while(trans != NULL)
   {
+    root = trans;
     trans = trans->getParent();
   }
 
-  return trans;
+  return root;
 }
 
 void Transform::rotate(Vector3 eulerAngles)
