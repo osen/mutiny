@@ -37,12 +37,14 @@ public:
 
     T* t = NULL;
 
+    // Game specific resources
     try
     {
       t = T::load(Application::dataPath + "/" + path);
     }
     catch(std::exception& e){}
 
+    // Internal engine files
     if(t == NULL)
     {
       try
@@ -52,9 +54,19 @@ public:
       catch(std::exception& e){}
     }
 
+    // Absolute path
     if(t == NULL)
     {
-      Debug::logError("Failed to load '" + path + "'");
+      try
+      {
+        t = T::load(path);
+      }
+      catch(std::exception& e){}
+    }
+
+    if(t == NULL)
+    {
+      //Debug::logError("Failed to load '" + path + "'");
       return NULL;
     }
 

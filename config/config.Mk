@@ -1,3 +1,3 @@
 #GAMENAME=experiment
-#GAMENAME=collision
-GAMENAME=animaker
+GAMENAME=collision
+#GAMENAME=animaker

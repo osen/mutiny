@@ -13,9 +13,10 @@ void MainScreen::onAwake()
   MeshFilter* mf = go->addComponent<MeshFilter>();
   mf->setMesh(Resources::load<Mesh>("models/curuthers/curuthers"));
   MeshRenderer* mr = go->addComponent<MeshRenderer>();
-  //mr->setTexture(Resources::load<Texture2d>("models/curuthers/Whiskers_diffuse");
 
-  Shader* shader = Resources::load<Shader>("shaders/textured");
+  Material* material = Resources::load<Material>("shaders/textured");
+  material->setMainTexture(Resources::load<Texture2d>("models/curuthers/Whiskers_diffuse"));
+  mr->setMaterial(material);
 
   transient = GameObject::createPrimitive(PrimitiveType::CUBE);
   transient->getTransform()->setPosition(Vector3(1, 1, 1));

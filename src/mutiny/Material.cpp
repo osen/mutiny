@@ -3,6 +3,7 @@
 #include "Shader.h"
 #include "Matrix4x4.h"
 #include "Texture.h"
+#include "Resources.h"
 #include "Debug.h"
 
 #include <memory>
@@ -23,44 +24,14 @@ std::shared_ptr<Material> Material::particleMaterial;
 
 Material* Material::load(std::string path)
 {
-  std::string vertPath = path + ".vert";
-  std::string fragPath = path + ".frag";
+  Shader* shader = Resources::load<Shader>(path);
 
-  std::string vertContents;
-  std::string fragContents;
-
-  std::ifstream file;
-  std::string line;
-  file.open(vertPath.c_str());
-
-  if(file.is_open() == false)
+  if(shader == NULL)
   {
-    //Debug::logError("Failed to read vertex shader file '" + path + "'");
-    throw std::exception();
+    return NULL;
   }
 
-  while(file.eof() == false)
-  {
-    getline(file, line);
-    vertContents += line + '\n';
-  }
-
-  file.close();
-  file.open(fragPath.c_str());
-
-  if(file.is_open() == false)
-  {
-    //Debug::logError("Failed to read fragment shader file");
-    throw std::exception();
-  }
-
-  while(file.eof() == false)
-  {
-    getline(file, line);
-    fragContents += line + '\n';
-  }
-
-  Material* material = new Material(vertContents, fragContents);
+  Material* material = new Material(shader);
 
   return material;
 }
@@ -68,6 +39,16 @@ Material* Material::load(std::string path)
 Material::Material(std::string vertContents, std::string fragContents)
 {
   shader.reset(new Shader(vertContents, fragContents));
+}
+
+Material::Material(Shader* shader)
+{
+  this->shader.reset(shader, std::bind(dummyDeleter));
+}
+
+void Material::dummyDeleter()
+{
+
 }
 
 void Material::setTexture(std::string propertyName, Texture* texture)
@@ -162,9 +143,9 @@ void Material::refreshIndexes()
     }
 
     textureIndexes[i] = uniformId;
-    glUniform1i(uniformId, i);
-    glActiveTexture(GL_TEXTURE0 + i);
-    glBindTexture(GL_TEXTURE_2D, textures[i]->getNativeTexture());
+    //glUniform1i(uniformId, i);
+    //glActiveTexture(GL_TEXTURE0 + i);
+    //glBindTexture(GL_TEXTURE_2D, textures[i]->getNativeTexture());
   }
 }
 

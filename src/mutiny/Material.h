@@ -36,6 +36,7 @@ class Material : public Object
 
 public:
   Material(std::string vertContents, std::string fragContents);
+  Material(Shader* shader);
 
   Shader* getShader();
   void setShader(Shader* shader);
@@ -61,6 +62,7 @@ private:
   Texture* mainTexture;
 
   void refreshIndexes();
+  static void dummyDeleter();
 
 };
 
