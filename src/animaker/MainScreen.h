@@ -15,7 +15,10 @@ public:
   virtual void onGui();
 
 private:
+  GameObject* root;
   GameObject* transient;
+  GameObject* transient2;
+  Texture2d* simpleTex;
 
 
 };
