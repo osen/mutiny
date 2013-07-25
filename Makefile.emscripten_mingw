@@ -1,0 +1,27 @@
+include config/config.emscripten.Mk
+include config/config.Mk
+
+HTML=$(GAMENAME).html
+
+MUTINYCPP=$(shell dir src\mutiny\*.cpp /b /s)
+MUTINYOBJ=$(MUTINYCPP:.cpp=.o)
+
+GAMECPP=$(shell dir src\$(GAMENAME)\*.cpp /b /s)
+GAMEOBJ=$(GAMECPP:.cpp=.o)
+
+.SUFFIXES: .o .cpp
+
+all: ${HTML}
+
+${HTML}: ${MUTINYOBJ} ${GAMEOBJ}
+	${LD} --preload-file share/mutiny --preload-file share/${GAMENAME} -o ${HTML} ${MUTINYOBJ} ${GAMEOBJ} ${LDFLAGS}
+
+.cpp.o:
+	${CXX} -c -DGAMENAME=\"${GAMENAME}\" -Isrc ${CXXFLAGS} -o $@ $<
+
+clean:
+	del ${MUTINYOBJ}
+	del ${GAMEOBJ}
+	del ${HTML}
+	del ${GAMENAME}.data
+

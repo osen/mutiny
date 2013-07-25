@@ -1,8 +1,19 @@
 Mutiny 3D - Open-source Unity re-implementation
 
-To build the software, follow these steps:
+To build the software on Linux, follow these steps:
 
-set the game in config/config.Mk
-gmake -f Makefile.emscripten_linux
+```
+$ cd mutiny
+$ make -f Makefile.linux
+$ bin/collision
+```
 
-TODO
+To build the software using the Emscripten cross compiler, use:
+
+```
+$ cd mutiny
+$ make -f Makefile.emscripten
+$ firefox index.html
+```
+
+Mutiny is licensed under the GPLv3
