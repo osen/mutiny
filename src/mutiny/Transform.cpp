@@ -62,7 +62,7 @@ Vector3 Transform::getPosition()
 
   while(trans != NULL)
   {
-    trs = trs * Matrix4x4::getTrs(trans->localPosition, trans->localRotation, Vector3(1, 1, 1));
+    trs = Matrix4x4::getTrs(trans->localPosition, trans->localRotation, Vector3(1, 1, 1)) * trs;
     trans = trans->getParent();
   }
 
@@ -90,6 +90,23 @@ Transform* Transform::getParent()
 
 void Transform::setParent(Transform* transform)
 {
+  if(this->parent != NULL)
+  {
+    for(int i = 0; i < this->parent->children.size(); i++)
+    {
+      if(this->parent->children.at(i) == this)
+      {
+        this->parent->children.erase(this->parent->children.begin() + i);
+        break;
+      }
+    }
+  }
+
+  if(transform != NULL)
+  {
+    transform->children.push_back(this);
+  }
+
   this->parent = transform;
 }
 
