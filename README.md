@@ -1,4 +1,3 @@
-Mutiny 3D - Open-source Unity re-implementation
 ![](http://devio.us/~kpedersen/mutiny/lib/tpl/prsnl10/user/logo.png)
 
 To build the software on Linux, follow these steps:
