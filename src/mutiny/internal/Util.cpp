@@ -19,7 +19,7 @@ void Util::splitString(std::string input, std::vector<std::string>* output)
   splitString(input, ' ', output);
 }
 
-void Util::splitString(std::string input, char seperator, std::vector<std::string>* output)
+void Util::splitString(std::string input, char separator, std::vector<std::string>* output)
 {
   std::string current;
 
@@ -27,13 +27,10 @@ void Util::splitString(std::string input, char seperator, std::vector<std::strin
   {
     if(input[i] == '\t' || input[i] == '\r' || input[i] == '\n')
     {
-      if(current.length() > 0)
-      {
-        output->push_back(current);
-        current = "";
-      }
+      continue;
     }
-    else if(input[i] == seperator || input[i] == '\t' || input[i] == '\r' || input[i] == '\n')
+
+    if(input[i] == separator)
     {
       output->push_back(current);
       current = "";
@@ -62,7 +59,7 @@ void Util::splitStringWhitespace(std::string line, std::vector<std::string>* out
       continue;
     }
 
-    if(line[i] == ' ')
+    if(line[i] == ' ' || line[i] == '\t')
     {
       if(lastWasWhiteSpace == false)
       {

@@ -17,7 +17,7 @@ class Util
 {
 public:
   static void splitString(std::string input, std::vector<std::string>* output);
-  static void splitString(std::string input, char seperator, std::vector<std::string>* output);
+  static void splitString(std::string input, char separator, std::vector<std::string>* output);
   static void splitStringWhitespace(std::string line, std::vector<std::string>* output);
   static double deg2Rad(double input);
   static std::string pathOnly(std::string input);
