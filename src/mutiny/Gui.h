@@ -25,8 +25,6 @@ public:
   static void drawTexture(Rect rect, Texture* texture);
 
 private:
-  static GLuint positionBufferId;
-  static GLuint uvBufferId;
 
 };
 

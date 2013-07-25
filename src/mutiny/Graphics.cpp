@@ -39,7 +39,7 @@ void Graphics::setRenderTarget(RenderTexture* renderTarget)
 
 void Graphics::drawTexture(Rect rect, Texture* texture, Material* material)
 {
-  Matrix4x4 projectionMat = Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1);
+  //Matrix4x4 projectionMat = Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1);
   float x = (float)rect.x;
   float y = (float)rect.y;
   float xw = (float)rect.x + (float)rect.width;
@@ -47,8 +47,7 @@ void Graphics::drawTexture(Rect rect, Texture* texture, Material* material)
 
   if(material == NULL)
   {
-    Debug::logWarning("Material is null");
-    return;
+    material = Material::guiMaterial.get();
   }
 
   if(texture == NULL)
@@ -79,7 +78,7 @@ void Graphics::drawTexture(Rect rect, Texture* texture, Material* material)
   material->setMainTexture(texture);
   material->setPass(0);
 
-  material->setMatrix("in_Projection", projectionMat);
+  //material->setMatrix("in_Projection", projectionMat);
   material->setMatrix("in_View", Matrix4x4::getIdentity());
   material->setMatrix("in_Model", Matrix4x4::getIdentity());
 
@@ -114,7 +113,9 @@ void Graphics::drawTexture(Rect rect, Texture* texture, Material* material)
   glEnableVertexAttribArray(positionAttributeId);
   glEnableVertexAttribArray(uvAttributeId);
   glDisable(GL_DEPTH_TEST);
+  glCullFace(GL_BACK);
   glDrawArrays(GL_TRIANGLES, 0, 6);
+  glCullFace(GL_FRONT);
   glEnable(GL_DEPTH_TEST);
   glDisableVertexAttribArray(positionAttributeId);
   glDisableVertexAttribArray(uvAttributeId);

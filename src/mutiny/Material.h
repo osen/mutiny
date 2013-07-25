@@ -23,6 +23,7 @@ class Matrix4x4;
 class Gui;
 class Texture;
 class ParticleRenderer;
+class Graphics;
 
 class Material : public Object
 {
@@ -31,6 +32,7 @@ class Material : public Object
   friend class mutiny::engine::MeshRenderer;
   friend class mutiny::engine::Gui;
   friend class mutiny::engine::ParticleRenderer;
+  friend class mutiny::engine::Graphics;
 
 public:
   Material(std::string vertContents, std::string fragContents);
