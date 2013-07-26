@@ -5,6 +5,7 @@
 #include "Shader.h"
 #include "Matrix4x4.h"
 #include "RenderTexture.h"
+#include "Gui.h"
 #include "Debug.h"
 
 #include <GL/glew.h>
@@ -39,7 +40,10 @@ void Graphics::setRenderTarget(RenderTexture* renderTarget)
 
 void Graphics::drawTexture(Rect rect, Texture* texture, Material* material)
 {
+  // Since the GUI system uses this class, we need to set its matrix.
+  // Why does Graphics have no way to set the projection matrix?
   //Matrix4x4 projectionMat = Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1);
+  Matrix4x4 projectionMat = Gui::getMatrix();
   float x = (float)rect.x;
   float y = (float)rect.y;
   float xw = (float)rect.x + (float)rect.width;
@@ -78,7 +82,7 @@ void Graphics::drawTexture(Rect rect, Texture* texture, Material* material)
   material->setMainTexture(texture);
   material->setPass(0);
 
-  //material->setMatrix("in_Projection", projectionMat);
+  material->setMatrix("in_Projection", projectionMat);
   material->setMatrix("in_View", Matrix4x4::getIdentity());
   material->setMatrix("in_Model", Matrix4x4::getIdentity());
 
