@@ -67,7 +67,7 @@ Shader::Shader(std::string vertContents, std::string fragContents)
   GLint isCompiled = GL_FALSE;
 
   vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
-  _vertexShaderId.reset(&vertexShaderId, std::bind(glDeleteShader, fragmentShaderId));
+  _vertexShaderId.reset(&vertexShaderId, std::bind(glDeleteShader, vertexShaderId));
   vertSrc = vertContents.c_str();
   glShaderSource(vertexShaderId, 1, &vertSrc, NULL);
   glCompileShader(vertexShaderId);

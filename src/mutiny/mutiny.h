@@ -6,7 +6,6 @@
 #include "GameObject.h"
 #include "Behaviour.h"
 #include "Component.h"
-#include "Gui.h"
 #include "Debug.h"
 #include "MeshFilter.h"
 #include "MeshRenderer.h"
@@ -39,6 +38,10 @@
 #include "KeyCode.h"
 #include "RenderTexture.h"
 #include "Graphics.h"
+#include "Gui.h"
+#include "GuiSkin.h"
+#include "GuiStyle.h"
+#include "GuiStyleState.h"
 
 #endif
 

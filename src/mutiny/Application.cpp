@@ -8,6 +8,7 @@
 #include "Input.h"
 #include "RenderTexture.h"
 #include "Resources.h"
+#include "GuiSkin.h"
 #include "Debug.h"
 
 #include <GL/glew.h>
@@ -75,9 +76,13 @@ void Application::init(int argc, char* argv[])
   engineDataPath = "share/mutiny";
   dataPath = std::string("share/") + GAMENAME;
 
+  // When the Resources wipes on a new level loaded, this will create issues.
+  // We should ideally clone these and hold our own memory.
   Material::defaultMaterial.reset(Resources::load<Material>("shaders/default_diffuse"));
   Material::guiMaterial.reset(Resources::load<Material>("shaders/default_gui"));
   Material::particleMaterial.reset(Resources::load<Material>("shaders/default_particle"));
+
+  GuiSkin::defaultGuiSkin.reset(new GuiSkin());
 
   initialized = true;
 }
@@ -112,7 +117,7 @@ void Application::run()
 
 void Application::loop()
 {
-  SDL_Event event;
+  SDL_Event event = { 0 };
 
   static float lastTime = SDL_GetTicks();
   float time = SDL_GetTicks();
