@@ -1,12 +1,13 @@
 #include "SceneManager.h"
 #include "MainScreen.h"
+#include "SelectModelScreen.h"
 
 using namespace mutiny::engine;
 
-void SceneManager::onAwake()
+void SceneManager::onStart()
 {
   dontDestroyOnLoad(getGameObject());
-  loadLevel();
+  Application::loadLevel("SelectModel");
 }
 
 void SceneManager::onLevelWasLoaded()
@@ -18,10 +19,15 @@ void SceneManager::loadLevel()
 {
   Debug::log("Level loaded: " + Application::getLoadedLevelName());
 
-  if(Application::getLoadedLevelName() == "Main")
+  GameObject* go = new GameObject(Application::getLoadedLevelName() + "Screen");
+
+  if(Application::getLoadedLevelName() == "SelectModel")
   {
-    GameObject* mainGo = new GameObject("MainScreen");
-    mainGo->addComponent<MainScreen>();
+    go->addComponent<SelectModelScreen>();
+  }
+  else if(Application::getLoadedLevelName() == "Main")
+  {
+    go->addComponent<MainScreen>();
   }
 }
 

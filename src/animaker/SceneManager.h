@@ -8,7 +8,7 @@ using namespace mutiny::engine;
 class SceneManager : public Behaviour
 {
 public:
-  virtual void onAwake();
+  virtual void onStart();
   virtual void onLevelWasLoaded();
 
 private:

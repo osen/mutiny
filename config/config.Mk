@@ -1,4 +1,4 @@
 #GAMENAME=experiment
 #GAMENAME=collision
-#GAMENAME=animaker
-GAMENAME=knights
+GAMENAME=animaker
+#GAMENAME=knights

@@ -10,8 +10,6 @@ void safe_main(int argc, char* argv[])
 {
   Application::init(argc, argv);
 
-  Application::loadLevel("Main");
-
   GameObject* smGo = new GameObject();
   smGo->addComponent<SceneManager>();
 
