@@ -2,6 +2,8 @@
 #include "Color.h"
 #include "Texture2d.h"
 
+#include <functional>
+
 namespace mutiny
 {
 
@@ -18,6 +20,7 @@ GuiStyleState::GuiStyleState()
 
 void GuiStyleState::setBackground(Texture2d* background)
 {
+  /*
   Texture2d* tex = new Texture2d(background->getWidth(), background->getHeight());
 
   for(int y = 0; y < background->getHeight(); y++)
@@ -30,11 +33,19 @@ void GuiStyleState::setBackground(Texture2d* background)
 
   tex->apply();
   this->background.reset(tex);
+  */
+
+  this->background.reset(background, std::bind(dummyDeleter));
 }
 
 Texture2d* GuiStyleState::getBackground()
 {
   return background.get();
+}
+
+void GuiStyleState::dummyDeleter()
+{
+
 }
 
 }

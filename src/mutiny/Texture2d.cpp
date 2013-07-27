@@ -104,7 +104,6 @@ void Texture2d::apply()
 Texture2d* Texture2d::load(std::string path)
 {
   SDL_Surface* tmpSurface = IMG_Load(std::string(path + ".png").c_str());
-  //SDL_Surface* surfaceO = SDL_CreateRGBSurface(SDL_SWSURFACE | SDL_SRCALPHA, nearestPowerOfTwo(tmpSurface->w), nearestPowerOfTwo(tmpSurface->h), tmpSurface->format->BytesPerPixel, tmpSurface->format->Rmask, tmpSurface->format->Gmask, tmpSurface->format->Bmask, tmpSurface->format->Amask);
   //SDL_Surface* surfaceO = SDL_CreateRGBSurface(SDL_SWSURFACE, tmpSurface->w, tmpSurface->h, 24, tmpSurface->format->Rmask, tmpSurface->format->Gmask, tmpSurface->format->Bmask, tmpSurface->format->Amask);
   //SDL_Rect rect = { 10, 10, 10, 10 };
   //SDL_SetAlpha(tmpSurface, 0, 0);
@@ -172,6 +171,32 @@ Texture2d* Texture2d::load(std::string path)
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glBindTexture(GL_TEXTURE_2D, 0);
+
+  /*
+  int val = 0;
+  for(int y = 0; y < texture->height; y++)
+  {
+    for(int x = 0; x < texture->width; x++)
+    {
+      if(bpp == 3)
+      {
+        texture->setPixel(x, y, Color((int)((Uint8 *)surface->pixels)[val],
+                             (int)((Uint8 *)surface->pixels)[val+1],
+                             (int)((Uint8 *)surface->pixels)[val+2]));
+      }
+      else
+      {
+        texture->setPixel(x, y, Color((int)((Uint8 *)surface->pixels)[val],
+                             (int)((Uint8 *)surface->pixels)[val+1],
+                             (int)((Uint8 *)surface->pixels)[val+2],
+                             (int)((Uint8 *)surface->pixels)[val+3]));
+
+      }
+
+      val+=bpp;
+    }
+  }
+  */
 
   //SDL_UnlockSurface(surface);
   SDL_FreeSurface(surface);

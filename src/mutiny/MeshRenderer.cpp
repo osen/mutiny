@@ -57,7 +57,7 @@ void MeshRenderer::render()
   if(material == NULL)
   {
     material = Material::defaultMaterial.get();
-    Debug::log("MeshRenderer set to default material");
+    //Debug::log("MeshRenderer set to default material");
   }
 
   shader = material->getShader();

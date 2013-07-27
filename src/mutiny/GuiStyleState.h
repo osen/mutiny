@@ -21,6 +21,8 @@ public:
 private:
   std::shared_ptr<Texture2d> background;
 
+  static void dummyDeleter();
+
 };
 
 }
