@@ -37,6 +37,7 @@ class Material : public Object
 public:
   Material(std::string vertContents, std::string fragContents);
   Material(Shader* shader);
+  Material(Material* material);
 
   Shader* getShader();
   void setShader(Shader* shader);

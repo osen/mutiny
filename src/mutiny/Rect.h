@@ -7,6 +7,7 @@ namespace mutiny
 namespace engine
 {
 
+class Vector3;
 class Rect
 {
 public:
@@ -16,6 +17,8 @@ public:
   int height;
 
   Rect(int x, int y, int width, int height);
+
+  bool contains(Vector3 point);
 
 };
 

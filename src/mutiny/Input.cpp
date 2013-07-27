@@ -18,6 +18,7 @@ std::vector<int> Input::mouseButtons;
 std::vector<int> Input::downMouseButtons;
 std::vector<int> Input::upMouseButtons;
 Vector3 Input::mousePosition;
+Vector3 Input::mouseDownPosition;
 
 Vector3 Input::getMousePosition()
 {

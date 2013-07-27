@@ -76,11 +76,12 @@ void Application::init(int argc, char* argv[])
   engineDataPath = "share/mutiny";
   dataPath = std::string("share/") + GAMENAME;
 
-  // When the Resources wipes on a new level loaded, this will create issues.
-  // We should ideally clone these and hold our own memory.
   Material::defaultMaterial.reset(Resources::load<Material>("shaders/default_diffuse"));
+  Object::dontDestroyOnLoad(Material::defaultMaterial.get());
   Material::guiMaterial.reset(Resources::load<Material>("shaders/default_gui"));
+  Object::dontDestroyOnLoad(Material::guiMaterial.get());
   Material::particleMaterial.reset(Resources::load<Material>("shaders/default_particle"));
+  Object::dontDestroyOnLoad(Material::particleMaterial.get());
 
   GuiSkin::defaultGuiSkin.reset(new GuiSkin());
 
@@ -128,13 +129,13 @@ void Application::loop()
   Screen::width = screen->w;
   Screen::height = screen->h;
 
+  Input::downKeys.clear();
+  Input::upKeys.clear();
+  Input::downMouseButtons.clear();
+  Input::upMouseButtons.clear();
+
   while(SDL_PollEvent(&event))
   {
-    Input::downKeys.clear();
-    Input::upKeys.clear();
-    Input::downMouseButtons.clear();
-    Input::upMouseButtons.clear();
-
     if(event.type == SDL_QUIT)
     {
       running = false;
@@ -143,6 +144,35 @@ void Application::loop()
     {
       Input::mousePosition.x = event.motion.x;
       Input::mousePosition.y = event.motion.y;
+    }
+    else if(event.type == SDL_MOUSEBUTTONDOWN)
+    {
+      for(int i = 0; i < Input::mouseButtons.size(); i++)
+      {
+        if(Input::mouseButtons.at(i) == event.button.button)
+        {
+          continue;
+        }
+      }
+
+      Input::mouseDownPosition.x = Input::mousePosition.x;
+      Input::mouseDownPosition.y = Input::mousePosition.y;
+      Input::mouseButtons.push_back(event.button.button);
+      Input::downMouseButtons.push_back(event.button.button);
+    }
+    else if(event.type == SDL_MOUSEBUTTONUP)
+    {
+      for(int i = 0; i < Input::mouseButtons.size(); i++)
+      {
+        if(Input::mouseButtons.at(i) == event.button.button)
+        {
+          Input::mouseButtons.erase(Input::mouseButtons.begin() + i);
+          i--;
+        }
+      }
+
+      Input::upMouseButtons.push_back(event.button.button);
+      //std::cout << (int)event.button.button << std::endl;
     }
     else if(event.type == SDL_KEYDOWN)
     {

@@ -22,6 +22,7 @@ public:
   Texture2d(int width, int height);
   virtual ~Texture2d();
   void setPixel(int x, int y, Color color);
+  Color getPixel(int x, int y);
   void apply();
 
 private:

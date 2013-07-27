@@ -32,6 +32,7 @@ void MeshRenderer::render()
   Mesh* mesh = NULL;
   Shader* shader = NULL;
   Transform* transform = getGameObject()->getTransform();
+  Material* material = this->material;
 
   if(transform == NULL)
   {

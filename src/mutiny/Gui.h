@@ -14,6 +14,7 @@ namespace mutiny
 namespace engine
 {
 
+class GuiSkin;
 class Texture;
 
 class Gui
@@ -25,6 +26,7 @@ public:
   static void drawTexture(Rect rect, Texture* texture);
 
 private:
+  static GuiSkin* skin;
 
 };
 

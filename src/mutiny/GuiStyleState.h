@@ -13,6 +13,10 @@ class Texture2d;
 class GuiStyleState
 {
 public:
+  GuiStyleState();
+
+  void setBackground(Texture2d* background);
+  Texture2d* getBackground();
 
 private:
   std::shared_ptr<Texture2d> background;

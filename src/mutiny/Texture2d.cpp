@@ -55,6 +55,11 @@ void Texture2d::setPixel(int x, int y, Color color)
   pixels[y][x] = color;
 }
 
+Color Texture2d::getPixel(int x, int y)
+{
+  return pixels[y][x];
+}
+
 void Texture2d::populateSpace()
 {
   for(int y = 0; y < height; y++)

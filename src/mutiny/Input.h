@@ -13,10 +13,12 @@ namespace engine
 {
 
 class Application;
+class Gui;
 
 class Input
 {
   friend class mutiny::engine::Application;
+  friend class mutiny::engine::Gui;
 
 public:
   static bool getKey(int keyCode);
@@ -35,6 +37,7 @@ private:
   static std::vector<int> upMouseButtons;
   static std::vector<int> downMouseButtons;
   static Vector3 mousePosition;
+  static Vector3 mouseDownPosition;
   static int translateButton(int input);
 
 };
