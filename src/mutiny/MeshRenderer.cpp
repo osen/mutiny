@@ -56,7 +56,7 @@ void MeshRenderer::render()
 
   if(material == NULL)
   {
-    material = Material::defaultMaterial.get();
+    material = Material::defaultMaterial;
     //Debug::log("MeshRenderer set to default material");
   }
 

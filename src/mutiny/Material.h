@@ -49,9 +49,9 @@ public:
   void setPass(int pass);
 
 private:
-  static std::shared_ptr<Material> defaultMaterial;
-  static std::shared_ptr<Material> guiMaterial;
-  static std::shared_ptr<Material> particleMaterial;
+  static Material* defaultMaterial;
+  static Material* guiMaterial;
+  static Material* particleMaterial;
 
   static Material* load(std::string path);
 

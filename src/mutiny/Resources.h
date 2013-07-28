@@ -70,17 +70,8 @@ public:
       return NULL;
     }
 
-    Material* material = dynamic_cast<Material*>(t);
-
-    if(material != NULL)
-    {
-      // We dont cache materials.
-    }
-    else
-    {
-      paths.push_back(ss.str());
-      objects.push_back(std::shared_ptr<Object>(t));
-    }
+    paths.push_back(ss.str());
+    objects.push_back(std::shared_ptr<Object>(t));
 
     return t;
   }

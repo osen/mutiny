@@ -9,6 +9,7 @@
 #include "RenderTexture.h"
 #include "Resources.h"
 #include "GuiSkin.h"
+#include "Shader.h"
 #include "Debug.h"
 
 #include <GL/glew.h>
@@ -76,12 +77,14 @@ void Application::init(int argc, char* argv[])
   engineDataPath = "share/mutiny";
   dataPath = std::string("share/") + GAMENAME;
 
-  Material::defaultMaterial.reset(Resources::load<Material>("shaders/default_diffuse"));
-  Object::dontDestroyOnLoad(Material::defaultMaterial.get());
-  Material::guiMaterial.reset(Resources::load<Material>("shaders/default_gui"));
-  Object::dontDestroyOnLoad(Material::guiMaterial.get());
-  Material::particleMaterial.reset(Resources::load<Material>("shaders/default_particle"));
-  Object::dontDestroyOnLoad(Material::particleMaterial.get());
+  Material::defaultMaterial = Resources::load<Material>("shaders/default_diffuse");
+  Object::dontDestroyOnLoad(Material::defaultMaterial);
+
+  Material::guiMaterial = Resources::load<Material>("shaders/default_gui");
+  Object::dontDestroyOnLoad(Material::guiMaterial);
+
+  Material::particleMaterial = Resources::load<Material>("shaders/default_particle");
+  Object::dontDestroyOnLoad(Material::particleMaterial);
 
   GuiSkin::defaultGuiSkin.reset(new GuiSkin());
 

@@ -68,7 +68,7 @@ bool Gui::button(Rect rect, std::string text)
 
 void Gui::drawTexture(Rect rect, Texture* texture)
 {
-  Material* guiMaterial = Material::guiMaterial.get();
+  Material* guiMaterial = Material::guiMaterial;
 
   guiMaterial->setMatrix("in_Projection", getMatrix());
   Graphics::drawTexture(rect, texture, guiMaterial);

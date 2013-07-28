@@ -51,7 +51,7 @@ void Graphics::drawTexture(Rect rect, Texture* texture, Material* material)
 
   if(material == NULL)
   {
-    material = Material::guiMaterial.get();
+    material = Material::guiMaterial;
   }
 
   if(texture == NULL)

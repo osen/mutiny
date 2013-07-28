@@ -18,10 +18,7 @@ void Player::onAwake()
   Debug::log("Player awoken");
 
   Texture2d* texture = Resources::load<Texture2d>("textures/box");
-  //Mesh* mesh = Resources::load<Mesh>("models/mower/mower");
-  //getGameObject()->addComponent<MeshFilter>()->setMesh(mesh);
-  //Material* material = Resources::load<Material>("shaders/textured");
-  material = Resources::load<Material>("shaders/mower");
+  material = new Material(Resources::load<Material>("shaders/mower"));
   //material->setFloat("in_Replace", 1.0f);
   material->setMainTexture(texture);
   getGameObject()->getComponent<MeshRenderer>()->setMaterial(material);
@@ -31,8 +28,7 @@ void Player::onAwake()
   getGameObject()->addComponent<CharacterController>();
 
   getGameObject()->addComponent<ParticleEmitter>();
-  //Material* particleMaterial = Resources::load<Material>("shaders/particle");
-  Material* particleMaterial = Resources::load<Material>("shaders/textured");
+  Material* particleMaterial = new Material(Resources::load<Material>("shaders/textured"));
   particleMaterial->setMainTexture(Resources::load<Texture2d>("particles/grass"));
   getGameObject()->addComponent<ParticleRenderer>()->setMaterial(particleMaterial);
 }

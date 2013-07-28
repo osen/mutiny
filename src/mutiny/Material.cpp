@@ -18,20 +18,50 @@ namespace mutiny
 namespace engine
 {
 
-std::shared_ptr<Material> Material::defaultMaterial;
-std::shared_ptr<Material> Material::guiMaterial;
-std::shared_ptr<Material> Material::particleMaterial;
+Material* Material::defaultMaterial = NULL;
+Material* Material::guiMaterial = NULL;
+Material* Material::particleMaterial = NULL;
 
 Material* Material::load(std::string path)
 {
-  Shader* shader = Resources::load<Shader>(path);
+  std::string vertPath = path + ".vert";
+  std::string fragPath = path + ".frag";
 
-  if(shader == NULL)
+  std::string vertContents;
+  std::string fragContents;
+
+  std::ifstream file;
+  std::string line;
+  file.open(vertPath.c_str());
+
+  if(file.is_open() == false)
   {
-    return NULL;
+    Debug::logError("Failed to read vertex shader file '" + path + "'");
+    throw std::exception();
   }
 
-  Material* material = new Material(shader);
+  while(file.eof() == false)
+  {
+    getline(file, line);
+    vertContents += line + '\n';
+  }
+
+  file.close();
+  file.open(fragPath.c_str());
+
+  if(file.is_open() == false)
+  {
+    Debug::logError("Failed to read fragment shader file");
+    throw std::exception();
+  }
+
+  while(file.eof() == false)
+  {
+    getline(file, line);
+    fragContents += line + '\n';
+  }
+
+  Material* material = new Material(vertContents, fragContents);
 
   return material;
 }
@@ -39,6 +69,11 @@ Material* Material::load(std::string path)
 Material::Material(std::string vertContents, std::string fragContents)
 {
   shader.reset(new Shader(vertContents, fragContents));
+}
+
+Material::Material(Material* material)
+{
+  shader.reset(material->shader.get(), std::bind(dummyDeleter));
 }
 
 Material::Material(Shader* shader)

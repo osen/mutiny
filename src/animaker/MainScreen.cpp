@@ -40,6 +40,9 @@ void MainScreen::onUpdate()
 
 void MainScreen::onGui()
 {
-  Gui::drawTexture(Rect(100, 100, 100, 100), simpleTex);
+  if(Gui::button(Rect(10, 10, 100, 30), "Back") == true)
+  {
+    Application::loadLevel("SelectModel");
+  }
 }
 

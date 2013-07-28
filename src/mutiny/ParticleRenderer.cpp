@@ -91,7 +91,7 @@ void ParticleRenderer::render()
 
   if(material == NULL)
   {
-    material = Material::particleMaterial.get();
+    material = Material::particleMaterial;
     //Debug::log("ParticleRenderer set to default material");
   }
 
