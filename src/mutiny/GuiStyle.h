@@ -11,8 +11,11 @@ namespace engine
 
 class GuiStyleState;
 class Font;
+class Gui;
 class GuiStyle
 {
+  friend class mutiny::engine::Gui;
+
 public:
   GuiStyle();
 

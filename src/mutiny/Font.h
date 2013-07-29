@@ -2,6 +2,7 @@
 #define MUTINY_ENGINE_FONT_H
 
 #include "Object.h"
+#include "CharacterInfo.h"
 
 #include <memory>
 #include <vector>
@@ -15,10 +16,12 @@ namespace engine
 
 class Texture2d;
 class Resources;
+class Gui;
 
 class Font : public Object
 {
   friend class mutiny::engine::Resources;
+  friend class mutiny::engine::Gui;
 
 public:
 
@@ -26,7 +29,7 @@ private:
   static Font* load(std::string path);
 
   std::shared_ptr<Texture2d> texture;
-  std::vector<std::string> characters;
+  std::vector<CharacterInfo> characterInfo;
 
 };
 

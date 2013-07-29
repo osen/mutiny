@@ -25,6 +25,7 @@ public:
   static bool button(Rect rect, std::string text);
   static void box(Rect rect, std::string text);
   static void drawTexture(Rect rect, Texture* texture);
+  static void drawTextureWithTexCoords(Rect position, Texture* texture, Rect texCoords);
 
 private:
   static GuiSkin* skin;

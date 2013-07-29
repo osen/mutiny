@@ -11,12 +11,13 @@ class Vector3;
 class Rect
 {
 public:
-  int x;
-  int y;
-  int width;
-  int height;
+  float x;
+  float y;
+  float width;
+  float height;
 
-  Rect(int x, int y, int width, int height);
+  Rect();
+  Rect(float x, float y, float width, float height);
 
   bool contains(Vector3 point);
 

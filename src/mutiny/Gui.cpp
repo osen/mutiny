@@ -10,6 +10,7 @@
 #include "GuiStyle.h"
 #include "GuiStyleState.h"
 #include "Input.h"
+#include "Font.h"
 #include "Debug.h"
 
 #include <GL/glew.h>
@@ -33,7 +34,14 @@ Matrix4x4 Gui::getMatrix()
 
 void Gui::label(Rect rect, std::string text)
 {
+  GuiSkin* skin = Gui::skin;
 
+  if(skin == NULL)
+  {
+    skin = GuiSkin::defaultGuiSkin.get();
+  }
+
+  drawTextureWithTexCoords(Rect(100, 100, 100, 100), (Texture*)skin->getButton()->font->texture.get(), skin->getButton()->font->characterInfo[0].uv);
 }
 
 bool Gui::button(Rect rect, std::string text)
@@ -67,7 +75,7 @@ bool Gui::button(Rect rect, std::string text)
     drawTexture(rect, (Texture*)skin->getButton()->getNormal()->getBackground());
   }
 
-
+  label(rect, text);
   return false;
 }
 
@@ -77,6 +85,14 @@ void Gui::drawTexture(Rect rect, Texture* texture)
 
   guiMaterial->setMatrix("in_Projection", getMatrix());
   Graphics::drawTexture(rect, texture, guiMaterial);
+}
+
+void Gui::drawTextureWithTexCoords(Rect position, Texture* texture, Rect texCoords)
+{
+  Material* guiMaterial = Material::guiMaterial;
+
+  guiMaterial->setMatrix("in_Projection", getMatrix());
+  Graphics::drawTexture(position, texture, texCoords, guiMaterial);
 }
 
 void Gui::box(Rect rect, std::string text)

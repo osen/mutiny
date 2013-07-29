@@ -20,6 +20,7 @@ class Graphics
 public:
   static void setRenderTarget(RenderTexture* renderTarget);
   static void drawTexture(Rect rect, Texture* texture, Material* material);
+  static void drawTexture(Rect rect, Texture* texture, Rect sourceRect, Material* material);
 
 private:
   static GLuint positionBufferId;
