@@ -13,6 +13,7 @@ public:
   virtual void onGui();
 
 private:
+  Font* titleFont;
 
 };
 

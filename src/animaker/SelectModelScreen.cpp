@@ -4,7 +4,7 @@ using namespace mutiny::engine;
 
 void SelectModelScreen::onAwake()
 {
-
+  titleFont = Resources::load<Font>("fonts/default");
 }
 
 void SelectModelScreen::onUpdate()

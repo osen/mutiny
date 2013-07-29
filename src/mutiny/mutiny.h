@@ -42,6 +42,7 @@
 #include "GuiSkin.h"
 #include "GuiStyle.h"
 #include "GuiStyleState.h"
+#include "Font.h"
 
 #endif
 

@@ -36,7 +36,7 @@ Material* Material::load(std::string path)
 
   if(file.is_open() == false)
   {
-    Debug::logError("Failed to read vertex shader file '" + path + "'");
+    //Debug::logError("Failed to read vertex shader file '" + path + "'");
     throw std::exception();
   }
 
@@ -51,7 +51,7 @@ Material* Material::load(std::string path)
 
   if(file.is_open() == false)
   {
-    Debug::logError("Failed to read fragment shader file");
+    //Debug::logError("Failed to read fragment shader file");
     throw std::exception();
   }
 
