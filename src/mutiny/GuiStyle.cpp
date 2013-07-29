@@ -3,6 +3,7 @@
 #include "Color.h"
 #include "Resources.h"
 #include "Texture2d.h"
+#include "Font.h"
 
 namespace mutiny
 {
@@ -29,6 +30,9 @@ GuiStyle::GuiStyle()
 
   active.reset(new GuiStyleState());
   active->setBackground(tex);
+
+  font = Resources::load<Font>("fonts/default");
+  Object::dontDestroyOnLoad(font);
 }
 
 GuiStyleState* GuiStyle::getActive()

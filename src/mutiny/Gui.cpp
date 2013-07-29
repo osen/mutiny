@@ -31,6 +31,11 @@ Matrix4x4 Gui::getMatrix()
   return Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1);
 }
 
+void Gui::label(Rect rect, std::string text)
+{
+
+}
+
 bool Gui::button(Rect rect, std::string text)
 {
   GuiSkin* skin = Gui::skin;

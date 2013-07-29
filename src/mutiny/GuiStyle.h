@@ -10,6 +10,7 @@ namespace engine
 {
 
 class GuiStyleState;
+class Font;
 class GuiStyle
 {
 public:
@@ -23,6 +24,7 @@ private:
   std::shared_ptr<GuiStyleState> normal;
   std::shared_ptr<GuiStyleState> hover;
   std::shared_ptr<GuiStyleState> active;
+  Font* font;
 
 };
 

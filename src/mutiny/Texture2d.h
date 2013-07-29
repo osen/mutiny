@@ -13,10 +13,12 @@ namespace engine
 
 class Color;
 class Resources;
+class Font;
 
 class Texture2d : public Texture
 {
   friend class Resources;
+  friend class Font;
 
 public:
   Texture2d(int width, int height);
