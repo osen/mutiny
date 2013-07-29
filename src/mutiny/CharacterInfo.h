@@ -14,6 +14,7 @@ struct CharacterInfo
 public:
   char index;
   Rect uv;
+  Rect vert;
 
 };
 

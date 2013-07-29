@@ -40,7 +40,7 @@ void MainScreen::onUpdate()
 
 void MainScreen::onGui()
 {
-  if(Gui::button(Rect(10, 10, 100, 30), "Back") == true)
+  if(Gui::button(Rect(10, 10, 100, 30), "back") == true)
   {
     Application::loadLevel("SelectModel");
   }

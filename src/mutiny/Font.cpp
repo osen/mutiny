@@ -37,6 +37,11 @@ Font* Font::load(std::string path)
     std::string line;
     getline(file, line);
 
+    if(line.length() < 1)
+    {
+      break;
+    }
+
     if(line.length() > maxChars)
     {
       maxChars = line.length();
@@ -45,7 +50,7 @@ Font* Font::load(std::string path)
     characters.push_back(line);
   }
 
-  Vector2 charSize(font->texture->getWidth() / (float)maxChars, font->texture->getHeight() / (float)characters.size());
+  Vector2 charSize((float)font->texture->getWidth() / (float)maxChars, (float)font->texture->getHeight() / (float)characters.size());
 
   //std::cout << charSize.x << " " << charSize.y << std::endl;
 
@@ -55,17 +60,30 @@ Font* Font::load(std::string path)
     {
       CharacterInfo info;
       info.index = characters[y][x];
+      info.vert = Rect(0, 0, charSize.x, charSize.y);
       info.uv.x = ((float)x * charSize.x) / (float)font->texture->getWidth();
+      info.uv.y = ((float)y * charSize.y) / (float)font->texture->getHeight();
       info.uv.width = ((float)x * charSize.x + charSize.x) / (float)font->texture->getWidth();
-      info.uv.y = ((float)y * charSize.y) / (float)font->texture->getWidth();
-      info.uv.height = ((float)y * charSize.y + charSize.y) / (float)font->texture->getWidth();
-      //std::cout << "X: " << info.uv.x << " Y: " << info.uv.y << std::endl;
-      //Debug::log(std::string("") + characters[y][x]);
+      info.uv.height = ((float)y * charSize.y + charSize.y) / (float)font->texture->getHeight();
       font->characterInfo.push_back(info);
     }
   }
 
   return font.release();
+}
+
+bool Font::getCharacterInfo(char character, CharacterInfo* characterInfo)
+{
+  for(int i = 0; i < this->characterInfo.size(); i++)
+  {
+    if(this->characterInfo.at(i).index == character)
+    {
+      *characterInfo = this->characterInfo.at(i);
+      return true;
+    }
+  }
+
+  return false;
 }
 
 }

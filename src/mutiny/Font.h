@@ -24,6 +24,7 @@ class Font : public Object
   friend class mutiny::engine::Gui;
 
 public:
+  bool getCharacterInfo(char character, CharacterInfo* characterInfo);
 
 private:
   static Font* load(std::string path);

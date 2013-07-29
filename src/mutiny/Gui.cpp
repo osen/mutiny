@@ -41,7 +41,21 @@ void Gui::label(Rect rect, std::string text)
     skin = GuiSkin::defaultGuiSkin.get();
   }
 
-  drawTextureWithTexCoords(Rect(100, 100, 100, 100), (Texture*)skin->getButton()->font->texture.get(), skin->getButton()->font->characterInfo[0].uv);
+  for(int i = 0; i < text.length(); i++)
+  {
+    CharacterInfo info;
+
+    if(skin->getButton()->font->getCharacterInfo(text[i], &info) == false)
+    {
+      continue;
+    }
+
+    drawTextureWithTexCoords(Rect(rect.x + (rect.width / 2) - ((info.vert.width * text.length()) / 2) + info.vert.width * i,
+                                  rect.y + (rect.height / 2) - (info.vert.height / 2),
+                                  info.vert.width,
+                                  info.vert.height),
+                                  (Texture*)skin->getButton()->font->texture.get(), info.uv);
+  }
 }
 
 bool Gui::button(Rect rect, std::string text)
