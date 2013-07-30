@@ -1,5 +1,6 @@
 #include "MainScreen.h"
 #include "MainCamera.h"
+#include "SelectModelScreen.h"
 
 using namespace mutiny::engine;
 
@@ -11,7 +12,8 @@ void MainScreen::onAwake()
 
   GameObject* go = new GameObject();
   MeshFilter* mf = go->addComponent<MeshFilter>();
-  mf->setMesh(Resources::load<Mesh>("models/curuthers/curuthers"));
+  //mf->setMesh(Resources::load<Mesh>("models/curuthers/curuthers"));
+  mf->setMesh(Resources::load<Mesh>(SelectModelScreen::choice.substr(0, SelectModelScreen::choice.length() - 4)));
   MeshRenderer* mr = go->addComponent<MeshRenderer>();
 
   Material* material = Resources::load<Material>("shaders/textured");
