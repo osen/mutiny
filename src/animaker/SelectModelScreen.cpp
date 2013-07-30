@@ -1,4 +1,5 @@
 #include "SelectModelScreen.h"
+#include "SelectAnimationScreen.h"
 
 #include <sys/types.h>
 #include <dirent.h>
@@ -56,22 +57,38 @@ void SelectModelScreen::onUpdate()
 
 }
 
+std::string SelectModelScreen::cleanPath(std::string input)
+{
+  std::string output;
+
+  for(int i = input.length() - 1; i >= 0; i--)
+  {
+    if(input[i] == '/' || input[i] == '\\')
+    {
+      break;
+    }
+
+    output = input[i] + output;
+  }
+
+  return output;
+}
+
 void SelectModelScreen::onGui()
 {
   Gui::label(Rect(100, 100, 100, 100), "select a model");
 
   for(int i = 0; i < files.size(); i++)
   {
-    if(Gui::button(Rect(50, 50 + i * 40, 200, 30), files.at(i)) == true)
+    if(Gui::button(Rect(50, 50 + i * 40, 200, 30), cleanPath(files.at(i))) == true)
     {
       choice = files.at(i);
-      Application::loadLevel("Main");
+      //Application::loadLevel("Main");
+      //Application::loadLevel("SelectAnimation");
+      GameObject* go = new GameObject("SelectAnimation");
+      go->addComponent<SelectAnimationScreen>();
+      Object::destroy(this);
     }
-  }
-
-  if(Gui::button(Rect(200, 200, 100, 30), "load") == true)
-  {
-    Application::loadLevel("Main");
   }
 
   if(Gui::button(Rect(Screen::getWidth() - 110, Screen::getHeight() - 40, 100, 30), "close") == true)

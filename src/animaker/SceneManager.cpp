@@ -1,6 +1,7 @@
 #include "SceneManager.h"
 #include "MainScreen.h"
 #include "SelectModelScreen.h"
+#include "SelectAnimationScreen.h"
 
 using namespace mutiny::engine;
 
@@ -24,6 +25,10 @@ void SceneManager::loadLevel()
   if(Application::getLoadedLevelName() == "SelectModel")
   {
     go->addComponent<SelectModelScreen>();
+  }
+  else if(Application::getLoadedLevelName() == "SelectAnimation")
+  {
+    go->addComponent<SelectAnimationScreen>();
   }
   else if(Application::getLoadedLevelName() == "Main")
   {

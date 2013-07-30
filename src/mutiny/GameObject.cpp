@@ -66,7 +66,16 @@ void GameObject::update()
 {
   for(int i = 0; i < components.size(); i++)
   {
-    components.at(i)->update();
+    if(components.at(i)->destroyed == true)
+    {
+      components.at(i)->destroy();
+      components.erase(components.begin() + i);
+      i--;
+    }
+    else
+    {
+      components.at(i)->update();
+    }
   }
 }
 

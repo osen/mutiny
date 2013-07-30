@@ -11,8 +11,14 @@ void Object::dontDestroyOnLoad(Object* object)
   object->destroyOnLoad = false;
 }
 
+void Object::destroy(Object* object)
+{
+  object->destroyed = true;
+}
+
 Object::Object()
 {
+  destroyed = false;
   destroyOnLoad = true;
 }
 

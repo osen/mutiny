@@ -17,6 +17,7 @@ class Object
 
 public:
   static void dontDestroyOnLoad(Object* object);
+  static void destroy(Object* object);
 
   Object();
   virtual ~Object();
@@ -24,6 +25,7 @@ public:
   void setName(std::string name);
   std::string getName();
 
+  bool destroyed;
 private:
   std::string name;
   bool destroyOnLoad;
