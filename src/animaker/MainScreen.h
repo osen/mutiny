@@ -19,6 +19,7 @@ private:
   GameObject* transient;
   GameObject* transient2;
   Texture2d* simpleTex;
+  Vector2 lastMousePosition;
 
 
 };

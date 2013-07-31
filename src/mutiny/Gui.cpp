@@ -91,6 +91,7 @@ bool Gui::button(Rect rect, std::string text)
   }
 
   label(rect, text);
+
   return false;
 }
 
@@ -112,7 +113,15 @@ void Gui::drawTextureWithTexCoords(Rect position, Texture* texture, Rect texCoor
 
 void Gui::box(Rect rect, std::string text)
 {
-  //drawTexture(rect, NULL);
+  GuiSkin* skin = Gui::skin;
+
+  if(skin == NULL)
+  {
+    skin = GuiSkin::defaultGuiSkin.get();
+  }
+
+  drawTexture(rect, (Texture*)skin->getBox()->getNormal()->getBackground());
+  label(rect, text);
 }
 
 }

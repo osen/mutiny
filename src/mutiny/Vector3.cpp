@@ -1,4 +1,5 @@
 #include "Vector3.h"
+#include "Vector2.h"
 
 #include <cmath>
 
@@ -42,6 +43,11 @@ Vector3 Vector3::operator+(Vector3 param)
 Vector3 Vector3::operator-(Vector3 param)
 {
   return Vector3(x - param.x, y - param.y, z - param.z);
+}
+
+Vector3 Vector3::operator-(Vector2 param)
+{
+  return Vector3(x - param.x, y - param.y, z);
 }
 
 Vector3 Vector3::operator*(float param)

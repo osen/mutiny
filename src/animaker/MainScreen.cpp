@@ -1,5 +1,6 @@
 #include "MainScreen.h"
 #include "MainCamera.h"
+#include "Timeline.h"
 #include "menus/SelectModelScreen.h"
 
 using namespace mutiny::engine;
@@ -12,7 +13,6 @@ void MainScreen::onAwake()
 
   GameObject* go = new GameObject();
   MeshFilter* mf = go->addComponent<MeshFilter>();
-  //mf->setMesh(Resources::load<Mesh>("models/curuthers/curuthers"));
   mf->setMesh(Resources::load<Mesh>(SelectModelScreen::choice.substr(0, SelectModelScreen::choice.length() - 4)));
   MeshRenderer* mr = go->addComponent<MeshRenderer>();
 
@@ -20,24 +20,27 @@ void MainScreen::onAwake()
   material->setMainTexture(Resources::load<Texture2d>("models/curuthers/Whiskers_diffuse"));
   mr->setMaterial(material);
 
-  transient = GameObject::createPrimitive(PrimitiveType::CUBE);
-  transient->getTransform()->setPosition(Vector3(1, 1, 1));
-  transient2 = GameObject::createPrimitive(PrimitiveType::CUBE);
-  transient2->getTransform()->setPosition(Vector3(1, 1, 1));
+  go->getTransform()->setParent(root->getTransform());
+  root->getTransform()->rotate(Vector3(0, 180, 0));
 
-  transient2->getTransform()->setParent(root->getTransform());
-  transient->getTransform()->setParent(transient2->getTransform());
-  go->getTransform()->setParent(transient->getTransform());
-
-  simpleTex = new Texture2d(1, 1);
-  simpleTex->setPixel(0, 0, Color(1, 0, 0));
-  simpleTex->apply();
+  Timeline::create();
 }
 
 void MainScreen::onUpdate()
 {
-  transient2->getTransform()->rotate(Vector3(100, 100, 0) * Time::getDeltaTime());
-  transient->getTransform()->rotate(Vector3(100, 100, 0) * Time::getDeltaTime());
+  Vector3 mousePosition = Input::getMousePosition();
+  Vector3 mouseDelta = mousePosition - lastMousePosition;
+  lastMousePosition = Vector2(mousePosition.x, mousePosition.y);
+
+  //std::cout << mouseDelta.x << mouseDelta.y << mouseDelta.z << std::endl;
+
+  //root->getTransform()->rotate(Vector3(0, 100, 0) * Time::getDeltaTime());
+
+  if(Input::getMouseButton(1) == true)
+  {
+    //root->getTransform()->rotate(Vector3(mouseDelta.y, -mouseDelta.x, 0));
+    root->getTransform()->rotate(Vector3(0, -mouseDelta.x, 0));
+  }
 }
 
 void MainScreen::onGui()

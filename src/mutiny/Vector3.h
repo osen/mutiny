@@ -7,6 +7,7 @@ namespace mutiny
 namespace engine
 {
 
+class Vector2;
 class Vector3
 {
 public:
@@ -18,6 +19,7 @@ public:
   Vector3(float x, float y);
   Vector3(float x, float y, float z);
 
+  Vector3 operator-(Vector2 param);
   Vector3 operator-(Vector3 param);
   Vector3 operator+(Vector3 param);
   Vector3 operator*(Vector3 param);
