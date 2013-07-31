@@ -1,5 +1,5 @@
-#ifndef SELECTANIMATIONSCREEN_H
-#define SELECTANIMATIONSCREEN_H
+#ifndef SELECTMODELSCREEN_H
+#define SELECTMODELSCREEN_H
 
 #include <mutiny/mutiny.h>
 
@@ -8,7 +8,7 @@
 
 using namespace mutiny::engine;
 
-class SelectAnimationScreen : public Behaviour
+class SelectModelScreen : public Behaviour
 {
 public:
   static std::string choice;
@@ -18,6 +18,7 @@ public:
   virtual void onGui();
 
 private:
+  Font* titleFont;
   std::vector<std::string> files;
 
 };

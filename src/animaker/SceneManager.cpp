@@ -1,14 +1,13 @@
 #include "SceneManager.h"
 #include "MainScreen.h"
-#include "SelectModelScreen.h"
-#include "SelectAnimationScreen.h"
+#include "MenuScreen.h"
 
 using namespace mutiny::engine;
 
 void SceneManager::onStart()
 {
   dontDestroyOnLoad(getGameObject());
-  Application::loadLevel("SelectModel");
+  Application::loadLevel("Menu");
 }
 
 void SceneManager::onLevelWasLoaded()
@@ -22,13 +21,9 @@ void SceneManager::loadLevel()
 
   GameObject* go = new GameObject(Application::getLoadedLevelName() + "Screen");
 
-  if(Application::getLoadedLevelName() == "SelectModel")
+  if(Application::getLoadedLevelName() == "Menu")
   {
-    go->addComponent<SelectModelScreen>();
-  }
-  else if(Application::getLoadedLevelName() == "SelectAnimation")
-  {
-    go->addComponent<SelectAnimationScreen>();
+    go->addComponent<MenuScreen>();
   }
   else if(Application::getLoadedLevelName() == "Main")
   {

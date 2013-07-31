@@ -10,10 +10,12 @@ namespace engine
 {
 
 class Application;
+class GameObject;
 
 class Object
 {
   friend class Application;
+  friend class GameObject;
 
 public:
   static void dontDestroyOnLoad(Object* object);
@@ -25,10 +27,10 @@ public:
   void setName(std::string name);
   std::string getName();
 
-  bool destroyed;
 private:
   std::string name;
   bool destroyOnLoad;
+  bool destroyed;
 
 };
 

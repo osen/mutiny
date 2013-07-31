@@ -1,6 +1,6 @@
 #include "MainScreen.h"
 #include "MainCamera.h"
-#include "SelectModelScreen.h"
+#include "menus/SelectModelScreen.h"
 
 using namespace mutiny::engine;
 

@@ -1,5 +1,5 @@
-#ifndef SELECTMODELSCREEN_H
-#define SELECTMODELSCREEN_H
+#ifndef SELECTANIMATIONSCREEN_H
+#define SELECTANIMATIONSCREEN_H
 
 #include <mutiny/mutiny.h>
 
@@ -8,7 +8,7 @@
 
 using namespace mutiny::engine;
 
-class SelectModelScreen : public Behaviour
+class SelectAnimationScreen : public Behaviour
 {
 public:
   static std::string choice;
@@ -16,13 +16,11 @@ public:
   virtual void onAwake();
   virtual void onUpdate();
   virtual void onGui();
+  virtual void onDestroy();
 
 private:
-  Font* titleFont;
   std::vector<std::string> files;
-
-  void scanDir(std::string directory, std::vector<std::string>* files);
-  std::string cleanPath(std::string input);
+  GameObject* modelGo;
 
 };
 

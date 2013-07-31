@@ -237,6 +237,16 @@ void Application::loop()
     gameObjects.at(i)->update();
   }
 
+  for(int i = 0; i < gameObjects.size(); i++)
+  {
+    if(gameObjects.at(i)->destroyed == true)
+    {
+      gameObjects.at(i)->destroy();
+      gameObjects.erase(gameObjects.begin() + i);
+      i--;
+    }
+  }
+
   glClearColor(32.0f / 255.0f, 32.0f / 255.0f, 32.0f / 255.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glViewport(0, 0, Screen::getWidth(), Screen::getHeight());
