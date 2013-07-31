@@ -46,3 +46,23 @@ std::string Util::cleanPath(std::string input)
   return output;
 }
 
+std::string Util::pathOnly(std::string input)
+{
+  int lastSep = -1;
+
+  for(int i = 0; i < input.length(); i++)
+  {
+    if(input[i] == '/' || input[i] == '\\')
+    {
+      lastSep = i;
+    }
+  }
+
+  if(lastSep == -1)
+  {
+    return ".";
+  }
+
+  return input.substr(0, lastSep);
+}
+

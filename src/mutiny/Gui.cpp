@@ -77,6 +77,7 @@ bool Gui::button(Rect rect, std::string text)
     else if(Input::getMouseButtonUp(0) == true &&
             rect.contains(Input::mouseDownPosition) == true)
     {
+      Input::mouseDownPosition = Vector3(-1, -1, -1);
       return true;
     }
     else

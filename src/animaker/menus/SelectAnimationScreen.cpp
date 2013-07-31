@@ -1,5 +1,6 @@
 #include "SelectAnimationScreen.h"
 #include "SelectModelScreen.h"
+#include "../Util.h"
 
 using namespace mutiny::engine;
 
@@ -11,6 +12,23 @@ void SelectAnimationScreen::onAwake()
   modelGo->addComponent<MeshRenderer>();
   MeshFilter* mf = modelGo->addComponent<MeshFilter>();
   mf->setMesh(Resources::load<Mesh>(SelectModelScreen::choice.substr(0, SelectModelScreen::choice.length() - 4)));
+
+  std::string modelDir = Util::pathOnly(SelectModelScreen::choice);
+
+  Debug::log(modelDir);
+
+  Util::scanDir(modelDir, &files);
+
+  for(int i = 0; i < files.size(); i++)
+  {
+    std::string curr = files.at(i);
+
+    if(curr.length() <= 4 || curr.substr(curr.length() - 4) != ".anm")
+    {
+      files.erase(files.begin() + i);
+      i--;
+    }
+  }
 }
 
 void SelectAnimationScreen::onUpdate()
@@ -21,6 +39,15 @@ void SelectAnimationScreen::onUpdate()
 void SelectAnimationScreen::onGui()
 {
   Gui::label(Rect(100, 100, 100, 100), "select an animation");
+
+  for(int i = 0; i < files.size(); i++)
+  {
+    if(Gui::button(Rect(50, 50 + i * 40, 200, 30), Util::cleanPath(files.at(i))) == true)
+    {
+      choice = files.at(i);
+      Application::loadLevel("Main");
+    }
+  }
 
   if(Gui::button(Rect(Screen::getWidth() - 110, Screen::getHeight() - 40 - 40, 100, 30), "back") == true)
   {

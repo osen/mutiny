@@ -44,7 +44,7 @@ void MainScreen::onGui()
 {
   if(Gui::button(Rect(10, 10, 100, 30), "back") == true)
   {
-    Application::loadLevel("SelectModel");
+    Application::loadLevel("Menu");
   }
 }
 
