@@ -92,9 +92,12 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
     throw std::exception();
   }
 
-  this->triangles.push_back(triangles);
+  if(submesh == positionBufferIds.size())
+  {
+    this->triangles.push_back(triangles);
+  }
+
   recalculateBounds();
-  //Debug::log("Sending mesh to gfx card");
 
   std::vector<float> values;
 
@@ -218,6 +221,11 @@ void Mesh::recalculateBounds()
 Bounds Mesh::getBounds()
 {
   return bounds;
+}
+
+int Mesh::getSubmeshCount()
+{
+  return triangles.size();
 }
 
 }

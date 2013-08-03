@@ -43,6 +43,7 @@ public:
   std::vector<Vector3>* getNormals();
 
   Bounds getBounds();
+  int getSubmeshCount();
 
 private:
   static Mesh* load(std::string path);

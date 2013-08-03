@@ -84,7 +84,7 @@ void MeshRenderer::render()
   GLint positionAttribId = glGetAttribLocation(shader->programId, "in_Position");
   GLint uvAttribId = glGetAttribLocation(shader->programId, "in_Uv");
 
-  for(int i = 0; i < mesh->positionBufferIds.size(); i++)
+  for(int i = 0; i < mesh->getSubmeshCount(); i++)
   {
     if(positionAttribId != -1)
     {
