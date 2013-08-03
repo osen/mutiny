@@ -17,6 +17,7 @@ GuiStyle::GuiStyle()
   hover.reset(new GuiStyleState());
   active.reset(new GuiStyleState());
 
+  border = RectOffset(10, 10, 10, 10);
   font = Resources::load<Font>("fonts/default");
   Object::dontDestroyOnLoad(font);
 }

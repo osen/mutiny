@@ -72,7 +72,7 @@ bool Gui::button(Rect rect, std::string text)
     if(Input::getMouseButton(0) == true &&
        rect.contains(Input::mouseDownPosition) == true)
     {
-      drawTexture(rect, (Texture*)skin->getButton()->getActive()->getBackground());
+      drawUi(rect, (Texture*)skin->getButton()->getActive()->getBackground(), skin->getButton());
     }
     else if(Input::getMouseButtonUp(0) == true &&
             rect.contains(Input::mouseDownPosition) == true)
@@ -82,12 +82,12 @@ bool Gui::button(Rect rect, std::string text)
     }
     else
     {
-      drawTexture(rect, (Texture*)skin->getButton()->getHover()->getBackground());
+      drawUi(rect, (Texture*)skin->getButton()->getHover()->getBackground(), skin->getButton());
     }
   }
   else
   {
-    drawTexture(rect, (Texture*)skin->getButton()->getNormal()->getBackground());
+    drawUi(rect, (Texture*)skin->getButton()->getNormal()->getBackground(), skin->getButton());
   }
 
   label(rect, text);
@@ -111,6 +111,15 @@ void Gui::drawTextureWithTexCoords(Rect position, Texture* texture, Rect texCoor
   Graphics::drawTexture(position, texture, texCoords, guiMaterial);
 }
 
+void Gui::drawUi(Rect rect, Texture* texture, GuiStyle* style)
+{
+  Graphics::drawTexture(rect, texture, Rect(0, 0, 1, 1),
+                        style->border.left,
+                        style->border.right,
+                        style->border.top,
+                        style->border.bottom);
+}
+
 void Gui::box(Rect rect, std::string text)
 {
   GuiSkin* skin = Gui::skin;
@@ -120,7 +129,7 @@ void Gui::box(Rect rect, std::string text)
     skin = GuiSkin::defaultGuiSkin.get();
   }
 
-  drawTexture(rect, (Texture*)skin->getBox()->getNormal()->getBackground());
+  drawUi(rect, (Texture*)skin->getBox()->getNormal()->getBackground(), skin->getBox());
   label(rect, text);
 }
 

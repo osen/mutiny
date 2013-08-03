@@ -1,6 +1,8 @@
 #ifndef MUTINY_ENGINE_GUI_STYLE_H
 #define MUTINY_ENGINE_GUI_STYLE_H
 
+#include "RectOffset.h"
+
 #include <memory>
 
 namespace mutiny
@@ -28,6 +30,7 @@ private:
   std::shared_ptr<GuiStyleState> hover;
   std::shared_ptr<GuiStyleState> active;
   Font* font;
+  RectOffset border;
 
 };
 

@@ -16,6 +16,7 @@ namespace engine
 
 class GuiSkin;
 class Texture;
+class GuiStyle;
 
 class Gui
 {
@@ -29,6 +30,7 @@ public:
 
 private:
   static GuiSkin* skin;
+  static void drawUi(Rect rect, Texture* texture, GuiStyle* style);
 
 };
 

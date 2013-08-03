@@ -23,6 +23,7 @@ public:
   static void drawTexture(Rect rect, Texture* texture, Material* material);
   static void drawTexture(Rect rect, Texture* texture, Rect sourceRect, Material* material);
   static void drawTexture(Rect rect, Texture* texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder, Color color, Material* material);
+  static void drawTexture(Rect rect, Texture* texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder);
 
 private:
   static GLuint positionBufferId;

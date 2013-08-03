@@ -44,6 +44,7 @@
 #include "GuiStyleState.h"
 #include "Font.h"
 #include "CharacterInfo.h"
+#include "RectOffset.h"
 
 #endif
 
