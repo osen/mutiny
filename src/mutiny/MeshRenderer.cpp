@@ -82,24 +82,27 @@ void MeshRenderer::render()
   material->setMatrix("in_Model", modelMat);
 
   GLint positionAttribId = glGetAttribLocation(shader->programId, "in_Position");
-
-  if(positionAttribId != -1)
-  {
-    glBindBuffer(GL_ARRAY_BUFFER, mesh->positionBufferId);
-    glVertexAttribPointer(positionAttribId, 3, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(positionAttribId);
-  }
-
   GLint uvAttribId = glGetAttribLocation(shader->programId, "in_Uv");
 
-  if(uvAttribId != -1)
+  for(int i = 0; i < mesh->positionBufferIds.size(); i++)
   {
-    glBindBuffer(GL_ARRAY_BUFFER, mesh->uvBufferId);
-    glVertexAttribPointer(uvAttribId, 2, GL_FLOAT, GL_FALSE, 0, 0);
-    glEnableVertexAttribArray(uvAttribId);
-  }
+    if(positionAttribId != -1)
+    {
+      glBindBuffer(GL_ARRAY_BUFFER, mesh->positionBufferIds.at(i));
+      glVertexAttribPointer(positionAttribId, 3, GL_FLOAT, GL_FALSE, 0, 0);
+      glEnableVertexAttribArray(positionAttribId);
+    }
 
-  glDrawArrays(GL_TRIANGLES, 0, mesh->vertices.size());
+    if(uvAttribId != -1)
+    {
+      glBindBuffer(GL_ARRAY_BUFFER, mesh->uvBufferIds.at(i));
+      glVertexAttribPointer(uvAttribId, 2, GL_FLOAT, GL_FALSE, 0, 0);
+      glEnableVertexAttribArray(uvAttribId);
+    }
+
+    //glDrawArrays(GL_TRIANGLES, 0, mesh->vertices.size());
+    glDrawArrays(GL_TRIANGLES, 0, mesh->getTriangles(i)->size());
+  }
 
   if(positionAttribId != -1)
   {

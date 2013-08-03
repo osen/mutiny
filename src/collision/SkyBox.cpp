@@ -44,7 +44,7 @@ void SkyBox::onAwake()
   Mesh* mesh = new Mesh();
   mesh->setVertices(vertices);
   mesh->setUv(uv);
-  mesh->setTriangles(triangles);
+  mesh->setTriangles(triangles, 0);
 
   MeshFilter* meshFilter = getGameObject()->addComponent<MeshFilter>();
   meshFilter->setMesh(mesh);

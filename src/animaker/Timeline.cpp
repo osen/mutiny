@@ -21,8 +21,5 @@ void Timeline::onUpdate()
 void Timeline::onGui()
 {
   Gui::box(Rect(10, Screen::getHeight() - 60, Screen::getWidth() - 20, 50), "");
-
-  //Graphics::drawTexture(Rect(100, 100, 200, 300), test, Rect(0, 0, 1, 1), 10, 10, 10, 10, Color(1, 1, 1), NULL);
-  Graphics::drawTexture(Rect(100, 100, 200, 300), test, Rect(0, 0, 1, 1), 10, 10, 10, 10, Color(1, 1, 1), NULL);
 }
 

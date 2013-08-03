@@ -33,12 +33,12 @@ public:
   void recalculateBounds();
 
   void setVertices(std::vector<Vector3> vertices);
-  void setTriangles(std::vector<int> triangles);
+  void setTriangles(std::vector<int> triangles, int submesh);
   void setUv(std::vector<Vector2> uv);
   void setNormals(std::vector<Vector3> normals);
 
   std::vector<Vector3>* getVertices();
-  std::vector<int>* getTriangles();
+  std::vector<int>* getTriangles(int submesh);
   std::vector<Vector2>* getUv();
   std::vector<Vector3>* getNormals();
 
@@ -46,15 +46,16 @@ public:
 
 private:
   static Mesh* load(std::string path);
+  static void freeBuffer(GLuint bufferId);
 
   std::vector<Vector3> vertices;
-  std::vector<int> triangles;
+  std::vector<std::vector<int> > triangles;
   std::vector<Vector2> uv;
   std::vector<Vector3> normals;
 
-  GLuint positionBufferId; std::shared_ptr<void> _positionBufferId;
-  GLuint uvBufferId; std::shared_ptr<void> _uvBufferId;
-  GLuint normalBufferId; std::shared_ptr<void> _normalBufferId;
+  std::vector<GLuint> positionBufferIds; std::vector<std::shared_ptr<void> > _positionBufferIds;
+  std::vector<GLuint> uvBufferIds; std::vector<std::shared_ptr<void> > _uvBufferIds;
+  std::vector<GLuint> normalBufferIds; std::vector<std::shared_ptr<void> > _normalBufferIds;
 
   Bounds bounds;
 
