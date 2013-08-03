@@ -18,9 +18,12 @@ namespace engine
 {
 
 class Object;
+class Application;
 
 class Resources
 {
+  friend class mutiny::engine::Application;
+
 public:
   template<class T> static T* load(std::string path)
   {

@@ -28,6 +28,7 @@ class Mesh : public Object
 
 public:
   Mesh();
+  ~Mesh();
 
   void recalculateNormals();
   void recalculateBounds();

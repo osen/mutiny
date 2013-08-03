@@ -312,6 +312,16 @@ void Application::loadLevel()
     }
   }
 
+  for(int i = 0; i < Resources::objects.size(); i++)
+  {
+    if(Resources::objects.at(i)->destroyOnLoad == true)
+    {
+      Resources::objects.erase(Resources::objects.begin() + i);
+      Resources::paths.erase(Resources::paths.begin() + i);
+      i--;
+    }
+  }
+
   for(int i = 0; i < gameObjects.size(); i++)
   {
     gameObjects.at(i)->levelWasLoaded();

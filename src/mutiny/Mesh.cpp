@@ -80,6 +80,11 @@ Mesh::Mesh() : bounds(Vector3(), Vector3())
   //_normalBufferId.reset(&normalBufferId, std::bind(glDeleteBuffers, 1, &normalBufferId));
 }
 
+Mesh::~Mesh()
+{
+
+}
+
 void Mesh::setVertices(std::vector<Vector3> vertices)
 {
   this->vertices = vertices;
