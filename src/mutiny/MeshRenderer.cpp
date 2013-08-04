@@ -32,7 +32,6 @@ void MeshRenderer::render()
   Mesh* mesh = NULL;
   Shader* shader = NULL;
   Transform* transform = getGameObject()->getTransform();
-  Material* material = this->material;
 
   if(transform == NULL)
   {
@@ -54,15 +53,6 @@ void MeshRenderer::render()
     return;
   }
 
-  if(material == NULL)
-  {
-    material = Material::defaultMaterial;
-    //Debug::log("MeshRenderer set to default material");
-  }
-
-  shader = material->getShader();
-  material->setPass(0);
-
   // obtain left-handed coordinate system by multiplying a negative Z scale on ModelView matrix
 
   Matrix4x4 viewMat = Matrix4x4::getTrs(
@@ -77,15 +67,31 @@ void MeshRenderer::render()
     Vector3(1, 1, 1) * Vector3(1, 1, 1)
   );
 
-  material->setMatrix("in_Projection", Camera::getCurrent()->getProjectionMatrix());
-  material->setMatrix("in_View", viewMat);
-  material->setMatrix("in_Model", modelMat);
-
-  GLint positionAttribId = glGetAttribLocation(shader->programId, "in_Position");
-  GLint uvAttribId = glGetAttribLocation(shader->programId, "in_Uv");
-
   for(int i = 0; i < mesh->getSubmeshCount(); i++)
   {
+    Material* material = getMaterial();
+
+    if(materials.size() > i)
+    {
+      material = materials[i];
+    }
+
+    if(material == NULL)
+    {
+      material = Material::defaultMaterial;
+      //Debug::log("MeshRenderer set to default material");
+    }
+
+    shader = material->getShader();
+    GLint positionAttribId = glGetAttribLocation(shader->programId, "in_Position");
+    GLint uvAttribId = glGetAttribLocation(shader->programId, "in_Uv");
+
+    material->setMatrix("in_Projection", Camera::getCurrent()->getProjectionMatrix());
+    material->setMatrix("in_View", viewMat);
+    material->setMatrix("in_Model", modelMat);
+
+    material->setPass(0);
+
     if(positionAttribId != -1)
     {
       glBindBuffer(GL_ARRAY_BUFFER, mesh->positionBufferIds.at(i));
@@ -102,27 +108,42 @@ void MeshRenderer::render()
 
     //glDrawArrays(GL_TRIANGLES, 0, mesh->vertices.size());
     glDrawArrays(GL_TRIANGLES, 0, mesh->getTriangles(i)->size());
-  }
 
-  if(positionAttribId != -1)
-  {
-    glDisableVertexAttribArray(positionAttribId);
-  }
+    if(positionAttribId != -1)
+    {
+      glDisableVertexAttribArray(positionAttribId);
+    }
 
-  if(uvAttribId != -1)
-  {
-    glDisableVertexAttribArray(uvAttribId);
+    if(uvAttribId != -1)
+    {
+      glDisableVertexAttribArray(uvAttribId);
+    }
   }
+}
+
+void MeshRenderer::setMaterials(std::vector<Material*> materials)
+{
+  this->materials = materials;
 }
 
 void MeshRenderer::setMaterial(Material* material)
 {
-  this->material = material;
+  if(materials.size() < 1)
+  {
+    materials.push_back(NULL);
+  }
+
+  materials[0] = material;
 }
 
 Material* MeshRenderer::getMaterial()
 {
-  return material;
+  if(materials.size() < 1)
+  {
+    return NULL;
+  }
+
+  return materials[0];
 }
 
 }

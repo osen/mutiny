@@ -6,6 +6,7 @@
 #include <GL/glew.h>
 
 #include <memory>
+#include <vector>
 
 namespace mutiny
 {
@@ -25,10 +26,11 @@ public:
   virtual ~MeshRenderer();
 
   void setMaterial(Material* material);
+  void setMaterials(std::vector<Material*> materials);
   Material* getMaterial();
 
 private:
-  Material* material;
+  std::vector<Material*> materials;
 
   virtual void render();
   virtual void awake();

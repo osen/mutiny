@@ -18,7 +18,13 @@ void MainScreen::onAwake()
 
   Material* material = Resources::load<Material>("shaders/textured");
   material->setMainTexture(Resources::load<Texture2d>("models/curuthers/Whiskers_diffuse"));
-  mr->setMaterial(material);
+
+  Material* material2 = new Material(Resources::load<Shader>("shaders/textured"));
+  material2->setMainTexture(Resources::load<Texture2d>("models/test/cpp"));
+
+  std::vector<Material*> materials;
+  materials.push_back(material);
+  mr->setMaterials(materials);
 
   go->getTransform()->setParent(root->getTransform());
   root->getTransform()->rotate(Vector3(0, 180, 0));
