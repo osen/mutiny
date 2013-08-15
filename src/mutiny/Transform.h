@@ -45,6 +45,7 @@ private:
   std::vector<Transform*> children;
 
   virtual void onAwake();
+  virtual void onDestroy();
 
 };
 

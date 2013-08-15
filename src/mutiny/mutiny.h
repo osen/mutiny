@@ -46,5 +46,7 @@
 #include "CharacterInfo.h"
 #include "RectOffset.h"
 
+#include "buccaneer/buccaneer.h"
+
 #endif
 

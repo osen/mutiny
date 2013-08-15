@@ -23,6 +23,11 @@ void Transform::onAwake()
   parent = NULL;
 }
 
+void Transform::onDestroy()
+{
+  setParent(NULL);
+}
+
 void Transform::setLocalRotation(Vector3 rotation)
 {
   localRotation = rotation;

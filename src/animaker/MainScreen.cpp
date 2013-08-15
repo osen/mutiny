@@ -12,19 +12,16 @@ void MainScreen::onAwake()
   root = new GameObject("root");
 
   GameObject* go = new GameObject();
-  MeshFilter* mf = go->addComponent<MeshFilter>();
-  mf->setMesh(Resources::load<Mesh>(SelectModelScreen::choice.substr(0, SelectModelScreen::choice.length() - 4)));
-  MeshRenderer* mr = go->addComponent<MeshRenderer>();
 
-  Material* material = Resources::load<Material>("shaders/textured");
-  material->setMainTexture(Resources::load<Texture2d>("models/curuthers/Whiskers_diffuse"));
+  AnimatedMesh* am = Resources::load<AnimatedMesh>(SelectModelScreen::choice.substr(0, SelectModelScreen::choice.length() - 4));
 
-  Material* material2 = new Material(Resources::load<Shader>("shaders/textured"));
-  material2->setMainTexture(Resources::load<Texture2d>("models/test/cpp"));
+  if(am == NULL)
+  {
+    Debug::log("Mesh is null :(");
+  }
 
-  std::vector<Material*> materials;
-  materials.push_back(material);
-  mr->setMaterials(materials);
+  AnimatedMeshRenderer* amr = go->addComponent<AnimatedMeshRenderer>();
+  amr->setAnimatedMesh(am);
 
   go->getTransform()->setParent(root->getTransform());
   root->getTransform()->rotate(Vector3(0, 180, 0));
