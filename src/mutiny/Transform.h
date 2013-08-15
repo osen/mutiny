@@ -33,6 +33,7 @@ public:
   int getChildCount();
   Transform* getChild(int index);
   Transform* getRoot();
+  Transform* find(std::string name);
 
   void rotate(Vector3 eulerAngles);
   void translate(Vector3 translation);

@@ -10,20 +10,19 @@ void MainScreen::onAwake()
   MainCamera::create();
 
   root = new GameObject("root");
+  animationGo = new GameObject();
 
-  GameObject* go = new GameObject();
+  animatedMesh = Resources::load<AnimatedMesh>(SelectModelScreen::choice.substr(0, SelectModelScreen::choice.length() - 4));
 
-  AnimatedMesh* am = Resources::load<AnimatedMesh>(SelectModelScreen::choice.substr(0, SelectModelScreen::choice.length() - 4));
-
-  if(am == NULL)
+  if(animatedMesh == NULL)
   {
     Debug::log("Mesh is null :(");
   }
 
-  AnimatedMeshRenderer* amr = go->addComponent<AnimatedMeshRenderer>();
-  amr->setAnimatedMesh(am);
+  AnimatedMeshRenderer* amr = animationGo->addComponent<AnimatedMeshRenderer>();
+  amr->setAnimatedMesh(animatedMesh);
 
-  go->getTransform()->setParent(root->getTransform());
+  animationGo->getTransform()->setParent(root->getTransform());
   root->getTransform()->rotate(Vector3(0, 180, 0));
 
   Timeline::create();
@@ -51,6 +50,18 @@ void MainScreen::onGui()
   if(Gui::button(Rect(10, 10, 100, 30), "back") == true)
   {
     Application::loadLevel("Menu");
+  }
+
+  Transform* rootTransform = animationGo->getTransform()->find("root");
+
+  if(rootTransform == NULL)
+  {
+    return;
+  }
+
+  for(int i = 0; i < rootTransform->getChildCount(); i++)
+  {
+    Gui::label(Rect(100, 100 + (20 * i), 100, 100), rootTransform->getChild(i)->getGameObject()->getName());
   }
 }
 

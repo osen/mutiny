@@ -78,6 +78,8 @@ void Application::init(int argc, char* argv[])
   dataPath = std::string("share/") + GAMENAME;
 
   Material::defaultMaterial = Resources::load<Material>("shaders/default_diffuse");
+  //if(Material::defaultMaterial == NULL) { throw Exception("Failed to load 'shaders/default_diffuse'"); }
+  if(Material::defaultMaterial == NULL) { throw std::exception(); }
   Object::dontDestroyOnLoad(Material::defaultMaterial);
 
   Material::guiMaterial = Resources::load<Material>("shaders/default_gui");

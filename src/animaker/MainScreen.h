@@ -15,7 +15,9 @@ public:
   virtual void onGui();
 
 private:
+  AnimatedMesh* animatedMesh;
   GameObject* root;
+  GameObject* animationGo;
   GameObject* transient;
   GameObject* transient2;
   Texture2d* simpleTex;

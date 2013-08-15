@@ -28,7 +28,7 @@ void AnimatedMeshRenderer::setAnimatedMesh(AnimatedMesh* mesh)
 
   for(int i = 0; i < mesh->getMeshCount(); i++)
   {
-    GameObject* go = new GameObject("part");
+    GameObject* go = new GameObject(mesh->getMeshName(i));
     go->getTransform()->setParent(rootGo->getTransform());
     MeshFilter* mf = go->addComponent<MeshFilter>();
     Mesh* m = mesh->getMesh(i);

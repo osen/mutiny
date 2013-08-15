@@ -1,6 +1,7 @@
 #include "Transform.h"
 #include "Vector2.h"
 #include "Matrix4x4.h"
+#include "GameObject.h"
 #include "Debug.h"
 
 #include "glm/glm.hpp"
@@ -98,6 +99,19 @@ void Transform::detachChildren()
 
   // Just to make sure.
   children.clear();
+}
+
+Transform* Transform::find(std::string name)
+{
+  for(int i = 0; i < children.size(); i++)
+  {
+    if(children.at(i)->getGameObject()->getName() == name)
+    {
+      return children.at(i);
+    }
+  }
+
+  return NULL;
 }
 
 Transform* Transform::getParent()

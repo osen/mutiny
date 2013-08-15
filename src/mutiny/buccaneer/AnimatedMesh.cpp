@@ -23,6 +23,7 @@ AnimatedMesh* AnimatedMesh::load(std::string path)
   {
     internal::PartData* part = modelData->parts.at(p).get();
     animatedMesh->textures.push_back(std::vector<std::string>());
+    animatedMesh->meshNames.push_back(part->name);
 
     for(int m = 0; m < part->materialGroups.size(); m++)
     {
@@ -101,6 +102,11 @@ int AnimatedMesh::getMeshCount()
 std::string AnimatedMesh::getTexture(int mesh, int submesh)
 {
   return textures.at(mesh).at(submesh);
+}
+
+std::string AnimatedMesh::getMeshName(int mesh)
+{
+  return meshNames.at(mesh);
 }
 
 }
