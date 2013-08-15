@@ -25,6 +25,7 @@ void Transform::onAwake()
 
 void Transform::onDestroy()
 {
+  detachChildren();
   setParent(NULL);
 }
 
@@ -86,6 +87,17 @@ Vector3 Transform::getRotation()
   }
 
   return rotation;
+}
+
+void Transform::detachChildren()
+{
+  for(int i = 0; i < children.size(); i++)
+  {
+    children.at(i)->setParent(NULL);
+  }
+
+  // Just to make sure.
+  children.clear();
 }
 
 Transform* Transform::getParent()

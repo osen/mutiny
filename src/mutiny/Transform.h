@@ -27,6 +27,7 @@ public:
   void setLocalPosition(Vector3 position);
   void setLocalRotation(Vector3 rotation);
 
+  void detachChildren();
   Transform* getParent();
   void setParent(Transform* transform);
   int getChildCount();

@@ -237,15 +237,18 @@ void Application::loop()
     gameObjects.at(i)->update();
   }
 
+  std::vector<std::shared_ptr<GameObject> > destroyedGos;
   for(int i = 0; i < gameObjects.size(); i++)
   {
     if(gameObjects.at(i)->destroyed == true)
     {
       gameObjects.at(i)->destroy();
+      destroyedGos.push_back(gameObjects.at(i));
       gameObjects.erase(gameObjects.begin() + i);
       i--;
     }
   }
+  destroyedGos.clear();
 
   glClearColor(32.0f / 255.0f, 32.0f / 255.0f, 32.0f / 255.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -302,15 +305,18 @@ void Application::quit()
 
 void Application::loadLevel()
 {
+  std::vector<std::shared_ptr<GameObject> > destroyedGos;
   for(int i = 0; i < gameObjects.size(); i++)
   {
     if(gameObjects.at(i)->destroyOnLoad == true)
     {
       gameObjects.at(i)->destroy();
+      destroyedGos.push_back(gameObjects.at(i));
       gameObjects.erase(gameObjects.begin() + i);
       i--;
     }
   }
+  destroyedGos.clear();
 
   for(int i = 0; i < Resources::objects.size(); i++)
   {
