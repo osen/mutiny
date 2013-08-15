@@ -2,6 +2,7 @@
 #define MUTINY_ENGINE_MATERIAL_H
 
 #include "Object.h"
+#include "Matrix4x4.h"
 
 #include <GL/glew.h>
 
@@ -19,7 +20,6 @@ class Resources;
 class Application;
 class Shader;
 class MeshRenderer;
-class Matrix4x4;
 class Gui;
 class Texture;
 class ParticleRenderer;

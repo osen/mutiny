@@ -28,12 +28,14 @@ public:
   Mesh* getMesh(int index);
   Bounds getBounds();
   int getMeshCount();
+  std::string getTexture(int mesh, int submesh);
 
 private:
   static AnimatedMesh* load(std::string path);
 
   AnimatedMesh();
 
+  std::vector<std::vector<std::string> > textures;
   std::vector<std::shared_ptr<Mesh> > meshes;
   Bounds bounds;
 

@@ -22,10 +22,15 @@ AnimatedMesh* AnimatedMesh::load(std::string path)
   for(int p = 0; p < modelData->parts.size(); p++)
   {
     internal::PartData* part = modelData->parts.at(p).get();
+    animatedMesh->textures.push_back(std::vector<std::string>());
 
     for(int m = 0; m < part->materialGroups.size(); m++)
     {
       internal::MaterialGroupData* materialGroup = part->materialGroups.at(m).get();
+      //Debug::log(materialGroup->material->texture);
+      std::string texName = materialGroup->material->texture;
+      texName = texName.substr(0, texName.length() - 4);
+      animatedMesh->textures.at(animatedMesh->textures.size() - 1).push_back(texName);
       triangles.push_back(std::vector<int>());
 
       for(int f = 0; f < materialGroup->faces.size(); f++)
@@ -91,6 +96,11 @@ Bounds AnimatedMesh::getBounds()
 int AnimatedMesh::getMeshCount()
 {
   return meshes.size();
+}
+
+std::string AnimatedMesh::getTexture(int mesh, int submesh)
+{
+  return textures.at(mesh).at(submesh);
 }
 
 }
