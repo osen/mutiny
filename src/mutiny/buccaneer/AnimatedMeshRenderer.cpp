@@ -6,6 +6,7 @@
 #include "../Transform.h"
 #include "../Resources.h"
 #include "../Texture2d.h"
+#include "../Shader.h"
 #include "../Debug.h"
 
 namespace mutiny
@@ -38,7 +39,9 @@ void AnimatedMeshRenderer::setAnimatedMesh(AnimatedMesh* mesh)
     std::vector<Material*> materials;
     for(int x = 0; x < m->getSubmeshCount(); x++)
     {
-      Material* material = Resources::load<Material>("shaders/textured");
+      //Material* material = Resources::load<Material>("shaders/textured");
+      // TODO: Use shared_ptr
+      Material* material = new Material(Resources::load<Shader>("shaders/textured"));
       Texture2d* tex = Resources::load<Texture2d>(mesh->getTexture(i, x));
 
       if(tex == NULL)

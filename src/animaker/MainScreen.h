@@ -18,11 +18,13 @@ private:
   AnimatedMesh* animatedMesh;
   GameObject* root;
   GameObject* animationGo;
-  GameObject* transient;
-  GameObject* transient2;
-  Texture2d* simpleTex;
   Vector2 lastMousePosition;
+  Material* selectedMaterial;
 
+  GameObject* selectedPart;
+  std::vector<Material*> origMaterials;
+
+  void selectPart(std::string partName);
 
 };
 

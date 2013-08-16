@@ -11,6 +11,8 @@
 #include "GuiSkin.h"
 #include "Shader.h"
 #include "Debug.h"
+#include "Texture2d.h"
+#include "Gui.h"
 
 #include <GL/glew.h>
 #include <SDL/SDL.h>
@@ -18,6 +20,8 @@
 #ifdef EMSCRIPTEN
 #include <emscripten.h>
 #endif
+
+#include <unistd.h>
 
 #include <functional>
 #include <iostream>
@@ -91,6 +95,20 @@ void Application::init(int argc, char* argv[])
   GuiSkin::defaultGuiSkin.reset(new GuiSkin());
 
   initialized = true;
+
+  //displaySplash();
+}
+
+void Application::displaySplash()
+{
+  glClearColor(1, 1, 1, 1.0f);
+  Texture2d* tex2 = Resources::load<Texture2d>("images/loading");
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  Gui::drawTexture(Rect(0, 0, 500, 500), tex2);
+  SDL_GL_SwapBuffers();
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  Gui::drawTexture(Rect(0, 0, 500, 500), tex2);
+  SDL_GL_SwapBuffers();
 }
 
 void Application::run()
@@ -100,6 +118,8 @@ void Application::run()
     std::cout << "Error: Already running" << std::endl;
     throw std::exception();
   }
+
+  //displaySplash();
 
   running = true;
 

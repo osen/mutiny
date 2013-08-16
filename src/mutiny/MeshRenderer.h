@@ -28,6 +28,7 @@ public:
   void setMaterial(Material* material);
   void setMaterials(std::vector<Material*> materials);
   Material* getMaterial();
+  void getMaterials(std::vector<Material*>* materials);
 
 private:
   std::vector<Material*> materials;

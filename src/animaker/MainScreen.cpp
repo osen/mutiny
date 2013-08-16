@@ -9,6 +9,7 @@ void MainScreen::onAwake()
 {
   MainCamera::create();
 
+  selectedPart = NULL;
   root = new GameObject("root");
   animationGo = new GameObject();
 
@@ -18,6 +19,8 @@ void MainScreen::onAwake()
   {
     Debug::log("Mesh is null :(");
   }
+
+  selectedMaterial = Resources::load<Material>("shaders/selected");
 
   AnimatedMeshRenderer* amr = animationGo->addComponent<AnimatedMeshRenderer>();
   amr->setAnimatedMesh(animatedMesh);
@@ -43,6 +46,46 @@ void MainScreen::onUpdate()
     //root->getTransform()->rotate(Vector3(mouseDelta.y, -mouseDelta.x, 0));
     root->getTransform()->rotate(Vector3(0, -mouseDelta.x, 0));
   }
+
+  //if(selectedPart != NULL)
+  //{
+  //  MeshRenderer* mr = selectedPart->getComponent<MeshRenderer>();
+  //  mr->setMaterial(selectedMaterial);
+  //}
+}
+
+void MainScreen::selectPart(std::string partName)
+{
+  Transform* rootTransform = animationGo->getTransform()->find("root");
+
+  if(rootTransform == NULL)
+  {
+    return;
+  }
+
+  for(int i = 0; i < rootTransform->getChildCount(); i++)
+  {
+    if(rootTransform->getChild(i)->getGameObject()->getName() == partName)
+    {
+      if(selectedPart != NULL)
+      {
+        selectedPart->getComponent<MeshRenderer>()->setMaterials(origMaterials);
+      }
+
+      selectedPart = rootTransform->getChild(i)->getGameObject();
+      origMaterials.clear();
+      selectedPart->getComponent<MeshRenderer>()->getMaterials(&origMaterials);
+
+      std::vector<Material*> newMaterials;
+
+      for(int x = 0; x < origMaterials.size(); x++)
+      {
+        newMaterials.push_back(selectedMaterial);
+      }
+
+      selectedPart->getComponent<MeshRenderer>()->setMaterials(newMaterials);
+    }
+  }
 }
 
 void MainScreen::onGui()
@@ -59,9 +102,22 @@ void MainScreen::onGui()
     return;
   }
 
+  std::string selectedName;
   for(int i = 0; i < rootTransform->getChildCount(); i++)
   {
-    Gui::label(Rect(100, 100 + (20 * i), 100, 100), rootTransform->getChild(i)->getGameObject()->getName());
+    Rect rect(100, 100 + (20 * i), 100, 20);
+    Gui::label(rect, rootTransform->getChild(i)->getGameObject()->getName());
+
+    if(rect.contains(Input::getMousePosition()) == true)
+    {
+      selectedName = rootTransform->getChild(i)->getGameObject()->getName();
+    }
+  }
+
+  if(selectedName != "")
+  {
+    //Debug::log(selectedName);
+    selectPart(selectedName);
   }
 }
 

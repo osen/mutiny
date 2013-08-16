@@ -146,6 +146,14 @@ Material* MeshRenderer::getMaterial()
   return materials[0];
 }
 
+void MeshRenderer::getMaterials(std::vector<Material*>* materials)
+{
+  for(int i = 0; i < this->materials.size(); i++)
+  {
+    materials->push_back(this->materials.at(i));
+  }
+}
+
 }
 
 }

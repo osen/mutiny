@@ -44,6 +44,7 @@ private:
 
   static void loadLevel();
   static void loop();
+  static void displaySplash();
 
 };
 
