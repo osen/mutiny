@@ -26,6 +26,7 @@ void AnimatedMeshRenderer::onAwake()
 void AnimatedMeshRenderer::setAnimatedMesh(AnimatedMesh* mesh)
 {
   this->mesh = mesh;
+  materials.clear();
 
   for(int i = 0; i < mesh->getMeshCount(); i++)
   {
@@ -36,11 +37,9 @@ void AnimatedMeshRenderer::setAnimatedMesh(AnimatedMesh* mesh)
     mf->setMesh(m);
     MeshRenderer* mr = go->addComponent<MeshRenderer>();
 
-    std::vector<Material*> materials;
+    std::vector<Material*> newMaterials;
     for(int x = 0; x < m->getSubmeshCount(); x++)
     {
-      //Material* material = Resources::load<Material>("shaders/textured");
-      // TODO: Use shared_ptr
       Material* material = new Material(Resources::load<Shader>("shaders/textured"));
       Texture2d* tex = Resources::load<Texture2d>(mesh->getTexture(i, x));
 
@@ -51,10 +50,11 @@ void AnimatedMeshRenderer::setAnimatedMesh(AnimatedMesh* mesh)
       }
 
       material->setMainTexture(Resources::load<Texture2d>(mesh->getTexture(i, x)));
-      materials.push_back(material);
+      newMaterials.push_back(material);
+      materials.push_back(std::unique_ptr<Material>(material));
     }
 
-    mr->setMaterials(materials);
+    mr->setMaterials(newMaterials);
   }
 }
 

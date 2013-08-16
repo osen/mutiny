@@ -3,6 +3,9 @@
 
 #include "../Behaviour.h"
 
+#include <vector>
+#include <memory>
+
 namespace mutiny
 {
 
@@ -11,6 +14,7 @@ namespace engine
 
 class GameObject;
 class AnimatedMesh;
+class Material;
 
 class AnimatedMeshRenderer : public Behaviour
 {
@@ -19,6 +23,7 @@ public:
   AnimatedMesh* getAnimatedMesh();
 
 private:
+  std::vector<std::unique_ptr<Material> > materials;
   AnimatedMesh* mesh;
   GameObject* rootGo;
 
