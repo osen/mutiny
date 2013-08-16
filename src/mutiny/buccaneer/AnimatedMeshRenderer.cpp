@@ -41,6 +41,7 @@ void AnimatedMeshRenderer::setAnimatedMesh(AnimatedMesh* mesh)
     for(int x = 0; x < m->getSubmeshCount(); x++)
     {
       Material* material = new Material(Resources::load<Shader>("shaders/textured"));
+      materials.push_back(std::unique_ptr<Material>(material));
       Texture2d* tex = Resources::load<Texture2d>(mesh->getTexture(i, x));
 
       if(tex == NULL)
@@ -51,7 +52,6 @@ void AnimatedMeshRenderer::setAnimatedMesh(AnimatedMesh* mesh)
 
       material->setMainTexture(Resources::load<Texture2d>(mesh->getTexture(i, x)));
       newMaterials.push_back(material);
-      materials.push_back(std::unique_ptr<Material>(material));
     }
 
     mr->setMaterials(newMaterials);

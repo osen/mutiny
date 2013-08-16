@@ -23,6 +23,7 @@ private:
 
   GameObject* selectedPart;
   std::vector<Material*> origMaterials;
+  std::vector<std::unique_ptr<Material> > newMaterials;
 
   void selectPart(std::string partName);
 

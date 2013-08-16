@@ -86,6 +86,19 @@ void Material::dummyDeleter()
 
 }
 
+Texture* Material::getTexture(std::string propertyName)
+{
+  for(int i = 0; i < textureNames.size(); i++)
+  {
+    if(textureNames.at(i) == propertyName)
+    {
+      return textures.at(i);
+    }
+  }
+
+  return NULL;
+}
+
 void Material::setTexture(std::string propertyName, Texture* texture)
 {
   for(int i = 0; i < textureNames.size(); i++)
@@ -182,6 +195,11 @@ void Material::refreshIndexes()
     //glActiveTexture(GL_TEXTURE0 + i);
     //glBindTexture(GL_TEXTURE_2D, textures[i]->getNativeTexture());
   }
+}
+
+Texture* Material::getMainTexture()
+{
+  return getTexture("in_Texture");
 }
 
 void Material::setMainTexture(Texture* texture)

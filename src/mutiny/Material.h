@@ -44,7 +44,9 @@ public:
   void setMatrix(std::string propertyName, Matrix4x4 matrix);
   void setFloat(std::string propertyName, float value);
   void setTexture(std::string propertyName, Texture* texture);
+  Texture* getTexture(std::string propertyName);
   void setMainTexture(Texture* texture);
+  Texture* getMainTexture();
 
   void setPass(int pass);
 
@@ -60,7 +62,6 @@ private:
   std::vector<Texture*> textures; std::vector<GLuint> textureIndexes; std::vector<std::string> textureNames;
 
   std::shared_ptr<Shader> shader;
-  Texture* mainTexture;
 
   void refreshIndexes();
   static void dummyDeleter();

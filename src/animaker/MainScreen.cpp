@@ -76,14 +76,18 @@ void MainScreen::selectPart(std::string partName)
       origMaterials.clear();
       selectedPart->getComponent<MeshRenderer>()->getMaterials(&origMaterials);
 
-      std::vector<Material*> newMaterials;
+      std::vector<Material*> _newMaterials;
+      newMaterials.clear();
 
       for(int x = 0; x < origMaterials.size(); x++)
       {
-        newMaterials.push_back(selectedMaterial);
+        Material* newMaterial = new Material(Resources::load<Shader>("shaders/selected"));
+        newMaterials.push_back(std::unique_ptr<Material>(newMaterial));
+        newMaterial->setMainTexture(origMaterials.at(x)->getMainTexture());
+        _newMaterials.push_back(newMaterial);
       }
 
-      selectedPart->getComponent<MeshRenderer>()->setMaterials(newMaterials);
+      selectedPart->getComponent<MeshRenderer>()->setMaterials(_newMaterials);
     }
   }
 }
