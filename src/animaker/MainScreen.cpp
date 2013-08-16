@@ -9,6 +9,8 @@ void MainScreen::onAwake()
 {
   MainCamera::create();
 
+  pulseAmount = 0;
+  pulseDown = false;
   selectedPart = NULL;
   root = new GameObject("root");
   animationGo = new GameObject();
@@ -52,6 +54,17 @@ void MainScreen::onUpdate()
   //  MeshRenderer* mr = selectedPart->getComponent<MeshRenderer>();
   //  mr->setMaterial(selectedMaterial);
   //}
+
+  if(pulseDown == false) { pulseAmount += Time::getDeltaTime(); }
+  if(pulseDown == true) { pulseAmount -= Time::getDeltaTime(); }
+
+  if(pulseAmount > 1.0f) {pulseDown = true; pulseAmount = 1.0f; }
+  if(pulseAmount < 0.0f) {pulseDown = false; pulseAmount = 0.0f; }
+
+  for(int i = 0; i < newMaterials.size(); i++)
+  {
+    newMaterials.at(i)->setFloat("in_Pulse", pulseAmount);
+  }
 }
 
 void MainScreen::selectPart(std::string partName)

@@ -20,6 +20,8 @@ private:
   GameObject* animationGo;
   Vector2 lastMousePosition;
   Material* selectedMaterial;
+  float pulseAmount;
+  bool pulseDown;
 
   GameObject* selectedPart;
   std::vector<Material*> origMaterials;
