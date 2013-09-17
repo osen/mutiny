@@ -24,6 +24,9 @@ AnimatedMesh* AnimatedMesh::load(std::string path)
     internal::PartData* part = modelData->parts.at(p).get();
     animatedMesh->textures.push_back(std::vector<std::string>());
     animatedMesh->meshNames.push_back(part->name);
+    Vector3 max;
+    Vector3 min;
+    bool mmSet = false;
 
     for(int m = 0; m < part->materialGroups.size(); m++)
     {
@@ -38,6 +41,34 @@ AnimatedMesh* AnimatedMesh::load(std::string path)
       {
         internal::FaceData* face = materialGroup->faces.at(f).get();
 
+        if(mmSet == false) { max.x = face->a.position.x; max.y = face->a.position.y; max.z = face->a.position.z;
+                             min.x = face->a.position.x; min.y = face->a.position.y; min.z = face->a.position.z;
+                             mmSet = true; }
+
+        if(face->a.position.x > max.x) { max.x = face->a.position.x; }
+        if(face->a.position.y > max.y) { max.y = face->a.position.y; }
+        if(face->a.position.z > max.z) { max.z = face->a.position.z; }
+
+        if(face->a.position.x < min.x) { min.x = face->a.position.x; }
+        if(face->a.position.y < min.y) { min.y = face->a.position.y; }
+        if(face->a.position.z < min.z) { min.z = face->a.position.z; }
+
+        if(face->b.position.x > max.x) { max.x = face->b.position.x; }
+        if(face->b.position.y > max.y) { max.y = face->b.position.y; }
+        if(face->b.position.z > max.z) { max.z = face->b.position.z; }
+
+        if(face->b.position.x < min.x) { min.x = face->b.position.x; }
+        if(face->b.position.y < min.y) { min.y = face->b.position.y; }
+        if(face->b.position.z < min.z) { min.z = face->b.position.z; }
+
+        if(face->c.position.x > max.x) { max.x = face->c.position.x; }
+        if(face->c.position.y > max.y) { max.y = face->c.position.y; }
+        if(face->c.position.z > max.z) { max.z = face->c.position.z; }
+
+        if(face->c.position.x < min.x) { min.x = face->c.position.x; }
+        if(face->c.position.y < min.y) { min.y = face->c.position.y; }
+        if(face->c.position.z < min.z) { min.z = face->c.position.z; }
+
         triangles.at(currentSubmesh).push_back(vertices.size());
         vertices.push_back(Vector3(face->a.position.x, face->a.position.y, face->a.position.z));
         triangles.at(currentSubmesh).push_back(vertices.size());
@@ -51,6 +82,14 @@ AnimatedMesh* AnimatedMesh::load(std::string path)
       }
 
       currentSubmesh++;
+    }
+
+    Vector3 offset = (max + min) / 2.0f;
+    animatedMesh->meshOffsets.push_back(offset);
+
+    for(int i = 0; i < vertices.size(); i++)
+    {
+      vertices[i] = vertices[i] - offset;
     }
 
     Mesh* mesh = new Mesh();
@@ -102,6 +141,11 @@ int AnimatedMesh::getMeshCount()
 std::string AnimatedMesh::getTexture(int mesh, int submesh)
 {
   return textures.at(mesh).at(submesh);
+}
+
+Vector3 AnimatedMesh::getMeshOffset(int mesh)
+{
+  return meshOffsets.at(mesh);
 }
 
 std::string AnimatedMesh::getMeshName(int mesh)

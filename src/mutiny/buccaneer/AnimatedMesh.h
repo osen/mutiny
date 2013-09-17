@@ -4,6 +4,7 @@
 #include "../Mesh.h"
 #include "../Object.h"
 #include "../Bounds.h"
+#include "../Vector3.h"
 
 #include <GL/glew.h>
 
@@ -30,6 +31,7 @@ public:
   int getMeshCount();
   std::string getTexture(int mesh, int submesh);
   std::string getMeshName(int mesh);
+  Vector3 getMeshOffset(int mesh);
 
 private:
   static AnimatedMesh* load(std::string path);
@@ -39,6 +41,7 @@ private:
   std::vector<std::vector<std::string> > textures;
   std::vector<std::shared_ptr<Mesh> > meshes;
   std::vector<std::string> meshNames;
+  std::vector<Vector3> meshOffsets;
   Bounds bounds;
 
 };

@@ -31,7 +31,9 @@ void AnimatedMeshRenderer::setAnimatedMesh(AnimatedMesh* mesh)
   for(int i = 0; i < mesh->getMeshCount(); i++)
   {
     GameObject* go = new GameObject(mesh->getMeshName(i));
+    Vector3 offset = mesh->getMeshOffset(i);
     go->getTransform()->setParent(rootGo->getTransform());
+    go->getTransform()->setLocalPosition(offset);
     MeshFilter* mf = go->addComponent<MeshFilter>();
     Mesh* m = mesh->getMesh(i);
     mf->setMesh(m);
