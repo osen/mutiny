@@ -3,6 +3,7 @@
 #include <mutiny/mutiny.h>
 
 #include <iostream>
+#include <exception>
 
 using namespace mutiny::engine;
 
