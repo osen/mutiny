@@ -46,16 +46,15 @@ void CharacterController::update()
 {
   grounded = false;
 
-  for(int i = 0; i < Application::gameObjects.size(); i++)
-  {
-    MeshCollider* meshCollider = Application::gameObjects.at(i)->getComponent<MeshCollider>();
+  std::vector<Object*> collidableObjects = GameObject::findObjectsOfType<MeshCollider>();
 
-    if(meshCollider != NULL)
+  for(int i = 0; i < collidableObjects.size(); i++)
+  {
+    MeshCollider* meshCollider = ((GameObject*)collidableObjects.at(i))->getComponent<MeshCollider>();
+
+    if(meshCollider->getBounds().intersects(bounds) == true)
     {
-      if(meshCollider->getBounds().intersects(bounds) == true)
-      {
-        checkCollision(meshCollider);
-      }
+      checkCollision(meshCollider);
     }
   }
 }

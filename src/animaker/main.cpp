@@ -9,12 +9,12 @@ using namespace mutiny::engine;
 
 void safe_main(int argc, char* argv[])
 {
-  Application::init(argc, argv);
+  Application application(argc, argv);
 
   GameObject* smGo = new GameObject();
   smGo->addComponent<SceneManager>();
 
-  Application::run();
+  application.run();
 }
 
 int main(int argc, char* argv[])

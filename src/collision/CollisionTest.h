@@ -16,8 +16,8 @@ private:
   GameObject* cameraGo;
   GameObject* camera2Go;
   GameObject* playerGo;
-  GameObject* levelGo = NULL;
-  GameObject* level2Go = NULL;
+  GameObject* levelGo;
+  GameObject* level2Go;
   RenderTexture* renderTexture;
   Texture* levelTexture;
 

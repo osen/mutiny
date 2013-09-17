@@ -32,22 +32,19 @@ namespace mutiny
 namespace engine
 {
 
-std::shared_ptr<SDL_Surface> Application::screen;
-bool Application::initialized = false;
-bool Application::running = false;
-std::string Application::levelChange;
-std::string Application::loadedLevelName;
-std::vector<std::shared_ptr<GameObject> > Application::gameObjects;
-std::string Application::dataPath;
-std::string Application::engineDataPath;
+Application* Application::instance = NULL;
 
-void Application::init(int argc, char* argv[])
+Application::Application(int argc, char* argv[])
 {
-  if(initialized == true)
+  if(instance != NULL)
   {
     std::cout << "Error: Already initialized" << std::endl;
     throw std::exception();
   }
+
+  instance = this;
+  initialized = true;
+  running = false;
 
   if(SDL_Init(SDL_INIT_EVERYTHING) == -1)
   {
@@ -151,8 +148,8 @@ void Application::loop()
   Time::deltaTime = diff / 1000.0f;
   lastTime = time;
 
-  Screen::width = screen->w;
-  Screen::height = screen->h;
+  Screen::width = instance->screen->w;
+  Screen::height = instance->screen->h;
 
   Input::downKeys.clear();
   Input::upKeys.clear();
@@ -163,7 +160,7 @@ void Application::loop()
   {
     if(event.type == SDL_QUIT)
     {
-      running = false;
+      instance->running = false;
     }
     else if(event.type == SDL_MOUSEMOTION)
     {
@@ -254,19 +251,19 @@ void Application::loop()
     }
   }
 
-  for(int i = 0; i < gameObjects.size(); i++)
+  for(int i = 0; i < instance->gameObjects.size(); i++)
   {
-    gameObjects.at(i)->update();
+    instance->gameObjects.at(i)->update();
   }
 
   std::vector<std::shared_ptr<GameObject> > destroyedGos;
-  for(int i = 0; i < gameObjects.size(); i++)
+  for(int i = 0; i < instance->gameObjects.size(); i++)
   {
-    if(gameObjects.at(i)->destroyed == true)
+    if(instance->gameObjects.at(i)->destroyed == true)
     {
-      gameObjects.at(i)->destroy();
-      destroyedGos.push_back(gameObjects.at(i));
-      gameObjects.erase(gameObjects.begin() + i);
+      instance->gameObjects.at(i)->destroy();
+      destroyedGos.push_back(instance->gameObjects.at(i));
+      instance->gameObjects.erase(instance->gameObjects.begin() + i);
       i--;
     }
   }
@@ -294,9 +291,9 @@ void Application::loop()
     glClearColor(49.0f / 255.0f, 77.0f / 255.0f, 121.0f / 255.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    for(int i = 0; i < gameObjects.size(); i++)
+    for(int i = 0; i < instance->gameObjects.size(); i++)
     {
-      gameObjects.at(i)->render();
+      instance->gameObjects.at(i)->render();
     }
 
     if(Camera::current->targetTexture != NULL)
@@ -305,36 +302,36 @@ void Application::loop()
     }
   }
 
-  for(int i = 0; i < gameObjects.size(); i++)
+  for(int i = 0; i < instance->gameObjects.size(); i++)
   {
-    gameObjects.at(i)->gui();
+    instance->gameObjects.at(i)->gui();
   }
 
   SDL_GL_SwapBuffers();
 
-  if(levelChange != "")
+  if(instance->levelChange != "")
   {
-    loadedLevelName = levelChange;
-    levelChange = "";
+    instance->loadedLevelName = instance->levelChange;
+    instance->levelChange = "";
     loadLevel();
   }
 }
 
 void Application::quit()
 {
-  running = false;
+  instance->running = false;
 }
 
 void Application::loadLevel()
 {
   std::vector<std::shared_ptr<GameObject> > destroyedGos;
-  for(int i = 0; i < gameObjects.size(); i++)
+  for(int i = 0; i < instance->gameObjects.size(); i++)
   {
-    if(gameObjects.at(i)->destroyOnLoad == true)
+    if(instance->gameObjects.at(i)->destroyOnLoad == true)
     {
-      gameObjects.at(i)->destroy();
-      destroyedGos.push_back(gameObjects.at(i));
-      gameObjects.erase(gameObjects.begin() + i);
+      instance->gameObjects.at(i)->destroy();
+      destroyedGos.push_back(instance->gameObjects.at(i));
+      instance->gameObjects.erase(instance->gameObjects.begin() + i);
       i--;
     }
   }
@@ -350,33 +347,33 @@ void Application::loadLevel()
     }
   }
 
-  for(int i = 0; i < gameObjects.size(); i++)
+  for(int i = 0; i < instance->gameObjects.size(); i++)
   {
-    gameObjects.at(i)->levelWasLoaded();
+    instance->gameObjects.at(i)->levelWasLoaded();
   }
 }
 
 void Application::loadLevel(std::string path)
 {
-  if(running == true)
+  if(instance->running == true)
   {
-    levelChange = path;
+    instance->levelChange = path;
   }
   else
   {
-    loadedLevelName = path;
+    instance->loadedLevelName = path;
     loadLevel();
   }
 }
 
 std::string Application::getLoadedLevelName()
 {
-  return loadedLevelName;
+  return instance->loadedLevelName;
 }
 
 std::string Application::getDataPath()
 {
-  return dataPath;
+  return instance->dataPath;
 }
 
 }

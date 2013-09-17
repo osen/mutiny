@@ -2,6 +2,7 @@
 #define MUTINY_ENGINE_GAMEOBJECT_H
 
 #include "Component.h"
+#include "Application.h"
 
 #include <memory>
 
@@ -24,6 +25,23 @@ class GameObject : public Component
 
 public:
   static GameObject* createPrimitive(int primitiveType);
+
+  template<class T> static std::vector<Object*> findObjectsOfType()
+  {
+    std::vector<Object*> objects;
+
+    for(int i = 0; i < Application::instance->gameObjects.size(); i++)
+    {
+      Component* component = Application::instance->gameObjects.at(i)->getComponent<T>();
+
+      if(component != NULL)
+      {
+        objects.push_back((Object*)Application::instance->gameObjects.at(i).get());
+      }
+    }
+
+    return objects;
+  }
 
   GameObject();
   GameObject(std::string name);
