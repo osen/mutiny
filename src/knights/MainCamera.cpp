@@ -37,7 +37,10 @@ void MainCamera::onUpdate()
 {
   getGameObject()->getTransform()->rotateAround(Vector3(0, 0, 0), Vector3(0, 1, 0), 100.0f * Time::getDeltaTime());
   getGameObject()->getTransform()->lookAt(Vector3(0, 0, 0));
+}
 
+void MainCamera::onGui()
+{
   Graphics::setRenderTarget(blurPass1.get());
   Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), originalPass.get(), texturedMaterial);
   Graphics::setRenderTarget(NULL);
@@ -58,10 +61,7 @@ void MainCamera::onUpdate()
   mergeMaterial->setTexture("in_Merge", lightKeyPass.get());
   Graphics::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), originalPass.get(), mergeMaterial);
   Graphics::setRenderTarget(NULL);
-}
 
-void MainCamera::onGui()
-{
   //Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), originalPass.get());
   //Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), blurPass1.get());
   //Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), blurPass2.get());

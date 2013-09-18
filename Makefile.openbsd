@@ -1,5 +1,11 @@
 all:
-	@cd src && ${MAKE} -f Makefile.openbsd
+	@cd src && ${MAKE} -f Makefile.openbsd GAMENAME=animaker
+	@cd src && ${MAKE} -f Makefile.openbsd GAMENAME=knights
+	@cd src && ${MAKE} -f Makefile.openbsd GAMENAME=collision
+	@cd src && ${MAKE} -f Makefile.openbsd GAMENAME=experiment
 
 clean:
-	@cd src && ${MAKE} -f Makefile.openbsd clean
+	@cd src && ${MAKE} -f Makefile.openbsd clean GAMENAME=animaker
+	@cd src && ${MAKE} -f Makefile.openbsd clean GAMENAME=knights
+	@cd src && ${MAKE} -f Makefile.openbsd clean GAMENAME=collision
+	@cd src && ${MAKE} -f Makefile.openbsd clean GAMENAME=experiment

@@ -104,14 +104,59 @@ Application::Application(int argc, char* argv[])
 
 void Application::setupPaths()
 {
+  std::string dirname;
+  std::string basename;
+
 #ifdef EMSCRIPTEN
   engineDataPath = "share/mutiny";
-  dataPath = std::string("share/") + GAMENAME;
+  dataPath = "share/_data";
 #elif WINDOWS
-  error
+  char strExePath [MAX_PATH];
+
+  GetModuleFileName (NULL, strExePath, MAX_PATH);
+  dirname = strExePath;
+  dirname = dirname.substr(0, dirname.find_last_of("\\"));
+  dirname = dirname.substr(0, dirname.find_last_of("\\"));
+  todo
 #else
-  engineDataPath = "share/mutiny";
-  dataPath = std::string("share/") + GAMENAME;
+  FILE* process = NULL;
+  std::string command;
+  char buffer[8];
+
+  command = "cd `dirname \\`which " + std::string(argv.at(0)) + "\\``; cd ..; pwd | tr -d '\n'";
+  process = popen(command.c_str(), "r");
+
+  if(process == NULL)
+  {
+    throw std::exception();
+    //throw Exception("Failed to open child process");
+  }
+
+  while(fgets(buffer, 7, process) != NULL)
+  {
+    dirname += buffer;
+  }
+
+  pclose(process);
+
+  command = "basename " + std::string(argv.at(0)) + " | tr -d '\n'";
+  process = popen(command.c_str(), "r");
+
+  if(process == NULL)
+  {
+    throw std::exception();
+    //throw Exception("Failed to open child process");
+  }
+
+  while(fgets(buffer, 7, process) != NULL)
+  {
+    basename += buffer;
+  }
+
+  pclose(process);
+
+  engineDataPath = dirname + "/share/mutiny";
+  dataPath = dirname + "/share/" + basename;
 #endif
 }
 

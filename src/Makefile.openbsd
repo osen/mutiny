@@ -1,9 +1,6 @@
 include ../config/config.openbsd.Mk
 include ../config/config.Mk
 
-LIBDIR=../lib
-BINDIR=../bin
-
 MUTINYCPP=$(shell find mutiny -name '*.cpp')
 MUTINYOBJ=$(MUTINYCPP:.cpp=.o)
 MUTINYLIB=../lib/libmutiny.a
@@ -16,26 +13,22 @@ GAMEBIN=../bin/${GAMENAME}
 
 all: ${GAMEBIN}
 
-${LIBDIR}:
-	mkdir ${LIBDIR}
-
-${BINDIR}:
-	mkdir ${BINDIR}
-
-${MUTINYLIB}: ${MUTINYOBJ} ${LIBDIR}
+${MUTINYLIB}: ${MUTINYOBJ}
+	mkdir -p ../lib
 	${AR} rcs ${MUTINYLIB} ${MUTINYOBJ}
 
-${GAMEBIN}: ${GAMEOBJ} ${MUTINYLIB} ${BINDIR}
+${GAMEBIN}: ${GAMEOBJ} ${MUTINYLIB}
+	mkdir -p ../bin
 	${LD} -o ${GAMEBIN} ${GAMEOBJ} -lGLEW -lSDL -lSDL_image -lSDL_gfx -lGL -lpng ${LDFLAGS} -L../lib -lmutiny
 
 .cpp.o:
-	${CXX} -c -I. ${CXXFLAGS} -DGAMENAME=\"${GAMENAME}\" -o $@ $<
+	${CXX} -c -I. ${CXXFLAGS} -o $@ $<
 
 clean:
 	rm -f ${MUTINYOBJ}
 	rm -f ${MUTINYLIB}
 	rm -f ${GAMEOBJ}
 	rm -f ${GAMEBIN}
-	rm -r -f ${LIBDIR}
-	rm -r -f ${BINDIR}
+	rm -r -f ../bin
+	rm -r -f ../lib
 
