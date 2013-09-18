@@ -46,6 +46,13 @@ Application::Application(int argc, char* argv[])
   initialized = true;
   running = false;
 
+  this->argc = argc;
+
+  for(int i = 0; i < argc; i++)
+  {
+    this->argv.push_back(argv[i]);
+  }
+
   if(SDL_Init(SDL_INIT_EVERYTHING) == -1)
   {
     std::cout << "Error: Failed to initialize" << std::endl;
@@ -374,6 +381,16 @@ std::string Application::getLoadedLevelName()
 std::string Application::getDataPath()
 {
   return instance->dataPath;
+}
+
+int Application::getArgc()
+{
+  return instance->argc;
+}
+
+std::string Application::getArgv(int i)
+{
+  return instance->argv.at(i);
 }
 
 }

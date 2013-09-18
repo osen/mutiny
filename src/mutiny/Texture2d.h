@@ -29,7 +29,6 @@ public:
 
 private:
   static Texture2d* load(std::string path);
-  static int nearestPowerOfTwo(int size);
 
   std::vector<std::vector<Color> > pixels;
 

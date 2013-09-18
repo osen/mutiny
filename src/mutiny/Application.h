@@ -29,6 +29,8 @@ public:
   static void loadLevel(std::string path);
   static std::string getLoadedLevelName();
   static std::string getDataPath();
+  static int getArgc();
+  static std::string getArgv(int i);
 
   Application(int argc, char* argv[]);
   void run();
@@ -48,6 +50,9 @@ private:
   std::string levelChange;
   std::string dataPath;
   std::string engineDataPath;
+
+  int argc;
+  std::vector<std::string> argv;
 
 };
 

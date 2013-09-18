@@ -26,7 +26,7 @@ ${MUTINYLIB}: ${MUTINYOBJ} ${LIBDIR}
 	${AR} rcs ${MUTINYLIB} ${MUTINYOBJ}
 
 ${GAMEBIN}: ${GAMEOBJ} ${MUTINYLIB} ${BINDIR}
-	${LD} -o ${GAMEBIN} ${GAMEOBJ} -lGLEW -lSDL -lSDL_image -lGL -lpng ${LDFLAGS} -L../lib -lmutiny
+	${LD} -o ${GAMEBIN} ${GAMEOBJ} -lGLEW -lSDL -lSDL_image -lSDL_gfx -lGL -lpng ${LDFLAGS} -L../lib -lmutiny
 
 .cpp.o:
 	${CXX} -c -I. ${CXXFLAGS} -DGAMENAME=\"${GAMENAME}\" -o $@ $<

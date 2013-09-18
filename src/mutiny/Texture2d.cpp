@@ -1,11 +1,12 @@
 #include "Texture2d.h"
 #include "Color.h"
 #include "Application.h"
+#include "Mathf.h"
 #include "Debug.h"
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
-//#include <SDL/SDL_rotozoom.h>
+#include <SDL/SDL_rotozoom.h>
 
 #include <memory>
 #include <functional>
@@ -27,22 +28,6 @@ Texture2d::Texture2d(int width, int height)
 Texture2d::~Texture2d()
 {
 
-}
-
-int Texture2d::nearestPowerOfTwo(int size)
-{
-  if(size != 0)
-  {
-    size--;
-    size |= (size >> 1);  //Or first 2 bits
-    size |= (size >> 2);  //Or next 2 bits
-    size |= (size >> 4);  //Or next 4 bits
-    size |= (size >> 8);  //Or next 8 bits
-    size |= (size >> 16); //Or next 16 bits
-    size++;
-  }
-
-  return size;
 }
 
 void Texture2d::setPixel(int x, int y, Color color)
@@ -104,15 +89,27 @@ void Texture2d::apply()
 Texture2d* Texture2d::load(std::string path)
 {
   SDL_Surface* tmpSurface = IMG_Load(std::string(path + ".png").c_str());
-  //SDL_Surface* surfaceO = SDL_CreateRGBSurface(SDL_SWSURFACE, tmpSurface->w, tmpSurface->h, 24, tmpSurface->format->Rmask, tmpSurface->format->Gmask, tmpSurface->format->Bmask, tmpSurface->format->Amask);
-  //SDL_Rect rect = { 10, 10, 10, 10 };
-  //SDL_SetAlpha(tmpSurface, 0, 0);
-  //SDL_BlitSurface(tmpSurface, 0, surfaceO, 0);
-  //SDL_Surface* surfaceA = zoomSurface(tmpSurface, 1, 1, false);
-  //SDL_Surface* surfaceC = SDL_ConvertSurface(tmpSurface, tmpSurface->format, tmpSurface->flags);
-  //SDL_Surface* surfaceB = SDL_DisplayFormatAlpha(tmpSurface);
+
+  if(tmpSurface == NULL)
+  {
+    //Debug::logError("Failed to load image '" + path + "'");
+    throw std::exception();
+  }
+
+#ifdef EMSCRIPTEN
   SDL_Surface* surface = tmpSurface;
-  //SDL_Surface* surface = surfaceO;
+#else
+  float targetX = Mathf::nextPowerOfTwo(tmpSurface->w);
+  float targetY = Mathf::nextPowerOfTwo(tmpSurface->h);
+  float scaleX = tmpSurface->w / targetX;
+  float scaleY = tmpSurface->h / targetY;
+
+  //std::cout << scaleX << " " << scaleY << std::endl;
+  //std::cout << tmpSurface->w / scaleX << " " << tmpSurface->h / scaleY << std::endl;
+  
+  SDL_Surface* surface = zoomSurface(tmpSurface, scaleX, scaleY, SMOOTHING_ON);
+  //SDL_Surface* surface = zoomSurface(tmpSurface, scaleX, scaleY, SMOOTHING_OFF);
+#endif
 
   if(surface == NULL)
   {
@@ -120,7 +117,7 @@ Texture2d* Texture2d::load(std::string path)
     throw std::exception();
   }
 
-  Texture2d* texture = new Texture2d(surface->w, surface->h);
+  Texture2d* texture = new Texture2d(tmpSurface->w, tmpSurface->h);
 
   if(texture->nativeTexture == -1)
   {
@@ -167,7 +164,7 @@ Texture2d* Texture2d::load(std::string path)
   //SDL_LockSurface(surface);
 
   glBindTexture(GL_TEXTURE_2D, texture->nativeTexture);
-  glTexImage2D(GL_TEXTURE_2D, 0, noc, texture->width, texture->height, 0, fmt, GL_UNSIGNED_BYTE, surface->pixels);
+  glTexImage2D(GL_TEXTURE_2D, 0, noc, surface->w, surface->h, 0, fmt, GL_UNSIGNED_BYTE, surface->pixels);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glBindTexture(GL_TEXTURE_2D, 0);
