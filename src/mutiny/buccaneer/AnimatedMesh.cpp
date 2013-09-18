@@ -1,5 +1,7 @@
 #include "AnimatedMesh.h"
 #include "../Debug.h"
+#include "../Resources.h"
+#include "../Texture2d.h"
 
 #include "../internal/WavefrontParser.h"
 
@@ -22,7 +24,7 @@ AnimatedMesh* AnimatedMesh::load(std::string path)
   for(int p = 0; p < modelData->parts.size(); p++)
   {
     internal::PartData* part = modelData->parts.at(p).get();
-    animatedMesh->textures.push_back(std::vector<std::string>());
+    animatedMesh->textures.push_back(std::vector<Texture2d*>());
     animatedMesh->meshNames.push_back(part->name);
     Vector3 max;
     Vector3 min;
@@ -34,7 +36,16 @@ AnimatedMesh* AnimatedMesh::load(std::string path)
       //Debug::log(materialGroup->material->texture);
       std::string texName = materialGroup->material->texture;
       texName = texName.substr(0, texName.length() - 4);
-      animatedMesh->textures.at(animatedMesh->textures.size() - 1).push_back(texName);
+
+      Texture2d* tex = Resources::load<Texture2d>(texName);
+
+      if(tex == NULL)
+      {
+        Debug::logError("Error: Texture is null " + texName);
+        throw std::exception();
+      }
+
+      animatedMesh->textures.at(animatedMesh->textures.size() - 1).push_back(tex);
       triangles.push_back(std::vector<int>());
 
       for(int f = 0; f < materialGroup->faces.size(); f++)
@@ -138,7 +149,7 @@ int AnimatedMesh::getMeshCount()
   return meshes.size();
 }
 
-std::string AnimatedMesh::getTexture(int mesh, int submesh)
+Texture2d* AnimatedMesh::getTexture(int mesh, int submesh)
 {
   return textures.at(mesh).at(submesh);
 }

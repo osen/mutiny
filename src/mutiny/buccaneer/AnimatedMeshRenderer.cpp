@@ -44,15 +44,7 @@ void AnimatedMeshRenderer::setAnimatedMesh(AnimatedMesh* mesh)
     {
       Material* material = new Material(Resources::load<Shader>("shaders/textured"));
       materials.push_back(std::unique_ptr<Material>(material));
-      Texture2d* tex = Resources::load<Texture2d>(mesh->getTexture(i, x));
-
-      if(tex == NULL)
-      {
-        Debug::logError("Error: Texture is null " + mesh->getTexture(i, x));
-        throw std::exception();
-      }
-
-      material->setMainTexture(Resources::load<Texture2d>(mesh->getTexture(i, x)));
+      material->setMainTexture(mesh->getTexture(i, x));
       newMaterials.push_back(material);
     }
 

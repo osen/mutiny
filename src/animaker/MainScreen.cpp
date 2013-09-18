@@ -48,6 +48,13 @@ void MainScreen::onUpdate()
     //root->getTransform()->rotate(Vector3(mouseDelta.y, -mouseDelta.x, 0));
     root->getTransform()->rotate(Vector3(0, -mouseDelta.x, 0));
   }
+  else if(Input::getMouseButton(2) == true)
+  {
+    if(selectedPart != NULL)
+    {
+      selectedPart->getTransform()->rotate(Vector3(0, -mouseDelta.x, 0));
+    }
+  }
 
   //if(selectedPart != NULL)
   //{
@@ -133,8 +140,11 @@ void MainScreen::onGui()
 
   if(selectedName != "")
   {
-    //Debug::log(selectedName);
-    selectPart(selectedName);
+    if(Input::getMouseButtonDown(0) == true)
+    {
+      //Debug::log(selectedName);
+      selectPart(selectedName);
+    }
   }
 }
 

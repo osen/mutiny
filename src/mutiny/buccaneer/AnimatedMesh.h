@@ -19,6 +19,7 @@ namespace engine
 {
 
 class Resources;
+class Texture2d;
 
 class AnimatedMesh : public Object
 {
@@ -29,7 +30,7 @@ public:
   Mesh* getMesh(int index);
   Bounds getBounds();
   int getMeshCount();
-  std::string getTexture(int mesh, int submesh);
+  Texture2d* getTexture(int mesh, int submesh);
   std::string getMeshName(int mesh);
   Vector3 getMeshOffset(int mesh);
 
@@ -38,7 +39,7 @@ private:
 
   AnimatedMesh();
 
-  std::vector<std::vector<std::string> > textures;
+  std::vector<std::vector<Texture2d*> > textures;
   std::vector<std::shared_ptr<Mesh> > meshes;
   std::vector<std::string> meshNames;
   std::vector<Vector3> meshOffsets;
