@@ -54,6 +54,8 @@ private:
   int argc;
   std::vector<std::string> argv;
 
+  void setupPaths();
+
 };
 
 }

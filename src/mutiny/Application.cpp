@@ -53,6 +53,8 @@ Application::Application(int argc, char* argv[])
     this->argv.push_back(argv[i]);
   }
 
+  setupPaths();
+
   if(SDL_Init(SDL_INIT_EVERYTHING) == -1)
   {
     std::cout << "Error: Failed to initialize" << std::endl;
@@ -82,9 +84,6 @@ Application::Application(int argc, char* argv[])
   glEnable(GL_CULL_FACE);
   glCullFace(GL_FRONT);
 
-  engineDataPath = "share/mutiny";
-  dataPath = std::string("share/") + GAMENAME;
-
   Material::defaultMaterial = Resources::load<Material>("shaders/default_diffuse");
   //if(Material::defaultMaterial == NULL) { throw Exception("Failed to load 'shaders/default_diffuse'"); }
   if(Material::defaultMaterial == NULL) { throw std::exception(); }
@@ -101,6 +100,19 @@ Application::Application(int argc, char* argv[])
   initialized = true;
 
   //displaySplash();
+}
+
+void Application::setupPaths()
+{
+#ifdef EMSCRIPTEN
+  engineDataPath = "share/mutiny";
+  dataPath = std::string("share/") + GAMENAME;
+#elif WINDOWS
+  error
+#else
+  engineDataPath = "share/mutiny";
+  dataPath = std::string("share/") + GAMENAME;
+#endif
 }
 
 void Application::displaySplash()

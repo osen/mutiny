@@ -28,9 +28,9 @@ void MainCamera::onAwake()
 
   getGameObject()->getTransform()->setPosition(Vector3(0, 0, -8));
 
-  texturedMaterial.reset(Resources::load<Material>("shaders/simple_2d"));
-  lightKeyMaterial.reset(Resources::load<Material>("shaders/light_key"));
-  mergeMaterial.reset(Resources::load<Material>("shaders/merge"));
+  texturedMaterial = Resources::load<Material>("shaders/simple_2d");
+  lightKeyMaterial = Resources::load<Material>("shaders/light_key");
+  mergeMaterial = Resources::load<Material>("shaders/merge");
 }
 
 void MainCamera::onUpdate()
@@ -39,24 +39,24 @@ void MainCamera::onUpdate()
   getGameObject()->getTransform()->lookAt(Vector3(0, 0, 0));
 
   Graphics::setRenderTarget(blurPass1.get());
-  Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), originalPass.get(), texturedMaterial.get());
+  Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), originalPass.get(), texturedMaterial);
   Graphics::setRenderTarget(NULL);
 
   Graphics::setRenderTarget(blurPass2.get());
-  Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), blurPass1.get(), texturedMaterial.get());
+  Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), blurPass1.get(), texturedMaterial);
   Graphics::setRenderTarget(NULL);
 
   Graphics::setRenderTarget(blurPass3.get());
-  Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), blurPass2.get(), texturedMaterial.get());
+  Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), blurPass2.get(), texturedMaterial);
   Graphics::setRenderTarget(NULL);
 
   Graphics::setRenderTarget(lightKeyPass.get());
-  Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), blurPass3.get(), lightKeyMaterial.get());
+  Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), blurPass3.get(), lightKeyMaterial);
   Graphics::setRenderTarget(NULL);
 
   Graphics::setRenderTarget(mergePass.get());
   mergeMaterial->setTexture("in_Merge", lightKeyPass.get());
-  Graphics::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), originalPass.get(), mergeMaterial.get());
+  Graphics::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), originalPass.get(), mergeMaterial);
   Graphics::setRenderTarget(NULL);
 }
 
