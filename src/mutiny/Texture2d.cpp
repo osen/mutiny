@@ -6,7 +6,11 @@
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
+
+#ifdef WINDOWS
+#else
 #include <SDL/SDL_rotozoom.h>
+#endif
 
 #include <memory>
 #include <functional>
@@ -99,7 +103,7 @@ Texture2d* Texture2d::load(std::string path)
     throw std::exception();
   }
 
-#ifdef EMSCRIPTEN
+#if defined EMSCRIPTEN || defined WINDOWS
   surface = tmpSurface;
 #else
   float targetX = Mathf::nextPowerOfTwo(tmpSurface->w);

@@ -4,7 +4,7 @@
 #include "Camera.h"
 #include "Material.h"
 #include "Screen.h"
-#include "Time.h"
+#include "_Time.h"
 #include "Input.h"
 #include "RenderTexture.h"
 #include "Resources.h"
@@ -21,7 +21,11 @@
 #include <emscripten.h>
 #endif
 
+#ifdef WINDOWS
+#include <windows.h>
+#else
 #include <unistd.h>
+#endif
 
 #include <functional>
 #include <iostream>
@@ -117,7 +121,9 @@ void Application::setupPaths()
   dirname = strExePath;
   dirname = dirname.substr(0, dirname.find_last_of("\\"));
   dirname = dirname.substr(0, dirname.find_last_of("\\"));
-  todo
+
+  engineDataPath = "share/mutiny";
+  dataPath = "share/mygame";
 #else
   FILE* process = NULL;
   std::string command;

@@ -5,6 +5,8 @@
 #include "internal/WavefrontParser.h"
 
 #include <iostream>
+#include <memory>
+#include <functional>
 
 namespace mutiny
 {

@@ -4,8 +4,6 @@
 #include "glm/glm.hpp"
 #include "glm/ext.hpp"
 
-#include <cmath>
-
 namespace mutiny
 {
 
