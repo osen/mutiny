@@ -7,7 +7,7 @@ include ../../config/config.Mk
 
 MUTINYLIBDIR=..\..\lib
 MUTINYLIB=..\..\lib\mutiny.lib
-MUTINYLIBS=..\..\import\msvc12\lib\GLEW32s.lib ..\..\import\msvc12\lib\SDL.lib ..\..\import\msvc12\lib\SDLmain.lib ..\..\import\msvc12\lib\SDL_image.lib
+MUTINYLIBS=..\..\import\msvc\lib\GLEW32s.lib ..\..\import\msvc\lib\SDL.lib ..\..\import\msvc\lib\SDLmain.lib ..\..\import\msvc\lib\SDL_image.lib
 MUTINYOBJ=$(MUTINYCPP:.cpp=.obj)
 
 .SUFFIXES: .obj .cpp
@@ -27,7 +27,7 @@ $(MUTINYLIB): $(MUTINYOBJ) $(MUTINYLIBDIR)
 	@$(MAKE) /NOLOGO -f Makefile.msvc _gensrc
 	@$(MAKE) /NOLOGO -f Makefile.msvc $@ SRCEXISTS="true"
 !else
-	$(CXX) /nologo /EHsc -c -I..\..\import\msvc12\include -I. $(CXXFLAGS) /Fo$@ $<
+	$(CXX) /nologo /EHsc -c -I..\..\import\msvc\include -I. $(CXXFLAGS) /Fo$@ $<
 !endif
 
 $(MUTINYLIBDIR):
