@@ -1,0 +1,51 @@
+include ../config/config.msvc.Mk
+include ../config/config.Mk
+
+!if "$(SRCEXISTS)" == "true"
+!include source.Mk
+!endif
+
+MUTINYLIB=..\lib\mutiny.lib
+MUTINYLIBS=GLEW32s.lib freeglut_static.lib GLU32.lib OpenGL32.lib alut.lib OpenAl32.lib libvorbisfile_static.lib libvorbis_static.lib libogg_static.lib pthreadVC2.lib libpng16.lib zlib.lib ws2_32.lib
+MUTINYOBJ=$(MUTINYCPP:.cpp=.obj)
+
+.SUFFIXES: .obj .cpp
+
+all: $(MUTINYLIB)
+
+$(MUTINYLIB): $(MUTINYOBJ)
+!if "$(SRCEXISTS)" == ""
+	$(MAKE) -f Makefile.msvc _gensrc
+	$(MAKE) -f Makefile.msvc $(MUTINYLIB) SRCEXISTS="true"
+!else
+	$(LINK) /OUT:$(MUTINYLIB) $(MUTINYOBJ) /LIBPATH:..\import\lib $(MUTINYLIBS) $(LDFLAGS)
+!endif
+
+.cpp.obj:
+!if "$(SRCEXISTS)" == ""
+	$(MAKE) -f Makefile.msvc _gensrc
+	$(MAKE) -f Makefile.msvc $@ SRCEXISTS="true"
+!else
+	$(CXX) /nologo /MD /EHsc -c -I..\import\include -I. $(CXXFLAGS) /Fo$@ $<
+!endif
+
+clean:
+!if "$(SRCEXISTS)" == ""
+	$(MAKE) -f Makefile.msvc _gensrc
+	$(MAKE) -f Makefile.msvc clean SRCEXISTS="true"
+!else
+	del /q $(MUTINYOBJ)
+	del /q $(MUTINYLIB)
+	del /q source.Mk
+!endif
+
+_gensrc:
+	@del /q source.Mk
+	
+	dir /a-d /b /s *.cpp >> source.tmp
+	@echo.>> source.tmp
+
+	@echo MUTINYCPP= \>> source.Mk
+	@FOR /F %%i IN (source.tmp) DO ECHO %%i \>> source.Mk
+
+	@del /q source.tmp
