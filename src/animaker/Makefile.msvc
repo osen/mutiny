@@ -5,21 +5,21 @@ include ../../config/config.Mk
 !include source.Mk
 !endif
 
-MUTINYLIBDIR=..\..\lib
-MUTINYLIB=..\..\lib\mutiny.lib
-MUTINYLIBS=..\..\import\msvc12\lib\GLEW32s.lib ..\..\import\msvc12\lib\SDL.lib ..\..\import\msvc12\lib\SDLmain.lib ..\..\import\msvc12\lib\SDL_image.lib
-MUTINYOBJ=$(MUTINYCPP:.cpp=.obj)
+ANIMAKERBINDIR=..\..\bin
+ANIMAKERBIN=..\..\bin\animaker
+ANIMAKERLIBS=
+ANIMAKEROBJ=$(ANIMAKERCPP:.cpp=.obj)
 
 .SUFFIXES: .obj .cpp
 
-all: $(MUTINYLIB)
+all: $(ANIMAKERBIN)
 
-$(MUTINYLIB): $(MUTINYOBJ) $(MUTINYLIBDIR)
+$(ANIMAKERBIN): $(ANIMAKEROBJ) $(ANIMAKERBINDIR)
 !if "$(SRCEXISTS)" == ""
 	@$(MAKE) /NOLOGO -f Makefile.msvc _gensrc
-	@$(MAKE) /NOLOGO -f Makefile.msvc $(MUTINYLIB) SRCEXISTS="true"
+	@$(MAKE) /NOLOGO -f Makefile.msvc $(ANIMAKERLIB) SRCEXISTS="true"
 !else
-	$(LIB) /OUT:$(MUTINYLIB) $(MUTINYOBJ) $(MUTINYLIBS)
+	$(LINK) /OUT:$(ANIMAKERBIN) $(ANIMAKEROBJ) /LIBPATH:..\..\import\lib /LIBPATH:..\..\lib $(ANIMAKERLIBS) $(LDFLAGS)
 !endif
 
 .cpp.obj:
@@ -27,20 +27,20 @@ $(MUTINYLIB): $(MUTINYOBJ) $(MUTINYLIBDIR)
 	@$(MAKE) /NOLOGO -f Makefile.msvc _gensrc
 	@$(MAKE) /NOLOGO -f Makefile.msvc $@ SRCEXISTS="true"
 !else
-	$(CXX) /nologo /EHsc -c -I..\..\import\msvc12\include -I. $(CXXFLAGS) /Fo$@ $<
+	$(CXX) /nologo /EHsc -c -I..\..\import\msvc12\include -I..\ -I. $(CXXFLAGS) /Fo$@ $<
 !endif
 
-$(MUTINYLIBDIR):
-	mkdir $(MUTINYLIBDIR)
+$(ANIMAKERBINDIR):
+	mkdir $(ANIMAKERBINDIR)
 
 clean:
 !if "$(SRCEXISTS)" == ""
 	@$(MAKE) /NOLOGO -f Makefile.msvc _gensrc
 	@$(MAKE) /NOLOGO -f Makefile.msvc clean SRCEXISTS="true"
 !else
-	-del $(MUTINYOBJ) 2>nul
-	-del $(MUTINYLIB) 2>nul
-	-rmdir $(MUTINYLIBDIR) 2>nul
+	-del $(ANIMAKEROBJ) 2>nul
+	-del $(ANIMAKERBIN) 2>nul
+	-rmdir $(ANIMAKERBINDIR) 2>nul
 	-del source.Mk 2>nul
 !endif
 
@@ -50,7 +50,7 @@ _gensrc:
 	@dir /a-d /b /s *.cpp >> source.tmp
 	@echo.>> source.tmp
 
-	@echo MUTINYCPP= \>> source.Mk
+	@echo ANIMAKERCPP= \>> source.Mk
 	@FOR /F %%i IN (source.tmp) DO @ECHO %%i \>> source.Mk
 
 	@del source.tmp 2>nul
