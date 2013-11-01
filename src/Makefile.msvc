@@ -1,0 +1,7 @@
+all:
+	@cd mutiny && $(MAKE) -f Makefile.msvc
+	@cd animaker && $(MAKE) -f Makefile.msvc
+
+clean:
+	@cd animaker && $(MAKE) -f Makefile.msvc clean
+	@cd mutiny && $(MAKE) -f Makefile.msvc clean

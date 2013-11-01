@@ -1,0 +1,27 @@
+include ../../config/config.mingw.Mk
+include ../../config/config.Mk
+
+BINDIR=..\..\bin
+BIN=${BINDIR}\animaker.exe
+
+ANIMAKERCPP=$(shell dir *.cpp /b /s)
+ANIMAKEROBJ=$(ANIMAKERCPP:.cpp=.o)
+
+.SUFFIXES: .o .cpp
+
+all: ${BIN}
+
+${BINDIR}:
+	mkdir ${BINDIR}
+
+${BIN}: ${BINDIR} ${ANIMAKEROBJ}
+	${LD} -o ${BIN} ${ANIMAKEROBJ} ${LDFLAGS} -L../../lib -lmutiny -L../../import/mingw32/lib -lmingw32 -lSDLmain -lSDL -lOpenGL32 -lGLEW32 -lGLU32 -lSDL_image
+
+.cpp.o:
+	${CXX} -c -I../../import/mingw32/include -I../ ${CXXFLAGS} -o $@ $<
+
+clean:
+	-del /q ${ANIMAKEROBJ} 2>nul
+	-del /q ${BIN} 2>nul
+	-rmdir /q ${BINDIR} 2>nul
+

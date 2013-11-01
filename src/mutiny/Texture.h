@@ -24,6 +24,10 @@ public:
   GLuint getNativeTexture();
 
 protected:
+  static void deleteFramebuffer(GLuint id);
+  static void deleteTexture(GLuint id);
+  static void deleteRenderbuffer(GLuint id);
+
   int width;
   int height;
   GLuint nativeTexture;

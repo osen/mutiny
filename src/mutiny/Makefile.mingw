@@ -1,0 +1,27 @@
+include ../../config/config.mingw.Mk
+include ../../config/config.Mk
+
+LIBDIR=..\..\lib
+LIB=${LIBDIR}\libmutiny.a
+
+MUTINYCPP=$(shell dir *.cpp /b /s)
+MUTINYOBJ=$(MUTINYCPP:.cpp=.o)
+
+.SUFFIXES: .o .cpp
+
+all: ${LIB}
+
+${LIBDIR}:
+	mkdir ${LIBDIR}
+
+${LIB}: ${LIBDIR} ${MUTINYOBJ}
+	${AR} rcs ${LIB} ${MUTINYOBJ}
+
+.cpp.o:
+	${CXX} -c -I../../import/mingw32/include -I../ ${CXXFLAGS} -o $@ $<
+
+clean:
+	-del /Q ${MUTINYOBJ} 2>nul
+	-del /Q ${LIB} 2>nul
+	-rmdir /Q ${LIBDIR} 2>nul
+

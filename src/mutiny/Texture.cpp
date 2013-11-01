@@ -16,6 +16,21 @@ Texture::~Texture()
 
 }
 
+void Texture::deleteFramebuffer(GLuint id)
+{
+  glDeleteFramebuffers(1, &id);
+}
+
+void Texture::deleteTexture(GLuint id)
+{
+  glDeleteTextures(1, &id);
+}
+
+void Texture::deleteRenderbuffer(GLuint id)
+{
+  glDeleteRenderbuffers(1, &id);
+}
+
 int Texture::getWidth()
 {
   return width;

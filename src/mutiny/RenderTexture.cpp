@@ -26,13 +26,13 @@ RenderTexture::RenderTexture(int width, int height)
   this->height = height;
 
   glGenFramebuffers(1, &nativeFrameBuffer);
-  _nativeFrameBuffer.reset(&nativeFrameBuffer, std::bind(glDeleteFramebuffers, 1, &nativeFrameBuffer));
+  _nativeFrameBuffer.reset(&nativeFrameBuffer, std::bind(deleteFramebuffer, nativeFrameBuffer));
   glBindFramebuffer(GL_FRAMEBUFFER, nativeFrameBuffer);
 
   if(nativeTexture == -1)
   {
     glGenTextures(1, &nativeTexture);
-    _nativeTexture.reset(&nativeTexture, std::bind(glDeleteTextures, 1, &nativeTexture));
+    _nativeTexture.reset(&nativeTexture, std::bind(deleteTexture, nativeTexture));
   }
 
   glBindTexture(GL_TEXTURE_2D, nativeTexture);
@@ -51,7 +51,7 @@ RenderTexture::RenderTexture(int width, int height)
   //glGenerateMipmapEXT(GL_TEXTURE_2D);
 
   glGenRenderbuffers(1, &nativeRenderBuffer);
-  _nativeRenderBuffer.reset(&nativeRenderBuffer, std::bind(glDeleteRenderbuffers, 1, &nativeRenderBuffer));
+  _nativeRenderBuffer.reset(&nativeRenderBuffer, std::bind(deleteRenderbuffer, nativeRenderBuffer));
   glBindRenderbuffer(GL_RENDERBUFFER, nativeRenderBuffer);
   glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height);
   glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, nativeRenderBuffer);

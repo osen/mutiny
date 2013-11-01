@@ -2,6 +2,8 @@
 
 #include <mutiny/mutiny.h>
 
+#include <windows.h>
+
 #include <iostream>
 #include <exception>
 
@@ -17,11 +19,13 @@ void safe_main(int argc, char* argv[])
   application.run();
 }
 
+//int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+
 int main(int argc, char* argv[])
 {
   //try
   //{
-    safe_main(argc, argv);
+    safe_main(0, NULL);
 
     return 0;
   //}

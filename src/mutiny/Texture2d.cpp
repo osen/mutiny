@@ -64,7 +64,7 @@ void Texture2d::apply()
   if(nativeTexture == -1)
   {
     glGenTextures(1, &nativeTexture);
-    _nativeTexture.reset(&nativeTexture, std::bind(glDeleteTextures, 1, &nativeTexture));
+    _nativeTexture.reset(&nativeTexture, std::bind(deleteTexture, nativeTexture));
   }
 
   if(pixels.size() < 1)
@@ -128,7 +128,7 @@ Texture2d* Texture2d::load(std::string path)
   if(texture->nativeTexture == -1)
   {
     glGenTextures(1, &texture->nativeTexture);
-    texture->_nativeTexture.reset(&texture->nativeTexture, std::bind(glDeleteTextures, 1, &texture->nativeTexture));
+    texture->_nativeTexture.reset(&texture->nativeTexture, std::bind(deleteTexture, texture->nativeTexture));
   }
 
   GLint bpp = surface->format->BytesPerPixel;
