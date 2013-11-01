@@ -1,27 +1,5 @@
-include ../../config/config.mingw.Mk
-include ../../config/config.Mk
+ROOT=..\..
+LOCAL_CXXFLAGS=-I${ROOT}/import/mingw/include
+LOCAL_LIB=libmutiny.a
 
-LIBDIR=..\..\lib
-LIB=${LIBDIR}\libmutiny.a
-
-MUTINYCPP=$(shell dir *.cpp /b /s)
-MUTINYOBJ=$(MUTINYCPP:.cpp=.o)
-
-.SUFFIXES: .o .cpp
-
-all: ${LIB}
-
-${LIBDIR}:
-	mkdir ${LIBDIR}
-
-${LIB}: ${LIBDIR} ${MUTINYOBJ}
-	${AR} rcs ${LIB} ${MUTINYOBJ}
-
-.cpp.o:
-	${CXX} -c -I../../import/mingw/include -I../ ${CXXFLAGS} -o $@ $<
-
-clean:
-	-del /Q ${MUTINYOBJ} 2>nul
-	-del /Q ${LIB} 2>nul
-	-rmdir /Q ${LIBDIR} 2>nul
-
+include ${ROOT}\tmpl\lib.mingw.Mk
