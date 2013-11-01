@@ -2,8 +2,6 @@
 
 #include <mutiny/mutiny.h>
 
-#include <windows.h>
-
 #include <iostream>
 #include <exception>
 
@@ -25,7 +23,7 @@ int main(int argc, char* argv[])
 {
   //try
   //{
-    safe_main(0, NULL);
+    safe_main(argc, argv);
 
     return 0;
   //}
