@@ -15,10 +15,10 @@ ${BINDIR}:
 	mkdir ${BINDIR}
 
 ${BIN}: ${BINDIR} ${ANIMAKEROBJ}
-	${LD} -o ${BIN} ${ANIMAKEROBJ} ${LDFLAGS} -L../../lib -lmutiny -L../../import/mingw32/lib -lmingw32 -lSDLmain -lSDL -lOpenGL32 -lGLEW32 -lGLU32 -lSDL_image
+	${LD} -o ${BIN} ${ANIMAKEROBJ} ${LDFLAGS} -L../../lib -lmutiny -L../../import/mingw/lib -lmingw32 -lSDLmain -lSDL -lOpenGL32 -lGLEW32 -lGLU32 -lSDL_image
 
 .cpp.o:
-	${CXX} -c -I../../import/mingw32/include -I../ ${CXXFLAGS} -o $@ $<
+	${CXX} -c -I../../import/mingw/include -I../ ${CXXFLAGS} -o $@ $<
 
 clean:
 	-del /q ${ANIMAKEROBJ} 2>nul

@@ -1,0 +1,7 @@
+all:
+	@cd mutiny && $(MAKE) -f Makefile.mingw
+	@cd animaker && $(MAKE) -f Makefile.mingw
+
+clean:
+	@cd animaker && $(MAKE) -f Makefile.mingw clean
+	@cd mutiny && $(MAKE) -f Makefile.mingw clean

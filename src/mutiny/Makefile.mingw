@@ -18,7 +18,7 @@ ${LIB}: ${LIBDIR} ${MUTINYOBJ}
 	${AR} rcs ${LIB} ${MUTINYOBJ}
 
 .cpp.o:
-	${CXX} -c -I../../import/mingw32/include -I../ ${CXXFLAGS} -o $@ $<
+	${CXX} -c -I../../import/mingw/include -I../ ${CXXFLAGS} -o $@ $<
 
 clean:
 	-del /Q ${MUTINYOBJ} 2>nul
