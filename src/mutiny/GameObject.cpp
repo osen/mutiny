@@ -30,14 +30,14 @@ GameObject::GameObject(std::string name)
 {
   setName(name);
   addComponent<Transform>();
-  Application::instance->gameObjects.push_back(std::shared_ptr<GameObject>(this));
+  Application::gameObjects.push_back(std::shared_ptr<GameObject>(this));
   activeSelf = true;
 }
 
 GameObject::GameObject()
 {
   addComponent<Transform>();
-  Application::instance->gameObjects.push_back(std::shared_ptr<GameObject>(this));
+  Application::gameObjects.push_back(std::shared_ptr<GameObject>(this));
   activeSelf = true;
 }
 

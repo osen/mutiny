@@ -36,25 +36,33 @@ namespace mutiny
 namespace engine
 {
 
-Application* Application::instance = NULL;
+std::shared_ptr<SDL_Surface> Application::screen;
+bool Application::running = false;
+bool Application::initialized = false;
+std::string Application::loadedLevelName;
+std::vector<std::shared_ptr<GameObject> > Application::gameObjects;
+std::string Application::levelChange;
+std::string Application::dataPath;
+std::string Application::engineDataPath;
 
-Application::Application(int argc, char* argv[])
+int Application::argc = 0;
+std::vector<std::string> Application::argv;
+
+void Application::init(int argc, char* argv[])
 {
-  if(instance != NULL)
+  if(initialized == true)
   {
-    std::cout << "Error: Already initialized" << std::endl;
-    throw std::exception();
+    return;
   }
 
-  instance = this;
   initialized = true;
   running = false;
 
-  this->argc = argc;
+  Application::argc = argc;
 
   for(int i = 0; i < argc; i++)
   {
-    this->argv.push_back(argv[i]);
+    Application::argv.push_back(argv[i]);
   }
 
   setupPaths();
@@ -218,8 +226,8 @@ void Application::loop()
   Time::deltaTime = diff / 1000.0f;
   lastTime = time;
 
-  Screen::width = instance->screen->w;
-  Screen::height = instance->screen->h;
+  Screen::width = screen->w;
+  Screen::height = screen->h;
 
   Input::downKeys.clear();
   Input::upKeys.clear();
@@ -230,7 +238,7 @@ void Application::loop()
   {
     if(event.type == SDL_QUIT)
     {
-      instance->running = false;
+      running = false;
     }
     else if(event.type == SDL_MOUSEMOTION)
     {
@@ -321,19 +329,19 @@ void Application::loop()
     }
   }
 
-  for(int i = 0; i < instance->gameObjects.size(); i++)
+  for(int i = 0; i < gameObjects.size(); i++)
   {
-    instance->gameObjects.at(i)->update();
+    gameObjects.at(i)->update();
   }
 
   std::vector<std::shared_ptr<GameObject> > destroyedGos;
-  for(int i = 0; i < instance->gameObjects.size(); i++)
+  for(int i = 0; i < gameObjects.size(); i++)
   {
-    if(instance->gameObjects.at(i)->destroyed == true)
+    if(gameObjects.at(i)->destroyed == true)
     {
-      instance->gameObjects.at(i)->destroy();
-      destroyedGos.push_back(instance->gameObjects.at(i));
-      instance->gameObjects.erase(instance->gameObjects.begin() + i);
+      gameObjects.at(i)->destroy();
+      destroyedGos.push_back(gameObjects.at(i));
+      gameObjects.erase(gameObjects.begin() + i);
       i--;
     }
   }
@@ -361,9 +369,9 @@ void Application::loop()
     glClearColor(49.0f / 255.0f, 77.0f / 255.0f, 121.0f / 255.0f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    for(int i = 0; i < instance->gameObjects.size(); i++)
+    for(int i = 0; i < gameObjects.size(); i++)
     {
-      instance->gameObjects.at(i)->render();
+      gameObjects.at(i)->render();
     }
 
     if(Camera::current->targetTexture != NULL)
@@ -372,36 +380,36 @@ void Application::loop()
     }
   }
 
-  for(int i = 0; i < instance->gameObjects.size(); i++)
+  for(int i = 0; i < gameObjects.size(); i++)
   {
-    instance->gameObjects.at(i)->gui();
+    gameObjects.at(i)->gui();
   }
 
   SDL_GL_SwapBuffers();
 
-  if(instance->levelChange != "")
+  if(levelChange != "")
   {
-    instance->loadedLevelName = instance->levelChange;
-    instance->levelChange = "";
+    loadedLevelName = levelChange;
+    levelChange = "";
     loadLevel();
   }
 }
 
 void Application::quit()
 {
-  instance->running = false;
+  running = false;
 }
 
 void Application::loadLevel()
 {
   std::vector<std::shared_ptr<GameObject> > destroyedGos;
-  for(int i = 0; i < instance->gameObjects.size(); i++)
+  for(int i = 0; i < gameObjects.size(); i++)
   {
-    if(instance->gameObjects.at(i)->destroyOnLoad == true)
+    if(gameObjects.at(i)->destroyOnLoad == true)
     {
-      instance->gameObjects.at(i)->destroy();
-      destroyedGos.push_back(instance->gameObjects.at(i));
-      instance->gameObjects.erase(instance->gameObjects.begin() + i);
+      gameObjects.at(i)->destroy();
+      destroyedGos.push_back(gameObjects.at(i));
+      gameObjects.erase(gameObjects.begin() + i);
       i--;
     }
   }
@@ -417,43 +425,43 @@ void Application::loadLevel()
     }
   }
 
-  for(int i = 0; i < instance->gameObjects.size(); i++)
+  for(int i = 0; i < gameObjects.size(); i++)
   {
-    instance->gameObjects.at(i)->levelWasLoaded();
+    gameObjects.at(i)->levelWasLoaded();
   }
 }
 
 void Application::loadLevel(std::string path)
 {
-  if(instance->running == true)
+  if(running == true)
   {
-    instance->levelChange = path;
+    levelChange = path;
   }
   else
   {
-    instance->loadedLevelName = path;
+    loadedLevelName = path;
     loadLevel();
   }
 }
 
 std::string Application::getLoadedLevelName()
 {
-  return instance->loadedLevelName;
+  return loadedLevelName;
 }
 
 std::string Application::getDataPath()
 {
-  return instance->dataPath;
+  return dataPath;
 }
 
 int Application::getArgc()
 {
-  return instance->argc;
+  return argc;
 }
 
 std::string Application::getArgv(int i)
 {
-  return instance->argv.at(i);
+  return argv.at(i);
 }
 
 }

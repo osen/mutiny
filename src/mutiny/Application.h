@@ -25,6 +25,8 @@ class Application
   friend class mutiny::engine::CharacterController;
 
 public:
+  static void init(int argc, char* argv[]);
+  static void run();
   static void quit();
   static void loadLevel(std::string path);
   static std::string getLoadedLevelName();
@@ -32,29 +34,24 @@ public:
   static int getArgc();
   static std::string getArgv(int i);
 
-  Application(int argc, char* argv[]);
-  void run();
-
 private:
-  static Application* instance;
-
   static void loadLevel();
   static void loop();
   static void displaySplash();
 
-  std::shared_ptr<SDL_Surface> screen;
-  bool running;
-  bool initialized;
-  std::string loadedLevelName;
-  std::vector<std::shared_ptr<GameObject> > gameObjects;
-  std::string levelChange;
-  std::string dataPath;
-  std::string engineDataPath;
+  static std::shared_ptr<SDL_Surface> screen;
+  static bool running;
+  static bool initialized;
+  static std::string loadedLevelName;
+  static std::vector<std::shared_ptr<GameObject> > gameObjects;
+  static std::string levelChange;
+  static std::string dataPath;
+  static std::string engineDataPath;
 
-  int argc;
-  std::vector<std::string> argv;
+  static int argc;
+  static std::vector<std::string> argv;
 
-  void setupPaths();
+  static void setupPaths();
 
 };
 
