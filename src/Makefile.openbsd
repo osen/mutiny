@@ -1,34 +1,7 @@
-include ../config/config.openbsd.Mk
-include ../config/config.Mk
-
-MUTINYCPP=$(shell find mutiny -name '*.cpp')
-MUTINYOBJ=$(MUTINYCPP:.cpp=.o)
-MUTINYLIB=../lib/libmutiny.a
-
-GAMECPP=$(shell find ${GAMENAME} -name '*.cpp')
-GAMEOBJ=$(GAMECPP:.cpp=.o)
-GAMEBIN=../bin/${GAMENAME}
-
-.SUFFIXES: .o .cpp
-
-all: ${GAMEBIN}
-
-${MUTINYLIB}: ${MUTINYOBJ}
-	mkdir -p ../lib
-	${AR} rcs ${MUTINYLIB} ${MUTINYOBJ}
-
-${GAMEBIN}: ${GAMEOBJ} ${MUTINYLIB}
-	mkdir -p ../bin
-	${LD} -o ${GAMEBIN} ${GAMEOBJ} -lGLEW -lSDL -lSDL_image -lSDL_gfx -lGL -lpng ${LDFLAGS} -L../lib -lmutiny
-
-.cpp.o:
-	${CXX} -c -I. ${CXXFLAGS} -o $@ $<
+all:
+	@cd mutiny && $(MAKE) -f Makefile.openbsd
+	@cd tools/buccaneer && $(MAKE) -f Makefile.openbsd
 
 clean:
-	rm -f ${MUTINYOBJ}
-	rm -f ${MUTINYLIB}
-	rm -f ${GAMEOBJ}
-	rm -f ${GAMEBIN}
-	rm -r -f ../bin
-	rm -r -f ../lib
-
+	@cd tools/buccaneer && $(MAKE) -f Makefile.openbsd clean
+	@cd mutiny && $(MAKE) -f Makefile.openbsd clean

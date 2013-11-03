@@ -1,0 +1,5 @@
+ROOT=../..
+LOCAL_CXXFLAGS=
+LOCAL_LIB=libmutiny.a
+
+include ${ROOT}/tmpl/lib.openbsd.Mk

@@ -1,11 +1,11 @@
 all:
 	@cd mutiny && $(MAKE) -f Makefile.mingw
-	@cd animaker && $(MAKE) -f Makefile.mingw
+	@cd tools\buccaneer && $(MAKE) -f Makefile.mingw
 	@cd collision && $(MAKE) -f Makefile.mingw
 	@cd knights && $(MAKE) -f Makefile.mingw
 
 clean:
 	@cd knights && $(MAKE) -f Makefile.mingw clean
 	@cd collision && $(MAKE) -f Makefile.mingw clean
-	@cd animaker && $(MAKE) -f Makefile.mingw clean
+	@cd tools\buccaneer && $(MAKE) -f Makefile.mingw clean
 	@cd mutiny && $(MAKE) -f Makefile.mingw clean

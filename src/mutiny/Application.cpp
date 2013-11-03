@@ -66,6 +66,7 @@ void Application::init(int argc, char* argv[])
   }
 
   setupPaths();
+  std::cout << "yay: " << engineDataPath << " " << dataPath << std::endl;
 
   if(SDL_Init(SDL_INIT_EVERYTHING) == -1)
   {
@@ -176,14 +177,9 @@ void Application::setupPaths()
 
 void Application::displaySplash()
 {
-  glClearColor(1, 1, 1, 1.0f);
-  Texture2d* tex2 = Resources::load<Texture2d>("images/loading");
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  Gui::drawTexture(Rect(0, 0, 500, 500), tex2);
-  SDL_GL_SwapBuffers();
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  Gui::drawTexture(Rect(0, 0, 500, 500), tex2);
-  SDL_GL_SwapBuffers();
+  // set timeout
+  // add gui game object
+  // when timeout done, change to next scene
 }
 
 void Application::run()
