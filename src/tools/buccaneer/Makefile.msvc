@@ -1,13 +1,13 @@
-include ../../config/config.msvc.Mk
-include ../../config/config.Mk
+include ../../../config/config.msvc.Mk
+include ../../../config/config.Mk
 
 !if "$(SRCEXISTS)" == "true"
 !include source.Mk
 !endif
 
-ANIMAKERBINDIR=..\..\bin
-ANIMAKERBIN=..\..\bin\animaker
-ANIMAKERLIBS=OpenGL32.lib GLU32.lib SDL.lib mutiny.lib
+ANIMAKERBINDIR=..\..\..\bin
+ANIMAKERBIN=..\..\..\bin\buccaneer
+ANIMAKERLIBS=OpenGL32.lib GLU32.lib SDLmain.lib SDL.lib mutiny.lib
 ANIMAKEROBJ=$(ANIMAKERCPP:.cpp=.obj)
 
 .SUFFIXES: .obj .cpp
@@ -19,7 +19,7 @@ $(ANIMAKERBIN): $(ANIMAKEROBJ) $(ANIMAKERBINDIR)
 	@$(MAKE) /NOLOGO -f Makefile.msvc _gensrc
 	@$(MAKE) /NOLOGO -f Makefile.msvc $(ANIMAKERLIB) SRCEXISTS="true"
 !else
-	$(LINK) /DYNAMICBASE /NODEFAULTLIB /SUBSYSTEM:WINDOWS /OUT:$(ANIMAKERBIN) $(ANIMAKEROBJ) /LIBPATH:..\..\import\msvc\lib /LIBPATH:..\..\lib $(ANIMAKERLIBS) $(LDFLAGS)
+	$(LINK) /SUBSYSTEM:WINDOWS /OUT:$(ANIMAKERBIN) $(ANIMAKEROBJ) /LIBPATH:..\..\..\import\msvc\lib /LIBPATH:..\..\..\lib $(ANIMAKERLIBS) $(LDFLAGS)
 !endif
 
 .cpp.obj:
@@ -27,7 +27,7 @@ $(ANIMAKERBIN): $(ANIMAKEROBJ) $(ANIMAKERBINDIR)
 	@$(MAKE) /NOLOGO -f Makefile.msvc _gensrc
 	@$(MAKE) /NOLOGO -f Makefile.msvc $@ SRCEXISTS="true"
 !else
-	$(CXX) /nologo /EHsc -c -I..\..\import\msvc\include -I..\ -I. $(CXXFLAGS) /Fo$@ $<
+	$(CXX) /nologo /EHsc -c -I..\..\..\import\msvc\include -I..\..\ $(CXXFLAGS) /Fo$@ $<
 !endif
 
 $(ANIMAKERBINDIR):

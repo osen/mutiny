@@ -19,7 +19,7 @@ $(MUTINYLIB): $(MUTINYOBJ) $(MUTINYLIBDIR)
 	@$(MAKE) /NOLOGO -f Makefile.msvc _gensrc
 	@$(MAKE) /NOLOGO -f Makefile.msvc $(MUTINYLIB) SRCEXISTS="true"
 !else
-	$(LIB) /OUT:$(MUTINYLIB) $(MUTINYOBJ) $(MUTINYLIBS)
+	lib /OUT:$(MUTINYLIB) $(MUTINYOBJ) $(MUTINYLIBS)
 !endif
 
 .cpp.obj:
@@ -27,7 +27,7 @@ $(MUTINYLIB): $(MUTINYOBJ) $(MUTINYLIBDIR)
 	@$(MAKE) /NOLOGO -f Makefile.msvc _gensrc
 	@$(MAKE) /NOLOGO -f Makefile.msvc $@ SRCEXISTS="true"
 !else
-	$(CXX) /nologo /EHsc -c -I..\..\import\msvc\include -I. $(CXXFLAGS) /Fo$@ $<
+	$(CXX) /nologo /EHsc -c -I..\..\import\msvc\include $(CXXFLAGS) /Fo$@ $<
 !endif
 
 $(MUTINYLIBDIR):
