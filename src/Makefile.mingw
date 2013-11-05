@@ -3,8 +3,10 @@ all:
 	@cd tools\buccaneer && $(MAKE) -f Makefile.mingw
 	@cd collision && $(MAKE) -f Makefile.mingw
 	@cd knights && $(MAKE) -f Makefile.mingw
+	@cd experiment && $(MAKE) -f Makefile.mingw
 
 clean:
+	@cd experiment && $(MAKE) -f Makefile.mingw clean
 	@cd knights && $(MAKE) -f Makefile.mingw clean
 	@cd collision && $(MAKE) -f Makefile.mingw clean
 	@cd tools\buccaneer && $(MAKE) -f Makefile.mingw clean

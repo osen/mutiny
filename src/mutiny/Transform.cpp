@@ -123,6 +123,9 @@ void Transform::setParent(Transform* transform)
 {
   if(this->parent != NULL)
   {
+    setLocalPosition(getPosition());
+	setLocalRotation(getRotation());
+
     for(int i = 0; i < this->parent->children.size(); i++)
     {
       if(this->parent->children.at(i) == this)
@@ -136,6 +139,9 @@ void Transform::setParent(Transform* transform)
   if(transform != NULL)
   {
     transform->children.push_back(this);
+
+	setLocalPosition(getLocalPosition() - transform->getPosition());
+	setLocalRotation(getLocalRotation() - transform->getRotation());
   }
 
   this->parent = transform;

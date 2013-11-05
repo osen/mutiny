@@ -8,28 +8,23 @@ void MainScreen::onAwake()
 {
   cameraGo = new GameObject("MainCamera");
   Camera* camera = cameraGo->addComponent<Camera>();
-  cameraGo->getTransform()->setPosition(Vector3(0, 0, -10));
+  cameraGo->getTransform()->setPosition(Vector3(0, 1, -10));
 
-  cubeGo = GameObject::createPrimitive(PrimitiveType::CUBE);
-  //centerGo = GameObject::createPrimitive(PrimitiveType::CUBE);
-  cubeGo->getTransform()->setPosition(Vector3(0, 0, 0));
+  cube1Go = GameObject::createPrimitive(PrimitiveType::CUBE);
+  cube1Go->getTransform()->setPosition(Vector3(10, 0, 10));
 
-  Matrix4x4 mat = Matrix4x4::getTrs(Vector3(23, 58, 11), Vector3(0, 0, 0), Vector3(1, 1, 1));
-  Matrix4x4 mat2 = Matrix4x4::getTrs(Vector3(0, 0, 0), Vector3(86, 49, 11), Vector3(1, 1, 1));
+  cube2Go = GameObject::createPrimitive(PrimitiveType::CUBE);
+  cube2Go->getTransform()->setPosition(Vector3(-10, 0, 10));
 
-  Vector3 orig(0, 0, 0);
-  Matrix4x4 mat3 = Matrix4x4::getIdentity() * mat2 * mat;
-
-  Vector3 result = mat3.multiplyPoint(orig);
-
-  std::cout << result.x << " " << result.y << " " << result.z << std::endl;
+  cube1Go->getTransform()->setParent(cube2Go->getTransform());
+  cube1Go->getTransform()->setParent(NULL);
 }
 
 void MainScreen::onGui()
 {
-  //cubeGo->getTransform()->rotate(Vector3(10, 0, 0) * Time::getDeltaTime());
+  cube2Go->getTransform()->rotate(Vector3(10, 0, 0) * Time::getDeltaTime());
   //cubeGo->getTransform()->translate(Vector3(0, 0, 1) * Time::getDeltaTime());
-  cameraGo->getTransform()->rotate(Vector3(0, 0, 10) * Time::getDeltaTime());
+  //cameraGo->getTransform()->rotate(Vector3(0, 0, 10) * Time::getDeltaTime());
   //cameraGo->getTransform()->translate(Vector3(0, 0, 1) * Time::getDeltaTime());
 }
 

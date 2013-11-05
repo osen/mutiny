@@ -14,13 +14,12 @@ _OBJ=$(_CPP:.cpp=.o)
 
 all: ${_LIB} ${_BIN}
 
-${_LIBDIR}:
-	mkdir ${_LIBDIR}
-
-${_LIB}: ${_LIBDIR} ${_OBJ}
+${_LIB}: ${_OBJ}
+	-mkdir ${_LIBDIR}
 	${AR} rcs ${_LIB} ${_OBJ}
 
-${_BIN}: ${_BINDIR} ${_OBJ}
+${_BIN}: ${_OBJ}
+	-mkdir ${_BINDIR}
 	${CXX} -o ${_BIN} ${_OBJ} ${LOCAL_LDFLAGS} ${LDFLAGS}
 
 .cpp.o:

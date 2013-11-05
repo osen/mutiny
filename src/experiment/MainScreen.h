@@ -15,7 +15,8 @@ public:
 
 private:
   GameObject* cameraGo;
-  GameObject* cubeGo;
+  GameObject* cube1Go;
+  GameObject* cube2Go;
   GameObject* centerGo;
 
 
