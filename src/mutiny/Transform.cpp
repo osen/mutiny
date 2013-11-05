@@ -67,7 +67,16 @@ void Transform::setPosition(Vector3 position)
 {
   if(getParent() != NULL)
   {
-    localPosition = position - getParent()->getPosition();
+    Matrix4x4 trs = Matrix4x4::getIdentity();
+    Transform* trans = getParent();
+
+    while(trans != NULL)
+    {
+      trs = Matrix4x4::getTrs(trans->localPosition, trans->localRotation, Vector3(1, 1, 1)) * trs;
+      trans = trans->getParent();
+    }
+
+    localPosition = trs.inverse() * position;
   }
   else
   {
@@ -216,6 +225,7 @@ void Transform::lookAt(Vector3 worldPosition)
   localRotation.y = angle - 180.0f;
 }
 
+// Should use Matrix4x4 rather than the unwrapped glm.
 void Transform::rotateAround(Vector3 center, Vector3 axis, float amount)
 {
   glm::mat4 mat;
