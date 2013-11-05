@@ -6,6 +6,8 @@ namespace mutiny
 namespace engine
 {
 
+float Mathf::pi = 3.14159265358979f;
+
 int Mathf::nextPowerOfTwo(int value)
 {
   if( value != 0 )
@@ -20,6 +22,11 @@ int Mathf::nextPowerOfTwo(int value)
   }
 
   return value;
+}
+
+float Mathf::deg2Rad(float degrees)
+{
+  return (degrees / 180) * Mathf::pi;
 }
 
 }

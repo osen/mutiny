@@ -1,5 +1,5 @@
-#ifndef MAINSCREEN_H
-#define MAINSCREEN_H
+#ifndef TRANSFORMSCREEN_H
+#define TRANSFORMSCREEN_H
 
 #include <mutiny/mutiny.h>
 
@@ -7,10 +7,13 @@
 
 using namespace mutiny::engine;
 
-class MainScreen : public Behaviour
+class TransformScreen : public Behaviour
 {
 public:
+  static GameObject* create();
+
   virtual void onAwake();
+  virtual void onUpdate();
   virtual void onGui();
 
 private:

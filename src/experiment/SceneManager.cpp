@@ -1,5 +1,6 @@
 #include "SceneManager.h"
-#include "MainScreen.h"
+#include "introduction/IntroductionScreen.h"
+#include "transform/TransformScreen.h"
 
 using namespace mutiny::engine;
 
@@ -18,10 +19,13 @@ void SceneManager::loadLevel()
 {
   Debug::log("Level loaded: " + Application::getLoadedLevelName());
 
-  if(Application::getLoadedLevelName() == "Main")
+  if(Application::getLoadedLevelName() == "introduction")
   {
-    GameObject* mainGo = new GameObject("MainScreen");
-    mainGo->addComponent<MainScreen>();
+	IntroductionScreen::create();
+  }
+  else if (Application::getLoadedLevelName() == "transform")
+  {
+	TransformScreen::create();
   }
 }
 

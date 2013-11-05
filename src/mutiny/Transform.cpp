@@ -53,13 +53,26 @@ Vector3 Transform::getLocalRotation()
 
 void Transform::setRotation(Vector3 rotation)
 {
-  localRotation = rotation;
+  if(getParent() != NULL)
+  {
+    localRotation = rotation - getParent()->getRotation();
+  }
+  else
+  {
+    localRotation = rotation;
+  }
 }
 
 void Transform::setPosition(Vector3 position)
 {
-  // Take off parent's existing position. Use setLocalPosition to set directly.
-  localPosition = position;
+  if(getParent() != NULL)
+  {
+    localPosition = position - getParent()->getPosition();
+  }
+  else
+  {
+    localPosition = position;
+  }
 }
 
 Vector3 Transform::getPosition()
@@ -123,9 +136,6 @@ void Transform::setParent(Transform* transform)
 {
   if(this->parent != NULL)
   {
-    setLocalPosition(getPosition());
-	setLocalRotation(getRotation());
-
     for(int i = 0; i < this->parent->children.size(); i++)
     {
       if(this->parent->children.at(i) == this)
@@ -139,12 +149,13 @@ void Transform::setParent(Transform* transform)
   if(transform != NULL)
   {
     transform->children.push_back(this);
-
-	setLocalPosition(getLocalPosition() - transform->getPosition());
-	setLocalRotation(getLocalRotation() - transform->getRotation());
   }
 
+  setLocalRotation(getRotation());
+  setLocalPosition(getPosition());
   this->parent = transform;
+  setRotation(getLocalRotation());
+  setPosition(getLocalPosition());
 }
 
 int Transform::getChildCount()
