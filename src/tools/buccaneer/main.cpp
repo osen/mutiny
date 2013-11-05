@@ -2,6 +2,8 @@
 
 #include <mutiny/mutiny.h>
 
+#include <windows.h>
+
 #include <iostream>
 #include <exception>
 

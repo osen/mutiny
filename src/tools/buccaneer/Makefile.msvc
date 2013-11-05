@@ -6,13 +6,17 @@ include ../../../config/config.Mk
 !endif
 
 ANIMAKERBINDIR=..\..\..\bin
-ANIMAKERBIN=..\..\..\bin\buccaneer
-ANIMAKERLIBS=OpenGL32.lib GLU32.lib SDLmain.lib SDL.lib mutiny.lib
+ANIMAKERBIN=..\..\..\bin\buccaneer.exe
+ANIMAKERLIBS=GLU32.lib OpenGL32.lib SDLmain.lib SDL.lib mutiny.lib
 ANIMAKEROBJ=$(ANIMAKERCPP:.cpp=.obj)
 
 .SUFFIXES: .obj .cpp
 
 all: $(ANIMAKERBIN)
+!if "$(SRCEXISTS)" == ""
+	@$(MAKE) /NOLOGO -f Makefile.msvc _gensrc
+	@$(MAKE) /NOLOGO -f Makefile.msvc $(ANIMAKERLIB) SRCEXISTS="true"
+!endif
 
 $(ANIMAKERBIN): $(ANIMAKEROBJ) $(ANIMAKERBINDIR)
 !if "$(SRCEXISTS)" == ""

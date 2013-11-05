@@ -13,6 +13,10 @@ MUTINYOBJ=$(MUTINYCPP:.cpp=.obj)
 .SUFFIXES: .obj .cpp
 
 all: $(MUTINYLIB)
+!if "$(SRCEXISTS)" == ""
+	@$(MAKE) /NOLOGO -f Makefile.msvc _gensrc
+	@$(MAKE) /NOLOGO -f Makefile.msvc $(MUTINYLIB) SRCEXISTS="true"
+!endif
 
 $(MUTINYLIB): $(MUTINYOBJ) $(MUTINYLIBDIR)
 !if "$(SRCEXISTS)" == ""

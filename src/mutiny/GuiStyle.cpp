@@ -19,6 +19,13 @@ GuiStyle::GuiStyle()
 
   border = RectOffset(10, 10, 10, 10);
   font = Resources::load<Font>("fonts/default");
+
+  if(font == NULL)
+  {
+    Debug::logError("Failed to load default font");
+    throw std::exception();
+  }
+
   Object::dontDestroyOnLoad(font);
 }
 
