@@ -1,6 +1,6 @@
 ROOT=..\..
 LOCAL_CXXFLAGS=-I${ROOT}/import/mingw/include -I../
 LOCAL_LDFLAGS=-L${ROOT}/import/mingw/lib -L${ROOT}/lib -lmingw32 -lmutiny -lSDLmain -lSDL -lSDL_image -lGLEW32 -lOpenGL32 -lGLU32
-LOCAL_BIN=collision.exe
+LOCAL_BIN=${ROOT}\bin\collision.exe
 
-include ${ROOT}\tmpl\bin.mingw.Mk
+include ${ROOT}\tmpl\tmpl.mingw.Mk

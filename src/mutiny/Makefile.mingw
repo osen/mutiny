@@ -1,5 +1,5 @@
 ROOT=..\..
 LOCAL_CXXFLAGS=-I${ROOT}/import/mingw/include
-LOCAL_LIB=libmutiny.a
+LOCAL_LIB=${ROOT}\lib\libmutiny.a
 
-include ${ROOT}\tmpl\lib.mingw.Mk
+include ${ROOT}\tmpl\tmpl.mingw.Mk
