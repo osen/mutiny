@@ -24,7 +24,12 @@ void IntroductionScreen::onGui()
 
   if(Gui::button(Rect(200, 200, 200, 50), "Transform Example") == true)
   {
-	Application::loadLevel("transform");
+    Application::loadLevel("transform");
+  }
+
+  if(Gui::button(Rect(200, 300, 200, 50), "Model Example") == true)
+  {
+    Application::loadLevel("model");
   }
 }
 

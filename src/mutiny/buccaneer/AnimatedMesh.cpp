@@ -41,8 +41,8 @@ AnimatedMesh* AnimatedMesh::load(std::string path)
 
       if(tex == NULL)
       {
-        Debug::logError("Error: Texture is null " + texName);
-        throw std::exception();
+        //Debug::logError("Texture is null " + texName);
+        //throw std::exception();
       }
 
       animatedMesh->textures.at(animatedMesh->textures.size() - 1).push_back(tex);

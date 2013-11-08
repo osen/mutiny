@@ -1,6 +1,7 @@
 #include "SceneManager.h"
 #include "introduction/IntroductionScreen.h"
 #include "transform/TransformScreen.h"
+#include "model/ModelScreen.h"
 
 using namespace mutiny::engine;
 
@@ -21,11 +22,15 @@ void SceneManager::loadLevel()
 
   if(Application::getLoadedLevelName() == "introduction")
   {
-	IntroductionScreen::create();
+    IntroductionScreen::create();
   }
   else if (Application::getLoadedLevelName() == "transform")
   {
-	TransformScreen::create();
+    TransformScreen::create();
+  }
+  else if (Application::getLoadedLevelName() == "model")
+  {
+    ModelScreen::create();
   }
 }
 

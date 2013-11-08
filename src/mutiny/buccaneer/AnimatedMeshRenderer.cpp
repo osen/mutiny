@@ -38,13 +38,25 @@ void AnimatedMeshRenderer::setAnimatedMesh(AnimatedMesh* mesh)
     Mesh* m = mesh->getMesh(i);
     mf->setMesh(m);
     MeshRenderer* mr = go->addComponent<MeshRenderer>();
-
     std::vector<Material*> newMaterials;
+
     for(int x = 0; x < m->getSubmeshCount(); x++)
     {
-      Material* material = new Material(Resources::load<Shader>("shaders/textured"));
+      Material* material = NULL;
+
+      Texture* tex = mesh->getTexture(i, x);
+
+      if(tex != NULL)
+      {
+        material = new Material(Resources::load<Shader>("shaders/textured"));
+        material->setMainTexture(tex);
+      }
+      else
+      {
+        material = new Material(Resources::load<Shader>("shaders/default_diffuse"));
+      }
+
       materials.push_back(std::unique_ptr<Material>(material));
-      material->setMainTexture(mesh->getTexture(i, x));
       newMaterials.push_back(material);
     }
 
