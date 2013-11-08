@@ -12,7 +12,7 @@ class ModelScreen : public Behaviour
 public:
   static GameObject* create();
 
-  virtual void onAwake();
+  virtual void onStart();
   virtual void onUpdate();
   virtual void onGui();
 

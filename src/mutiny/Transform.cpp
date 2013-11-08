@@ -160,11 +160,11 @@ void Transform::setParent(Transform* transform)
     transform->children.push_back(this);
   }
 
-  setLocalRotation(getRotation());
   setLocalPosition(getPosition());
+  setLocalRotation(getRotation());
   this->parent = transform;
-  setRotation(getLocalRotation());
   setPosition(getLocalPosition());
+  setRotation(getLocalRotation());
 }
 
 int Transform::getChildCount()

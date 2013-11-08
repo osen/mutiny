@@ -12,7 +12,7 @@ GameObject* ModelScreen::create()
   return mainGo;
 }
 
-void ModelScreen::onAwake()
+void ModelScreen::onStart()
 {
   cameraGo = new GameObject("MainCamera");
   Camera* camera = cameraGo->addComponent<Camera>();
@@ -24,6 +24,7 @@ void ModelScreen::onAwake()
   AnimatedMeshRenderer* playerMr = modelGo->addComponent<AnimatedMeshRenderer>();
   AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/al/al");
   playerMr->setAnimatedMesh(mesh);
+  //modelGo->getTransform()->setPosition(Vector3(0, 0, 10));
 }
 
 void ModelScreen::onUpdate()

@@ -36,20 +36,20 @@ void TransformScreen::onGui()
 
   if(Gui::button(Rect(200, 200, 200, 50), "Back") == true)
   {
-	Application::loadLevel("introduction");
+    Application::loadLevel("introduction");
   }
 
   if(cube1Go->getTransform()->getParent() == NULL)
   {
-	if (Gui::button(Rect(10, 300, 200, 50), "Attach") == true)
-	{
-	  cube1Go->getTransform()->setParent(cube2Go->getTransform());
-	}
+    if(Gui::button(Rect(10, 300, 200, 50), "Attach") == true)
+    {
+      cube1Go->getTransform()->setParent(cube2Go->getTransform());
+    }
   }
   else
   {
-	if(Gui::button(Rect(10, 300, 200, 50), "Detach") == true)
-	{
+    if(Gui::button(Rect(10, 300, 200, 50), "Detach") == true)
+    {
       cube1Go->getTransform()->setParent(NULL);
     }
   }
