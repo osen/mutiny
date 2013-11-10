@@ -21,6 +21,7 @@ void AnimatedMeshRenderer::onAwake()
   mesh = NULL;
   rootGo = new GameObject("root");
   rootGo->getTransform()->setParent(getGameObject()->getTransform());
+  rootGo->getTransform()->setLocalPosition(Vector3());
 }
 
 void AnimatedMeshRenderer::setAnimatedMesh(AnimatedMesh* mesh)

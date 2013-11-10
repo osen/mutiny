@@ -2,19 +2,24 @@ include ${ROOT}/config/config.openbsd.Mk
 include ${ROOT}/config/config.Mk
 
 _BINDIR=${ROOT}/bin
-_BIN=${_BINDIR}/${LOCAL_BIN}
+_BIN=${LOCAL_BIN}
+
+_LIBDIR=${ROOT}/lib
+_LIB=${LOCAL_LIB}
 
 _CPP=$(shell find . -name '*.cpp')
 _OBJ=$(_CPP:.cpp=.o)
 
 .SUFFIXES: .o .cpp
 
-all: ${_BIN}
+all: ${_LIB} ${_BIN}
 
-${_BINDIR}:
+${_LIB}: ${_OBJ}
+	mkdir -p ${_LIBDIR}
+	${AR} rcs ${_LIB} ${_OBJ}
+
+${_BIN}: ${_OBJ}
 	mkdir -p ${_BINDIR}
-
-${_BIN}: ${_BINDIR} ${_OBJ}
 	${CXX} -o ${_BIN} ${_OBJ} ${LOCAL_LDFLAGS} ${LDFLAGS}
 
 .cpp.o:
@@ -24,4 +29,6 @@ clean:
 	rm -f ${_OBJ}
 	rm -f ${_BIN}
 	rm -r -f ${_BINDIR}
+	rm -f ${_LIB}
+	rm -r -f ${_LIBDIR}
 

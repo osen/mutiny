@@ -1,5 +1,6 @@
 #include "Mesh.h"
 #include "Application.h"
+#include "Color.h"
 #include "Debug.h"
 
 #include "internal/WavefrontParser.h"
@@ -20,6 +21,7 @@ Mesh* Mesh::load(std::string path)
   internal::ModelData* modelData = parser.getModelData();
   std::vector<Vector3> vertices;
   std::vector<Vector2> uv;
+  std::vector<Color> colors;
   std::vector<std::vector<int> > triangles;
   int currentSubmesh = 0;
 
@@ -46,6 +48,18 @@ Mesh* Mesh::load(std::string path)
         uv.push_back(Vector2(face->a.coord.x, face->a.coord.y));
         uv.push_back(Vector2(face->b.coord.x, face->b.coord.y));
         uv.push_back(Vector2(face->c.coord.x, face->c.coord.y));
+
+        colors.push_back(Color(materialGroup->material->color.x,
+                               materialGroup->material->color.y,
+                               materialGroup->material->color.z));
+
+        colors.push_back(Color(materialGroup->material->color.x,
+                               materialGroup->material->color.y,
+                               materialGroup->material->color.z));
+
+        colors.push_back(Color(materialGroup->material->color.x,
+                               materialGroup->material->color.y,
+                               materialGroup->material->color.z));
       }
 
       currentSubmesh++;
@@ -56,6 +70,7 @@ Mesh* Mesh::load(std::string path)
   Mesh* mesh = new Mesh();
   mesh->setVertices(vertices);
   mesh->setUv(uv);
+  mesh->setColors(colors);
 
   for(int i = 0; i < triangles.size(); i++)
   {
@@ -90,6 +105,11 @@ Mesh::~Mesh()
 void Mesh::setVertices(std::vector<Vector3> vertices)
 {
   this->vertices = vertices;
+}
+
+void Mesh::setColors(std::vector<Color> colors)
+{
+  this->colors = colors;
 }
 
 void Mesh::setTriangles(std::vector<int> triangles, int submesh)
@@ -168,6 +188,11 @@ std::vector<Vector2>* Mesh::getUv()
 std::vector<Vector3>* Mesh::getNormals()
 {
   return &normals;
+}
+
+std::vector<Color>* Mesh::getColors()
+{
+  return &colors;
 }
 
 void Mesh::recalculateBounds()

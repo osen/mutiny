@@ -1,6 +1,6 @@
-ROOT=../../..
-LOCAL_CXXFLAGS=-I../../
+ROOT=../../
+LOCAL_CXXFLAGS=-I../
 LOCAL_LDFLAGS=-L${ROOT}/lib -lSDL_image -lSDL_gfx -lSDL -lGLEW -lGL -lmutiny
-LOCAL_BIN=${ROOT}/bin/buccaneer
+LOCAL_BIN=${ROOT}/bin/experiment
 
 include ${ROOT}/tmpl/tmpl.openbsd.Mk

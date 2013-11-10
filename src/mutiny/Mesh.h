@@ -20,6 +20,7 @@ namespace engine
 
 class Resources;
 class MeshRenderer;
+class Color;
 
 class Mesh : public Object
 {
@@ -37,11 +38,13 @@ public:
   void setTriangles(std::vector<int> triangles, int submesh);
   void setUv(std::vector<Vector2> uv);
   void setNormals(std::vector<Vector3> normals);
+  void setColors(std::vector<Color> colors);
 
   std::vector<Vector3>* getVertices();
   std::vector<int>* getTriangles(int submesh);
   std::vector<Vector2>* getUv();
   std::vector<Vector3>* getNormals();
+  std::vector<Color>* getColors();
 
   Bounds getBounds();
   int getSubmeshCount();
@@ -54,6 +57,7 @@ private:
   std::vector<std::vector<int> > triangles;
   std::vector<Vector2> uv;
   std::vector<Vector3> normals;
+  std::vector<Color> colors;
 
   std::vector<GLuint> positionBufferIds; std::vector<std::shared_ptr<void> > _positionBufferIds;
   std::vector<GLuint> uvBufferIds; std::vector<std::shared_ptr<void> > _uvBufferIds;
