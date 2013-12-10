@@ -38,6 +38,7 @@ void Graphics::setRenderTarget(RenderTexture* renderTarget)
   }
 }
 
+// if material is null, a default material with internal-GUITexture.shader is used.
 void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, Material* material)
 {
   // Since the GUI system uses this class, we need to set its matrix.

@@ -4,6 +4,8 @@
 #include "Component.h"
 #include "Application.h"
 
+#include "internal/Internal.h"
+
 #include <memory>
 
 #include <string>
@@ -30,13 +32,13 @@ public:
   {
     std::vector<Object*> objects;
 
-    for(int i = 0; i < Application::gameObjects.size(); i++)
+    for(int i = 0; i < Application::getInternal()->gameObjects.size(); i++)
     {
-      Component* component = Application::gameObjects.at(i)->getComponent<T>();
+      Component* component = Application::getInternal()->gameObjects.at(i)->getComponent<T>();
 
       if(component != NULL)
       {
-        objects.push_back((Object*)Application::gameObjects.at(i).get());
+        objects.push_back((Object*)Application::getInternal()->gameObjects.at(i).get());
       }
     }
 

@@ -5,6 +5,8 @@
 #include "Material.h"
 #include "Application.h"
 
+#include "internal/Internal.h"
+
 #include <memory>
 #include <string>
 #include <vector>
@@ -43,7 +45,7 @@ public:
     // Game specific resources
     try
     {
-      t = T::load(Application::dataPath + "/" + path);
+      t = T::load(Application::getInternal()->dataPath + "/" + path);
     }
     catch(std::exception& e){}
 
@@ -52,7 +54,7 @@ public:
     {
       try
       {
-        t = T::load(Application::engineDataPath + "/" + path);
+        t = T::load(Application::getInternal()->engineDataPath + "/" + path);
       }
       catch(std::exception& e){}
     }

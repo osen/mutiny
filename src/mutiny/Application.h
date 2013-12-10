@@ -1,6 +1,8 @@
 #ifndef MUTINY_ENGINE_APPLICATION_H
 #define MUTINY_ENGINE_APPLICATION_H
 
+#include "internal/Internal.h"
+
 #include <SDL/SDL.h>
 
 #include <memory>
@@ -35,23 +37,14 @@ public:
   static std::string getArgv(int i);
 
 private:
+  static internal::Internal* _internal;
+
   static void loadLevel();
   static void loop();
   static void displaySplash();
-
-  static std::shared_ptr<SDL_Surface> screen;
-  static bool running;
-  static bool initialized;
-  static std::string loadedLevelName;
-  static std::vector<std::shared_ptr<GameObject> > gameObjects;
-  static std::string levelChange;
-  static std::string dataPath;
-  static std::string engineDataPath;
-
-  static int argc;
-  static std::vector<std::string> argv;
-
   static void setupPaths();
+
+  static internal::Internal* getInternal();
 
 };
 
