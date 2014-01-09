@@ -20,7 +20,7 @@ Transform::~Transform()
 
 void Transform::onAwake()
 {
-  Debug::log("Transform awake");
+  //Debug::log("Transform awake");
   parent = NULL;
 }
 

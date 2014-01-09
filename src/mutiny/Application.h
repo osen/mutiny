@@ -3,10 +3,7 @@
 
 #include "internal/Internal.h"
 
-#include <SDL/SDL.h>
-
 #include <memory>
-
 #include <vector>
 #include <string>
 
@@ -28,6 +25,7 @@ class Application
 
 public:
   static void init(int argc, char* argv[]);
+  static void destroy();
   static void run();
   static void quit();
   static void loadLevel(std::string path);
@@ -37,7 +35,7 @@ public:
   static std::string getArgv(int i);
 
 private:
-  static internal::Internal* _internal;
+  static std::shared_ptr<internal::Internal> _internal;
 
   static void loadLevel();
   static void loop();

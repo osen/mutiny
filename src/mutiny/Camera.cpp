@@ -80,7 +80,7 @@ void Camera::onStart()
 {
   if(_main == NULL && getGameObject()->getName() == "MainCamera")
   {
-    Debug::log("MainCamera added");
+    //Debug::log("MainCamera added");
     _main = this;
   }
 
@@ -89,7 +89,7 @@ void Camera::onStart()
 
 void Camera::onDestroy()
 {
-  Debug::log("Camera destroyed");
+  //Debug::log("Camera destroyed");
 
   if(_main == this)
   {

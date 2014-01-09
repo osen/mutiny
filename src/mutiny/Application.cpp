@@ -38,16 +38,16 @@ namespace mutiny
 namespace engine
 {
 
-internal::Internal* Application::_internal = NULL;
+std::shared_ptr<internal::Internal> Application::_internal;
 
 void Application::init(int argc, char* argv[])
 {
-  if(_internal != NULL)
+  if(_internal.get() != NULL)
   {
     return;
   }
 
-  _internal = new internal::Internal();
+  _internal.reset(new internal::Internal());
   _internal->running = false;
   _internal->argc = argc;
 
@@ -57,7 +57,7 @@ void Application::init(int argc, char* argv[])
   }
 
   setupPaths();
-  std::cout << "yay: " << _internal->engineDataPath << " " << _internal->dataPath << std::endl;
+  //std::cout << "Paths: " << _internal->engineDataPath << " " << _internal->dataPath << std::endl;
 
   if(SDL_Init(SDL_INIT_EVERYTHING) == -1)
   {
@@ -162,6 +162,22 @@ void Application::setupPaths()
   _internal->engineDataPath = dirname + "/share/mutiny";
   _internal->dataPath = dirname + "/share/" + basename;
 #endif
+}
+
+void Application::destroy()
+{
+  if(_internal.get() == NULL)
+  {
+    throw std::exception();
+  }
+
+  // TODO: Running is a flag, not a reliable state
+  if(_internal->running == true)
+  {
+    throw std::exception();
+  }
+
+  _internal.reset();
 }
 
 void Application::displaySplash()
@@ -450,7 +466,7 @@ std::string Application::getArgv(int i)
 
 internal::Internal* Application::getInternal()
 {
-  return _internal;
+  return _internal.get();
 }
 
 }
