@@ -222,12 +222,11 @@ void Material::setShader(Shader* shader)
 void Material::setPass(int pass)
 {
   Application::getInternal()->currentMaterial = this;
+  glUseProgram(shader->programId);
 }
 
 void Material::apply()
 {
-  glUseProgram(shader->programId);
-
   for(int i = 0; i < matrixNames.size(); i++)
   {
     glUniformMatrix4fv(matrixIndexes[i], 1, GL_FALSE, matrices[i].getValue());
