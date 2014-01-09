@@ -31,5 +31,10 @@ void IntroductionScreen::onGui()
   {
     Application::loadLevel("model");
   }
+
+  if(Gui::button(Rect(200, 400, 200, 50), "Collision Example") == true)
+  {
+    Application::loadLevel("collision");
+  }
 }
 
