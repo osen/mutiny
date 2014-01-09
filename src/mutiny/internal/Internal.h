@@ -16,6 +16,7 @@ namespace engine
 class GameObject;
 class Camera;
 class GuiSkin;
+class Material;
 
 namespace internal
 {
@@ -45,6 +46,8 @@ public:
 
   // GuiSkin
   std::shared_ptr<GuiSkin> defaultGuiSkin;
+
+  Material* currentMaterial;
 
   Internal();
 

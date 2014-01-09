@@ -29,6 +29,7 @@ public:
   virtual ~Camera();
 
   Matrix4x4 getProjectionMatrix();
+  //Matrix4x4 getWorldToCameraMatrix();
   void setProjectionMatrix(Matrix4x4 projectionMatrix);
   void resetProjectionMatrix();
   void setTargetTexture(RenderTexture* texture);

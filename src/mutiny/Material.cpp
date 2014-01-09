@@ -239,6 +239,8 @@ void Material::setPass(int pass)
     glActiveTexture(GL_TEXTURE0 + i);
     glBindTexture(GL_TEXTURE_2D, textures[i]->getNativeTexture());
   }
+
+  Application::getInternal()->currentMaterial = this;
 }
 
 }

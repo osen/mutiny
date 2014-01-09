@@ -15,6 +15,9 @@ namespace engine
 class Texture;
 class Material;
 class RenderTexture;
+class Matrix4x4;
+class Mesh;
+class Camera;
 
 class Graphics
 {
@@ -24,6 +27,8 @@ public:
   static void drawTexture(Rect rect, Texture* texture, Rect sourceRect, Material* material);
   static void drawTexture(Rect rect, Texture* texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder, Color color, Material* material);
   static void drawTexture(Rect rect, Texture* texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder);
+
+  static void drawMeshNow(Mesh* mesh, Matrix4x4 matrix, int materialIndex);
 
 private:
   static GLuint positionBufferId;

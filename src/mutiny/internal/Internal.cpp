@@ -14,6 +14,7 @@ Internal::Internal()
   mainCamera = NULL;
   currentCamera = NULL;
   skin = NULL;
+  currentMaterial = NULL;
 }
 
 }

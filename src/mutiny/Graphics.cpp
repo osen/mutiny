@@ -6,6 +6,11 @@
 #include "Matrix4x4.h"
 #include "RenderTexture.h"
 #include "Gui.h"
+#include "Camera.h"
+#include "Vector3.h"
+#include "GameObject.h"
+#include "Transform.h"
+#include "Mesh.h"
 #include "Debug.h"
 
 #include <GL/glew.h>
@@ -140,30 +145,88 @@ void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, int lef
 
   // Top
   drawTexture(Rect(rect.x, rect.y, texture->getWidth() * left, texture->getHeight() * top), texture, Rect(0, 0, left, top), material);
-
   drawTexture(Rect(rect.x + (texture->getWidth() * left), rect.y, rect.width - (texture->getWidth() * left) - (texture->getWidth() * right), texture->getHeight() * top), texture, Rect(left, 0, 1.0f - right, top), material);
-
   drawTexture(Rect(rect.x + rect.width - (texture->getWidth() * right), rect.y, texture->getWidth() * right, texture->getHeight() * top), texture, Rect(1.0f - right, 0, 1.0f, top), material);
 
   // Bottom
   drawTexture(Rect(rect.x, rect.y + rect.height - (texture->getHeight() * bottom), texture->getWidth() * left, texture->getHeight() * bottom), texture, Rect(0, 1.0f - bottom, left, 1.0f), material);
-
   drawTexture(Rect(rect.x + (texture->getWidth() * left), rect.y + rect.height - (texture->getHeight() * bottom), rect.width - (texture->getWidth() * left) - (texture->getWidth() * right), texture->getHeight() * bottom), texture, Rect(left, 1.0f - bottom, 1.0f - right, 1.0f), material);
-
   drawTexture(Rect(rect.x + rect.width - (texture->getWidth() * right), rect.y + rect.height - (texture->getHeight() * bottom), texture->getWidth() * right, texture->getHeight() * bottom), texture, Rect(1.0f - right, 1.0f - bottom, 1.0f, 1.0f), material);
 
   // Side
   drawTexture(Rect(rect.x, rect.y + texture->getHeight() * top, texture->getWidth() * left, rect.height - texture->getHeight() * top - texture->getHeight() * bottom), texture, Rect(0, top, left, 1.0f - top), material);
-
   drawTexture(Rect(rect.x + rect.width - texture->getWidth() * right, rect.y + texture->getHeight() * top, texture->getWidth() * right, rect.height - texture->getHeight() * top - texture->getHeight() * bottom), texture, Rect(1.0f - right, top, 1.0f, 1.0f - bottom), material);
-
-
   drawTexture(Rect(rect.x + texture->getWidth() * left, rect.y + texture->getHeight() * top, rect.width - texture->getWidth() * right - texture->getWidth() * left, rect.height - texture->getHeight() * top - texture->getHeight() * bottom), texture, Rect(left, top, 1.0f - right, 1.0f - top), material);
 }
 
 void Graphics::drawTexture(Rect rect, Texture* texture, Material* material)
 {
   drawTexture(rect, texture, Rect(0, 0, 1, 1), material);
+}
+
+void Graphics::drawMeshNow(Mesh* mesh, Matrix4x4 matrix, int materialIndex)
+{
+  Material* material;
+  Shader* shader;
+
+  if(mesh == NULL)
+  {
+    Debug::log("Mesh is null");
+    return;
+  }
+
+  if(materialIndex >= mesh->getSubmeshCount())
+  {
+    Debug::log("Invalid material index");
+    return;
+  }
+
+  material = Application::getInternal()->currentMaterial;
+
+  if(material == NULL)
+  {
+    Debug::log("Material is NULL");
+    return;
+  }
+
+  shader = material->getShader();
+
+  if(shader == NULL)
+  {
+    Debug::log("Shader is NULL");
+    return;
+  }
+
+  GLint positionAttribId = glGetAttribLocation(shader->programId, "in_Position");
+  GLint uvAttribId = glGetAttribLocation(shader->programId, "in_Uv");
+
+  material->setMatrix("in_Model", matrix);
+
+  if(positionAttribId != -1)
+  {
+    glBindBuffer(GL_ARRAY_BUFFER, mesh->positionBufferIds.at(materialIndex));
+    glVertexAttribPointer(positionAttribId, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(positionAttribId);
+  }
+
+  if(uvAttribId != -1)
+  {
+    glBindBuffer(GL_ARRAY_BUFFER, mesh->uvBufferIds.at(materialIndex));
+    glVertexAttribPointer(uvAttribId, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(uvAttribId);
+  }
+
+  glDrawArrays(GL_TRIANGLES, 0, mesh->getTriangles(materialIndex)->size());
+
+  if(positionAttribId != -1)
+  {
+    glDisableVertexAttribArray(positionAttribId);
+  }
+
+  if(uvAttribId != -1)
+  {
+    glDisableVertexAttribArray(uvAttribId);
+  }
 }
 
 }

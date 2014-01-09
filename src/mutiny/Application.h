@@ -18,6 +18,8 @@ class CharacterController;
 class Resources;
 class Camera;
 class Gui;
+class Graphics;
+class Material;
 
 class Application
 {
@@ -26,6 +28,8 @@ class Application
   friend class mutiny::engine::CharacterController;
   friend class mutiny::engine::Camera;
   friend class mutiny::engine::Gui;
+  friend class mutiny::engine::Graphics;
+  friend class mutiny::engine::Material;
 
 public:
   static void init(int argc, char* argv[]);

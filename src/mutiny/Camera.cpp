@@ -30,6 +30,11 @@ Camera::~Camera()
 
 }
 
+//Matrix4x4 Camera::getWorldToCameraMatrix()
+//{
+//
+//}
+
 Matrix4x4 Camera::getProjectionMatrix()
 {
   if(projectionMatrix.get() != NULL)

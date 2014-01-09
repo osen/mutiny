@@ -21,11 +21,13 @@ namespace engine
 class Resources;
 class MeshRenderer;
 class Color;
+class Graphics;
 
 class Mesh : public Object
 {
   friend class mutiny::engine::Resources;
   friend class mutiny::engine::MeshRenderer;
+  friend class mutiny::engine::Graphics;
 
 public:
   Mesh();
