@@ -17,6 +17,7 @@ class GameObject;
 class Camera;
 class GuiSkin;
 class Material;
+class RenderTexture;
 
 namespace internal
 {
@@ -48,6 +49,10 @@ public:
   std::shared_ptr<GuiSkin> defaultGuiSkin;
 
   Material* currentMaterial;
+
+  // Graphics
+  Material* graphicsDefaultMaterial;
+  RenderTexture* graphicsRenderTarget;
 
   Internal();
 

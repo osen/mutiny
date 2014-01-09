@@ -99,6 +99,9 @@ void Application::init(int argc, char* argv[])
   Material::particleMaterial = Resources::load<Material>("shaders/default_particle");
   Object::dontDestroyOnLoad(Material::particleMaterial);
 
+  _internal->graphicsDefaultMaterial = Resources::load<Material>("shaders/Internal-GUITexture");
+  Object::dontDestroyOnLoad(_internal->graphicsDefaultMaterial);
+
   _internal->defaultGuiSkin.reset(new GuiSkin());
 
   //displaySplash();

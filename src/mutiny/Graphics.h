@@ -28,16 +28,12 @@ public:
   static void setRenderTarget(RenderTexture* renderTarget);
   static void drawTexture(Rect rect, Texture* texture, Material* material);
   static void drawTexture(Rect rect, Texture* texture, Rect sourceRect, Material* material);
-  static void drawTexture(Rect rect, Texture* texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder, Color color, Material* material);
-  static void drawTexture(Rect rect, Texture* texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder);
+  static void drawTexture(Rect rect, Texture* texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder, Color color, Material* material = NULL);
+  static void drawTexture(Rect rect, Texture* texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder, Material* material = NULL);
 
   static void drawMeshNow(Mesh* mesh, Matrix4x4 matrix, int materialIndex);
 
 private:
-  static GLuint positionBufferId;
-  static GLuint uvBufferId;
-  static RenderTexture* renderTarget;
-
   static void drawMeshNow(Mesh* mesh, int materialIndex);
 
 };

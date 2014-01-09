@@ -116,11 +116,18 @@ void Gui::drawTextureWithTexCoords(Rect position, Texture* texture, Rect texCoor
 
 void Gui::drawUi(Rect rect, Texture* texture, GuiStyle* style)
 {
+  Material* guiMaterial = Material::guiMaterial;
+
+  guiMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
+  guiMaterial->setMatrix("in_View", Matrix4x4::getIdentity());
+  guiMaterial->setMatrix("in_Model", getMatrix());
+
   Graphics::drawTexture(rect, texture, Rect(0, 0, 1, 1),
                         style->border.left,
                         style->border.right,
                         style->border.top,
-                        style->border.bottom);
+                        style->border.bottom,
+                        guiMaterial);
 }
 
 void Gui::box(Rect rect, std::string text)

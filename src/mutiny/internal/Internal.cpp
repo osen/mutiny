@@ -15,6 +15,8 @@ Internal::Internal()
   currentCamera = NULL;
   skin = NULL;
   currentMaterial = NULL;
+  graphicsDefaultMaterial = NULL;
+  graphicsRenderTarget = NULL;
 }
 
 }

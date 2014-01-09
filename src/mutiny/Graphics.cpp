@@ -25,13 +25,10 @@ namespace mutiny
 namespace engine
 {
 
-GLuint Graphics::positionBufferId = -1;
-GLuint Graphics::uvBufferId = -1;
-RenderTexture* Graphics::renderTarget = NULL;
-
+// TODO: Does this need to be re-enabled every draw?
 void Graphics::setRenderTarget(RenderTexture* renderTarget)
 {
-  Graphics::renderTarget = renderTarget;
+  Application::getInternal()->graphicsRenderTarget = renderTarget;
 
   if(renderTarget == NULL)
   {
@@ -64,7 +61,10 @@ void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, Materia
   if(material == NULL)
   {
     // TODO: Use a unique material with MVP set
-    material = Material::guiMaterial;
+    material = Application::getInternal()->graphicsDefaultMaterial;
+    material->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
+    material->setMatrix("in_View", Matrix4x4::getIdentity());
+    material->setMatrix("in_Model", Matrix4x4::getIdentity());
   }
 
   if(texture == NULL)
@@ -111,9 +111,9 @@ void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, Materia
   glEnable(GL_DEPTH_TEST);
 }
 
-void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder)
+void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder, Material* material)
 {
-  drawTexture(rect, texture, sourceRect, leftBorder, rightBorder, topBorder, bottomBorder, Color(1, 1, 1), NULL);
+  drawTexture(rect, texture, sourceRect, leftBorder, rightBorder, topBorder, bottomBorder, Color(1, 1, 1), material);
 }
 
 void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder, Color color, Material* material)
