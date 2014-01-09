@@ -4,7 +4,7 @@
 #include "Camera.h"
 #include "Material.h"
 #include "Screen.h"
-#include "_Time.h"
+#include "Time.h"
 #include "Input.h"
 #include "RenderTexture.h"
 #include "Resources.h"
@@ -358,11 +358,11 @@ void Application::loop()
       continue;
     }
 
-    Camera::current = Camera::getAllCameras()->at(h);
+    _internal->currentCamera = Camera::getAllCameras()->at(h);
 
-    if(Camera::current->targetTexture != NULL)
+    if(_internal->currentCamera->targetTexture != NULL)
     {
-      Camera::current->targetTexture->setEnabled(true);
+      _internal->currentCamera->targetTexture->setEnabled(true);
     }
 
     //glClearColor(0.2f, 0.2f, 0.5f, 1.0f);
@@ -374,9 +374,9 @@ void Application::loop()
       _internal->gameObjects.at(i)->render();
     }
 
-    if(Camera::current->targetTexture != NULL)
+    if(_internal->currentCamera->targetTexture != NULL)
     {
-      Camera::current->targetTexture->setEnabled(false);
+      _internal->currentCamera->targetTexture->setEnabled(false);
     }
   }
 

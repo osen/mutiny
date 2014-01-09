@@ -2,7 +2,8 @@ add_library(mutiny SHARED
   internal/Util.cpp
   internal/tribox.cpp
   internal/WavefrontParser.cpp
-  _Time.cpp
+  internal/Internal.cpp
+  Time.cpp
   Mathf.cpp
   Texture.cpp
   Component.cpp

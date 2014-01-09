@@ -16,12 +16,16 @@ namespace engine
 class GameObject;
 class CharacterController;
 class Resources;
+class Camera;
+class Gui;
 
 class Application
 {
   friend class mutiny::engine::Resources;
   friend class mutiny::engine::GameObject;
   friend class mutiny::engine::CharacterController;
+  friend class mutiny::engine::Camera;
+  friend class mutiny::engine::Gui;
 
 public:
   static void init(int argc, char* argv[]);

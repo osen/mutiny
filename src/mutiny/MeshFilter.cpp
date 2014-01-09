@@ -14,7 +14,7 @@ MeshFilter::~MeshFilter()
 
 void MeshFilter::onAwake()
 {
-  Debug::log("MeshFilter awaken");
+  //Debug::log("MeshFilter awaken");
   mesh = NULL;
 }
 

@@ -34,10 +34,6 @@ public:
   void setTargetTexture(RenderTexture* texture);
 
 private:
-  static Camera* _main;
-  static Camera* current;
-  static std::vector<Camera*> allCameras;
-
   float fieldOfView;
   bool orthographic;
   float orthographicSize;

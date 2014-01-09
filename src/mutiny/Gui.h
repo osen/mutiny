@@ -29,7 +29,6 @@ public:
   static void drawTextureWithTexCoords(Rect position, Texture* texture, Rect texCoords);
 
 private:
-  static GuiSkin* skin;
   static void drawUi(Rect rect, Texture* texture, GuiStyle* style);
 
 };

@@ -14,6 +14,8 @@ namespace engine
 {
 
 class GameObject;
+class Camera;
+class GuiSkin;
 
 namespace internal
 {
@@ -32,6 +34,16 @@ public:
 
   int argc;
   std::vector<std::string> argv;
+
+  // Camera
+  Camera* mainCamera;
+  Camera* currentCamera;
+  std::vector<Camera*> allCameras;
+
+  // Gui
+  GuiSkin* skin;
+
+  Internal();
 
 };
 

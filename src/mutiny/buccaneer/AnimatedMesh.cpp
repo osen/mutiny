@@ -118,7 +118,7 @@ AnimatedMesh* AnimatedMesh::load(std::string path)
     triangles.clear();
     currentSubmesh = 0;
 
-    Debug::log("Loaded part");
+    //Debug::log("Loaded part");
   }
 
   return animatedMesh.release();

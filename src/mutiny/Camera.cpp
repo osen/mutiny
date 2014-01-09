@@ -10,23 +10,19 @@ namespace mutiny
 namespace engine
 {
 
-Camera* Camera::_main = NULL;
-Camera* Camera::current = NULL;
-std::vector<Camera*> Camera::allCameras;
-
 Camera* Camera::getMain()
 {
-  return _main;
+  return Application::getInternal()->mainCamera;
 }
 
 Camera* Camera::getCurrent()
 {
-  return current;
+  return Application::getInternal()->currentCamera;
 }
 
 std::vector<Camera*>* Camera::getAllCameras()
 {
-  return &allCameras;
+  return &Application::getInternal()->allCameras;
 }
 
 Camera::~Camera()
@@ -78,29 +74,29 @@ void Camera::setTargetTexture(RenderTexture* targetTexture)
 
 void Camera::onStart()
 {
-  if(_main == NULL && getGameObject()->getName() == "MainCamera")
+  if(Application::getInternal()->mainCamera == NULL && getGameObject()->getName() == "MainCamera")
   {
     //Debug::log("MainCamera added");
-    _main = this;
+    Application::getInternal()->mainCamera = this;
   }
 
-  allCameras.push_back(this);
+  Application::getInternal()->allCameras.push_back(this);
 }
 
 void Camera::onDestroy()
 {
   //Debug::log("Camera destroyed");
 
-  if(_main == this)
+  if(Application::getInternal()->mainCamera == this)
   {
-    _main = NULL;
+    Application::getInternal()->mainCamera = NULL;
   }
 
-  for(int i = 0; i < allCameras.size(); i++)
+  for(int i = 0; i < Application::getInternal()->allCameras.size(); i++)
   {
-    if(allCameras.at(i) == this)
+    if(Application::getInternal()->allCameras.at(i) == this)
     {
-      allCameras.erase(allCameras.begin() + i);
+      Application::getInternal()->allCameras.erase(Application::getInternal()->allCameras.begin() + i);
       i--;
     }
   }
