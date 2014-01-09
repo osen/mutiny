@@ -19,7 +19,6 @@ void MainScreen::onAwake()
   fallbackTex->setPixel(0, 0, Color(0.0f, 0.5f, 1.0f));
   fallbackTex->apply();
 
-  Resources::load<Animation>(SelectAnimationScreen::choice);
   animatedMesh = Resources::load<AnimatedMesh>(SelectModelScreen::choice.substr(0, SelectModelScreen::choice.length() - 4));
 
   if(animatedMesh == NULL)
@@ -31,6 +30,8 @@ void MainScreen::onAwake()
 
   AnimatedMeshRenderer* amr = animationGo->addComponent<AnimatedMeshRenderer>();
   amr->setAnimatedMesh(animatedMesh);
+
+  amr->setAnimation(Resources::load<Animation>(SelectAnimationScreen::choice));
 
   animationGo->getTransform()->setParent(root->getTransform());
   root->getTransform()->rotate(Vector3(0, 180, 0));

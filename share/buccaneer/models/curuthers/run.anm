@@ -1,2 +1,8 @@
 f
-LeftUpperLeg 10 10 10 10 10
+t Body 1 1 1 1 1 1
+f
+t Body 2 8 1 9 3 6
+f
+t Body 8 1 9 2 3 5
+f
+t Body 3 6 2 3 7 7
