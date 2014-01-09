@@ -37,7 +37,7 @@ void Gui::label(Rect rect, std::string text)
 
   if(skin == NULL)
   {
-    skin = GuiSkin::defaultGuiSkin.get();
+    skin = Application::getInternal()->defaultGuiSkin.get();
   }
 
   for(int i = 0; i < text.length(); i++)
@@ -63,7 +63,7 @@ bool Gui::button(Rect rect, std::string text)
 
   if(skin == NULL)
   {
-    skin = GuiSkin::defaultGuiSkin.get();
+    skin = Application::getInternal()->defaultGuiSkin.get();
   }
 
   if(rect.contains(Input::getMousePosition()) == true)
@@ -125,7 +125,7 @@ void Gui::box(Rect rect, std::string text)
 
   if(skin == NULL)
   {
-    skin = GuiSkin::defaultGuiSkin.get();
+    skin = Application::getInternal()->defaultGuiSkin.get();
   }
 
   drawUi(rect, (Texture*)skin->getBox()->getNormal()->getBackground(), skin->getBox());

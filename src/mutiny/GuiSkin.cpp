@@ -12,8 +12,6 @@ namespace mutiny
 namespace engine
 {
 
-std::shared_ptr<GuiSkin> GuiSkin::defaultGuiSkin;
-
 GuiSkin::GuiSkin()
 {
   Texture2d* tex = NULL;

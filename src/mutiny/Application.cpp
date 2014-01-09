@@ -99,7 +99,7 @@ void Application::init(int argc, char* argv[])
   Material::particleMaterial = Resources::load<Material>("shaders/default_particle");
   Object::dontDestroyOnLoad(Material::particleMaterial);
 
-  GuiSkin::defaultGuiSkin.reset(new GuiSkin());
+  _internal->defaultGuiSkin.reset(new GuiSkin());
 
   //displaySplash();
 }

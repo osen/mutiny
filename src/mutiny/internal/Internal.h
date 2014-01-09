@@ -43,6 +43,9 @@ public:
   // Gui
   GuiSkin* skin;
 
+  // GuiSkin
+  std::shared_ptr<GuiSkin> defaultGuiSkin;
+
   Internal();
 
 };
