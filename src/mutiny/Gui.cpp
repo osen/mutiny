@@ -28,7 +28,7 @@ namespace engine
 
 Matrix4x4 Gui::getMatrix()
 {
-  return Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1);
+  return Matrix4x4::getIdentity();
 }
 
 void Gui::label(Rect rect, std::string text)
@@ -98,7 +98,9 @@ void Gui::drawTexture(Rect rect, Texture* texture)
 {
   Material* guiMaterial = Material::guiMaterial;
 
-  guiMaterial->setMatrix("in_Projection", getMatrix());
+  guiMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
+  guiMaterial->setMatrix("in_View", Matrix4x4::getIdentity());
+  guiMaterial->setMatrix("in_Model", getMatrix());
   Graphics::drawTexture(rect, texture, guiMaterial);
 }
 
@@ -106,7 +108,9 @@ void Gui::drawTextureWithTexCoords(Rect position, Texture* texture, Rect texCoor
 {
   Material* guiMaterial = Material::guiMaterial;
 
-  guiMaterial->setMatrix("in_Projection", getMatrix());
+  guiMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
+  guiMaterial->setMatrix("in_View", Matrix4x4::getIdentity());
+  guiMaterial->setMatrix("in_Model", getMatrix());
   Graphics::drawTexture(position, texture, texCoords, guiMaterial);
 }
 

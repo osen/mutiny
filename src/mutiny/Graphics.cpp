@@ -49,7 +49,7 @@ void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, Materia
   // Since the GUI system uses this class, we need to set its matrix.
   // Why does Graphics have no way to set the projection matrix?
   //Matrix4x4 projectionMat = Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1);
-  Matrix4x4 projectionMat = Gui::getMatrix();
+  //Matrix4x4 projectionMat = Gui::getMatrix();
 
   std::vector<Vector3> vertices;
   std::vector<Vector2> uv;
@@ -63,6 +63,7 @@ void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, Materia
 
   if(material == NULL)
   {
+    // TODO: Use a unique material with MVP set
     material = Material::guiMaterial;
   }
 
@@ -103,12 +104,9 @@ void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, Materia
   material->setMainTexture(texture);
   material->setPass(0);
 
-  material->setMatrix("in_Projection", projectionMat);
-  material->setMatrix("in_View", Matrix4x4::getIdentity());
-
   glDisable(GL_DEPTH_TEST);
   glCullFace(GL_BACK);
-  drawMeshNow(&mesh, Matrix4x4::getIdentity(), 0);
+  drawMeshNow(&mesh, 0);
   glCullFace(GL_FRONT);
   glEnable(GL_DEPTH_TEST);
 }
@@ -149,6 +147,16 @@ void Graphics::drawTexture(Rect rect, Texture* texture, Material* material)
 void Graphics::drawMeshNow(Mesh* mesh, Matrix4x4 matrix, int materialIndex)
 {
   Material* material;
+
+  material = Application::getInternal()->currentMaterial;
+  material->setMatrix("in_Model", matrix);
+
+  drawMeshNow(mesh, materialIndex);
+}
+
+void Graphics::drawMeshNow(Mesh* mesh, int materialIndex)
+{
+  Material* material;
   Shader* shader;
 
   if(mesh == NULL)
@@ -181,8 +189,6 @@ void Graphics::drawMeshNow(Mesh* mesh, Matrix4x4 matrix, int materialIndex)
 
   GLint positionAttribId = glGetAttribLocation(shader->programId, "in_Position");
   GLint uvAttribId = glGetAttribLocation(shader->programId, "in_Uv");
-
-  material->setMatrix("in_Model", matrix);
 
   if(positionAttribId != -1)
   {

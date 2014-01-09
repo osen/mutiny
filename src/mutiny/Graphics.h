@@ -18,9 +18,12 @@ class RenderTexture;
 class Matrix4x4;
 class Mesh;
 class Camera;
+class Gui;
 
 class Graphics
 {
+  friend class mutiny::engine::Gui;
+
 public:
   static void setRenderTarget(RenderTexture* renderTarget);
   static void drawTexture(Rect rect, Texture* texture, Material* material);
@@ -34,6 +37,8 @@ private:
   static GLuint positionBufferId;
   static GLuint uvBufferId;
   static RenderTexture* renderTarget;
+
+  static void drawMeshNow(Mesh* mesh, int materialIndex);
 
 };
 
