@@ -221,6 +221,11 @@ void Material::setShader(Shader* shader)
 
 void Material::setPass(int pass)
 {
+  Application::getInternal()->currentMaterial = this;
+}
+
+void Material::apply()
+{
   glUseProgram(shader->programId);
 
   for(int i = 0; i < matrixNames.size(); i++)
@@ -239,8 +244,6 @@ void Material::setPass(int pass)
     glActiveTexture(GL_TEXTURE0 + i);
     glBindTexture(GL_TEXTURE_2D, textures[i]->getNativeTexture());
   }
-
-  Application::getInternal()->currentMaterial = this;
 }
 
 }

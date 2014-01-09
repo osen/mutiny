@@ -50,6 +50,12 @@ void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, Materia
   // Why does Graphics have no way to set the projection matrix?
   //Matrix4x4 projectionMat = Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1);
   Matrix4x4 projectionMat = Gui::getMatrix();
+
+  std::vector<Vector3> vertices;
+  std::vector<Vector2> uv;
+  std::vector<Color> colors;
+  std::vector<int> triangles;
+
   float x = (float)rect.x;
   float y = (float)rect.y;
   float xw = (float)rect.x + (float)rect.width;
@@ -66,69 +72,45 @@ void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, Materia
     return;
   }
 
-  GLfloat positions[] = {
-    x, y,
-    x, yh,
-    xw, yh,
-    xw, yh,
-    xw, y,
-    x, y
-  };
+  triangles.push_back(0);
+  triangles.push_back(1);
+  triangles.push_back(2);
+  triangles.push_back(3);
+  triangles.push_back(4);
+  triangles.push_back(5);
 
-  GLfloat uv[] = {
-    sourceRect.x, sourceRect.y,
-    sourceRect.x, sourceRect.height,
-    sourceRect.width, sourceRect.height,
-    sourceRect.width, sourceRect.height,
-    sourceRect.width, sourceRect.y,
-    sourceRect.x, sourceRect.y
-  };
+  vertices.push_back(Vector3(x, y, 0));
+  vertices.push_back(Vector3(x, yh, 0));
+  vertices.push_back(Vector3(xw, yh));
+  vertices.push_back(Vector3(xw, yh));
+  vertices.push_back(Vector3(xw, y));
+  vertices.push_back(Vector3(x, y));
 
-  GLuint programId = material->getShader()->programId;
+  uv.push_back(Vector2(sourceRect.x, sourceRect.y));
+  uv.push_back(Vector2(sourceRect.x, sourceRect.height));
+  uv.push_back(Vector2(sourceRect.width, sourceRect.height));
+  uv.push_back(Vector2(sourceRect.width, sourceRect.height));
+  uv.push_back(Vector2(sourceRect.width, sourceRect.y));
+  uv.push_back(Vector2(sourceRect.x, sourceRect.y));
+
+  Mesh mesh;
+  mesh.setVertices(vertices);
+  mesh.setUv(uv);
+  //mesh.setColors(colors);
+
+  mesh.setTriangles(triangles, 0);
+
   material->setMainTexture(texture);
   material->setPass(0);
 
   material->setMatrix("in_Projection", projectionMat);
   material->setMatrix("in_View", Matrix4x4::getIdentity());
-  material->setMatrix("in_Model", Matrix4x4::getIdentity());
 
-  GLint positionAttributeId = glGetAttribLocation(programId, "in_Position");
-  GLint uvAttributeId = glGetAttribLocation(programId, "in_Uv");
-
-  if(positionAttributeId == -1 ||
-     uvAttributeId == -1)
-  {
-    Debug::logError("Error: Shader does not provide required attributes");
-    throw std::exception();
-  }
-
-  if(positionBufferId == -1)
-  {
-    glGenBuffers(1, &positionBufferId);
-  }
-
-  glBindBuffer(GL_ARRAY_BUFFER, positionBufferId);
-  glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(positions[0]), positions, GL_DYNAMIC_DRAW);
-  glVertexAttribPointer(positionAttributeId, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
-  if(uvBufferId == -1)
-  {
-    glGenBuffers(1, &uvBufferId);
-  }
-
-  glBindBuffer(GL_ARRAY_BUFFER, uvBufferId);
-  glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(uv[0]), uv, GL_DYNAMIC_DRAW);
-  glVertexAttribPointer(uvAttributeId, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
-  glEnableVertexAttribArray(positionAttributeId);
-  glEnableVertexAttribArray(uvAttributeId);
   glDisable(GL_DEPTH_TEST);
   glCullFace(GL_BACK);
-  glDrawArrays(GL_TRIANGLES, 0, 6);
+  drawMeshNow(&mesh, Matrix4x4::getIdentity(), 0);
   glCullFace(GL_FRONT);
   glEnable(GL_DEPTH_TEST);
-  glDisableVertexAttribArray(positionAttributeId);
-  glDisableVertexAttribArray(uvAttributeId);
 }
 
 void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder)
@@ -216,6 +198,7 @@ void Graphics::drawMeshNow(Mesh* mesh, Matrix4x4 matrix, int materialIndex)
     glEnableVertexAttribArray(uvAttribId);
   }
 
+  material->apply();
   glDrawArrays(GL_TRIANGLES, 0, mesh->getTriangles(materialIndex)->size());
 
   if(positionAttribId != -1)

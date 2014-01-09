@@ -106,7 +106,7 @@ void MeshRenderer::render()
       glEnableVertexAttribArray(uvAttribId);
     }
 
-    //glDrawArrays(GL_TRIANGLES, 0, mesh->vertices.size());
+    material->apply();
     glDrawArrays(GL_TRIANGLES, 0, mesh->getTriangles(i)->size());
 
     if(positionAttribId != -1)

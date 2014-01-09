@@ -65,6 +65,7 @@ private:
 
   void refreshIndexes();
   static void dummyDeleter();
+  void apply();
 
 };
 
