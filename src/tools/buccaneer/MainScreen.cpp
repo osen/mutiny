@@ -2,6 +2,7 @@
 #include "MainCamera.h"
 #include "Timeline.h"
 #include "menus/SelectModelScreen.h"
+#include "menus/SelectAnimationScreen.h"
 
 using namespace mutiny::engine;
 
@@ -14,7 +15,11 @@ void MainScreen::onAwake()
   selectedPart = NULL;
   root = new GameObject("root");
   animationGo = new GameObject();
+  fallbackTex.reset(new Texture2d(1, 1));
+  fallbackTex->setPixel(0, 0, Color(0.0f, 0.5f, 1.0f));
+  fallbackTex->apply();
 
+  Resources::load<Animation>(SelectAnimationScreen::choice);
   animatedMesh = Resources::load<AnimatedMesh>(SelectModelScreen::choice.substr(0, SelectModelScreen::choice.length() - 4));
 
   if(animatedMesh == NULL)
@@ -103,7 +108,16 @@ void MainScreen::selectPart(std::string partName)
       {
         Material* newMaterial = new Material(Resources::load<Shader>("shaders/selected"));
         newMaterials.push_back(std::unique_ptr<Material>(newMaterial));
-        newMaterial->setMainTexture(origMaterials.at(x)->getMainTexture());
+
+        if(origMaterials.at(x)->getMainTexture() != NULL)
+        {
+          newMaterial->setMainTexture(origMaterials.at(x)->getMainTexture());
+        }
+        else
+        {
+          newMaterial->setMainTexture(fallbackTex.get());
+        }
+
         _newMaterials.push_back(newMaterial);
       }
 

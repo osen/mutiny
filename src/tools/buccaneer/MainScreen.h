@@ -22,6 +22,7 @@ private:
   Material* selectedMaterial;
   float pulseAmount;
   bool pulseDown;
+  std::unique_ptr<Texture2d> fallbackTex;
 
   GameObject* selectedPart;
   std::vector<Material*> origMaterials;

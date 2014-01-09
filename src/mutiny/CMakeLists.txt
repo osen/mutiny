@@ -3,12 +3,13 @@ add_library(mutiny SHARED
   internal/tribox.cpp
   internal/WavefrontParser.cpp
   internal/Internal.cpp
+  buccaneer/AnimatedMeshRenderer.cpp
+  buccaneer/AnimatedMesh.cpp
+  buccaneer/Animation.cpp
   Time.cpp
   Mathf.cpp
   Texture.cpp
   Component.cpp
-  buccaneer/AnimatedMeshRenderer.cpp
-  buccaneer/AnimatedMesh.cpp
   GuiSkin.cpp
   Resources.cpp
   Behaviour.cpp

@@ -3,6 +3,7 @@
 
 #include "AnimatedMesh.h"
 #include "AnimatedMeshRenderer.h"
+#include "Animation.h"
 
 #endif
 
