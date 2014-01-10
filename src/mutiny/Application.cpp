@@ -369,7 +369,8 @@ void Application::loop()
     }
 
     //glClearColor(0.2f, 0.2f, 0.5f, 1.0f);
-    glClearColor(49.0f / 255.0f, 77.0f / 255.0f, 121.0f / 255.0f, 1.0f);
+    Color clearColor = _internal->currentCamera->getBackgroundColor();
+    glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     for(int i = 0; i < _internal->gameObjects.size(); i++)

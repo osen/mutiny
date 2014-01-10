@@ -70,6 +70,8 @@ void Camera::onAwake()
   targetTexture = NULL;
   nearClipPlane = 0.3f;
   farClipPlane = 1000.0f;
+
+  backgroundColor = Color(49.0f / 255.0f, 77.0f / 255.0f, 121.0f / 255.0f, 1.0f);
 }
 
 void Camera::setTargetTexture(RenderTexture* targetTexture)
@@ -86,6 +88,16 @@ void Camera::onStart()
   }
 
   Application::getInternal()->allCameras.push_back(this);
+}
+
+Color Camera::getBackgroundColor()
+{
+  return backgroundColor;
+}
+
+void Camera::setBackgroundColor(Color color)
+{
+  this->backgroundColor = color;
 }
 
 void Camera::onDestroy()

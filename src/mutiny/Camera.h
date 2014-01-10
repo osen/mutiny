@@ -3,6 +3,7 @@
 
 #include "Behaviour.h"
 #include "Matrix4x4.h"
+#include "Color.h"
 
 #include <memory>
 
@@ -33,8 +34,11 @@ public:
   void setProjectionMatrix(Matrix4x4 projectionMatrix);
   void resetProjectionMatrix();
   void setTargetTexture(RenderTexture* texture);
+  void setBackgroundColor(Color color);
+  Color getBackgroundColor();
 
 private:
+  Color backgroundColor;
   float fieldOfView;
   bool orthographic;
   float orthographicSize;

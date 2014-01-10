@@ -41,5 +41,10 @@ void IntroductionScreen::onGui()
   {
     Application::loadLevel("post");
   }
+
+  if(Gui::button(Rect(410, 200, 200, 50), "Bloom Example") == true)
+  {
+    Application::loadLevel("bloom");
+  }
 }
 
