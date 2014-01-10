@@ -41,6 +41,11 @@ void Component::render()
 
 }
 
+void Component::postRender()
+{
+
+}
+
 void Component::gui()
 {
 

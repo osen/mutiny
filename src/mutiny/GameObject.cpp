@@ -87,6 +87,14 @@ void GameObject::render()
   }
 }
 
+void GameObject::postRender()
+{
+  for(int i = 0; i < components.size(); i++)
+  {
+    components.at(i)->postRender();
+  }
+}
+
 void GameObject::gui()
 {
   for(int i = 0; i < components.size(); i++)

@@ -386,6 +386,11 @@ void Application::loop()
 
   for(int i = 0; i < _internal->gameObjects.size(); i++)
   {
+    _internal->gameObjects.at(i)->postRender();
+  }
+
+  for(int i = 0; i < _internal->gameObjects.size(); i++)
+  {
     _internal->gameObjects.at(i)->gui();
   }
 

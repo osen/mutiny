@@ -29,6 +29,11 @@ void Behaviour::update()
   onUpdate();
 }
 
+void Behaviour::postRender()
+{
+  onPostRender();
+}
+
 void Behaviour::gui()
 {
   onGui();
@@ -55,6 +60,11 @@ void Behaviour::onStart()
 }
 
 void Behaviour::onUpdate()
+{
+
+}
+
+void Behaviour::onPostRender()
 {
 
 }

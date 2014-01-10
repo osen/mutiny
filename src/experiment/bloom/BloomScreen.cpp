@@ -30,6 +30,9 @@ void BloomScreen::onAwake()
 
 void BloomScreen::onGui()
 {
-
+  if(Gui::button(Rect(Screen::getWidth() - 210, 10, 200, 50), "Back") == true)
+  {
+    Application::loadLevel("introduction");
+  }
 }
 

@@ -29,6 +29,7 @@ private:
   virtual void start();
   virtual void update();
   virtual void render();
+  virtual void postRender();
   virtual void gui();
   virtual void destroy();
   virtual void levelWasLoaded();

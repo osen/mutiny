@@ -21,7 +21,7 @@ void BloomCamera::onAwake()
   originalPass.reset(new RenderTexture(512, 512));
   camera->setTargetTexture(originalPass.get());
 
-  blurPass1.reset(new RenderTexture(64, 64));
+  blurPass1.reset(new RenderTexture(32, 32));
   blurPass2.reset(new RenderTexture(128, 128));
   blurPass3.reset(new RenderTexture(256, 256));
   mergePass.reset(new RenderTexture(512, 512));
@@ -45,7 +45,7 @@ void BloomCamera::onUpdate()
   getGameObject()->getTransform()->lookAt(Vector3(0, 0, 0));
 }
 
-void BloomCamera::onGui()
+void BloomCamera::onPostRender()
 {
   Graphics::setRenderTarget(blurPass1.get());
   //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
