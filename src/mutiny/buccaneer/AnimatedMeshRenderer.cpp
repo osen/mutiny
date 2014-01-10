@@ -26,16 +26,22 @@ void AnimatedMeshRenderer::onAwake()
   rootGo = new GameObject("root");
   rootGo->getTransform()->setParent(getGameObject()->getTransform());
   rootGo->getTransform()->setLocalPosition(Vector3());
+  rootGo->getTransform()->setLocalRotation(Vector3());
 }
 
 void AnimatedMeshRenderer::onUpdate()
 {
   Transform* childTransform = NULL;
+  AnimationTransform* transformA = NULL;
+  AnimationTransform* transformB = NULL;
+  AnimationFrame* animationFrameA = NULL;
+  AnimationFrame* animationFrameB = NULL;
 
   for(int i = 0; i < rootGo->getTransform()->getChildCount(); i++)
   {
     childTransform = rootGo->getTransform()->getChild(i);
     childTransform->setLocalPosition(mesh->getMeshOffset(i));
+    childTransform->setLocalRotation(Vector3());
   }
 
   if(animation != NULL && animation->frames.size() > 0)
@@ -43,17 +49,56 @@ void AnimatedMeshRenderer::onUpdate()
     for(int i = 0; i < rootGo->getTransform()->getChildCount(); i++)
     {
       childTransform = rootGo->getTransform()->getChild(i);
-      AnimationFrame* animationFrame = &animation->frames.at(frame);
+      animationFrameA = &animation->frames.at(frame);
 
-      for(int j = 0; j < animationFrame->transforms.size(); j++)
+      if(frame >= animation->frames.size() - 1)
       {
-        AnimationTransform* transform = &animationFrame->transforms.at(j);
+        animationFrameB = &animation->frames.at(0);
+        //animationFrameB = &animation->frames.at(frame);
+      }
+      else
+      {
+        animationFrameB = &animation->frames.at(frame + 1);
+      }
 
-        if(childTransform->getGameObject()->getName() == transform->partName)
+      transformA = NULL;
+      transformB = NULL;
+
+      for(int j = 0; j < animationFrameA->transforms.size(); j++)
+      {
+        if(childTransform->getGameObject()->getName() == animationFrameA->transforms.at(j).partName)
         {
-          childTransform->setLocalPosition(Vector3(transform->pX, transform->pY, transform->pZ));
+          transformA = &animationFrameA->transforms.at(j);
+          break;
         }
       }
+
+      if(transformA == NULL) continue;
+
+      for(int j = 0; j < animationFrameB->transforms.size(); j++)
+      {
+        if(childTransform->getGameObject()->getName() == animationFrameB->transforms.at(j).partName)
+        {
+          transformB = &animationFrameB->transforms.at(j);
+          break;
+        }
+      }
+
+      if(transformB == NULL) continue;
+
+      Vector3 a(transformA->pX, transformA->pY, transformA->pZ);
+      Vector3 b(transformB->pX, transformB->pY, transformB->pZ);
+      Vector3 diff = b - a;
+      float frameDiff = (float)((int)frame + 1) - frame;
+
+      //std::cout << frameDiff << std::endl;
+
+      childTransform->setLocalPosition(a + (diff * (1.0f - frameDiff)));
+
+      a = Vector3(transformA->rX, transformA->rY, transformA->rZ);
+      b = Vector3(transformB->rX, transformB->rY, transformB->rZ);
+      diff = b - a;
+      childTransform->setLocalRotation(a + (diff * (1.0f - frameDiff)));
     }
 
     frame += Time::getDeltaTime();

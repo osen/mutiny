@@ -1,8 +1,8 @@
 f
-t Body 1 1 1 1 1 1
+t Body 1 1 1 10 10 10
 f
-t Body 2 8 1 9 3 6
+t Body 2 8 1 90 30 60
 f
-t Body 8 1 9 2 3 5
+t Body 8 1 9 20 30 50
 f
-t Body 3 6 2 3 7 7
+t Body 3 6 2 30 70 70
