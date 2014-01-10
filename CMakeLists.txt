@@ -14,5 +14,4 @@ link_directories(/usr/local/lib /usr/X11R6/lib)
 add_subdirectory(src/mutiny)
 add_subdirectory(src/tools/buccaneer)
 add_subdirectory(src/experiment)
-add_subdirectory(src/knights)
 
