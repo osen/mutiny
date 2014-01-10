@@ -1,20 +1,20 @@
-#include "BloomCamera.h"
+#include "LayerCamera.h"
 
 #include <vector>
 
 using namespace mutiny::engine;
 
-BloomCamera* BloomCamera::create()
+LayerCamera* LayerCamera::create()
 {
-  GameObject* cameraGo = new GameObject("BloomCamera");
-  BloomCamera* camera = cameraGo->addComponent<BloomCamera>();
+  GameObject* cameraGo = new GameObject("LayerCamera");
+  LayerCamera* camera = cameraGo->addComponent<LayerCamera>();
 
   return camera;
 }
 
-void BloomCamera::onAwake()
+void LayerCamera::onAwake()
 {
-  Debug::log("BloomCamera awoken");
+  Debug::log("LayerCamera awoken");
 
   Camera* camera = getGameObject()->addComponent<Camera>();
   camera->setBackgroundColor(Color(0, 0, 0, 1));
@@ -39,13 +39,13 @@ void BloomCamera::onAwake()
   mergeMaterial->setMatrix("in_Model", Matrix4x4::getIdentity());
 }
 
-void BloomCamera::onUpdate()
+void LayerCamera::onUpdate()
 {
   getGameObject()->getTransform()->rotateAround(Vector3(0, 0, 0), Vector3(0, 1, 0), 100.0f * Time::getDeltaTime());
   getGameObject()->getTransform()->lookAt(Vector3(0, 0, 0));
 }
 
-void BloomCamera::onPostRender()
+void LayerCamera::onPostRender()
 {
   Graphics::setRenderTarget(blurPass1.get());
   //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

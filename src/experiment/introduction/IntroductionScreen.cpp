@@ -46,5 +46,10 @@ void IntroductionScreen::onGui()
   {
     Application::loadLevel("bloom");
   }
+
+  if(Gui::button(Rect(410, 300, 200, 50), "Layer Example") == true)
+  {
+    Application::loadLevel("layer");
+  }
 }
 

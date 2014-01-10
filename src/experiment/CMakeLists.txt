@@ -16,6 +16,9 @@ add_executable(experiment
 
   bloom/BloomCamera.cpp
   bloom/BloomScreen.cpp
+
+  layer/LayerCamera.cpp
+  layer/LayerScreen.cpp
 )
 
 target_link_libraries(experiment mutiny)

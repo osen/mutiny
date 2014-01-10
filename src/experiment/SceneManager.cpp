@@ -5,6 +5,7 @@
 #include "collision/CollisionScreen.h"
 #include "post/PostScreen.h"
 #include "bloom/BloomScreen.h"
+#include "layer/LayerScreen.h"
 
 using namespace mutiny::engine;
 
@@ -46,6 +47,10 @@ void SceneManager::loadLevel()
   else if (Application::getLoadedLevelName() == "bloom")
   {
     BloomScreen::create();
+  }
+  else if (Application::getLoadedLevelName() == "layer")
+  {
+    LayerScreen::create();
   }
 }
 
