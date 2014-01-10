@@ -36,5 +36,10 @@ void IntroductionScreen::onGui()
   {
     Application::loadLevel("collision");
   }
+
+  if(Gui::button(Rect(200, 500, 200, 50), "Postprocess Example") == true)
+  {
+    Application::loadLevel("post");
+  }
 }
 

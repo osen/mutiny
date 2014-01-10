@@ -3,6 +3,7 @@
 #include "transform/TransformScreen.h"
 #include "model/ModelScreen.h"
 #include "collision/CollisionScreen.h"
+#include "post/PostScreen.h"
 
 using namespace mutiny::engine;
 
@@ -36,6 +37,10 @@ void SceneManager::loadLevel()
   else if (Application::getLoadedLevelName() == "collision")
   {
     CollisionScreen::create();
+  }
+  else if (Application::getLoadedLevelName() == "post")
+  {
+    PostScreen::create();
   }
 }
 

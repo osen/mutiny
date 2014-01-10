@@ -29,15 +29,7 @@ namespace engine
 void Graphics::setRenderTarget(RenderTexture* renderTarget)
 {
   Application::getInternal()->graphicsRenderTarget = renderTarget;
-
-  if(renderTarget == NULL)
-  {
-    RenderTexture::setActive(NULL);
-  }
-  else
-  {
-    RenderTexture::setActive(renderTarget);
-  }
+  RenderTexture::setActive(renderTarget);
 }
 
 // if material is null, a default material with internal-GUITexture.shader is used.

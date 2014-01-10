@@ -10,6 +10,9 @@ add_executable(experiment
   collision/Player.cpp
   collision/SkyBox.cpp
   collision/SplashScreen.cpp
+
+  post/MainCamera.cpp
+  post/PostScreen.cpp
 )
 
 target_link_libraries(experiment mutiny)
