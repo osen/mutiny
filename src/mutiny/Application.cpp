@@ -375,6 +375,12 @@ void Application::loop()
 
     for(int i = 0; i < _internal->gameObjects.size(); i++)
     {
+      if((_internal->currentCamera->getCullMask() & _internal->gameObjects.at(i)->getLayer()) !=
+        _internal->gameObjects.at(i)->getLayer())
+      {
+        continue;
+      }
+
       _internal->gameObjects.at(i)->render();
     }
 

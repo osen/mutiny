@@ -14,6 +14,8 @@ public:
   virtual void onGui();
 
 private:
+  GameObject* playerGo;
+  GameObject* cameraGo;
 
 
 };

@@ -10,7 +10,7 @@ using namespace mutiny::engine;
 class LayerCamera : public Behaviour
 {
 public:
-  static LayerCamera* create();
+  static GameObject* create();
 
   virtual void onAwake();
   virtual void onUpdate();

@@ -4,12 +4,12 @@
 
 using namespace mutiny::engine;
 
-LayerCamera* LayerCamera::create()
+GameObject* LayerCamera::create()
 {
   GameObject* cameraGo = new GameObject("LayerCamera");
-  LayerCamera* camera = cameraGo->addComponent<LayerCamera>();
+  cameraGo->addComponent<LayerCamera>();
 
-  return camera;
+  return cameraGo;
 }
 
 void LayerCamera::onAwake()
@@ -20,6 +20,17 @@ void LayerCamera::onAwake()
   camera->setBackgroundColor(Color(0, 0, 0, 1));
   originalPass.reset(new RenderTexture(512, 512));
   camera->setTargetTexture(originalPass.get());
+
+  // Display only layer 0
+  //int cullMask = 1 << 0;
+
+  // Display only layer 1
+  //int cullMask = 1 << 1;
+
+  // Display everything but layer 1
+  //cullMask = ~cullMask;
+
+  //camera->setCullMask(cullMask);
 
   blurPass1.reset(new RenderTexture(64, 64));
   blurPass2.reset(new RenderTexture(256, 256));

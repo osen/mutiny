@@ -32,6 +32,7 @@ GameObject::GameObject(std::string name)
   addComponent<Transform>();
   Application::getInternal()->gameObjects.push_back(std::shared_ptr<GameObject>(this));
   activeSelf = true;
+  layer = 0;
 }
 
 GameObject::GameObject()
@@ -39,11 +40,22 @@ GameObject::GameObject()
   addComponent<Transform>();
   Application::getInternal()->gameObjects.push_back(std::shared_ptr<GameObject>(this));
   activeSelf = true;
+  layer = 0;
 }
 
 GameObject::~GameObject()
 {
 
+}
+
+void GameObject::setLayer(int layer)
+{
+  this->layer = layer;
+}
+
+int GameObject::getLayer()
+{
+  return layer;
 }
 
 void GameObject::awake()

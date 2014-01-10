@@ -52,6 +52,8 @@ public:
   void setActive(bool active);
   bool getActive();
   bool getActiveSelf();
+  int getLayer();
+  void setLayer(int layer);
   Transform* getTransform();
 
   template<class T> T* addComponent()
@@ -83,6 +85,7 @@ public:
 private:
   std::vector<std::shared_ptr<Component> > components;
   bool activeSelf;
+  int layer;
 
   virtual void awake();
   virtual void start();

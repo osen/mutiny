@@ -36,6 +36,8 @@ public:
   void setTargetTexture(RenderTexture* texture);
   void setBackgroundColor(Color color);
   Color getBackgroundColor();
+  int getCullMask();
+  void setCullMask(int cullMask);
 
 private:
   Color backgroundColor;
@@ -46,6 +48,7 @@ private:
   float farClipPlane;
   std::shared_ptr<Matrix4x4> projectionMatrix;
   RenderTexture* targetTexture;
+  int cullMask;
 
   virtual void onAwake();
   virtual void onStart();
