@@ -18,19 +18,17 @@ class RenderTexture : public Texture
   friend class mutiny::engine::Graphics;
 
 public:
+  static void setActive(RenderTexture* renderTexture);
+
   RenderTexture(int width, int height);
   virtual ~RenderTexture();
 
 private:
-  static void disable();
-
   GLuint nativeFrameBuffer;
   std::shared_ptr<void> _nativeFrameBuffer;
 
   GLuint nativeRenderBuffer;
   std::shared_ptr<void> _nativeRenderBuffer;
-
-  void setEnabled(bool enabled);
 
 };
 

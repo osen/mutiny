@@ -365,7 +365,7 @@ void Application::loop()
 
     if(_internal->currentCamera->targetTexture != NULL)
     {
-      _internal->currentCamera->targetTexture->setEnabled(true);
+      RenderTexture::setActive(_internal->currentCamera->targetTexture);
     }
 
     //glClearColor(0.2f, 0.2f, 0.5f, 1.0f);
@@ -379,7 +379,7 @@ void Application::loop()
 
     if(_internal->currentCamera->targetTexture != NULL)
     {
-      _internal->currentCamera->targetTexture->setEnabled(false);
+      RenderTexture::setActive(NULL);
     }
   }
 

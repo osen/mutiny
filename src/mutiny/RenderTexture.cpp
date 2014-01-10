@@ -73,18 +73,12 @@ RenderTexture::~RenderTexture()
 
 }
 
-void RenderTexture::disable()
+void RenderTexture::setActive(RenderTexture* renderTexture)
 {
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
-  glViewport(0, 0, Screen::getWidth(), Screen::getHeight());
-}
-
-void RenderTexture::setEnabled(bool enabled)
-{
-  if(enabled == true)
+  if(renderTexture != NULL)
   {
-    glBindFramebuffer(GL_FRAMEBUFFER, nativeFrameBuffer);
-    glViewport(0, 0, width, height);
+    glBindFramebuffer(GL_FRAMEBUFFER, renderTexture->nativeFrameBuffer);
+    glViewport(0, 0, renderTexture->width, renderTexture->height);
   }
   else
   {

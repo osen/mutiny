@@ -32,11 +32,11 @@ void Graphics::setRenderTarget(RenderTexture* renderTarget)
 
   if(renderTarget == NULL)
   {
-    RenderTexture::disable();
+    RenderTexture::setActive(NULL);
   }
   else
   {
-    renderTarget->setEnabled(true);
+    RenderTexture::setActive(renderTarget);
   }
 }
 
