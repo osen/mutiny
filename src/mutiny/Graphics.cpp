@@ -29,16 +29,12 @@ namespace engine
 void Graphics::setRenderTarget(RenderTexture* renderTarget)
 {
   Application::getInternal()->graphicsRenderTarget = renderTarget;
-  RenderTexture::setActive(renderTarget);
 }
 
 // if material is null, a default material with internal-GUITexture.shader is used.
 void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, Material* material)
 {
-  // Since the GUI system uses this class, we need to set its matrix.
-  // Why does Graphics have no way to set the projection matrix?
-  //Matrix4x4 projectionMat = Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1);
-  //Matrix4x4 projectionMat = Gui::getMatrix();
+  RenderTexture* currentRenderTexture = NULL;
 
   std::vector<Vector3> vertices;
   std::vector<Vector2> uv;
@@ -96,11 +92,16 @@ void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, Materia
   material->setMainTexture(texture);
   material->setPass(0);
 
+  currentRenderTexture = RenderTexture::getActive();
+  RenderTexture::setActive(Application::getInternal()->graphicsRenderTarget);
+
   glDisable(GL_DEPTH_TEST);
   glCullFace(GL_BACK);
   drawMeshNow(&mesh, 0);
   glCullFace(GL_FRONT);
   glEnable(GL_DEPTH_TEST);
+
+  RenderTexture::setActive(currentRenderTexture);
 }
 
 void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder, Material* material)

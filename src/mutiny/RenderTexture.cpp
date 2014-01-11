@@ -75,6 +75,11 @@ RenderTexture::~RenderTexture()
 
 void RenderTexture::setActive(RenderTexture* renderTexture)
 {
+  if(Application::getInternal()->renderTextureActive == renderTexture)
+  {
+    return;
+  }
+
   if(renderTexture != NULL)
   {
     glBindFramebuffer(GL_FRAMEBUFFER, renderTexture->nativeFrameBuffer);
@@ -85,6 +90,13 @@ void RenderTexture::setActive(RenderTexture* renderTexture)
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glViewport(0, 0, Screen::getWidth(), Screen::getHeight());
   }
+
+  Application::getInternal()->renderTextureActive = renderTexture;
+}
+
+RenderTexture* RenderTexture::getActive()
+{
+  return Application::getInternal()->renderTextureActive;
 }
 
 }

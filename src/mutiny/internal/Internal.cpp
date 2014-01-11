@@ -17,6 +17,7 @@ Internal::Internal()
   currentMaterial = NULL;
   graphicsDefaultMaterial = NULL;
   graphicsRenderTarget = NULL;
+  renderTextureActive = NULL;
 }
 
 }

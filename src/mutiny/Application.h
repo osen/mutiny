@@ -20,6 +20,7 @@ class Camera;
 class Gui;
 class Graphics;
 class Material;
+class RenderTexture;
 
 class Application
 {
@@ -30,6 +31,7 @@ class Application
   friend class mutiny::engine::Gui;
   friend class mutiny::engine::Graphics;
   friend class mutiny::engine::Material;
+  friend class mutiny::engine::RenderTexture;
 
 public:
   static void init(int argc, char* argv[]);

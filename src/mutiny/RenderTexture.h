@@ -19,6 +19,7 @@ class RenderTexture : public Texture
 
 public:
   static void setActive(RenderTexture* renderTexture);
+  static RenderTexture* getActive();
 
   RenderTexture(int width, int height);
   virtual ~RenderTexture();

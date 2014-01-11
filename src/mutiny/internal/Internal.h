@@ -54,6 +54,9 @@ public:
   Material* graphicsDefaultMaterial;
   RenderTexture* graphicsRenderTarget;
 
+  // RenderTexture
+  RenderTexture* renderTextureActive;
+
   Internal();
 
 };
