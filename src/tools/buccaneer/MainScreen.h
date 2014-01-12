@@ -11,6 +11,8 @@ class Timeline;
 
 class MainScreen : public Behaviour
 {
+  friend class Timeline;
+
 public:
   virtual void onAwake();
   virtual void onUpdate();

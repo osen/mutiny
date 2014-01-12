@@ -42,10 +42,9 @@ void MainScreen::onAwake()
   animationGo->getTransform()->setParent(root->getTransform());
   //root->getTransform()->rotate(Vector3(0, 180, 0));
 
-
   undoBuffer.push_back(animation->frames);
 
-  timeline = Timeline::create(amr);
+  timeline = Timeline::create(this);
 }
 
 void MainScreen::modifyTransform(AnimationTransform* transform)

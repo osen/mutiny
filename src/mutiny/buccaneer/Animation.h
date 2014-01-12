@@ -7,6 +7,7 @@
 #include <vector>
 
 class MainScreen;
+class Timeline;
 
 namespace mutiny
 {
@@ -44,6 +45,7 @@ class Animation : public Object
   friend class mutiny::engine::Resources;
   friend class mutiny::engine::AnimatedMeshRenderer;
   friend class ::MainScreen;
+  friend class ::Timeline;
 
 public:
   int getFrameCount();
