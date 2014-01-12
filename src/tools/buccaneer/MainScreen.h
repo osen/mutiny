@@ -16,6 +16,8 @@ public:
 
 private:
   AnimatedMesh* animatedMesh;
+  AnimatedMeshRenderer* amr;
+  Animation* animation;
   GameObject* root;
   GameObject* animationGo;
   Vector2 lastMousePosition;

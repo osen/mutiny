@@ -28,10 +28,11 @@ void MainScreen::onAwake()
 
   selectedMaterial = Resources::load<Material>("shaders/selected");
 
-  AnimatedMeshRenderer* amr = animationGo->addComponent<AnimatedMeshRenderer>();
+  amr = animationGo->addComponent<AnimatedMeshRenderer>();
   amr->setAnimatedMesh(animatedMesh);
 
-  amr->setAnimation(Resources::load<Animation>(SelectAnimationScreen::choice));
+  animation = Resources::load<Animation>(SelectAnimationScreen::choice);
+  amr->setAnimation(animation);
 
   animationGo->getTransform()->setParent(root->getTransform());
   root->getTransform()->rotate(Vector3(0, 180, 0));
@@ -58,7 +59,25 @@ void MainScreen::onUpdate()
   {
     if(selectedPart != NULL)
     {
-      selectedPart->getTransform()->rotate(Vector3(0, -mouseDelta.x, 0));
+      bool found = false;
+      for(int i = 0; i < animation->frames.at(0).transforms.size(); i++)
+      {
+        if(animation->frames.at(0).transforms.at(i).partName == selectedPart->getName())
+        {
+          found = true;
+          animation->frames.at(0).transforms.at(i).pX -= mouseDelta.x;
+          //selectedPart->getTransform()->rotate(Vector3(0, -mouseDelta.x, 0));
+        }
+      }
+
+      if(found == false)
+      {
+        AnimationTransform newTransform;
+        newTransform.partName = selectedPart->getName();
+        animation->frames.at(0).transforms.push_back(newTransform);
+        //animation->frames.at(1).transforms.push_back(newTransform);
+        //animation->frames.at(2).transforms.push_back(newTransform);
+      }
     }
   }
 
@@ -132,6 +151,21 @@ void MainScreen::onGui()
   if(Gui::button(Rect(10, 10, 100, 30), "back") == true)
   {
     Application::loadLevel("Menu");
+  }
+
+  if(amr->isPlaying() == false)
+  {
+    if(Gui::button(Rect(10, 50, 100, 30), "Play") == true)
+    {
+      amr->play();
+    }
+  }
+  else
+  {
+    if(Gui::button(Rect(10, 50, 100, 30), "Stop") == true)
+    {
+      amr->stop();
+    }
   }
 
   Transform* rootTransform = animationGo->getTransform()->find("root");

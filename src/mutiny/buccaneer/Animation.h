@@ -6,6 +6,8 @@
 #include <string>
 #include <vector>
 
+class MainScreen;
+
 namespace mutiny
 {
 
@@ -26,6 +28,8 @@ public:
   float rY;
   float rZ;
 
+  AnimationTransform();
+
 };
 
 class AnimationFrame
@@ -39,8 +43,10 @@ class Animation : public Object
 {
   friend class mutiny::engine::Resources;
   friend class mutiny::engine::AnimatedMeshRenderer;
+  friend class ::MainScreen;
 
 private:
+//public:
   static Animation* load(std::string path);
 
   std::vector<AnimationFrame> frames;

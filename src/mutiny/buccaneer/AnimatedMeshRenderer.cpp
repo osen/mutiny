@@ -23,10 +23,32 @@ void AnimatedMeshRenderer::onAwake()
   mesh = NULL;
   animation = NULL;
   frame = 0;
+  playing = false;
   rootGo = new GameObject("root");
   rootGo->getTransform()->setParent(getGameObject()->getTransform());
   rootGo->getTransform()->setLocalPosition(Vector3());
   rootGo->getTransform()->setLocalRotation(Vector3());
+}
+
+bool AnimatedMeshRenderer::isPlaying()
+{
+  return playing;
+}
+
+void AnimatedMeshRenderer::play()
+{
+  if(animation == NULL)
+  {
+    return;
+  }
+
+  playing = true;
+}
+
+void AnimatedMeshRenderer::stop()
+{
+  playing = false;
+  frame = 0;
 }
 
 void AnimatedMeshRenderer::onUpdate()
@@ -84,7 +106,7 @@ void AnimatedMeshRenderer::onUpdate()
         }
       }
 
-      if(transformB == NULL) continue;
+      if(transformB == NULL) transformB = transformA;
 
       Vector3 a(transformA->pX, transformA->pY, transformA->pZ);
       Vector3 b(transformB->pX, transformB->pY, transformB->pZ);
@@ -101,7 +123,10 @@ void AnimatedMeshRenderer::onUpdate()
       childTransform->setLocalRotation(a + (diff * (1.0f - frameDiff)));
     }
 
-    frame += Time::getDeltaTime();
+    if(playing == true)
+    {
+      frame += Time::getDeltaTime();
+    }
 
     if(frame >= animation->frames.size())
     {

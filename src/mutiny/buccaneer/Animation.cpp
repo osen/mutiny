@@ -11,6 +11,16 @@ namespace mutiny
 namespace engine
 {
 
+AnimationTransform::AnimationTransform()
+{
+  pX = 0;
+  pY = 0;
+  pZ = 0;
+  rX = 0;
+  rY = 0;
+  rZ = 0;
+}
+
 Animation* Animation::load(std::string path)
 {
   std::string line;

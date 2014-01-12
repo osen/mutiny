@@ -24,6 +24,9 @@ public:
   AnimatedMesh* getAnimatedMesh();
   void setAnimation(Animation* animation);
   Animation* getAnimation();
+  void play();
+  void stop();
+  bool isPlaying();
 
 private:
   std::vector<std::unique_ptr<Material> > materials;
@@ -31,6 +34,7 @@ private:
   Animation* animation;
   GameObject* rootGo;
   float frame;
+  bool playing;
 
   virtual void onAwake();
   virtual void onUpdate();
