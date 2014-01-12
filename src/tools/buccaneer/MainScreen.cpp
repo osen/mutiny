@@ -10,6 +10,10 @@ void MainScreen::onAwake()
 {
   MainCamera::create();
 
+  // Vector2(Vector3))?
+  lastMousePosition.x = Input::getMousePosition().x;
+  lastMousePosition.y = Input::getMousePosition().y;
+
   pulseAmount = 0;
   pulseDown = false;
   selectedPart = NULL;
@@ -40,11 +44,18 @@ void MainScreen::onAwake()
   Timeline::create();
 }
 
+void MainScreen::modifyTransform(AnimationTransform* transform)
+{
+  Vector3 mousePosition = Input::getMousePosition();
+  Vector3 mouseDelta = mousePosition - lastMousePosition;
+
+  transform->pX -= mouseDelta.x;
+}
+
 void MainScreen::onUpdate()
 {
   Vector3 mousePosition = Input::getMousePosition();
   Vector3 mouseDelta = mousePosition - lastMousePosition;
-  lastMousePosition = Vector2(mousePosition.x, mousePosition.y);
 
   //std::cout << mouseDelta.x << mouseDelta.y << mouseDelta.z << std::endl;
 
@@ -65,7 +76,9 @@ void MainScreen::onUpdate()
         if(animation->frames.at(0).transforms.at(i).partName == selectedPart->getName())
         {
           found = true;
-          animation->frames.at(0).transforms.at(i).pX -= mouseDelta.x;
+
+          modifyTransform(&animation->frames.at(0).transforms.at(i));
+          //animation->frames.at(0).transforms.at(i).pX -= mouseDelta.x;
           //selectedPart->getTransform()->rotate(Vector3(0, -mouseDelta.x, 0));
         }
       }
@@ -97,6 +110,8 @@ void MainScreen::onUpdate()
   {
     newMaterials.at(i)->setFloat("in_Pulse", pulseAmount);
   }
+
+  lastMousePosition = Vector2(mousePosition.x, mousePosition.y);
 }
 
 void MainScreen::selectPart(std::string partName)

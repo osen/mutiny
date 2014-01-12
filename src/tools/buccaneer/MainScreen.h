@@ -30,6 +30,7 @@ private:
   std::vector<Material*> origMaterials;
   std::vector<std::unique_ptr<Material> > newMaterials;
 
+  void modifyTransform(AnimationTransform* transform);
   void selectPart(std::string partName);
 
 };

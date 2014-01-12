@@ -115,7 +115,7 @@ void AnimatedMeshRenderer::onUpdate()
 
       //std::cout << frameDiff << std::endl;
 
-      childTransform->setLocalPosition(a + (diff * (1.0f - frameDiff)));
+      childTransform->setLocalPosition(childTransform->getLocalPosition() + a + (diff * (1.0f - frameDiff)));
 
       a = Vector3(transformA->rX, transformA->rY, transformA->rZ);
       b = Vector3(transformB->rX, transformB->rY, transformB->rZ);
