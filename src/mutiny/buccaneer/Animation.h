@@ -45,8 +45,10 @@ class Animation : public Object
   friend class mutiny::engine::AnimatedMeshRenderer;
   friend class ::MainScreen;
 
+public:
+  int getFrameCount();
+
 private:
-//public:
   static Animation* load(std::string path);
 
   std::vector<AnimationFrame> frames;

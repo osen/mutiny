@@ -21,6 +21,11 @@ AnimationTransform::AnimationTransform()
   rZ = 0;
 }
 
+int Animation::getFrameCount()
+{
+  return frames.size();
+}
+
 Animation* Animation::load(std::string path)
 {
   std::string line;

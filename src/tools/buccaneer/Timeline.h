@@ -14,8 +14,11 @@ public:
   virtual void onUpdate();
   virtual void onGui();
 
+  int getFrame();
+
 private:
   Texture2d* test;
+  int frame;
 
 
 };

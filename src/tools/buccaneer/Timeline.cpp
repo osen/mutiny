@@ -10,7 +10,13 @@ Timeline* Timeline::create()
 
 void Timeline::onAwake()
 {
+  frame = 0;
   test = Resources::load<Texture2d>("gui/box_normal");
+}
+
+int Timeline::getFrame()
+{
+  return frame;
 }
 
 void Timeline::onUpdate()

@@ -7,6 +7,8 @@
 
 using namespace mutiny::engine;
 
+class Timeline;
+
 class MainScreen : public Behaviour
 {
 public:
@@ -25,10 +27,13 @@ private:
   float pulseAmount;
   bool pulseDown;
   std::unique_ptr<Texture2d> fallbackTex;
+  bool changeMade;
+  Timeline* timeline;
 
   GameObject* selectedPart;
   std::vector<Material*> origMaterials;
   std::vector<std::unique_ptr<Material> > newMaterials;
+  std::vector<std::vector<AnimationFrame> > undoBuffer;
 
   void modifyTransform(AnimationTransform* transform);
   void selectPart(std::string partName);

@@ -14,6 +14,7 @@ void MainScreen::onAwake()
   lastMousePosition.x = Input::getMousePosition().x;
   lastMousePosition.y = Input::getMousePosition().y;
 
+  changeMade = false;
   pulseAmount = 0;
   pulseDown = false;
   selectedPart = NULL;
@@ -41,7 +42,10 @@ void MainScreen::onAwake()
   animationGo->getTransform()->setParent(root->getTransform());
   //root->getTransform()->rotate(Vector3(0, 180, 0));
 
-  Timeline::create();
+
+  undoBuffer.push_back(animation->frames);
+
+  timeline = Timeline::create();
 }
 
 void MainScreen::modifyTransform(AnimationTransform* transform)
@@ -52,6 +56,11 @@ void MainScreen::modifyTransform(AnimationTransform* transform)
   Vector3 mouseDelta = mousePosition - lastMousePosition;
 
   rootTransform = root->getTransform();
+
+  if(mouseDelta.x != 0 || mouseDelta.x != 0)
+  {
+    changeMade = true;
+  }
 
   //if(rootTransform->getRotation().y >= 360 - 45 && rootTransform->getRotation().y < 90 - 45)
   //if(rootTransform->getRotation().y >= 0 && rootTransform->getRotation().y < 90 - 45)
@@ -74,6 +83,8 @@ void MainScreen::modifyTransform(AnimationTransform* transform)
   {
     transform->pX -= mouseDelta.x * sensitivity;
   }
+
+  transform->pY -= mouseDelta.y * sensitivity;
 }
 
 void MainScreen::onUpdate()
@@ -107,15 +118,12 @@ void MainScreen::onUpdate()
     if(selectedPart != NULL)
     {
       bool found = false;
-      for(int i = 0; i < animation->frames.at(0).transforms.size(); i++)
+      for(int i = 0; i < animation->frames.at(timeline->getFrame()).transforms.size(); i++)
       {
-        if(animation->frames.at(0).transforms.at(i).partName == selectedPart->getName())
+        if(animation->frames.at(timeline->getFrame()).transforms.at(i).partName == selectedPart->getName())
         {
           found = true;
-
-          modifyTransform(&animation->frames.at(0).transforms.at(i));
-          //animation->frames.at(0).transforms.at(i).pX -= mouseDelta.x;
-          //selectedPart->getTransform()->rotate(Vector3(0, -mouseDelta.x, 0));
+          modifyTransform(&animation->frames.at(timeline->getFrame()).transforms.at(i));
         }
       }
 
@@ -123,11 +131,14 @@ void MainScreen::onUpdate()
       {
         AnimationTransform newTransform;
         newTransform.partName = selectedPart->getName();
-        animation->frames.at(0).transforms.push_back(newTransform);
-        //animation->frames.at(1).transforms.push_back(newTransform);
-        //animation->frames.at(2).transforms.push_back(newTransform);
+        animation->frames.at(timeline->getFrame()).transforms.push_back(newTransform);
       }
     }
+  }
+  else if(changeMade == true)
+  {
+    changeMade = false;
+    undoBuffer.push_back(animation->frames);
   }
 
   //if(selectedPart != NULL)
@@ -202,6 +213,17 @@ void MainScreen::onGui()
   if(Gui::button(Rect(10, 10, 100, 30), "back") == true)
   {
     Application::loadLevel("Menu");
+  }
+
+  if(undoBuffer.size() > 1)
+  {
+    if(Gui::button(Rect(120, 10, 100, 30), "Undo") == true)
+    {
+      animation->frames = undoBuffer.at(undoBuffer.size() - 2);
+      undoBuffer.erase(undoBuffer.begin() + (undoBuffer.size() - 1));
+      undoBuffer.erase(undoBuffer.begin() + (undoBuffer.size() - 1));
+      undoBuffer.push_back(animation->frames);
+    }
   }
 
   if(amr->isPlaying() == false)
