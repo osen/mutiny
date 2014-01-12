@@ -27,6 +27,8 @@ public:
   void play();
   void stop();
   bool isPlaying();
+  float getFrame();
+  void setFrame(float frame);
 
 private:
   std::vector<std::unique_ptr<Material> > materials;

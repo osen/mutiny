@@ -30,6 +30,16 @@ void AnimatedMeshRenderer::onAwake()
   rootGo->getTransform()->setLocalRotation(Vector3());
 }
 
+void AnimatedMeshRenderer::setFrame(float frame)
+{
+  this->frame = frame;
+}
+
+float AnimatedMeshRenderer::getFrame()
+{
+  return frame;
+}
+
 bool AnimatedMeshRenderer::isPlaying()
 {
   return playing;

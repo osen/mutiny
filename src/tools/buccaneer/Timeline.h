@@ -8,18 +8,15 @@ using namespace mutiny::engine;
 class Timeline : public Behaviour
 {
 public:
-  static Timeline* create();
+  static Timeline* create(AnimatedMeshRenderer* amr);
 
   virtual void onAwake();
   virtual void onUpdate();
   virtual void onGui();
 
-  int getFrame();
-
 private:
+  AnimatedMeshRenderer* amr;
   Texture2d* test;
-  int frame;
-
 
 };
 

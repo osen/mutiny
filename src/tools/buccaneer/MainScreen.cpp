@@ -45,7 +45,7 @@ void MainScreen::onAwake()
 
   undoBuffer.push_back(animation->frames);
 
-  timeline = Timeline::create();
+  timeline = Timeline::create(amr);
 }
 
 void MainScreen::modifyTransform(AnimationTransform* transform)
@@ -118,12 +118,12 @@ void MainScreen::onUpdate()
     if(selectedPart != NULL)
     {
       bool found = false;
-      for(int i = 0; i < animation->frames.at(timeline->getFrame()).transforms.size(); i++)
+      for(int i = 0; i < animation->frames.at(amr->getFrame()).transforms.size(); i++)
       {
-        if(animation->frames.at(timeline->getFrame()).transforms.at(i).partName == selectedPart->getName())
+        if(animation->frames.at(amr->getFrame()).transforms.at(i).partName == selectedPart->getName())
         {
           found = true;
-          modifyTransform(&animation->frames.at(timeline->getFrame()).transforms.at(i));
+          modifyTransform(&animation->frames.at(amr->getFrame()).transforms.at(i));
         }
       }
 
@@ -131,7 +131,7 @@ void MainScreen::onUpdate()
       {
         AnimationTransform newTransform;
         newTransform.partName = selectedPart->getName();
-        animation->frames.at(timeline->getFrame()).transforms.push_back(newTransform);
+        animation->frames.at(amr->getFrame()).transforms.push_back(newTransform);
       }
     }
   }
