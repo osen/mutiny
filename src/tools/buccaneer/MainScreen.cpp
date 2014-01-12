@@ -39,23 +39,59 @@ void MainScreen::onAwake()
   amr->setAnimation(animation);
 
   animationGo->getTransform()->setParent(root->getTransform());
-  root->getTransform()->rotate(Vector3(0, 180, 0));
+  //root->getTransform()->rotate(Vector3(0, 180, 0));
 
   Timeline::create();
 }
 
 void MainScreen::modifyTransform(AnimationTransform* transform)
 {
+  float sensitivity = 0.01f;
+  Transform* rootTransform = NULL;
   Vector3 mousePosition = Input::getMousePosition();
   Vector3 mouseDelta = mousePosition - lastMousePosition;
 
-  transform->pX -= mouseDelta.x;
+  rootTransform = root->getTransform();
+
+  //if(rootTransform->getRotation().y >= 360 - 45 && rootTransform->getRotation().y < 90 - 45)
+  //if(rootTransform->getRotation().y >= 0 && rootTransform->getRotation().y < 90 - 45)
+  //{
+  //  transform->pX -= mouseDelta.x;
+  //}
+  if(rootTransform->getRotation().y >= 90 - 45 && rootTransform->getRotation().y < 180 - 45)
+  {
+    transform->pZ -= mouseDelta.x * sensitivity;
+  }
+  else if(rootTransform->getRotation().y >= 180 - 45 && rootTransform->getRotation().y < 180 + 45)
+  {
+    transform->pX += mouseDelta.x * sensitivity;
+  }
+  else if(rootTransform->getRotation().y >= 180 + 45 && rootTransform->getRotation().y < 360 - 45)
+  {
+    transform->pZ += mouseDelta.x * sensitivity;
+  }
+  else
+  {
+    transform->pX -= mouseDelta.x * sensitivity;
+  }
 }
 
 void MainScreen::onUpdate()
 {
+  Transform* rootTransform = NULL;
   Vector3 mousePosition = Input::getMousePosition();
   Vector3 mouseDelta = mousePosition - lastMousePosition;
+
+  rootTransform = root->getTransform();
+
+  if(rootTransform->getRotation().y > 360.0f)
+  {
+    rootTransform->setRotation(Vector3(0, rootTransform->getRotation().y - 360, 0));
+  }
+  else if(rootTransform->getRotation().y < 0.0f)
+  {
+    rootTransform->setRotation(Vector3(0, 360 + rootTransform->getRotation().y, 0));
+  }
 
   //std::cout << mouseDelta.x << mouseDelta.y << mouseDelta.z << std::endl;
 
