@@ -1,5 +1,0 @@
-ROOT=../..
-LOCAL_CXXFLAGS=
-LOCAL_LIB=${ROOT}/lib/libmutiny.a
-
-include ${ROOT}/tmpl/tmpl.freebsd.Mk

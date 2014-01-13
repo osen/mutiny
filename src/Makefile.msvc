@@ -1,7 +1,0 @@
-all:
-	@cd mutiny && $(MAKE) -f Makefile.msvc
-	@cd tools\buccaneer && $(MAKE) -f Makefile.msvc
-
-clean:
-	@cd tools\buccaneer && $(MAKE) -f Makefile.msvc clean
-	@cd mutiny && $(MAKE) -f Makefile.msvc clean

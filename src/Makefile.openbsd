@@ -1,9 +1,0 @@
-all:
-	@cd mutiny && $(MAKE) -f Makefile.openbsd
-	@cd tools/buccaneer && $(MAKE) -f Makefile.openbsd
-	@cd experiment && $(MAKE) -f Makefile.openbsd
-
-clean:
-	@cd experiment && $(MAKE) -f Makefile.openbsd clean
-	@cd tools/buccaneer && $(MAKE) -f Makefile.openbsd clean
-	@cd mutiny && $(MAKE) -f Makefile.openbsd clean
