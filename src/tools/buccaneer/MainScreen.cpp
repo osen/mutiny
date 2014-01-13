@@ -6,6 +6,13 @@
 
 using namespace mutiny::engine;
 
+/******************************************************************************
+ * onAwake
+ *
+ * Set initial data and ensure that the selected AnimatedMesh is loaded.
+ * Create a root GameObject in which to attach the animation GameObject to.
+ * Add the AnimatedMeshRender Component to the animation GameObject.
+ ******************************************************************************/
 void MainScreen::onAwake()
 {
   MainCamera::create();
@@ -23,30 +30,31 @@ void MainScreen::onAwake()
   fallbackTex.reset(new Texture2d(1, 1));
   fallbackTex->setPixel(0, 0, Color(0.0f, 0.5f, 1.0f));
   fallbackTex->apply();
-
   animatedMesh = Resources::load<AnimatedMesh>(SelectModelScreen::choice.substr(0, SelectModelScreen::choice.length() - 4));
 
   if(animatedMesh == NULL)
   {
-    Debug::log("Mesh is null :(");
+    Debug::logError("Mesh is null :(");
+    //TODO: Throw exception
   }
 
   selectedMaterial = Resources::load<Material>("shaders/selected");
-
   amr = animationGo->addComponent<AnimatedMeshRenderer>();
   amr->setAnimatedMesh(animatedMesh);
-
   animation = Resources::load<Animation>(SelectAnimationScreen::choice);
   amr->setAnimation(animation);
-
   animationGo->getTransform()->setParent(root->getTransform());
-  //root->getTransform()->rotate(Vector3(0, 180, 0));
-
   undoBuffer.push_back(animation->frames);
-
   timeline = Timeline::create(this);
 }
 
+/******************************************************************************
+ * modifyTransform
+ *
+ * Translate and rotate the specified AnimationTransform. The translation and
+ * rotation is based losely (45 degrees) on the direction that the camera is
+ * facing.
+ ******************************************************************************/
 void MainScreen::modifyTransform(AnimationTransform* transform)
 {
   float sensitivity = 0.01f;
@@ -86,6 +94,16 @@ void MainScreen::modifyTransform(AnimationTransform* transform)
   transform->pY -= mouseDelta.y * sensitivity;
 }
 
+/******************************************************************************
+ * onUpdate
+ *
+ * Ensure that the root Transform's rotation is within 0 and 360. If the right
+ * mouse button is down, rotate the root Transform. If the middle mouse button
+ * is down, modify the AnimationTransform in the current frame with the
+ * currently selected part name or add the AnimationTransform if it cannot be
+ * found. If the middle mouse is released and something has been modified then
+ * push a copy of the current transforms onto the undo list.
+ ******************************************************************************/
 void MainScreen::onUpdate()
 {
   Transform* rootTransform = NULL;
@@ -94,7 +112,7 @@ void MainScreen::onUpdate()
 
   rootTransform = root->getTransform();
 
-  if(rootTransform->getRotation().y > 360.0f)
+  if(rootTransform->getRotation().y >= 360.0f)
   {
     rootTransform->setRotation(Vector3(0, rootTransform->getRotation().y - 360, 0));
   }
@@ -102,10 +120,6 @@ void MainScreen::onUpdate()
   {
     rootTransform->setRotation(Vector3(0, 360 + rootTransform->getRotation().y, 0));
   }
-
-  //std::cout << mouseDelta.x << mouseDelta.y << mouseDelta.z << std::endl;
-
-  //root->getTransform()->rotate(Vector3(0, 100, 0) * Time::getDeltaTime());
 
   if(Input::getMouseButton(1) == true)
   {
@@ -160,6 +174,16 @@ void MainScreen::onUpdate()
   lastMousePosition = Vector2(mousePosition.x, mousePosition.y);
 }
 
+/******************************************************************************
+ * selectPart
+ *
+ * Based on the string specified, iterate through all the GameObjects attached
+ * to the root GameObject to find one with the same name. If an existing part
+ * is selected, reapply the backed up materials before storing the new part's
+ * existing materials so that a red pulse shader material can be used in place.
+ * Copy across the texture or use a default one from the original material to
+ * maintain the parts texture in the new shader.
+ ******************************************************************************/
 void MainScreen::selectPart(std::string partName)
 {
   Transform* rootTransform = animationGo->getTransform()->find("root");
@@ -207,6 +231,15 @@ void MainScreen::selectPart(std::string partName)
   }
 }
 
+/******************************************************************************
+ * onGui
+ *
+ * Draw back button, undo button, play/stop button and a list of all the parts
+ * attached to the root GameObject. If back button clicked, load the menu
+ * scene. If play/stop button clicked then play or stop the animation.
+ * Iterate through each GameObject in root and generate rectangles to test for
+ * mouse clicks in order to change selected part.
+ ******************************************************************************/
 void MainScreen::onGui()
 {
   if(Gui::button(Rect(10, 10, 100, 30), "back") == true)
@@ -263,7 +296,6 @@ void MainScreen::onGui()
   {
     if(Input::getMouseButtonDown(0) == true)
     {
-      //Debug::log(selectedName);
       selectPart(selectedName);
     }
   }
