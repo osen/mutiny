@@ -21,6 +21,7 @@ void MainScreen::onAwake()
   lastMousePosition.x = Input::getMousePosition().x;
   lastMousePosition.y = Input::getMousePosition().y;
 
+  transformMode = 0;
   changeMade = false;
   pulseAmount = 0;
   pulseDown = false;
@@ -64,34 +65,34 @@ void MainScreen::modifyTransform(AnimationTransform* transform)
 
   rootTransform = root->getTransform();
 
-  if(mouseDelta.x != 0 || mouseDelta.x != 0)
+  if(mouseDelta.x != 0 || mouseDelta.y != 0)
   {
     changeMade = true;
   }
 
-  //if(rootTransform->getRotation().y >= 360 - 45 && rootTransform->getRotation().y < 90 - 45)
-  //if(rootTransform->getRotation().y >= 0 && rootTransform->getRotation().y < 90 - 45)
-  //{
-  //  transform->pX -= mouseDelta.x;
-  //}
   if(rootTransform->getRotation().y >= 90 - 45 && rootTransform->getRotation().y < 180 - 45)
   {
-    transform->pZ -= mouseDelta.x * sensitivity;
+    if(transformMode == 0) transform->pZ -= mouseDelta.x * sensitivity;
+    if(transformMode == 1) transform->rZ += mouseDelta.y;
   }
   else if(rootTransform->getRotation().y >= 180 - 45 && rootTransform->getRotation().y < 180 + 45)
   {
-    transform->pX += mouseDelta.x * sensitivity;
+    if(transformMode == 0) transform->pX += mouseDelta.x * sensitivity;
+    if(transformMode == 1) transform->rX -= mouseDelta.y;
   }
   else if(rootTransform->getRotation().y >= 180 + 45 && rootTransform->getRotation().y < 360 - 45)
   {
-    transform->pZ += mouseDelta.x * sensitivity;
+    if(transformMode == 0) transform->pZ += mouseDelta.x * sensitivity;
+    if(transformMode == 1) transform->rZ -= mouseDelta.y;
   }
   else
   {
-    transform->pX -= mouseDelta.x * sensitivity;
+    if(transformMode == 0) transform->pX -= mouseDelta.x * sensitivity;
+    if(transformMode == 1) transform->rX += mouseDelta.y;
   }
 
-  transform->pY -= mouseDelta.y * sensitivity;
+  if(transformMode == 0) transform->pY -= mouseDelta.y * sensitivity;
+  if(transformMode == 1) transform->rY -= mouseDelta.x;
 }
 
 /******************************************************************************
@@ -255,6 +256,11 @@ void MainScreen::onGui()
       undoBuffer.erase(undoBuffer.begin() + (undoBuffer.size() - 1));
       undoBuffer.erase(undoBuffer.begin() + (undoBuffer.size() - 1));
       undoBuffer.push_back(animation->frames);
+
+      if(amr->getFrame() >= animation->frames.size())
+      {
+        amr->setFrame(animation->frames.size() - 1);
+      }
     }
   }
 
@@ -270,6 +276,21 @@ void MainScreen::onGui()
     if(Gui::button(Rect(10, 50, 100, 30), "Stop") == true)
     {
       amr->stop();
+    }
+  }
+
+  if(transformMode == 0)
+  {
+    if(Gui::button(Rect(Screen::getWidth() - 10 - 100, 10, 100, 30), "Translate") == true)
+    {
+      transformMode = 1;
+    }
+  }
+  else
+  {
+    if(Gui::button(Rect(Screen::getWidth() - 10 - 100, 10, 100, 30), "Rotate") == true)
+    {
+      transformMode = 0;
     }
   }
 

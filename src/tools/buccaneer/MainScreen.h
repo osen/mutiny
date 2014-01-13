@@ -30,6 +30,7 @@ private:
   bool pulseDown;
   std::unique_ptr<Texture2d> fallbackTex;
   bool changeMade;
+  int transformMode;
   Timeline* timeline;
 
   GameObject* selectedPart;

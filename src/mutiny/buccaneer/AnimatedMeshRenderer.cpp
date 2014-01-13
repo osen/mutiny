@@ -32,6 +32,16 @@ void AnimatedMeshRenderer::onAwake()
 
 void AnimatedMeshRenderer::setFrame(float frame)
 {
+  if(frame >= animation->frames.size())
+  {
+    frame = animation->frames.size() - 1;
+  }
+
+  if(frame < 0)
+  {
+    frame = 0;
+  }
+
   this->frame = frame;
 }
 
@@ -105,8 +115,6 @@ void AnimatedMeshRenderer::onUpdate()
         }
       }
 
-      if(transformA == NULL) continue;
-
       for(int j = 0; j < animationFrameB->transforms.size(); j++)
       {
         if(childTransform->getGameObject()->getName() == animationFrameB->transforms.at(j).partName)
@@ -116,10 +124,11 @@ void AnimatedMeshRenderer::onUpdate()
         }
       }
 
-      if(transformB == NULL) transformB = transformA;
+      Vector3 a;
+      Vector3 b;
+      if(transformA != NULL) a = Vector3(transformA->pX, transformA->pY, transformA->pZ);
+      if(transformB != NULL) b = Vector3(transformB->pX, transformB->pY, transformB->pZ);
 
-      Vector3 a(transformA->pX, transformA->pY, transformA->pZ);
-      Vector3 b(transformB->pX, transformB->pY, transformB->pZ);
       Vector3 diff = b - a;
       float frameDiff = (float)((int)frame + 1) - frame;
 
@@ -127,8 +136,11 @@ void AnimatedMeshRenderer::onUpdate()
 
       childTransform->setLocalPosition(childTransform->getLocalPosition() + a + (diff * (1.0f - frameDiff)));
 
-      a = Vector3(transformA->rX, transformA->rY, transformA->rZ);
-      b = Vector3(transformB->rX, transformB->rY, transformB->rZ);
+      a = Vector3();
+      b = Vector3();
+      if(transformA != NULL) a = Vector3(transformA->rX, transformA->rY, transformA->rZ);
+      if(transformB != NULL) b = Vector3(transformB->rX, transformB->rY, transformB->rZ);
+
       diff = b - a;
       childTransform->setLocalRotation(a + (diff * (1.0f - frameDiff)));
     }

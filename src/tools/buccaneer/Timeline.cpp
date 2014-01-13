@@ -31,7 +31,7 @@ void Timeline::onGui()
     return;
   }
 
-  int spacer = 50;
+  int spacer = 60;
   Gui::box(Rect(spacer, Screen::getHeight() - 60, Screen::getWidth() - (spacer * 2), 50), "");
   float pointWidth = (Screen::getWidth() - spacer - spacer) / (amr->getAnimation()->getFrameCount() - 1);
   int relX = Input::getMousePosition().x - spacer + (pointWidth / 2);
@@ -53,6 +53,13 @@ void Timeline::onGui()
   {
     amr->getAnimation()->frames.insert(amr->getAnimation()->frames.begin() + amr->getFrame(), amr->getAnimation()->frames.at(amr->getFrame()));
     amr->setFrame(amr->getFrame() + 1);
+    mainScreen->undoBuffer.push_back(mainScreen->animation->frames);
+  }
+
+  if(Gui::button(Rect(Screen::getWidth() - 10 - 40, Screen::getHeight() - 60, 40, 50), "Del") == true)
+  {
+    amr->getAnimation()->frames.erase(amr->getAnimation()->frames.begin() + amr->getFrame());
+    amr->setFrame(amr->getFrame() - 1);
     mainScreen->undoBuffer.push_back(mainScreen->animation->frames);
   }
 }
