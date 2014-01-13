@@ -33,7 +33,14 @@ void Timeline::onGui()
 
   int spacer = 60;
   Gui::box(Rect(spacer, Screen::getHeight() - 60, Screen::getWidth() - (spacer * 2), 50), "");
-  float pointWidth = (Screen::getWidth() - spacer - spacer) / (amr->getAnimation()->getFrameCount() - 1);
+
+  float pointWidth = Screen::getWidth() - spacer - spacer;
+
+  if(amr->getAnimation()->getFrameCount() > 1)
+  {
+    pointWidth = pointWidth / (amr->getAnimation()->getFrameCount() - 1);
+  }
+
   int relX = Input::getMousePosition().x - spacer + (pointWidth / 2);
 
   for(int i = 1; i < amr->getAnimation()->getFrameCount() - 1; i++)
@@ -43,7 +50,8 @@ void Timeline::onGui()
 
   if(Input::getMouseButton(0) == true &&
      Input::getMousePosition().y >= Screen::getHeight() - 60 &&
-     Input::getMousePosition().x > spacer)
+     Input::getMousePosition().x > spacer &&
+     Input::getMousePosition().x < Screen::getWidth() - spacer)
   {
     amr->setFrame((int)((float)(amr->getAnimation()->getFrameCount() - 1.0f) / (float)(Screen::getWidth() - spacer - spacer) * (float)relX));
     //std::cout << amr->getFrame() << std::endl;
@@ -59,7 +67,17 @@ void Timeline::onGui()
   if(Gui::button(Rect(Screen::getWidth() - 10 - 40, Screen::getHeight() - 60, 40, 50), "Del") == true)
   {
     amr->getAnimation()->frames.erase(amr->getAnimation()->frames.begin() + amr->getFrame());
-    amr->setFrame(amr->getFrame() - 1);
+
+    if(amr->getAnimation()->frames.size() < 1)
+    {
+      amr->getAnimation()->frames.push_back(AnimationFrame());
+      amr->setFrame(0);
+    }
+    else
+    {
+      amr->setFrame(amr->getFrame() - 1);
+    }
+
     mainScreen->undoBuffer.push_back(mainScreen->animation->frames);
   }
 }
