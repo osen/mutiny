@@ -20,6 +20,8 @@ private:
   MainScreen* mainScreen;
   AnimatedMeshRenderer* amr;
   Texture2d* test;
+  Texture2d* whitePixel;
+  Texture2d* cursor;
 
 };
 

@@ -17,6 +17,8 @@ void Timeline::onAwake()
 {
   amr = NULL;
   test = Resources::load<Texture2d>("gui/box_normal");
+  whitePixel = Resources::load<Texture2d>("images/white_pixel");
+  cursor = Resources::load<Texture2d>("images/cursor");
 }
 
 void Timeline::onUpdate()
@@ -32,7 +34,8 @@ void Timeline::onGui()
   }
 
   int spacer = 60;
-  Gui::box(Rect(spacer, Screen::getHeight() - 60, Screen::getWidth() - (spacer * 2), 50), "");
+  //Gui::box(Rect(spacer, Screen::getHeight() - 60, Screen::getWidth() - (spacer * 2), 50), "");
+  Gui::drawTexture(Rect(spacer, Screen::getHeight() - 10 - 10 - 1, Screen::getWidth() - (spacer * 2), 2), whitePixel);
 
   float pointWidth = Screen::getWidth() - spacer - spacer;
 
@@ -43,9 +46,14 @@ void Timeline::onGui()
 
   int relX = Input::getMousePosition().x - spacer + (pointWidth / 2);
 
-  for(int i = 1; i < amr->getAnimation()->getFrameCount() - 1; i++)
+  for(int i = 0; i < amr->getAnimation()->getFrameCount(); i++)
   {
-    Gui::box(Rect(spacer + (i * pointWidth), Screen::getHeight() - 60, 2, 50), "");
+    Gui::drawTexture(Rect(spacer + (i * pointWidth) - 1, Screen::getHeight() - 10 - 10 - 8, 2, 9), whitePixel);
+
+    if(i == amr->getFrame())
+    {
+      Gui::drawTexture(Rect(spacer + (i * pointWidth) - (cursor->getWidth() / 2), Screen::getHeight() - 10 - 10 - cursor->getHeight(), cursor->getWidth(), cursor->getHeight()), cursor);
+    }
   }
 
   if(Input::getMouseButton(0) == true &&
