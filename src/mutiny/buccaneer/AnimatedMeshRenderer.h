@@ -40,6 +40,7 @@ private:
 
   virtual void onAwake();
   virtual void onUpdate();
+  virtual void onDestroy();
 
 };
 

@@ -114,9 +114,13 @@ Vector3 Transform::getRotation()
 
 void Transform::detachChildren()
 {
-  for(int i = 0; i < children.size(); i++)
+  std::vector<Transform*> tmpChildren = children;
+
+  for(int i = 0; i < tmpChildren.size(); i++)
   {
-    children.at(i)->setParent(NULL);
+    tmpChildren.at(i)->setParent(NULL);
+    // Dont just detach.. destroy
+    Object::destroy(tmpChildren.at(i)->getGameObject());
   }
 
   // Just to make sure.

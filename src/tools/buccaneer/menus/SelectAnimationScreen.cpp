@@ -9,9 +9,8 @@ std::string SelectAnimationScreen::choice;
 void SelectAnimationScreen::onAwake()
 {
   modelGo = new GameObject("Model");
-  modelGo->addComponent<MeshRenderer>();
-  MeshFilter* mf = modelGo->addComponent<MeshFilter>();
-  mf->setMesh(Resources::load<Mesh>(SelectModelScreen::choice.substr(0, SelectModelScreen::choice.length() - 4)));
+  AnimatedMesh* mesh = Resources::load<AnimatedMesh>(SelectModelScreen::choice.substr(0, SelectModelScreen::choice.length() - 4));
+  modelGo->addComponent<AnimatedMeshRenderer>()->setAnimatedMesh(mesh);
 
   std::string modelDir = Util::pathOnly(SelectModelScreen::choice);
 
