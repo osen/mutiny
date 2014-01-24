@@ -24,7 +24,7 @@ void MenuScreen::onGui()
 
   if(Gui::button(Rect(200, 200, 200, 50), "Transform Example") == true)
   {
-
+		Application::loadLevel("game");
   }
 }
 
