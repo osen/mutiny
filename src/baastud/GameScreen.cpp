@@ -1,5 +1,6 @@
 #include "GameScreen.h"
 #include "Sheep.h"
+#include "Fence.h"
 
 #include <iostream>
 
@@ -27,4 +28,5 @@ void GameScreen::onGui()
 void GameScreen::onStart()
 {
   Sheep::create();
+  Fence::create();
 }

@@ -4,6 +4,7 @@ add_executable(baastud
   main.cpp
   GameScreen.cpp
   Sheep.cpp
+  Fence.cpp
 )
 
 target_link_libraries(baastud mutiny)
