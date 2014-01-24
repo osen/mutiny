@@ -1,4 +1,5 @@
 #include "GameScreen.h"
+#include "GameCamera.h"
 #include "Sheep.h"
 #include "Fence.h"
 
@@ -16,8 +17,7 @@ GameObject* GameScreen::create()
 
 void GameScreen::onAwake()
 {
-  cameraGo = new GameObject("MainCamera");
-  Camera* camera = cameraGo->addComponent<Camera>();
+  GameCamera::create();
 }
 
 void GameScreen::onGui()

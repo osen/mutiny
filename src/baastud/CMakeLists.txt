@@ -4,6 +4,7 @@ add_executable(baastud
   main.cpp
   GameScreen.cpp
   Sheep.cpp
+  GameCamera.cpp
   Fence.cpp
 )
 
