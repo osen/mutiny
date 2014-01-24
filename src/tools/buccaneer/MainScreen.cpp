@@ -43,6 +43,7 @@ void MainScreen::onAwake()
   amr = animationGo->addComponent<AnimatedMeshRenderer>();
   amr->setAnimatedMesh(animatedMesh);
   animation = Resources::load<Animation>(SelectAnimationScreen::choice);
+  animationPath = SelectAnimationScreen::choice;
   amr->setAnimation(animation);
   animationGo->getTransform()->setParent(root->getTransform());
   undoBuffer.push_back(animation->frames);
@@ -246,6 +247,11 @@ void MainScreen::onGui()
   if(Gui::button(Rect(10, 10, 100, 30), "back") == true)
   {
     Application::loadLevel("Menu");
+  }
+
+  if(Gui::button(Rect(30 + 200, 10, 100, 30), "Save") == true)
+  {
+    animation->save(animationPath);
   }
 
   if(undoBuffer.size() > 1)

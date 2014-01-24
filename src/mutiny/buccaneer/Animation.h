@@ -49,6 +49,7 @@ class Animation : public Object
 
 public:
   int getFrameCount();
+  void save(std::string path);
 
 private:
   static Animation* load(std::string path);

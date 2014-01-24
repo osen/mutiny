@@ -21,6 +21,7 @@ public:
 private:
   AnimatedMesh* animatedMesh;
   AnimatedMeshRenderer* amr;
+  std::string animationPath;
   Animation* animation;
   GameObject* root;
   GameObject* animationGo;

@@ -1,5 +1,6 @@
 #include "Animation.h"
 
+#include "../Exception.h"
 #include "../internal/Util.h"
 
 #include <fstream>
@@ -71,6 +72,40 @@ Animation* Animation::load(std::string path)
   }
 
   return animation.release();
+}
+
+void Animation::save(std::string path)
+{
+  std::ofstream file;
+  AnimationFrame* frame;
+  AnimationTransform* transform;
+
+  file.open(path.c_str());
+
+  if(file.is_open() == false)
+  {
+    throw Exception("Failed to open file for writing");
+  }
+
+  for(int i = 0; i < frames.size(); i++)
+  {
+    file << "f" << std::endl;
+    frame = &frames.at(i);
+
+    for(int j = 0; j < frame->transforms.size(); j++)
+    {
+      transform = &frame->transforms.at(j);
+
+      file << "t "
+           << transform->partName << " "
+           << transform->pX << " "
+           << transform->pY << " "
+           << transform->pZ << " "
+           << transform->rX << " "
+           << transform->rY << " "
+           << transform->rZ << std::endl;
+    }
+  }
 }
 
 }
