@@ -1,4 +1,5 @@
 #include "SceneManager.h"
+#include "MenuScreen.h"
 
 using namespace mutiny::engine;
 
@@ -19,6 +20,7 @@ void SceneManager::loadLevel()
 
   if(Application::getLoadedLevelName() == "introduction")
   {
+    MenuScreen::create();
   }
 }
 
