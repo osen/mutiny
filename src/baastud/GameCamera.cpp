@@ -40,7 +40,23 @@ void GameCamera::onAwake()
 
 void GameCamera::onUpdate()
 {
-  getGameObject()->getTransform()->setPosition(playerGo->getTransform()->getPosition() + Vector3(0, 5, -10));
+  Vector3 final;
+
+  positionBuffer.push_back(playerGo->getTransform()->getPosition() + Vector3(0, 5, -10));
+
+  while(positionBuffer.size() > 20)
+  {
+    positionBuffer.erase(positionBuffer.begin() + 0);
+  }
+
+  for(int i = 0; i < positionBuffer.size(); i++)
+  {
+    final = final + positionBuffer.at(i);
+  }
+
+  final = final / positionBuffer.size();
+
+  getGameObject()->getTransform()->setPosition(final);
 }
 
 void GameCamera::onStart()

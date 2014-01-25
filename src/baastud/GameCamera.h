@@ -4,6 +4,7 @@
 #include <mutiny/mutiny.h>
 
 #include <memory>
+#include <vector>
 
 using namespace mutiny::engine;
 
@@ -29,6 +30,7 @@ private:
   Material* mergeMaterial;
   Camera* camera;
   GameObject* playerGo;
+  std::vector<Vector3> positionBuffer;
 
 };
 

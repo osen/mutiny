@@ -94,7 +94,13 @@ void Player::onUpdate()
 
     for(int i = 0; i < sheepGos.size(); i++)
     {
-      std::cout << Vector3::getDistance(sheepGos.at(i)->getTransform()->getPosition(), getGameObject()->getTransform()->getPosition()) << std::endl;
+      float dist = Vector3::getDistance(sheepGos.at(i)->getTransform()->getPosition(), getGameObject()->getTransform()->getPosition());
+      std::cout << dist << std::endl;
+
+      if(dist < 1)
+      {
+        Object::destroy(sheepGos.at(i));
+      }
     }
   }
 
