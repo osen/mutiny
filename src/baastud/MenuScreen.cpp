@@ -20,11 +20,15 @@ void MenuScreen::onAwake()
 
 void MenuScreen::onGui()
 {
-  Gui::label(Rect(10, 10, 100, 100), "Welcome");
+  Gui::label(Rect(100, 10, 100, 100), "baaaaaaaaaaaaasttuuuuddd");
 
-  if(Gui::button(Rect(200, 200, 200, 50), "Transform Example") == true)
+  if(Gui::button(Rect(300, 200, 200, 50), "begin game") == true)
   {
 		Application::loadLevel("game");
+  }
+  else if(Gui::button(Rect(500, 500, 200, 50), "quit") == true)
+  {
+		Application::quit();
   }
 }
 

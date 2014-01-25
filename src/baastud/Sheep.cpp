@@ -16,8 +16,6 @@ void Sheep::onUpdate()
 {
   getGameObject()->getTransform()->translate(getGameObject()->getTransform()->getForward() * 0.1f);
   getGameObject()->getTransform()->rotate(Vector3(0, 1, 0));
-
-  Debug::log("Baaaaaaa");
 }
 
 void Sheep::onAwake()

@@ -1,4 +1,5 @@
 #include "Fence.h"
+#include "FencePanel.h"
 
 #include <iostream>
 
@@ -12,7 +13,18 @@ GameObject* Fence::create()
   return mainGo;
 }
 
-void Fence::onUpdate()
+void Fence::onAwake()
 {
-  Debug::log("Feeeeennce");
+  mesh = Resources::load<Mesh>("models/fence/fence");
+  float fpLength = mesh->getBounds().size.x;
+
+  //FencePanel* []
 }
+
+
+
+
+
+//  GameObject* go = FencePanel::create(this);
+//  FencePanel* fp = go->getComponent<FencePanel>();
+//  float fpLength = fp->getComponent()->getBounds()->size->x;
