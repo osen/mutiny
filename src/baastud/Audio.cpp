@@ -19,8 +19,16 @@ Audio::Audio()
     std::cout << "Audio ain't gunna werk :(" << std::endl;
 
   // Load audio files
-  sounds.push_back(Mix_LoadWAV(std::string(Application::getDataPath() + "/audio/baa.wav").c_str()));
-  sounds.push_back(Mix_LoadWAV(std::string(Application::getDataPath() + "/audio/stressedBaa.wav").c_str()));
+  addSound("audio/baa.wav");
+  addSound("audio/stressedBaa.wav");
+
+  music = Mix_LoadMUS(std::string(Application::getDataPath() + "/audio/baa.wav").c_str());
+  //music = Mix_LoadMUS(std::string(Application::getDataPath() + "/audio/music.ogg").c_str()));
+}
+
+void Audio::addSound(std::string path)
+{
+  sounds.push_back(Mix_LoadWAV(std::string(Application::getDataPath() + "/" + path).c_str()));
 }
 
 void Audio::playSound(int sound)
@@ -28,10 +36,15 @@ void Audio::playSound(int sound)
   Mix_PlayChannel(-1,sounds[sound],0); 
 }
 
+void Audio::playMusic()
+{
+  Mix_PlayMusic(music, -1);
+}
+
 Audio::~Audio()
 {
-  Mix_FreeChunk(sounds[0]);
-  Mix_FreeChunk(sounds[1]);
+  for(int i = 0; i < sounds.size(); i++)
+    Mix_FreeChunk(sounds[i]);
 
   Mix_CloseAudio();
   SDL_QuitSubSystem(SDL_INIT_AUDIO);
