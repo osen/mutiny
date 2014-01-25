@@ -26,6 +26,10 @@ void MenuScreen::onGui()
   {
 		Application::loadLevel("game");
   }
+  else if(Gui::button(Rect(300, 300, 200, 50), "audio test") == true)
+  {
+		Application::loadLevel("audiotest");
+  }
   else if(Gui::button(Rect(500, 500, 200, 50), "quit") == true)
   {
 		Application::quit();

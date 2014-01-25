@@ -1,6 +1,7 @@
 #include "SceneManager.h"
 #include "MenuScreen.h"
 #include "GameScreen.h"
+#include "AudioTest.h"
 
 using namespace mutiny::engine;
 
@@ -22,6 +23,10 @@ void SceneManager::loadLevel()
   if(Application::getLoadedLevelName() == "introduction")
   {
     MenuScreen::create();
+  }
+  else if(Application::getLoadedLevelName() == "audiotest")
+  {
+    AudioTest::create();
   }
   else if(Application::getLoadedLevelName() == "game")
   {

@@ -10,6 +10,8 @@ add_executable(baastud
   FencePanel.cpp
   Terrain.cpp
   SkyBox.cpp
+  AudioTest.cpp
+  Audio.cpp
 )
 
-target_link_libraries(baastud mutiny)
+target_link_libraries(baastud mutiny SDL_mixer)
