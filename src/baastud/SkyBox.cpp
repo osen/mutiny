@@ -17,6 +17,7 @@ void SkyBox::onAwake()
 {
   Debug::log("SkyBox awoken");
 
+  // Front
   std::vector<Vector3> vertices;
   vertices.push_back(Vector3(-200, -100, 150));
   vertices.push_back(Vector3(-200, 100, 150));
@@ -33,6 +34,51 @@ void SkyBox::onAwake()
   uv.push_back(Vector2(2, 1));
   uv.push_back(Vector2(0, 1));
 
+  // Right
+  vertices.push_back(Vector3(200, -100, 200));
+  vertices.push_back(Vector3(200, 100, 200));
+  vertices.push_back(Vector3(200, 100, -200));
+  vertices.push_back(Vector3(200, 100, -200));
+  vertices.push_back(Vector3(200, -100, -200));
+  vertices.push_back(Vector3(200, -100, 200));
+
+  uv.push_back(Vector2(0, 1));
+  uv.push_back(Vector2(0, 0));
+  uv.push_back(Vector2(2, 0));
+  uv.push_back(Vector2(2, 0));
+  uv.push_back(Vector2(2, 1));
+  uv.push_back(Vector2(0, 1));
+
+  // Back
+  vertices.push_back(Vector3(200, -100, -200));
+  vertices.push_back(Vector3(200, 100, -200));
+  vertices.push_back(Vector3(-200, 100, -200));
+  vertices.push_back(Vector3(-200, 100, -200));
+  vertices.push_back(Vector3(-200, -100, -200));
+  vertices.push_back(Vector3(200, -100, -200));
+
+  uv.push_back(Vector2(0, 1));
+  uv.push_back(Vector2(0, 0));
+  uv.push_back(Vector2(2, 0));
+  uv.push_back(Vector2(2, 0));
+  uv.push_back(Vector2(2, 1));
+  uv.push_back(Vector2(0, 1));
+
+  // Left
+  vertices.push_back(Vector3(-200, -100, -200));
+  vertices.push_back(Vector3(-200, 100, -200));
+  vertices.push_back(Vector3(-200, 100, 200));
+  vertices.push_back(Vector3(-200, 100, 200));
+  vertices.push_back(Vector3(-200, -100, 200));
+  vertices.push_back(Vector3(-200, -100, -200));
+
+  uv.push_back(Vector2(0, 1));
+  uv.push_back(Vector2(0, 0));
+  uv.push_back(Vector2(2, 0));
+  uv.push_back(Vector2(2, 0));
+  uv.push_back(Vector2(2, 1));
+  uv.push_back(Vector2(0, 1));
+
   std::vector<int> triangles;
   triangles.push_back(0);
   triangles.push_back(1);
@@ -40,6 +86,24 @@ void SkyBox::onAwake()
   triangles.push_back(3);
   triangles.push_back(4);
   triangles.push_back(5);
+  triangles.push_back(6);
+  triangles.push_back(7);
+  triangles.push_back(8);
+  triangles.push_back(9);
+  triangles.push_back(10);
+  triangles.push_back(11);
+  triangles.push_back(12);
+  triangles.push_back(13);
+  triangles.push_back(14);
+  triangles.push_back(15);
+  triangles.push_back(16);
+  triangles.push_back(17);
+  triangles.push_back(18);
+  triangles.push_back(19);
+  triangles.push_back(20);
+  triangles.push_back(21);
+  triangles.push_back(22);
+  triangles.push_back(23);
 
   Mesh* mesh = new Mesh();
   mesh->setVertices(vertices);
