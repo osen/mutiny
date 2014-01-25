@@ -34,6 +34,8 @@ void Collider::awake()
   Debug::log("Collider awaken");
   Mesh* mesh = NULL;
 
+  bounds = Bounds(Vector3(0, 0, 0), Vector3(2, 2, 2));
+
   MeshFilter* meshFilter = getGameObject()->getComponent<MeshFilter>();
 
   if(meshFilter != NULL)

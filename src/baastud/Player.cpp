@@ -14,20 +14,11 @@ GameObject* Player::create()
 
 void Player::onAwake()
 {
-  MeshRenderer* mr = getGameObject()->addComponent<MeshRenderer>();
-  MeshFilter* mf = getGameObject()->addComponent<MeshFilter>();
-  Mesh* mesh = Resources::load<Mesh>("models/terrain/terrain");
-  Texture2d* tex = Resources::load<Texture2d>("models/terrain/terrain");
+  AnimatedMeshRenderer* mr = getGameObject()->addComponent<AnimatedMeshRenderer>();
+  AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/sheep/sheep");
+  mr->setAnimatedMesh(mesh);
 
-  Material* material = new Material(Resources::load<Material>("shaders/textured"));
-  material->setMainTexture(tex);
-
-  mr->setMaterial(material);
-  mf->setMesh(mesh);
-  //AnimatedMeshRenderer* mr = getGameObject()->addComponent<AnimatedMeshRenderer>();
-  //AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/sheep/sheep");
-  //AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/terrain/terrain");
-  //mr->setAnimatedMesh(mesh);
+  getGameObject()->addComponent<CharacterController>();
 }
 
 void Player::onUpdate()
@@ -39,7 +30,11 @@ void Player::onUpdate()
 
   if(Input::getKey(KeyCode::UP) == true)
   {
-    //getGameObject()->getTransform()->translate(getGameObject()->getTransform()->getForward() * 10 * Time::getDeltaTime());
-    getGameObject()->getTransform()->translate(getGameObject()->getTransform()->getPosition() + Vector3(0, -1, 0));
+    getGameObject()->getTransform()->translate(getGameObject()->getTransform()->getForward() * 10 * Time::getDeltaTime());
+    //getGameObject()->getTransform()->translate(getGameObject()->getTransform()->getPosition() + Vector3(0, -1, 0));
   }
+
+  CharacterController* cc = getGameObject()->getComponent<CharacterController>();
+
+  cc->simpleMove(Vector3(0, -1, 0) * Time::getDeltaTime());
 }

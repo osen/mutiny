@@ -3,6 +3,7 @@
 #include "Sheep.h"
 #include "Fence.h"
 #include "Player.h"
+#include "Terrain.h"
 
 #include <iostream>
 
@@ -19,6 +20,7 @@ GameObject* GameScreen::create()
 void GameScreen::onAwake()
 {
   GameCamera::create();
+  Terrain::create();
 }
 
 void GameScreen::onGui()

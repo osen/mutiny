@@ -57,6 +57,8 @@ void CharacterController::update()
       checkCollision(meshCollider);
     }
   }
+
+  Collider::update();
 }
 
 void CharacterController::checkCollision(MeshCollider* collider)

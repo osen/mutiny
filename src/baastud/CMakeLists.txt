@@ -8,6 +8,7 @@ add_executable(baastud
   Fence.cpp
   Player.cpp
   FencePanel.cpp
+  Terrain.cpp
 )
 
 target_link_libraries(baastud mutiny)
