@@ -39,7 +39,9 @@ void GameCamera::onAwake()
 
 void GameCamera::onStart()
 {
-  getGameObject()->getTransform()->setPosition(Vector3(0, 0, -10));
+  //getGameObject()->getTransform()->setPosition(Vector3(0, 10, -25));
+  getGameObject()->getTransform()->setPosition(Vector3(0, 30, 0));
+  getGameObject()->getTransform()->setRotation(Vector3(90, 0, 0));
 }
 
 void GameCamera::onPostRender()
