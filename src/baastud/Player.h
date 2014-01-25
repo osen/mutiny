@@ -20,8 +20,10 @@ private:
   AnimatedMeshRenderer* mr;
   Animation* walkAnimation;
   Animation* idleAnimation;
+  Animation* sprintAnimation;
 
   void keepInBounds();
+  int state;
 
 };
 
