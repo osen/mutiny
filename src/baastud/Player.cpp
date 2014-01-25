@@ -52,27 +52,25 @@ void Player::onUpdate()
 
   Transform* transform = getGameObject()->getTransform();
 
-  while(transform->getPosition().x > fence->getBounds().extents.x)
+  while(transform->getPosition().x > fence->getBounds().extents.x - 1)
   {
     cc->simpleMove(Vector3(-0.1f, 0, 0));
   }
 
-  while(transform->getPosition().x < -fence->getBounds().extents.x)
+  while(transform->getPosition().x < -fence->getBounds().extents.x + 1)
   {
     cc->simpleMove(Vector3(0.1f, 0, 0));
   }
 
-  while(transform->getPosition().z > fence->getBounds().extents.z)
+  while(transform->getPosition().z > fence->getBounds().extents.z - 1)
   {
     cc->simpleMove(Vector3(0, 0, -0.1f));
   }
 
-  while(transform->getPosition().z < -fence->getBounds().extents.z)
+  while(transform->getPosition().z < -fence->getBounds().extents.z + 1)
   {
     cc->simpleMove(Vector3(0, 0, 0.1f));
   }
-
-
 
   keepInBounds();
 }
