@@ -30,7 +30,9 @@ void GameScreen::onGui()
 
 void GameScreen::onStart()
 {
-  Sheep::create();
+  for(int i = 0; i < 100; i++)
+    Sheep::create();
+
   Fence::create();
   Player::create();
 }

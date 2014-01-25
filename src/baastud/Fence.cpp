@@ -18,9 +18,30 @@ void Fence::onAwake()
   mesh = Resources::load<Mesh>("models/fence/fence");
 
   float fpLength = mesh->getBounds().size.x;
+  float fenceLengthX = fpLength * FENCE_X_WIDTH;
 
-  
-  GameObject* go = FencePanel::create(this);
+
+  for (int i = 0; i < FENCE_X_WIDTH; i++) 
+  {
+    GameObject* go = FencePanel::create(this);
+
+    go->getTransform()->setPosition(Vector3((i*fpLength)-fenceLengthX/2,0,0));
+  } 
+
+  for (int i = 0; i < FENCE_X_WIDTH; i++) 
+  {
+    GameObject* go = FencePanel::create(this);
+  } 
+
+  for (int i = 0; i < FENCE_Z_WIDTH; i++) 
+  {
+    GameObject* go = FencePanel::create(this);
+  } 
+
+  for (int i = 0; i < FENCE_Z_WIDTH; i++) 
+  {
+    GameObject* go = FencePanel::create(this);
+  } 
 }
 
 

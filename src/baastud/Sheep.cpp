@@ -14,7 +14,7 @@ GameObject* Sheep::create()
 
 void Sheep::onUpdate()
 {
-  getGameObject()->getTransform()->translate(getGameObject()->getTransform()->getForward() * 0.1f);
+  getGameObject()->getTransform()->translate(getGameObject()->getTransform()->getForward() * 10.0f * Time::getDeltaTime());
   getGameObject()->getTransform()->rotate(Vector3(0, 1, 0));
 }
 
