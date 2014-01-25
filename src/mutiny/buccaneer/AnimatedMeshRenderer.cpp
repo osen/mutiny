@@ -24,6 +24,7 @@ void AnimatedMeshRenderer::onAwake()
   animation = NULL;
   frame = 0;
   playing = false;
+  fps = 1;
   rootGo = new GameObject("root");
   rootGo->getTransform()->setParent(getGameObject()->getTransform());
   rootGo->getTransform()->setLocalPosition(Vector3());
@@ -38,6 +39,11 @@ void AnimatedMeshRenderer::onDestroy()
   }
 
   //Object::destroy(rootGo);
+}
+
+void AnimatedMeshRenderer::setFps(float fps)
+{
+  this->fps = fps;
 }
 
 void AnimatedMeshRenderer::setFrame(float frame)
@@ -103,7 +109,7 @@ void AnimatedMeshRenderer::onUpdate()
       childTransform = rootGo->getTransform()->getChild(i);
       animationFrameA = &animation->frames.at(frame);
 
-      if(frame >= animation->frames.size() - 1)
+      if(frame + 1 >= animation->frames.size())
       {
         animationFrameB = &animation->frames.at(0);
         //animationFrameB = &animation->frames.at(frame);
@@ -157,7 +163,7 @@ void AnimatedMeshRenderer::onUpdate()
 
     if(playing == true)
     {
-      frame += Time::getDeltaTime();
+      frame += fps * Time::getDeltaTime();
     }
 
     if(frame >= animation->frames.size())

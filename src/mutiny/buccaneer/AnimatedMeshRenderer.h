@@ -29,6 +29,7 @@ public:
   bool isPlaying();
   float getFrame();
   void setFrame(float frame);
+  void setFps(float fps);
 
 private:
   std::vector<std::unique_ptr<Material> > materials;
@@ -37,6 +38,7 @@ private:
   GameObject* rootGo;
   float frame;
   bool playing;
+  float fps;
 
   virtual void onAwake();
   virtual void onUpdate();

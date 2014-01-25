@@ -17,6 +17,7 @@ public:
 
 private:
   GameScreen* gameScreen;
+  Animation* walkAnimation;
 
   void keepInBounds();
 

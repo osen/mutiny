@@ -21,6 +21,12 @@ void Player::onAwake()
   AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/sheep/sheep");
   mr->setAnimatedMesh(mesh);
 
+  walkAnimation = Resources::load<Animation>("models/sheep/run.anm");
+
+  mr->setAnimation(walkAnimation);
+  mr->setFps(4);
+  mr->play();
+
   getGameObject()->getTransform()->setPosition(Vector3(0, 10, 0));
 
   getGameObject()->addComponent<CharacterController>();
