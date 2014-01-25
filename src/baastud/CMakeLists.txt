@@ -6,6 +6,7 @@ add_executable(baastud
   Sheep.cpp
   GameCamera.cpp
   Fence.cpp
+  Player.cpp
   FencePanel.cpp
 )
 

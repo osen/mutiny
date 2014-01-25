@@ -13,8 +13,8 @@ public:
   virtual void onAwake();
 
   // Number of panels
-  const int FENCE_X_WIDTH = 20;
-  const int FENCE_Z_WIDTH = 20;
+  static const int FENCE_X_WIDTH = 20;
+  static const int FENCE_Z_WIDTH = 20;
 
   Mesh* mesh;
 

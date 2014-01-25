@@ -2,6 +2,7 @@
 #include "GameCamera.h"
 #include "Sheep.h"
 #include "Fence.h"
+#include "Player.h"
 
 #include <iostream>
 
@@ -29,4 +30,5 @@ void GameScreen::onStart()
 {
   Sheep::create();
   Fence::create();
+  Player::create();
 }
