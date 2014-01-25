@@ -119,6 +119,13 @@ Vector3 Matrix4x4::multiplyPoint(Vector3 v)
   return Vector3(rtn.x, rtn.y, rtn.z);
 }
 
+Vector3 Matrix4x4::multiplyVector(Vector3 v)
+{
+  glm::vec4 rtn = mat * glm::vec4(v.x, v.y, v.z, 0.0f);
+
+  return Vector3(rtn.x, rtn.y, rtn.z);
+}
+
 Vector3 Matrix4x4::operator*(Vector3 param)
 {
   glm::vec4 rtn = mat * glm::vec4(param.x, param.y, param.z, 1.0f);

@@ -35,6 +35,7 @@ public:
   Matrix4x4 inverse();
 
   Vector3 multiplyPoint(Vector3 v);
+  Vector3 multiplyVector(Vector3 v);
 
   Vector3 operator*(Vector3 param);
   Matrix4x4 operator*(Matrix4x4 param);

@@ -249,11 +249,9 @@ void Transform::rotateAround(Vector3 center, Vector3 axis, float amount)
 
 Vector3 Transform::getForward()
 {
-  Matrix4x4 m = Matrix4x4::getIdentity();
+  Matrix4x4 m = Matrix4x4::getTrs(localPosition, localRotation, Vector3(1, 1, 1));
 
-  m.rotate(getRotation());
-
-  return m.multiplyPoint(Vector3(1, 1, 1));  
+  return m.multiplyVector(Vector3(0, 0, 1));  
 }
 
 }
