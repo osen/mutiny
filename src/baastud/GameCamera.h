@@ -18,6 +18,8 @@ public:
   virtual void onUpdate();
   virtual void onPostRender();
 
+  void toggleEventMode();
+
 private:
   std::shared_ptr<RenderTexture> originalPass;
   std::shared_ptr<RenderTexture> blurPass1;
@@ -31,6 +33,7 @@ private:
   Camera* camera;
   GameObject* playerGo;
   std::vector<Vector3> positionBuffer;
+  bool eventMode;
 
 };
 

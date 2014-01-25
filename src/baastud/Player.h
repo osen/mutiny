@@ -21,6 +21,7 @@ private:
   Animation* walkAnimation;
   Animation* idleAnimation;
   Animation* sprintAnimation;
+  Animation* humpAnimation;
 
   void keepInBounds();
   int state;

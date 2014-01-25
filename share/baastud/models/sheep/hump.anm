@@ -1,0 +1,14 @@
+f
+t Body 0 0 0 -86 -2 0
+t Head 0 1.59 -1.11 0 0 0
+t FrontLeftLeg 0.44 2.18 -0.49 0 -23 122
+t FrontRightLeg -0.56 2.11 -0.51 0 11 -132
+t BackRightLef_BackRightLeg -0.68 -0.45 0.49 -1 -15 -76
+t BackLeftLeg 0.37 -0.51 1.18 0 -18 70
+f
+t Body 0 0.07 -0.4 -86 -2 0
+t Head 0 1.59 -1.11 0 0 0
+t FrontLeftLeg 0.44 2.18 -0.49 0 -44 108
+t FrontRightLeg -0.56 2.07 -0.77 0 52 -120
+t BackRightLef_BackRightLeg -0.68 -0.45 0.51 -1 26 -72
+t BackLeftLeg 0.12 -0.25 1.18 0 -55 71

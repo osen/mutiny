@@ -15,6 +15,8 @@ public:
   virtual void onUpdate();
   virtual void onStart();
 
+  void freeze();
+
 private:
   GameScreen* gameScreen;
   Animation* walkAnimation;

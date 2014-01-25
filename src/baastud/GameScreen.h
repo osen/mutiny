@@ -8,6 +8,7 @@
 using namespace mutiny::engine;
 
 class Audio;
+class GameCamera;
 
 class GameScreen : public Behaviour
 {
@@ -20,6 +21,7 @@ public:
 
   GameObject* getFence();
   Audio* getAudio();
+  GameCamera* getCamera();
 
 private:
   GameObject* cameraGo;

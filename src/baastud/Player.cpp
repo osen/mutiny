@@ -2,6 +2,8 @@
 #include "GameScreen.h"
 #include "Fence.h"
 #include "Audio.h"
+#include "Sheep.h"
+#include "GameCamera.h"
 
 #include <iostream>
 
@@ -26,6 +28,7 @@ void Player::onAwake()
   walkAnimation = Resources::load<Animation>("models/sheep/run.anm");
   idleAnimation = Resources::load<Animation>("models/sheep/idle.anm");
   sprintAnimation = Resources::load<Animation>("models/sheep/sprint.anm");
+  humpAnimation = Resources::load<Animation>("models/sheep/hump.anm");
 
   mr->setAnimation(idleAnimation);
   mr->setFps(4);
@@ -70,6 +73,7 @@ void Player::onUpdate()
 
     if(Input::getKey(KeyCode::SPACE) == true)
     {
+      gameScreen->getCamera()->toggleEventMode();
       gameScreen->getAudio()->playSound(1);
       mr->setAnimation(sprintAnimation);
       mr->setFps(4);
@@ -99,7 +103,13 @@ void Player::onUpdate()
 
       if(dist < 1)
       {
-        Object::destroy(sheepGos.at(i));
+        sheepGos.at(i)->getTransform()->setParent(getGameObject()->getTransform());
+        sheepGos.at(i)->getComponent<Sheep>()->freeze();
+        state = 2;
+        mr->setAnimation(humpAnimation);
+        mr->setFps(4);
+        break;
+        //Object::destroy(sheepGos.at(i));
       }
     }
   }

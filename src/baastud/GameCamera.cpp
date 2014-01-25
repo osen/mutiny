@@ -13,8 +13,21 @@ GameObject* GameCamera::create(GameObject* playerGo)
   return mainGo;
 }
 
+void GameCamera::toggleEventMode()
+{
+  if(eventMode == true)
+  {
+    eventMode = false;
+  }
+  else
+  {
+    eventMode = true;
+  }
+}
+
 void GameCamera::onAwake()
 {
+  eventMode = false;
   camera = getGameObject()->addComponent<Camera>();
   camera->setBackgroundColor(Color(0, 0, 0, 1));
   originalPass.reset(new RenderTexture(512, 512));

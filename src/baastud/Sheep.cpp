@@ -46,8 +46,19 @@ void Sheep::onStart()
   getGameObject()->getTransform()->rotate(Vector3(0, rand() % 360, 0));
 }
 
+void Sheep::freeze()
+{
+  state = 2;
+  sheepMr->setAnimation(NULL);
+}
+
 void Sheep::onUpdate()
 {
+  if(state == 2)
+  {
+    return;
+  }
+
   if(state == 0)
   {
     getGameObject()->getTransform()->translate(getGameObject()->getTransform()->getForward() * 10.0f * Time::getDeltaTime());

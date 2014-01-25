@@ -34,6 +34,11 @@ Audio* GameScreen::getAudio()
   return audio.get();
 }
 
+GameCamera* GameScreen::getCamera()
+{
+  return cameraGo->getComponent<GameCamera>();
+}
+
 void GameScreen::onGui()
 {
   Gui::label(Rect(10, 10, 100, 100), "game running...");
@@ -49,6 +54,6 @@ void GameScreen::onStart()
   fenceGo = Fence::create();
   GameObject* playerGo = Player::create(this);
   SkyBox::create(playerGo);
-  GameCamera::create(playerGo);
+  cameraGo = GameCamera::create(playerGo);
   Terrain::create();
 }
