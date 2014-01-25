@@ -225,7 +225,13 @@ Animation* AnimatedMeshRenderer::getAnimation()
 
 void AnimatedMeshRenderer::setAnimation(Animation* animation)
 {
+  if(this->animation == animation)
+  {
+    return;
+  }
+
   this->animation = animation;
+  frame = 0;
 }
 
 }

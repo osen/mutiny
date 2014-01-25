@@ -68,7 +68,6 @@ void Player::onUpdate()
   cc->simpleMove(Vector3(0, -5, 0) * Time::getDeltaTime());
 
   Fence* fence = gameScreen->getFence()->getComponent<Fence>();
-  fence->getBounds();
 
   Transform* transform = getGameObject()->getTransform();
 

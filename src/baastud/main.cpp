@@ -2,12 +2,14 @@
 
 #include <mutiny/mutiny.h>
 
+#include <ctime>
 #include <iostream>
 
 using namespace mutiny::engine;
 
 void safe_main(int argc, char* argv[])
 {
+  srand(time(NULL));
   Application::init(argc, argv);
 
   Application::loadLevel("introduction");

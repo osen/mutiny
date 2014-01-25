@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Terrain.h"
 #include "SkyBox.h"
+#include "Audio.h"
 
 #include <iostream>
 
@@ -25,6 +26,12 @@ GameObject* GameScreen::getFence()
 
 void GameScreen::onAwake()
 {
+  audio.reset(new Audio());
+}
+
+Audio* GameScreen::getAudio()
+{
+  return audio.get();
 }
 
 void GameScreen::onGui()
@@ -34,7 +41,7 @@ void GameScreen::onGui()
 
 void GameScreen::onStart()
 {
-  for(int i = 0; i < 10; i++)
+  for(int i = 0; i < 20; i++)
   {
     Sheep::create(this);
   }

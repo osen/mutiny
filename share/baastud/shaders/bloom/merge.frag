@@ -16,8 +16,8 @@ void main()
   // --
   vec4 merge = texture2D(in_Merge, vec2(ex_Uv.x, 1.0 - ex_Uv.y));
   //merge = merge / 2.0;
-  //merge.a = 1.0;
   //merge = merge / 1.5;
+  //merge.a = 1.0;
 
   //if(merge.x + merge.y + merge.z >= 1.0)
   //{

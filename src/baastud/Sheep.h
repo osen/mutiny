@@ -18,6 +18,11 @@ public:
 private:
   GameScreen* gameScreen;
   Animation* walkAnimation;
+  Animation* eatAnimation;
+  int state;
+  float stateTimeout;
+  AnimatedMeshRenderer* sheepMr;
+  int random(int min, int max);
 
 };
 
