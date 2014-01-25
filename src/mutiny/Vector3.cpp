@@ -77,6 +77,16 @@ Vector3 Vector3::getNormalized()
   return rtn;
 }
 
+float Vector3::getMagnitude()
+{
+  return sqrt(x*x+y*y+z*z);
+}
+
+float Vector3::getDistance(Vector3 a, Vector3 b)
+{
+  return (a - b).getMagnitude();
+}
+
 }
 
 }

@@ -152,6 +152,27 @@ Transform* GameObject::getTransform()
   return getComponent<Transform>();
 }
 
+std::string GameObject::getTag()
+{
+  return tag;
+}
+
+void GameObject::setTag(std::string tag)
+{
+  this->tag = tag;
+}
+
+void GameObject::findGameObjectsWithTag(std::string tag, std::vector<GameObject*>* gameObjects)
+{
+  for(int i = 0; i < Application::getInternal()->gameObjects.size(); i++)
+  {
+    if(Application::getInternal()->gameObjects.at(i)->getTag() == tag)
+    {
+      gameObjects->push_back(Application::getInternal()->gameObjects.at(i).get());
+    }
+  }
+}
+
 }
 
 }

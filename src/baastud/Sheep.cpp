@@ -25,6 +25,7 @@ GameObject* Sheep::create(GameScreen* gameScreen)
 
 void Sheep::onStart()
 {
+  getGameObject()->setTag("sheep");
   state = 0;
   stateTimeout = rand() % 1000;
   sheepMr = getGameObject()->addComponent<AnimatedMeshRenderer>();

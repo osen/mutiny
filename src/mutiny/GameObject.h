@@ -45,6 +45,8 @@ public:
     return objects;
   }
 
+  static void findGameObjectsWithTag(std::string tag, std::vector<GameObject*>* gameObjects);
+
   GameObject();
   GameObject(std::string name);
   ~GameObject();
@@ -55,6 +57,8 @@ public:
   int getLayer();
   void setLayer(int layer);
   Transform* getTransform();
+  void setTag(std::string tag);
+  std::string getTag();
 
   template<class T> T* addComponent()
   {
@@ -86,6 +90,7 @@ private:
   std::vector<std::shared_ptr<Component> > components;
   bool activeSelf;
   int layer;
+  std::string tag;
 
   virtual void awake();
   virtual void start();

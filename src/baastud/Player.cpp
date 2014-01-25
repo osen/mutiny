@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "GameScreen.h"
 #include "Fence.h"
+#include "Audio.h"
 
 #include <iostream>
 
@@ -69,6 +70,7 @@ void Player::onUpdate()
 
     if(Input::getKey(KeyCode::SPACE) == true)
     {
+      gameScreen->getAudio()->playSound(1);
       mr->setAnimation(sprintAnimation);
       mr->setFps(4);
       state = 1;
@@ -76,7 +78,24 @@ void Player::onUpdate()
   }
   else if(state == 1)
   {
+    if(Input::getKey(KeyCode::RIGHT) == true)
+    {
+      getGameObject()->getTransform()->rotate(Vector3(0, 1, 0) * 100 * Time::getDeltaTime());
+    }
+    else if(Input::getKey(KeyCode::LEFT) == true)
+    {
+      getGameObject()->getTransform()->rotate(Vector3(0, -1, 0) * 100 * Time::getDeltaTime());
+    }
+
     getGameObject()->getTransform()->translate(getGameObject()->getTransform()->getForward() * 10 * Time::getDeltaTime());
+
+    std::vector<GameObject*> sheepGos;
+    GameObject::findGameObjectsWithTag("sheep", &sheepGos);
+
+    for(int i = 0; i < sheepGos.size(); i++)
+    {
+      std::cout << Vector3::getDistance(sheepGos.at(i)->getTransform()->getPosition(), getGameObject()->getTransform()->getPosition()) << std::endl;
+    }
   }
 
   CharacterController* cc = getGameObject()->getComponent<CharacterController>();

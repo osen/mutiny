@@ -27,7 +27,9 @@ public:
   Vector3 operator*(float param);
   Vector3 operator+(float param);
 
+  float getMagnitude();
   Vector3 getNormalized();
+  static float getDistance(Vector3 a, Vector3 b);
 
 };
 
