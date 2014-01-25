@@ -27,7 +27,7 @@ void Terrain::onAwake()
 
   MeshCollider* meshCollider = getGameObject()->addComponent<MeshCollider>();
 
-  getGameObject()->getTransform()->setPosition(Vector3(0, -5, 0));
+  getGameObject()->getTransform()->setPosition(Vector3(0, -1, 50));
 }
 
 void Terrain::onUpdate()

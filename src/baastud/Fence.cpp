@@ -13,6 +13,15 @@ GameObject* Fence::create()
   return mainGo;
 }
 
+Bounds Fence::getBounds()
+{
+  float fpLength = mesh->getBounds().size.z;
+  float fenceLengthX = fpLength * FENCE_X_WIDTH;
+  float fenceLengthZ = fpLength * FENCE_Z_WIDTH;
+
+  return Bounds(Vector3(0, 0, 0), Vector3(fenceLengthX, 10, fenceLengthZ));
+}
+
 void Fence::onAwake()
 {
   mesh = Resources::load<Mesh>("models/fence/fence");

@@ -1,13 +1,16 @@
 #include "Player.h"
+#include "GameScreen.h"
+#include "Fence.h"
 
 #include <iostream>
 
 using namespace mutiny::engine;
 
-GameObject* Player::create()
+GameObject* Player::create(GameScreen* gameScreen)
 {
   GameObject* mainGo = new GameObject("Player");
-  mainGo->addComponent<Player>();
+  Player* player = mainGo->addComponent<Player>();
+  player->gameScreen = gameScreen;
 
   return mainGo;
 }
@@ -18,6 +21,8 @@ void Player::onAwake()
   AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/sheep/sheep");
   mr->setAnimatedMesh(mesh);
 
+  getGameObject()->getTransform()->setPosition(Vector3(0, 10, 0));
+
   getGameObject()->addComponent<CharacterController>();
 }
 
@@ -26,6 +31,10 @@ void Player::onUpdate()
   if(Input::getKey(KeyCode::RIGHT) == true)
   {
     getGameObject()->getTransform()->rotate(Vector3(0, 1, 0) * 100 * Time::getDeltaTime());
+  }
+  else if(Input::getKey(KeyCode::LEFT) == true)
+  {
+    getGameObject()->getTransform()->rotate(Vector3(0, -1, 0) * 100 * Time::getDeltaTime());
   }
 
   if(Input::getKey(KeyCode::UP) == true)
@@ -36,5 +45,39 @@ void Player::onUpdate()
 
   CharacterController* cc = getGameObject()->getComponent<CharacterController>();
 
-  cc->simpleMove(Vector3(0, -1, 0) * Time::getDeltaTime());
+  cc->simpleMove(Vector3(0, -5, 0) * Time::getDeltaTime());
+
+  Fence* fence = gameScreen->getFence()->getComponent<Fence>();
+  fence->getBounds();
+
+  Transform* transform = getGameObject()->getTransform();
+
+  while(transform->getPosition().x > fence->getBounds().extents.x)
+  {
+    cc->simpleMove(Vector3(-0.1f, 0, 0));
+  }
+
+  while(transform->getPosition().x < -fence->getBounds().extents.x)
+  {
+    cc->simpleMove(Vector3(0.1f, 0, 0));
+  }
+
+  while(transform->getPosition().z > fence->getBounds().extents.z)
+  {
+    cc->simpleMove(Vector3(0, 0, -0.1f));
+  }
+
+  while(transform->getPosition().z < -fence->getBounds().extents.z)
+  {
+    cc->simpleMove(Vector3(0, 0, 0.1f));
+  }
+
+
+
+  keepInBounds();
+}
+
+void Player::keepInBounds()
+{
+
 }

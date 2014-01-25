@@ -13,10 +13,12 @@ public:
   virtual void onAwake();
 
   // Number of panels
-  static const int FENCE_X_WIDTH = 8;
+  static const int FENCE_X_WIDTH = 12;
   static const int FENCE_Z_WIDTH = 8;
 
   Mesh* mesh;
+
+  Bounds getBounds();
 
 private:
 

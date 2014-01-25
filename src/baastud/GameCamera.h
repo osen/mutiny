@@ -10,10 +10,11 @@ using namespace mutiny::engine;
 class GameCamera : public Behaviour
 {
 public:
-  static GameObject* create();
+  static GameObject* create(GameObject* playerGo);
 
   virtual void onAwake();
   virtual void onStart();
+  virtual void onUpdate();
   virtual void onPostRender();
 
 private:
@@ -27,6 +28,7 @@ private:
   Material* lightKeyMaterial;
   Material* mergeMaterial;
   Camera* camera;
+  GameObject* playerGo;
 
 };
 

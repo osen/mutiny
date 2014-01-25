@@ -4,6 +4,7 @@
 #include "Fence.h"
 #include "Player.h"
 #include "Terrain.h"
+#include "SkyBox.h"
 
 #include <iostream>
 
@@ -17,10 +18,13 @@ GameObject* GameScreen::create()
   return mainGo;
 }
 
+GameObject* GameScreen::getFence()
+{
+  return fenceGo;
+}
+
 void GameScreen::onAwake()
 {
-  GameCamera::create();
-  Terrain::create();
 }
 
 void GameScreen::onGui()
@@ -31,6 +35,9 @@ void GameScreen::onGui()
 void GameScreen::onStart()
 {
   Sheep::create();
-  Fence::create();
-  Player::create();
+  fenceGo = Fence::create();
+  GameObject* playerGo = Player::create(this);
+  SkyBox::create(playerGo);
+  GameCamera::create(playerGo);
+  Terrain::create();
 }

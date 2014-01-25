@@ -14,8 +14,11 @@ public:
   virtual void onGui();
   virtual void onStart();
 
+  GameObject* getFence();
+
 private:
   GameObject* cameraGo;
+  GameObject* fenceGo;
 
 };
 

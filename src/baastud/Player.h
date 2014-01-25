@@ -5,15 +5,20 @@
 
 using namespace mutiny::engine;
 
+class GameScreen;
+
 class Player : public Behaviour
 {
 public:
-  static GameObject* create();
+  static GameObject* create(GameScreen* gameScreen);
 
   virtual void onUpdate();
   virtual void onAwake();
 
 private:
+  GameScreen* gameScreen;
+
+  void keepInBounds();
 
 };
 

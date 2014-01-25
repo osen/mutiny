@@ -4,10 +4,11 @@
 
 using namespace mutiny::engine;
 
-GameObject* GameCamera::create()
+GameObject* GameCamera::create(GameObject* playerGo)
 {
   GameObject* mainGo = new GameObject("GameCamera");
-  mainGo->addComponent<GameCamera>();
+  GameCamera* gameCamera = mainGo->addComponent<GameCamera>();
+  gameCamera->playerGo = playerGo;
 
   return mainGo;
 }
@@ -35,6 +36,11 @@ void GameCamera::onAwake()
   mergeMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
   mergeMaterial->setMatrix("in_View", Matrix4x4::getIdentity());
   mergeMaterial->setMatrix("in_Model", Matrix4x4::getIdentity());
+}
+
+void GameCamera::onUpdate()
+{
+  getGameObject()->getTransform()->setPosition(playerGo->getTransform()->getPosition() + Vector3(0, 5, -10));
 }
 
 void GameCamera::onStart()
