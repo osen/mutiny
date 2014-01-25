@@ -33,6 +33,7 @@ private:
   Camera* camera;
   GameObject* playerGo;
   std::vector<Vector3> positionBuffer;
+  std::vector<Vector3> rotationBuffer;
   bool eventMode;
 
 };

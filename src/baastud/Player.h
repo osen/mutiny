@@ -25,6 +25,8 @@ private:
 
   void keepInBounds();
   int state;
+  float hTimeout;
+  GameObject* hTarget;
 
 };
 

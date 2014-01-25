@@ -20,6 +20,7 @@ GameObject* Player::create(GameScreen* gameScreen)
 
 void Player::onAwake()
 {
+  hTimeout = 0;
   state = 0;
   mr = getGameObject()->addComponent<AnimatedMeshRenderer>();
   AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/sheep/sheep");
@@ -73,7 +74,6 @@ void Player::onUpdate()
 
     if(Input::getKey(KeyCode::SPACE) == true)
     {
-      gameScreen->getCamera()->toggleEventMode();
       gameScreen->getAudio()->playSound(1);
       mr->setAnimation(sprintAnimation);
       mr->setFps(4);
@@ -99,18 +99,32 @@ void Player::onUpdate()
     for(int i = 0; i < sheepGos.size(); i++)
     {
       float dist = Vector3::getDistance(sheepGos.at(i)->getTransform()->getPosition(), getGameObject()->getTransform()->getPosition());
-      std::cout << dist << std::endl;
+      //std::cout << dist << std::endl;
 
       if(dist < 1)
       {
+        hTarget = sheepGos.at(i);
         sheepGos.at(i)->getTransform()->setParent(getGameObject()->getTransform());
         sheepGos.at(i)->getComponent<Sheep>()->freeze();
         state = 2;
+        gameScreen->getCamera()->toggleEventMode();
         mr->setAnimation(humpAnimation);
         mr->setFps(4);
+        hTimeout = 2000.0f;
         break;
         //Object::destroy(sheepGos.at(i));
       }
+    }
+  }
+  else if(state == 2)
+  {
+    hTimeout -= Time::getDeltaTime() * 1000;
+
+    if(hTimeout < 0)
+    {
+      Object::destroy(hTarget);
+      gameScreen->getCamera()->toggleEventMode();
+      state = 0;
     }
   }
 

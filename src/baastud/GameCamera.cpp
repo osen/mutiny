@@ -55,11 +55,25 @@ void GameCamera::onUpdate()
 {
   Vector3 final;
 
-  positionBuffer.push_back(playerGo->getTransform()->getPosition() + Vector3(0, 5, -10));
+  if(eventMode == true)
+  {
+    rotationBuffer.push_back(Vector3(20, 180, 0));
+    positionBuffer.push_back(playerGo->getTransform()->getPosition() + Vector3(0, 5, 10));
+  }
+  else
+  {
+    rotationBuffer.push_back(Vector3(20, 0, 0));
+    positionBuffer.push_back(playerGo->getTransform()->getPosition() + Vector3(0, 5, -10));
+  }
 
-  while(positionBuffer.size() > 20)
+  while(positionBuffer.size() > 10)
   {
     positionBuffer.erase(positionBuffer.begin() + 0);
+  }
+
+  while(rotationBuffer.size() > 10)
+  {
+    rotationBuffer.erase(rotationBuffer.begin() + 0);
   }
 
   for(int i = 0; i < positionBuffer.size(); i++)
@@ -70,6 +84,16 @@ void GameCamera::onUpdate()
   final = final / positionBuffer.size();
 
   getGameObject()->getTransform()->setPosition(final);
+  final = Vector3();
+
+  for(int i = 0; i < rotationBuffer.size(); i++)
+  {
+    final = final + rotationBuffer.at(i);
+  }
+
+  final = final / rotationBuffer.size();
+
+  getGameObject()->getTransform()->setRotation(final);
 }
 
 void GameCamera::onStart()
