@@ -34,7 +34,11 @@ void GameScreen::onGui()
 
 void GameScreen::onStart()
 {
-  Sheep::create();
+  for(int i = 0; i < 10; i++)
+  {
+    Sheep::create(this);
+  }
+
   fenceGo = Fence::create();
   GameObject* playerGo = Player::create(this);
   SkyBox::create(playerGo);

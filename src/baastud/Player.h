@@ -17,7 +17,9 @@ public:
 
 private:
   GameScreen* gameScreen;
+  AnimatedMeshRenderer* mr;
   Animation* walkAnimation;
+  Animation* idleAnimation;
 
   void keepInBounds();
 

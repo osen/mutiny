@@ -5,15 +5,19 @@
 
 using namespace mutiny::engine;
 
+class GameScreen;
+
 class Sheep : public Behaviour
 {
 public:
-  static GameObject* create();
+  static GameObject* create(GameScreen* gameScreen);
 
   virtual void onUpdate();
-  virtual void onAwake();
+  virtual void onStart();
 
 private:
+  GameScreen* gameScreen;
+  Animation* walkAnimation;
 
 };
 
