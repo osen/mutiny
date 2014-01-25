@@ -23,10 +23,23 @@ GameObject* Sheep::create(GameScreen* gameScreen)
   return mainGo;
 }
 
+bool Sheep::isWolf()
+{
+  return wolf;
+}
+
 void Sheep::onStart()
 {
+  wolf = false;
   getGameObject()->setTag("sheep");
   state = 0;
+
+  if(rand() % 1000 > 500)
+  {
+    std::cout << "I am a wolf" << std::endl;
+    wolf = true;
+  }
+
   stateTimeout = rand() % 1000;
   sheepMr = getGameObject()->addComponent<AnimatedMeshRenderer>();
   AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/sheep/sheep");
@@ -74,17 +87,17 @@ void Sheep::onUpdate()
   {
     stateTimeout = rand() % 3000;
 
-    state = random(0, 10);
-    //std::cout << state << std::endl;
-
-    if(state == 0)
+    if(random(0, 10) < 2)
     {
+      state = 0;
+      //std::cout << state << std::endl;
       gameScreen->getAudio()->playSound(0);
       sheepMr->setAnimation(walkAnimation);
       sheepMr->setFps(4);
     }
     else
     {
+      state = 1;
       sheepMr->setAnimation(eatAnimation);
       sheepMr->setFps(1);
     }

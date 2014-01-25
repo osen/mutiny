@@ -105,6 +105,8 @@ void Player::onUpdate()
       {
         hTarget = sheepGos.at(i);
         sheepGos.at(i)->getTransform()->setParent(getGameObject()->getTransform());
+        sheepGos.at(i)->getTransform()->setLocalRotation(Vector3(0, 0, 0));
+        sheepGos.at(i)->getTransform()->setLocalPosition(Vector3(0, 0, 2));
         sheepGos.at(i)->getComponent<Sheep>()->freeze();
         state = 2;
         gameScreen->getCamera()->toggleEventMode();
@@ -138,25 +140,29 @@ void Player::onUpdate()
 
   while(transform->getPosition().x > fence->getBounds().extents.x - 1)
   {
-    state = 0;
+    transform->setRotation(Vector3(0, rand() % 350 + 190, 0));
+    //state = 0;
     cc->simpleMove(Vector3(-0.1f, 0, 0));
   }
 
   while(transform->getPosition().x < -fence->getBounds().extents.x + 1)
   {
-    state = 0;
+    transform->setRotation(Vector3(0, rand() % 170 + 10, 0));
+    //state = 0;
     cc->simpleMove(Vector3(0.1f, 0, 0));
   }
 
   while(transform->getPosition().z > fence->getBounds().extents.z - 1)
   {
-    state = 0;
+    transform->setRotation(Vector3(0, rand() % 260 + 100, 0));
+    //state = 0;
     cc->simpleMove(Vector3(0, 0, -0.1f));
   }
 
   while(transform->getPosition().z < -fence->getBounds().extents.z + 1)
   {
-    state = 0;
+    transform->setRotation(Vector3(0, rand() % 260 + 100, 0) * -1);
+    //state = 0;
     cc->simpleMove(Vector3(0, 0, 0.1f));
   }
 

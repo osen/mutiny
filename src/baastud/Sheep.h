@@ -16,6 +16,7 @@ public:
   virtual void onStart();
 
   void freeze();
+  bool isWolf();
 
 private:
   GameScreen* gameScreen;
@@ -25,6 +26,7 @@ private:
   float stateTimeout;
   AnimatedMeshRenderer* sheepMr;
   int random(int min, int max);
+  bool wolf;
 
 };
 
