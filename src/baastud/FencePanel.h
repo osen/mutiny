@@ -12,7 +12,7 @@ class FencePanel : public Behaviour
 public:
   static GameObject* create(Fence* fence);
 
-  virtual void onAwake();
+  virtual void onStart();
 
 private:
   Fence* fence;

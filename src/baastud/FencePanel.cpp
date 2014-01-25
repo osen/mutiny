@@ -14,14 +14,16 @@ GameObject* FencePanel::create(Fence* fence)
   return mainGo;
 }
 
-void FencePanel::onAwake()
+void FencePanel::onStart()
 {
   MeshRenderer* fencePanelMr = getGameObject()->addComponent<MeshRenderer>();
-  //Material* material = new Material(
+  Material* material = new Material(Resources::load<Material>("shaders/textured"));
+  material->setMainTexture(Resources::load<Texture2d>("models/fence/fence"));
   
   MeshFilter* mf = getGameObject()->addComponent<MeshFilter>();
 
   mf->setMesh(fence->mesh);
 
-//  fencePanelMr->setMaterial(fence->mesh);
+  fencePanelMr->setMaterial(material);
+  
 }

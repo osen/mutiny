@@ -16,9 +16,11 @@ GameObject* Fence::create()
 void Fence::onAwake()
 {
   mesh = Resources::load<Mesh>("models/fence/fence");
+
   float fpLength = mesh->getBounds().size.x;
 
-  //FencePanel* []
+  
+  GameObject* go = FencePanel::create(this);
 }
 
 
