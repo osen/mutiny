@@ -22,6 +22,7 @@ void Player::onAwake()
 {
   hTimeout = 0;
   state = 0;
+  speed = 10.0f;
   mr = getGameObject()->addComponent<AnimatedMeshRenderer>();
   AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/sheep/sheep");
   mr->setAnimatedMesh(mesh);
@@ -91,7 +92,7 @@ void Player::onUpdate()
       getGameObject()->getTransform()->rotate(Vector3(0, -1, 0) * 100 * Time::getDeltaTime());
     }
 
-    getGameObject()->getTransform()->translate(getGameObject()->getTransform()->getForward() * 10 * Time::getDeltaTime());
+    getGameObject()->getTransform()->translate(getGameObject()->getTransform()->getForward() * speed * Time::getDeltaTime());
 
     std::vector<GameObject*> sheepGos;
     GameObject::findGameObjectsWithTag("sheep", &sheepGos);
@@ -117,6 +118,13 @@ void Player::onUpdate()
         //Object::destroy(sheepGos.at(i));
       }
     }
+
+    speed += 1.0f * Time::getDeltaTime();
+
+    if(speed > 50)
+    {
+      speed = 50;
+    }
   }
   else if(state == 2)
   {
@@ -140,28 +148,32 @@ void Player::onUpdate()
 
   while(transform->getPosition().x > fence->getBounds().extents.x - 1)
   {
-    transform->setRotation(Vector3(0, rand() % 350 + 190, 0));
+    if(state == 1)
+      transform->setRotation(Vector3(0, rand() % 350 + 190, 0));
     //state = 0;
     cc->simpleMove(Vector3(-0.1f, 0, 0));
   }
 
   while(transform->getPosition().x < -fence->getBounds().extents.x + 1)
   {
-    transform->setRotation(Vector3(0, rand() % 170 + 10, 0));
+    if(state == 1)
+      transform->setRotation(Vector3(0, rand() % 170 + 10, 0));
     //state = 0;
     cc->simpleMove(Vector3(0.1f, 0, 0));
   }
 
   while(transform->getPosition().z > fence->getBounds().extents.z - 1)
   {
-    transform->setRotation(Vector3(0, rand() % 260 + 100, 0));
+    if(state == 1)
+      transform->setRotation(Vector3(0, rand() % 260 + 100, 0));
     //state = 0;
     cc->simpleMove(Vector3(0, 0, -0.1f));
   }
 
   while(transform->getPosition().z < -fence->getBounds().extents.z + 1)
   {
-    transform->setRotation(Vector3(0, rand() % 260 + 100, 0) * -1);
+    if(state == 1)
+      transform->setRotation(Vector3(0, rand() % 260 + 100, 0) * -1);
     //state = 0;
     cc->simpleMove(Vector3(0, 0, 0.1f));
   }

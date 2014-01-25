@@ -23,6 +23,7 @@ private:
   Animation* sprintAnimation;
   Animation* humpAnimation;
 
+  float speed;
   void keepInBounds();
   int state;
   float hTimeout;
