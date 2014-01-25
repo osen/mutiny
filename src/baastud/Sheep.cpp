@@ -14,5 +14,18 @@ GameObject* Sheep::create()
 
 void Sheep::onUpdate()
 {
+  getGameObject()->getTransform()->translate(getGameObject()->getTransform()->getForward() * 0.1f);
+
   Debug::log("Baaaaaaa");
 }
+
+void Sheep::onAwake()
+{
+  AnimatedMeshRenderer* sheepMr = getGameObject()->addComponent<AnimatedMeshRenderer>();
+  AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/sheep/sheep");
+  sheepMr->setAnimatedMesh(mesh);
+
+  getGameObject()->getTransform()->rotate(Vector3(0, 90, 0));
+}
+
+

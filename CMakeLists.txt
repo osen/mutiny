@@ -5,7 +5,7 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/lib)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin)
 
-set(CMAKE_CXX_COMPILER "eg++")
+#set(CMAKE_CXX_COMPILER "eg++")
 set(CMAKE_CXX_FLAGS "-g -std=c++0x")
 
 include_directories(${MUTINY_SOURCE_DIR}/src /usr/local/include /usr/X11R6/include)

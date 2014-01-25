@@ -40,6 +40,8 @@ public:
   void lookAt(Vector3 worldPosition);
   void rotateAround(Vector3 center, Vector3 axis, float amount);
 
+  Vector3 getForward();
+
 private:
   Vector3 localPosition;
   Vector3 localRotation;

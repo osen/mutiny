@@ -247,6 +247,15 @@ void Transform::rotateAround(Vector3 center, Vector3 axis, float amount)
   //std::cout << localPosition.x << " " << localPosition.z << std::endl;
 }
 
+Vector3 Transform::getForward()
+{
+  Matrix4x4 m = Matrix4x4::getIdentity();
+
+  m.rotate(getRotation());
+
+  return m.multiplyPoint(Vector3(1, 1, 1));  
+}
+
 }
 
 }

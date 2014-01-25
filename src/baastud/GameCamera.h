@@ -11,6 +11,7 @@ public:
   static GameObject* create();
 
   virtual void onAwake();
+  virtual void onStart();
 
 private:
   Camera* camera;
