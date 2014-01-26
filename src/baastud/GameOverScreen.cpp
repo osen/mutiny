@@ -8,6 +8,8 @@ int GameOverScreen::score = 0;
 
 GameObject* GameOverScreen::create()
 {
+  Debug::log("GameOverScreen::create()");
+
   GameObject* mainGo = new GameObject("GameOverScreen");
   mainGo->addComponent<GameOverScreen>();
 

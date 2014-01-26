@@ -9,6 +9,7 @@ using namespace mutiny::engine;
 std::vector<Mix_Chunk*> Audio::sounds;
 Mix_Music* Audio::music = NULL;
 Mix_Music* Audio::musicA = NULL;
+Mix_Music* Audio::breathing = NULL;
 
 void Audio::initialize()
 {
@@ -55,10 +56,10 @@ void Audio::initialize()
   addSound("audio/Horny_6.ogg");
 //
   addSound("audio/Scream_1.ogg");
-  //addSound("audio/Heavy_Breathing.ogg");
 
   music = Mix_LoadMUS(std::string(Application::getDataPath() + "/audio/menuMusic.ogg").c_str());
   musicA = Mix_LoadMUS(std::string(Application::getDataPath() + "/audio/Bird_ambience.ogg").c_str());
+  breathing = Mix_LoadMUS(std::string(Application::getDataPath() + "/audio/Heavy_Breathing.ogg").c_str());
 }
 
 void Audio::addSound(std::string path)
@@ -81,10 +82,16 @@ void Audio::playMusicA()
   Mix_PlayMusic(musicA, -1);
 }
 
+void Audio::playBreathing()
+{
+  Mix_PlayMusic(breathing, -1);
+}
+
 void Audio::stopMusic()
 {
   Mix_HaltMusic();
 }
+
 
 /*
 Audio::~Audio()

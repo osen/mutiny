@@ -14,12 +14,14 @@ public:
   static void playSound(int sound);
   static void playMusic();
   static void playMusicA();
+  static void playBreathing();
   static void stopMusic();
 
 private:
   static std::vector<Mix_Chunk*> sounds;
   static Mix_Music* music;
   static Mix_Music* musicA;
+  static Mix_Music* breathing;
 
 };
 

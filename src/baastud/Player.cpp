@@ -151,7 +151,8 @@ void Player::onUpdate()
           }
         }
 
-        //gameScreen->getAudio()->playSound(23);
+        // Begin the breathing...
+        gameScreen->getAudio()->playBreathing();
 
         int rval = rand() % 100;
 
@@ -205,10 +206,16 @@ void Player::onUpdate()
       if(hTarget->getComponent<Sheep>()->isWolf() == true)
       {
         Debug::logWarning("Wolf was humped. Ending match");
+
+        gameScreen->getAudio()->stopMusic();
+
         Application::loadLevel("gameover");
         GameOverScreen::score = score;
         return;
       }
+
+      Audio::playMusicA();
+      Audio::playSound(19);
 
       Object::destroy(hTarget);
       gameScreen->getCamera()->toggleEventMode();
@@ -216,6 +223,7 @@ void Player::onUpdate()
       mr->setAnimation(sprintAnimation);
       mr->setFps(4);
       score++;
+
       Sheep::create(gameScreen);
     }
   }
