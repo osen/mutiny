@@ -16,6 +16,7 @@ public:
   virtual void onGui();
 
 private:
+  Texture2d* wwwTexture;
   Texture2d* titleTexture;
   GameObject* cameraGo;
 

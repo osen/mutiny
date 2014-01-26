@@ -1,5 +1,6 @@
 #include "GameOverScreen.h"
 #include "QuickNumber.h"
+#include "Audio.h"
 
 using namespace mutiny::engine;
 
@@ -15,6 +16,7 @@ GameObject* GameOverScreen::create()
 
 void GameOverScreen::onAwake()
 {
+  Audio::playSound(23);
   qn.reset(new QuickNumber());
   background = Resources::load<Texture2d>("textures/failScreen");
   timeout = 5;

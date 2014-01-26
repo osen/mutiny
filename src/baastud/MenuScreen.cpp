@@ -19,6 +19,7 @@ void MenuScreen::onAwake()
   cameraGo = new GameObject("MainCamera");
   Camera* camera = cameraGo->addComponent<Camera>();
   titleTexture = Resources::load<Texture2d>("textures/titleLogo");
+  wwwTexture = Resources::load<Texture2d>("textures/www");
 }
 
 void MenuScreen::onGui()
@@ -41,5 +42,6 @@ void MenuScreen::onGui()
   }
 
   Gui::drawTexture(Rect(10, 10, titleTexture->getWidth(), titleTexture->getHeight()), titleTexture);
+  Gui::drawTexture(Rect(10, Screen::getHeight() - wwwTexture->getHeight(), wwwTexture->getWidth(), wwwTexture->getHeight()), wwwTexture);
 }
 
