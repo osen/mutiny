@@ -29,7 +29,7 @@ void Player::onAwake()
   AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/sheep/sheep");
   mr->setAnimatedMesh(mesh);
 
-  heartTexture = Resources::load<Texture2d>("textures/heart");
+  sheepIconTexture = Resources::load<Texture2d>("textures/sheepIcon");
   censoredTexture = Resources::load<Texture2d>("textures/censored");
   quickNumber.reset(new QuickNumber());
 
@@ -268,12 +268,13 @@ void Player::onGui()
   {
     float texWidth = censoredTexture->getWidth() * 0.8f;
     float texHeight = censoredTexture->getHeight() * 0.8f;
+    
     Gui::drawTexture(Rect((Screen::getWidth() / 2) - (texWidth / 2),
                           (Screen::getHeight() / 2) - (texHeight / 2),
                           texWidth, texHeight), censoredTexture);
   }
 
-  Gui::drawTexture(Rect(10, 10, 50, 50), heartTexture);
+  Gui::drawTexture(Rect(10, 10, sheepIconTexture->getWidth()-32, sheepIconTexture->getHeight()-32),   sheepIconTexture);
 
-  quickNumber->draw(score, 70, 10);
+  quickNumber->draw(score, 115, 55);
 }

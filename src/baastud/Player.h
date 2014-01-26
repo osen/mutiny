@@ -25,7 +25,7 @@ private:
   Animation* sprintAnimation;
   Animation* humpAnimation;
   Texture2d* censoredTexture;
-  Texture2d* heartTexture;
+  Texture2d* sheepIconTexture;
   std::unique_ptr<QuickNumber> quickNumber;
 
   float speed;
