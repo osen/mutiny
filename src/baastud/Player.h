@@ -6,6 +6,7 @@
 using namespace mutiny::engine;
 
 class GameScreen;
+class QuickNumber;
 
 class Player : public Behaviour
 {
@@ -24,11 +25,14 @@ private:
   Animation* sprintAnimation;
   Animation* humpAnimation;
   Texture2d* censoredTexture;
+  Texture2d* heartTexture;
+  std::unique_ptr<QuickNumber> quickNumber;
 
   float speed;
   int state;
   float hTimeout;
   GameObject* hTarget;
+  int score;
 
 };
 

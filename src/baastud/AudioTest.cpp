@@ -24,22 +24,22 @@ void AudioTest::onGui()
 
   if(Gui::button(Rect(300, 200, 200, 50), "test 1") == true)
   {
-		Debug::log("Play baa");
+    Debug::log("Play baa");
     audio->playSound(0);
   }
   else if(Gui::button(Rect(300, 300, 200, 50), "test 2") == true)
   {
-		Debug::log("Play stressed baa");
+    Debug::log("Play stressed baa");
     audio->playSound(1);
   }
   else if(Gui::button(Rect(300, 400, 200, 50), "test 2") == true)
   {
-		Debug::log("Play music loop");
+    Debug::log("Play music loop");
     audio->playMusic();
   }
   else if(Gui::button(Rect(500, 500, 200, 50), "quit") == true)
   {
-		Application::quit();
+    Application::quit();
   }
 }
 

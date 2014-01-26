@@ -4,6 +4,7 @@
 #include "Audio.h"
 #include "Sheep.h"
 #include "GameCamera.h"
+#include "QuickNumber.h"
 
 #include <iostream>
 
@@ -20,6 +21,7 @@ GameObject* Player::create(GameScreen* gameScreen)
 
 void Player::onAwake()
 {
+  score = 0;
   hTimeout = 0;
   state = 0;
   speed = 10.0f;
@@ -27,7 +29,9 @@ void Player::onAwake()
   AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/sheep/sheep");
   mr->setAnimatedMesh(mesh);
 
+  heartTexture = Resources::load<Texture2d>("textures/heart");
   censoredTexture = Resources::load<Texture2d>("textures/censored");
+  quickNumber.reset(new QuickNumber());
 
   walkAnimation = Resources::load<Animation>("models/sheep/run.anm");
   idleAnimation = Resources::load<Animation>("models/sheep/idle.anm");
@@ -149,6 +153,8 @@ void Player::onUpdate()
       if(hTarget->getComponent<Sheep>()->isWolf() == true)
       {
         Debug::logWarning("Wolf was humped. Ending match");
+        Application::loadLevel("gameover");
+        return;
       }
 
       Object::destroy(hTarget);
@@ -156,6 +162,7 @@ void Player::onUpdate()
       state = 1;
       mr->setAnimation(sprintAnimation);
       mr->setFps(4);
+      score++;
       Sheep::create(gameScreen);
     }
   }
@@ -203,6 +210,11 @@ void Player::onUpdate()
 
 void Player::onGui()
 {
+  if(Application::getLoadedLevelName() == "introduction")
+  {
+    return;
+  }
+
   if(state == 2)
   {
     float texWidth = censoredTexture->getWidth() * 0.8f;
@@ -211,4 +223,8 @@ void Player::onGui()
                           (Screen::getHeight() / 2) - (texHeight / 2),
                           texWidth, texHeight), censoredTexture);
   }
+
+  Gui::drawTexture(Rect(10, 10, 50, 50), heartTexture);
+
+  quickNumber->draw(score, 70, 10);
 }

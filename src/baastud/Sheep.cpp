@@ -30,11 +30,13 @@ bool Sheep::isWolf()
 
 void Sheep::onStart()
 {
+  AnimatedMesh* mesh;
+
   wolf = false;
   getGameObject()->setTag("sheep");
   state = 0;
 
-  if(rand() % 1000 > 800)
+  if(rand() % 1000 > 700)
   {
     std::cout << "I am a wolf" << std::endl;
     wolf = true;
@@ -42,7 +44,16 @@ void Sheep::onStart()
 
   stateTimeout = rand() % 1000;
   sheepMr = getGameObject()->addComponent<AnimatedMeshRenderer>();
-  AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/sheep/sheep");
+
+  if(wolf == false)
+  {
+    mesh = Resources::load<AnimatedMesh>("models/sheep/sheep");
+  }
+  else
+  {
+    mesh = Resources::load<AnimatedMesh>("models/sheep/wolf");
+  }
+
   sheepMr->setAnimatedMesh(mesh);
 
   walkAnimation = Resources::load<Animation>("models/sheep/run.anm");
@@ -91,7 +102,34 @@ void Sheep::onUpdate()
     {
       state = 0;
       //std::cout << state << std::endl;
-      gameScreen->getAudio()->playSound(0);
+
+      int rval = rand() % 100;
+
+      if(rval > 97)
+      {
+        gameScreen->getAudio()->playSound(0);
+      }
+      else if(rval > 93)
+      {
+        gameScreen->getAudio()->playSound(1);
+      }
+      else if(rval > 90)
+      {
+        gameScreen->getAudio()->playSound(2);
+      }
+      else if(rval > 85)
+      {
+        gameScreen->getAudio()->playSound(3);
+      }
+      else if(rval > 82)
+      {
+        gameScreen->getAudio()->playSound(4);
+      }
+      else if(rval >= 80)
+      {
+        gameScreen->getAudio()->playSound(5);
+      }
+
       sheepMr->setAnimation(walkAnimation);
       sheepMr->setFps(4);
     }

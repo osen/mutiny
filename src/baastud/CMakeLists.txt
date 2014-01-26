@@ -12,6 +12,7 @@ add_executable(baastud
   SkyBox.cpp
   AudioTest.cpp
   Audio.cpp
+  QuickNumber.cpp
 )
 
 target_link_libraries(baastud mutiny SDL_mixer)

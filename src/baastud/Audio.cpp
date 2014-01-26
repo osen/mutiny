@@ -23,6 +23,11 @@ void Audio::initialize()
 
   // Load audio files
   addSound("audio/baa.wav");
+  addSound("audio/Ambient_1.ogg");
+  addSound("audio/Ambient_2.ogg");
+  addSound("audio/Ambient_3.ogg");
+  addSound("audio/Ambient_4.ogg");
+  addSound("audio/Ambient_5.ogg");
   addSound("audio/stressedBaa.wav");
 
   music = Mix_LoadMUS(std::string(Application::getDataPath() + "/audio/menuMusic.ogg").c_str());
@@ -42,6 +47,11 @@ void Audio::playSound(int sound)
 void Audio::playMusic()
 {
   Mix_PlayMusic(music, -1);
+}
+
+void Audio::stopMusic()
+{
+  Mix_HaltMusic();
 }
 
 /*

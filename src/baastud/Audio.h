@@ -13,6 +13,7 @@ public:
   static void addSound(std::string path);
   static void playSound(int sound);
   static void playMusic();
+  static void stopMusic();
 
 private:
   static std::vector<Mix_Chunk*> sounds;
