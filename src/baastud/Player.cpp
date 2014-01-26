@@ -88,7 +88,7 @@ void Player::onUpdate()
 
     if(Input::getKey(KeyCode::SPACE) == true)
     {
-      gameScreen->getAudio()->playSound(1);
+      gameScreen->getAudio()->playSound(6);
       mr->setAnimation(sprintAnimation);
       mr->setFps(4);
       state = 1;
@@ -125,7 +125,29 @@ void Player::onUpdate()
 
         if(sheepGos.at(i)->getComponent<Sheep>()->isWolf() == true)
         {
+          int rval = rand() % 100;
+
           std::cout << "Currently humping wolf" << std::endl;
+          if(rval > 80)
+          {
+            gameScreen->getAudio()->playSound(7);
+          }
+          else if(rval > 60)
+          {
+            gameScreen->getAudio()->playSound(8);
+          }
+          else if(rval > 40)
+          {
+            gameScreen->getAudio()->playSound(9);
+          }
+          else if(rval > 20)
+          {
+            gameScreen->getAudio()->playSound(10);
+          }
+          else
+          {
+            gameScreen->getAudio()->playSound(11);
+          }
         }
 
         state = 2;

@@ -28,7 +28,14 @@ void Audio::initialize()
   addSound("audio/Ambient_3.ogg");
   addSound("audio/Ambient_4.ogg");
   addSound("audio/Ambient_5.ogg");
+//
   addSound("audio/stressedBaa.wav");
+//
+  addSound("audio/Wolf_Growl_1.ogg");
+  addSound("audio/Wolf_Growl_2.ogg");
+  addSound("audio/Wolf_Growl_3.ogg");
+  addSound("audio/Wolf_Growl_4.ogg");
+  addSound("audio/Wolf_Growl_5.ogg");
 
   music = Mix_LoadMUS(std::string(Application::getDataPath() + "/audio/menuMusic.ogg").c_str());
   //music = Mix_LoadMUS(std::string(Application::getDataPath() + "/audio/music.ogg").c_str()));
