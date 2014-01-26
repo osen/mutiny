@@ -27,6 +27,15 @@ GameObject* GameScreen::getFence()
 void GameScreen::onAwake()
 {
   audio.reset(new Audio());
+
+  if(Application::getLoadedLevelName() != "introduction")
+  {
+    Audio::playMusicA();
+    Audio::playSound(16);
+  }
+  else
+  {
+  }
 }
 
 Audio* GameScreen::getAudio()

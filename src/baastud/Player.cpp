@@ -150,6 +150,33 @@ void Player::onUpdate()
           }
         }
 
+        int rval = rand() % 100;
+
+        if(rval > 80)
+        {
+          gameScreen->getAudio()->playSound(17);
+        }
+        else if(rval > 60)
+        {
+          gameScreen->getAudio()->playSound(18);
+        }
+        else if(rval > 40)
+        {
+          gameScreen->getAudio()->playSound(19);
+        }
+        else if(rval > 20)
+        {
+          gameScreen->getAudio()->playSound(20);
+        }
+        else if(rval > 10)
+        {
+          gameScreen->getAudio()->playSound(21);
+        }
+        else
+        {
+          gameScreen->getAudio()->playSound(22);
+        }
+
         state = 2;
         gameScreen->getCamera()->toggleEventMode();
         mr->setAnimation(humpAnimation);

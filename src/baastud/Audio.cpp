@@ -8,6 +8,7 @@ using namespace mutiny::engine;
 
 std::vector<Mix_Chunk*> Audio::sounds;
 Mix_Music* Audio::music = NULL;
+Mix_Music* Audio::musicA = NULL;
 
 void Audio::initialize()
 {
@@ -22,14 +23,16 @@ void Audio::initialize()
     std::cout << "Audio ain't gunna werk :(" << std::endl;
 
   // Load audio files
-  addSound("audio/baa.wav");
+  //addSound("audio/baa.wav");
+  addSound("audio/Ambient_2.ogg");
   addSound("audio/Ambient_1.ogg");
   addSound("audio/Ambient_2.ogg");
   addSound("audio/Ambient_3.ogg");
   addSound("audio/Ambient_4.ogg");
   addSound("audio/Ambient_5.ogg");
 //
-  addSound("audio/stressedBaa.wav");
+  //addSound("audio/stressedBaa.wav");
+  addSound("audio/Horny_4.ogg");
 //
   addSound("audio/Wolf_Growl_1.ogg");
   addSound("audio/Wolf_Growl_2.ogg");
@@ -41,9 +44,18 @@ void Audio::initialize()
   addSound("audio/Wolf_2.ogg");
   addSound("audio/Wolf_3.ogg");
   addSound("audio/Wolf_4.ogg");
+//
+  addSound("audio/VoiceIntro_1.ogg");
+//
+  addSound("audio/Horny_1.ogg");
+  addSound("audio/Horny_2.ogg");
+  addSound("audio/Horny_3.ogg");
+  addSound("audio/Horny_4.ogg");
+  addSound("audio/Horny_5.ogg");
+  addSound("audio/Horny_6.ogg");
 
   music = Mix_LoadMUS(std::string(Application::getDataPath() + "/audio/menuMusic.ogg").c_str());
-  //music = Mix_LoadMUS(std::string(Application::getDataPath() + "/audio/music.ogg").c_str()));
+  musicA = Mix_LoadMUS(std::string(Application::getDataPath() + "/audio/Bird_ambience.ogg").c_str());
 }
 
 void Audio::addSound(std::string path)
@@ -59,6 +71,11 @@ void Audio::playSound(int sound)
 void Audio::playMusic()
 {
   Mix_PlayMusic(music, -1);
+}
+
+void Audio::playMusicA()
+{
+  Mix_PlayMusic(musicA, -1);
 }
 
 void Audio::stopMusic()
