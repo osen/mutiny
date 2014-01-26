@@ -33,6 +33,7 @@ private:
   float hTimeout;
   GameObject* hTarget;
   int score;
+  bool firstTime;
 
 };
 

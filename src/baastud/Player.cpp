@@ -22,6 +22,7 @@ GameObject* Player::create(GameScreen* gameScreen)
 
 void Player::onAwake()
 {
+  firstTime = true;
   score = 0;
   hTimeout = 0;
   state = 0;
@@ -185,7 +186,16 @@ void Player::onUpdate()
         gameScreen->getCamera()->toggleEventMode();
         mr->setAnimation(humpAnimation);
         mr->setFps(6);
-        hTimeout = 1000.0f;
+
+        if(firstTime == true)
+        {
+          hTimeout = 4000.0f;
+          firstTime = false;
+        }
+        else
+        {
+          hTimeout = 1000.0f;
+        }
         break;
       }
     }
