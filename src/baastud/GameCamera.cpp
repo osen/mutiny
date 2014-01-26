@@ -16,13 +16,9 @@ GameObject* GameCamera::create(GameObject* playerGo)
 void GameCamera::toggleEventMode()
 {
   if(eventMode == true)
-  {
     eventMode = false;
-  }
   else
-  {
     eventMode = true;
-  }
 }
 
 void GameCamera::onAwake()
@@ -41,12 +37,14 @@ void GameCamera::onAwake()
   getGameObject()->getTransform()->setPosition(Vector3(0, 0, -8));
 
   texturedMaterial = Resources::load<Material>("shaders/bloom/simple_2d");
-  texturedMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
+  texturedMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, 
+    Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
   texturedMaterial->setMatrix("in_View", Matrix4x4::getIdentity());
   texturedMaterial->setMatrix("in_Model", Matrix4x4::getIdentity());
 
   mergeMaterial = Resources::load<Material>("shaders/bloom/merge");
-  mergeMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
+  mergeMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, 
+    Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
   mergeMaterial->setMatrix("in_View", Matrix4x4::getIdentity());
   mergeMaterial->setMatrix("in_Model", Matrix4x4::getIdentity());
 }
@@ -67,19 +65,13 @@ void GameCamera::onUpdate()
   }
 
   while(positionBuffer.size() > 10)
-  {
     positionBuffer.erase(positionBuffer.begin() + 0);
-  }
 
   while(rotationBuffer.size() > 10)
-  {
     rotationBuffer.erase(rotationBuffer.begin() + 0);
-  }
 
   for(int i = 0; i < positionBuffer.size(); i++)
-  {
     final = final + positionBuffer.at(i);
-  }
 
   final = final / positionBuffer.size();
 
@@ -87,9 +79,7 @@ void GameCamera::onUpdate()
   final = Vector3();
 
   for(int i = 0; i < rotationBuffer.size(); i++)
-  {
     final = final + rotationBuffer.at(i);
-  }
 
   final = final / rotationBuffer.size();
 
@@ -98,7 +88,6 @@ void GameCamera::onUpdate()
 
 void GameCamera::onStart()
 {
-  //getGameObject()->getTransform()->setPosition(Vector3(0, 10, -25));
   getGameObject()->getTransform()->setPosition(Vector3(0, 15, -35));
   getGameObject()->getTransform()->setRotation(Vector3(20, 0, 0));
 }
@@ -106,24 +95,24 @@ void GameCamera::onStart()
 void GameCamera::onPostRender()
 {
   Graphics::setRenderTarget(blurPass1.get());
-  //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), originalPass.get(), texturedMaterial);
+  Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), 
+    originalPass.get(), texturedMaterial);
   Graphics::setRenderTarget(NULL);
 
   Graphics::setRenderTarget(blurPass2.get());
-  //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), blurPass1.get(), texturedMaterial);
+  Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), 
+    blurPass1.get(), texturedMaterial);
   Graphics::setRenderTarget(NULL);
 
   Graphics::setRenderTarget(blurPass3.get());
-  //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), blurPass2.get(), texturedMaterial);
+  Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), 
+    blurPass2.get(), texturedMaterial);
   Graphics::setRenderTarget(NULL);
 
   Graphics::setRenderTarget(mergePass.get());
-  //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   mergeMaterial->setTexture("in_Merge", blurPass3.get());
-  Graphics::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), originalPass.get(), mergeMaterial);
+  Graphics::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), 
+    originalPass.get(), mergeMaterial);
   Graphics::setRenderTarget(NULL);
 
   Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), mergePass.get());

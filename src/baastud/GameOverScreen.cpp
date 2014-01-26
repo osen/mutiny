@@ -8,8 +8,6 @@ int GameOverScreen::score = 0;
 
 GameObject* GameOverScreen::create()
 {
-  Debug::log("GameOverScreen::create()");
-
   GameObject* mainGo = new GameObject("GameOverScreen");
   mainGo->addComponent<GameOverScreen>();
 
@@ -27,13 +25,10 @@ void GameOverScreen::onAwake()
 void GameOverScreen::onGui()
 {
   Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), background);
-
   qn->drawW(score, Screen::getWidth() * 0.3f, Screen::getHeight() * 0.05f);
 
   timeout -= Time::getDeltaTime();
 
   if(timeout <= 0)
-  {
     Application::loadLevel("introduction");
-  }
 }

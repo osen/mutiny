@@ -14,9 +14,9 @@ Mix_Music* Audio::breathing = NULL;
 void Audio::initialize()
 {
   int audio_rate = 22050;
-  Uint16 audio_format = AUDIO_S16; /* 16-bit stereo */
   int audio_channels = 2;
   int audio_buffers = 4096;
+  Uint16 audio_format = AUDIO_S16; /* 16-bit stereo */
 
   SDL_InitSubSystem(SDL_INIT_AUDIO);
 
@@ -24,7 +24,6 @@ void Audio::initialize()
     std::cout << "Audio ain't gunna werk :(" << std::endl;
 
   // Load audio files
-  //addSound("audio/baa.wav");
   addSound("audio/Ambient_2.ogg");
   addSound("audio/Ambient_1.ogg");
   addSound("audio/Ambient_2.ogg");
@@ -32,7 +31,6 @@ void Audio::initialize()
   addSound("audio/Ambient_4.ogg");
   addSound("audio/Ambient_5.ogg");
 //
-  //addSound("audio/stressedBaa.wav");
   addSound("audio/Horny_4.ogg");
 //
   addSound("audio/Wolf_Growl_1.ogg");

@@ -9,8 +9,6 @@ using namespace mutiny::engine;
 
 int Sheep::random(int min, int max)
 {
-  //srand(time(NULL));
-
   return rand() % ((max + 1) - min) + min;
 }
 
@@ -46,13 +44,9 @@ void Sheep::onStart()
   sheepMr = getGameObject()->addComponent<AnimatedMeshRenderer>();
 
   if(wolf == false)
-  {
     mesh = Resources::load<AnimatedMesh>("models/sheep/sheep");
-  }
   else
-  {
     mesh = Resources::load<AnimatedMesh>("models/sheep/wolf");
-  }
 
   sheepMr->setAnimatedMesh(mesh);
 
@@ -64,9 +58,7 @@ void Sheep::onStart()
   sheepMr->play();
 
   getGameObject()->addComponent<CharacterController>();
-
   getGameObject()->getTransform()->translate(Vector3(rand() % 20 + 1, 0, rand() % 20 + 1));
-
   getGameObject()->getTransform()->rotate(Vector3(0, rand() % 360, 0));
 }
 
@@ -79,9 +71,7 @@ void Sheep::freeze()
 void Sheep::onUpdate()
 {
   if(state == 2)
-  {
     return;
-  }
 
   if(state == 0)
   {
@@ -101,7 +91,6 @@ void Sheep::onUpdate()
     if(random(0, 10) < 2)
     {
       state = 0;
-      //std::cout << state << std::endl;
 
       int rval = rand() % 100;
 

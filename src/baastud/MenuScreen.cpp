@@ -24,8 +24,6 @@ void MenuScreen::onAwake()
 
 void MenuScreen::onGui()
 {
-  Gui::label(Rect(100, 10, 100, 100), "baaaaaaaaaaaaasttuuuuddd");
-
   if(Gui::button(Rect(Screen::getWidth() - 280, 350, 200, 50), "begin game") == true)
   {
     Audio::stopMusic();
@@ -42,6 +40,7 @@ void MenuScreen::onGui()
   }
 
   Gui::drawTexture(Rect(10, 10, titleTexture->getWidth(), titleTexture->getHeight()), titleTexture);
-  Gui::drawTexture(Rect(10, Screen::getHeight() - wwwTexture->getHeight() + 80, wwwTexture->getWidth(), wwwTexture->getHeight()), wwwTexture);
+  Gui::drawTexture(Rect(10, Screen::getHeight() - wwwTexture->getHeight() + 80, 
+    wwwTexture->getWidth(), wwwTexture->getHeight()), wwwTexture);
 }
 

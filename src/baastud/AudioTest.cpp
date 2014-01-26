@@ -38,8 +38,6 @@ void AudioTest::onGui()
     audio->playMusic();
   }
   else if(Gui::button(Rect(500, 500, 200, 50), "quit") == true)
-  {
     Application::quit();
-  }
 }
 

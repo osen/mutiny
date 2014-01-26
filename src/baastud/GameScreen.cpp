@@ -33,9 +33,6 @@ void GameScreen::onAwake()
     Audio::playMusicA();
     Audio::playSound(16);
   }
-  else
-  {
-  }
 }
 
 Audio* GameScreen::getAudio()
@@ -56,10 +53,8 @@ void GameScreen::onGui()
 void GameScreen::onStart()
 {
   for(int i = 0; i < 20; i++)
-  {
     Sheep::create(this);
-  }
-
+ 
   fenceGo = Fence::create();
   GameObject* playerGo = Player::create(this);
   SkyBox::create(playerGo);

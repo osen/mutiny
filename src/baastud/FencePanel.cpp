@@ -25,5 +25,4 @@ void FencePanel::onStart()
   mf->setMesh(fence->mesh);
 
   fencePanelMr->setMaterial(material);
-  
 }

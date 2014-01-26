@@ -27,14 +27,14 @@ public:
 
   void setMaterial(Material* material);
   void setMaterials(std::vector<Material*> materials);
-  Material* getMaterial();
   void getMaterials(std::vector<Material*>* materials);
+  Material* getMaterial();
 
 private:
-  std::vector<Material*> materials;
-
   virtual void render();
   virtual void awake();
+
+  std::vector<Material*> materials;
 
 };
 

@@ -28,12 +28,13 @@ private:
   Texture2d* sheepIconTexture;
   std::unique_ptr<QuickNumber> quickNumber;
 
-  float speed;
+
+  bool firstTime;
+  int score;
   int state;
   float hTimeout;
+  float speed;
   GameObject* hTarget;
-  int score;
-  bool firstTime;
 
 };
 

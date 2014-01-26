@@ -17,7 +17,6 @@ public:
   static const int FENCE_Z_WIDTH = 8;
 
   Mesh* mesh;
-
   Bounds getBounds();
 
 private:

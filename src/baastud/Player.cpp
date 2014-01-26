@@ -27,6 +27,7 @@ void Player::onAwake()
   hTimeout = 0;
   state = 0;
   speed = 10.0f;
+
   mr = getGameObject()->addComponent<AnimatedMeshRenderer>();
   AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/sheep/sheep");
   mr->setAnimatedMesh(mesh);
@@ -45,7 +46,6 @@ void Player::onAwake()
   mr->play();
 
   getGameObject()->getTransform()->setPosition(Vector3(0, 1, 0));
-
   getGameObject()->addComponent<CharacterController>();
 }
 
@@ -57,6 +57,7 @@ void Player::onUpdate()
   {
     getGameObject()->getTransform()->setRotation(Vector3(0, 180, 0));
     getGameObject()->getTransform()->setPosition(Vector3(-13, 0, -19));
+
     return;
   }
 
@@ -66,27 +67,27 @@ void Player::onUpdate()
     {
       mr->setAnimation(walkAnimation);
       getGameObject()->getTransform()->rotate(Vector3(0, 1, 0) * 100 * Time::getDeltaTime());
+
       setToIdle = false;
     }
     else if(Input::getKey(KeyCode::LEFT) == true)
     {
       mr->setAnimation(walkAnimation);
       getGameObject()->getTransform()->rotate(Vector3(0, -1, 0) * 100 * Time::getDeltaTime());
+
       setToIdle = false;
     }
 
     if(Input::getKey(KeyCode::UP) == true)
     {
       mr->setAnimation(walkAnimation);
-      getGameObject()->getTransform()->translate(getGameObject()->getTransform()->getForward() * 8 * Time::getDeltaTime());
+      getGameObject()->getTransform()->translate(
+        getGameObject()->getTransform()->getForward() * 8 * Time::getDeltaTime());
       setToIdle = false;
-      //getGameObject()->getTransform()->translate(getGameObject()->getTransform()->getPosition() + Vector3(0, -1, 0));
     }
 
     if(setToIdle == true)
-    {
       mr->setAnimation(idleAnimation);
-    }
 
     if(Input::getKey(KeyCode::SPACE) == true)
     {
@@ -99,13 +100,9 @@ void Player::onUpdate()
   else if(state == 1)
   {
     if(Input::getKey(KeyCode::RIGHT) == true)
-    {
       getGameObject()->getTransform()->rotate(Vector3(0, 1, 0) * 100 * Time::getDeltaTime());
-    }
     else if(Input::getKey(KeyCode::LEFT) == true)
-    {
       getGameObject()->getTransform()->rotate(Vector3(0, -1, 0) * 100 * Time::getDeltaTime());
-    }
 
     getGameObject()->getTransform()->translate(getGameObject()->getTransform()->getForward() * speed * Time::getDeltaTime());
 
@@ -114,8 +111,8 @@ void Player::onUpdate()
 
     for(int i = 0; i < sheepGos.size(); i++)
     {
-      float dist = Vector3::getDistance(sheepGos.at(i)->getTransform()->getPosition(), getGameObject()->getTransform()->getPosition());
-      //std::cout << dist << std::endl;
+      float dist = Vector3::getDistance(sheepGos.at(i)->getTransform()->getPosition(), 
+        getGameObject()->getTransform()->getPosition());
 
       if(dist < 1)
       {
@@ -129,27 +126,16 @@ void Player::onUpdate()
         {
           int rval = rand() % 100;
 
-          std::cout << "Currently humping wolf" << std::endl;
           if(rval > 80)
-          {
             gameScreen->getAudio()->playSound(7);
-          }
           else if(rval > 60)
-          {
             gameScreen->getAudio()->playSound(8);
-          }
           else if(rval > 40)
-          {
             gameScreen->getAudio()->playSound(9);
-          }
           else if(rval > 20)
-          {
             gameScreen->getAudio()->playSound(10);
-          }
           else
-          {
             gameScreen->getAudio()->playSound(11);
-          }
         }
 
         // Begin the breathing...
@@ -158,32 +144,21 @@ void Player::onUpdate()
         int rval = rand() % 100;
 
         if(rval > 80)
-        {
           gameScreen->getAudio()->playSound(17);
-        }
         else if(rval > 60)
-        {
-          gameScreen->getAudio()->playSound(18);
-        }
+           gameScreen->getAudio()->playSound(18);
         else if(rval > 40)
-        {
           gameScreen->getAudio()->playSound(19);
-        }
         else if(rval > 20)
-        {
           gameScreen->getAudio()->playSound(20);
-        }
         else if(rval > 10)
-        {
           gameScreen->getAudio()->playSound(21);
-        }
         else
-        {
           gameScreen->getAudio()->playSound(22);
-        }
 
         state = 2;
         gameScreen->getCamera()->toggleEventMode();
+
         mr->setAnimation(humpAnimation);
         mr->setFps(6);
 
@@ -193,9 +168,8 @@ void Player::onUpdate()
           firstTime = false;
         }
         else
-        {
           hTimeout = 2000.0f;
-        }
+
         break;
       }
     }
@@ -203,9 +177,7 @@ void Player::onUpdate()
     speed += 0.5f * Time::getDeltaTime();
 
     if(speed > 15)
-    {
       speed = 15;
-    }
   }
   else if(state == 2)
   {
@@ -215,12 +187,10 @@ void Player::onUpdate()
     {
       if(hTarget->getComponent<Sheep>()->isWolf() == true)
       {
-        Debug::logWarning("Wolf was humped. Ending match");
-
         gameScreen->getAudio()->stopMusic();
-
         Application::loadLevel("gameover");
         GameOverScreen::score = score;
+
         return;
       }
 
@@ -250,7 +220,7 @@ void Player::onUpdate()
   {
     if(state == 1)
       transform->setRotation(Vector3(0, rand() % 350 + 190, 0));
-    //state = 0;
+
     cc->simpleMove(Vector3(-0.1f, 0, 0));
   }
 
@@ -258,7 +228,7 @@ void Player::onUpdate()
   {
     if(state == 1)
       transform->setRotation(Vector3(0, rand() % 170 + 10, 0));
-    //state = 0;
+
     cc->simpleMove(Vector3(0.1f, 0, 0));
   }
 
@@ -266,7 +236,7 @@ void Player::onUpdate()
   {
     if(state == 1)
       transform->setRotation(Vector3(0, rand() % 260 + 100, 0));
-    //state = 0;
+
     cc->simpleMove(Vector3(0, 0, -0.1f));
   }
 
@@ -274,7 +244,7 @@ void Player::onUpdate()
   {
     if(state == 1)
       transform->setRotation(Vector3(0, rand() % 260 + 100, 0) * -1);
-    //state = 0;
+
     cc->simpleMove(Vector3(0, 0, 0.1f));
   }
 }
@@ -282,9 +252,7 @@ void Player::onUpdate()
 void Player::onGui()
 {
   if(Application::getLoadedLevelName() == "introduction")
-  {
     return;
-  }
 
   if(state == 2)
   {
@@ -296,7 +264,8 @@ void Player::onGui()
                           texWidth, texHeight), censoredTexture);
   }
 
-  Gui::drawTexture(Rect(10, 10, sheepIconTexture->getWidth()-32, sheepIconTexture->getHeight()-32),   sheepIconTexture);
+  Gui::drawTexture(Rect(10, 10, sheepIconTexture->getWidth()-32, sheepIconTexture->getHeight()-32),
+    sheepIconTexture);
 
   quickNumber->draw(score, 115, 55);
-}
+} 
