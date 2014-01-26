@@ -180,8 +180,8 @@ void Player::onUpdate()
         state = 2;
         gameScreen->getCamera()->toggleEventMode();
         mr->setAnimation(humpAnimation);
-        mr->setFps(4);
-        hTimeout = 2000.0f;
+        mr->setFps(6);
+        hTimeout = 1000.0f;
         break;
       }
     }

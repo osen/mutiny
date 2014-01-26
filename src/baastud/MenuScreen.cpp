@@ -18,25 +18,28 @@ void MenuScreen::onAwake()
   Audio::playMusic();
   cameraGo = new GameObject("MainCamera");
   Camera* camera = cameraGo->addComponent<Camera>();
+  titleTexture = Resources::load<Texture2d>("textures/titleLogo");
 }
 
 void MenuScreen::onGui()
 {
   Gui::label(Rect(100, 10, 100, 100), "baaaaaaaaaaaaasttuuuuddd");
 
-  if(Gui::button(Rect(300, 200, 200, 50), "begin game") == true)
+  if(Gui::button(Rect(Screen::getWidth() - 280, 350, 200, 50), "begin game") == true)
   {
     Audio::stopMusic();
     Application::loadLevel("game");
   }
-  else if(Gui::button(Rect(300, 300, 200, 50), "audio test") == true)
+  else if(Gui::button(Rect(Screen::getWidth() - 280, 425, 200, 50), "audio test") == true)
   {
     Audio::stopMusic();
     Application::loadLevel("audiotest");
   }
-  else if(Gui::button(Rect(500, 500, 200, 50), "quit") == true)
+  else if(Gui::button(Rect(Screen::getWidth() - 110, Screen::getHeight() - 40, 100, 30), "quit") == true)
   {
     Application::quit();
   }
+
+  Gui::drawTexture(Rect(10, 10, titleTexture->getWidth(), titleTexture->getHeight()), titleTexture);
 }
 

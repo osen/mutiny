@@ -1,13 +1,11 @@
-#ifndef MENUSCREEN_H
-#define MENUSCREEN_H
+#ifndef MUTINYSCREEN_H
+#define MUTINYSCREEN_H
 
 #include <mutiny/mutiny.h>
 
-#include <memory>
-
 using namespace mutiny::engine;
 
-class MenuScreen : public Behaviour
+class MutinyScreen : public Behaviour
 {
 public:
   static GameObject* create();
@@ -16,8 +14,9 @@ public:
   virtual void onGui();
 
 private:
-  Texture2d* titleTexture;
-  GameObject* cameraGo;
+  Texture2d* mutinyLogo;
+  Texture2d* background;
+  float timeout;
 
 };
 

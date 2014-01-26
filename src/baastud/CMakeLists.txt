@@ -13,6 +13,7 @@ add_executable(baastud
   AudioTest.cpp
   Audio.cpp
   QuickNumber.cpp
+  MutinyScreen.cpp
 )
 
 target_link_libraries(baastud mutiny SDL_mixer)

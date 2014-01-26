@@ -14,7 +14,7 @@ void safe_main(int argc, char* argv[])
   Application::init(argc, argv);
   Audio::initialize();
 
-  Application::loadLevel("introduction");
+  Application::loadLevel("mutiny");
 
   GameObject* smGo = new GameObject();
   smGo->addComponent<SceneManager>();
