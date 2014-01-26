@@ -53,6 +53,9 @@ void Audio::initialize()
   addSound("audio/Horny_4.ogg");
   addSound("audio/Horny_5.ogg");
   addSound("audio/Horny_6.ogg");
+//
+  addSound("audio/Scream_1.ogg");
+  //addSound("audio/Heavy_Breathing.ogg");
 
   music = Mix_LoadMUS(std::string(Application::getDataPath() + "/audio/menuMusic.ogg").c_str());
   musicA = Mix_LoadMUS(std::string(Application::getDataPath() + "/audio/Bird_ambience.ogg").c_str());

@@ -151,6 +151,8 @@ void Player::onUpdate()
           }
         }
 
+        //gameScreen->getAudio()->playSound(23);
+
         int rval = rand() % 100;
 
         if(rval > 80)
