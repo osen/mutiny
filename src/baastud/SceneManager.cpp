@@ -23,6 +23,7 @@ void SceneManager::loadLevel()
   if(Application::getLoadedLevelName() == "introduction")
   {
     MenuScreen::create();
+    GameScreen::create();
   }
   else if(Application::getLoadedLevelName() == "audiotest")
   {

@@ -12,8 +12,9 @@ class Player : public Behaviour
 public:
   static GameObject* create(GameScreen* gameScreen);
 
-  virtual void onUpdate();
   virtual void onAwake();
+  virtual void onUpdate();
+  virtual void onGui();
 
 private:
   GameScreen* gameScreen;
@@ -22,9 +23,9 @@ private:
   Animation* idleAnimation;
   Animation* sprintAnimation;
   Animation* humpAnimation;
+  Texture2d* censoredTexture;
 
   float speed;
-  void keepInBounds();
   int state;
   float hTimeout;
   GameObject* hTarget;

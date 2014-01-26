@@ -1,4 +1,5 @@
 #include "SceneManager.h"
+#include "Audio.h"
 
 #include <mutiny/mutiny.h>
 
@@ -11,6 +12,7 @@ void safe_main(int argc, char* argv[])
 {
   srand(time(NULL));
   Application::init(argc, argv);
+  Audio::initialize();
 
   Application::loadLevel("introduction");
 

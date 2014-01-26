@@ -27,6 +27,8 @@ void Player::onAwake()
   AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/sheep/sheep");
   mr->setAnimatedMesh(mesh);
 
+  censoredTexture = Resources::load<Texture2d>("textures/censored");
+
   walkAnimation = Resources::load<Animation>("models/sheep/run.anm");
   idleAnimation = Resources::load<Animation>("models/sheep/idle.anm");
   sprintAnimation = Resources::load<Animation>("models/sheep/sprint.anm");
@@ -36,7 +38,7 @@ void Player::onAwake()
   mr->setFps(4);
   mr->play();
 
-  getGameObject()->getTransform()->setPosition(Vector3(0, 10, 0));
+  getGameObject()->getTransform()->setPosition(Vector3(0, 0, 0));
 
   getGameObject()->addComponent<CharacterController>();
 }
@@ -44,6 +46,13 @@ void Player::onAwake()
 void Player::onUpdate()
 {
   bool setToIdle = true;
+
+  if(Application::getLoadedLevelName() == "introduction")
+  {
+    getGameObject()->getTransform()->setRotation(Vector3(0, 180, 0));
+    getGameObject()->getTransform()->setPosition(Vector3(-13, 0, -19));
+    return;
+  }
 
   if(state == 0)
   {
@@ -109,21 +118,26 @@ void Player::onUpdate()
         sheepGos.at(i)->getTransform()->setLocalRotation(Vector3(0, 0, 0));
         sheepGos.at(i)->getTransform()->setLocalPosition(Vector3(0, 0, 2));
         sheepGos.at(i)->getComponent<Sheep>()->freeze();
+
+        if(sheepGos.at(i)->getComponent<Sheep>()->isWolf() == true)
+        {
+          std::cout << "Currently humping wolf" << std::endl;
+        }
+
         state = 2;
         gameScreen->getCamera()->toggleEventMode();
         mr->setAnimation(humpAnimation);
         mr->setFps(4);
         hTimeout = 2000.0f;
         break;
-        //Object::destroy(sheepGos.at(i));
       }
     }
 
-    speed += 1.0f * Time::getDeltaTime();
+    speed += 0.5f * Time::getDeltaTime();
 
-    if(speed > 50)
+    if(speed > 15)
     {
-      speed = 50;
+      speed = 15;
     }
   }
   else if(state == 2)
@@ -132,9 +146,17 @@ void Player::onUpdate()
 
     if(hTimeout < 0)
     {
+      if(hTarget->getComponent<Sheep>()->isWolf() == true)
+      {
+        Debug::logWarning("Wolf was humped. Ending match");
+      }
+
       Object::destroy(hTarget);
       gameScreen->getCamera()->toggleEventMode();
-      state = 0;
+      state = 1;
+      mr->setAnimation(sprintAnimation);
+      mr->setFps(4);
+      Sheep::create(gameScreen);
     }
   }
 
@@ -177,11 +199,16 @@ void Player::onUpdate()
     //state = 0;
     cc->simpleMove(Vector3(0, 0, 0.1f));
   }
-
-  keepInBounds();
 }
 
-void Player::keepInBounds()
+void Player::onGui()
 {
-
+  if(state == 2)
+  {
+    float texWidth = censoredTexture->getWidth() * 0.8f;
+    float texHeight = censoredTexture->getHeight() * 0.8f;
+    Gui::drawTexture(Rect((Screen::getWidth() / 2) - (texWidth / 2),
+                          (Screen::getHeight() / 2) - (texHeight / 2),
+                          texWidth, texHeight), censoredTexture);
+  }
 }

@@ -34,7 +34,7 @@ void Sheep::onStart()
   getGameObject()->setTag("sheep");
   state = 0;
 
-  if(rand() % 1000 > 500)
+  if(rand() % 1000 > 800)
   {
     std::cout << "I am a wolf" << std::endl;
     wolf = true;
@@ -74,7 +74,7 @@ void Sheep::onUpdate()
 
   if(state == 0)
   {
-    getGameObject()->getTransform()->translate(getGameObject()->getTransform()->getForward() * 10.0f * Time::getDeltaTime());
+    getGameObject()->getTransform()->translate(getGameObject()->getTransform()->getForward() * 8.0f * Time::getDeltaTime());
     getGameObject()->getTransform()->rotate(Vector3(0, 1, 0));
   }
 

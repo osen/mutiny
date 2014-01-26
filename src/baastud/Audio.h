@@ -8,15 +8,15 @@
 class Audio
 {
 public:
-  Audio();
-  ~Audio();
+  static void initialize();
 
-  void addSound(std::string path);
-  void playSound(int sound);
-  void playMusic();
+  static void addSound(std::string path);
+  static void playSound(int sound);
+  static void playMusic();
+
 private:
-  std::vector<Mix_Chunk*> sounds;
-  Mix_Music* music;
+  static std::vector<Mix_Chunk*> sounds;
+  static Mix_Music* music;
 
 };
 

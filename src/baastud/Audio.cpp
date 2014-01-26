@@ -6,7 +6,10 @@
 
 using namespace mutiny::engine;
 
-Audio::Audio()
+std::vector<Mix_Chunk*> Audio::sounds;
+Mix_Music* Audio::music = NULL;
+
+void Audio::initialize()
 {
   int audio_rate = 22050;
   Uint16 audio_format = AUDIO_S16; /* 16-bit stereo */
@@ -41,6 +44,7 @@ void Audio::playMusic()
   Mix_PlayMusic(music, -1);
 }
 
+/*
 Audio::~Audio()
 {
   for(int i = 0; i < sounds.size(); i++)
@@ -49,3 +53,4 @@ Audio::~Audio()
   Mix_CloseAudio();
   SDL_QuitSubSystem(SDL_INIT_AUDIO);
 }
+*/
