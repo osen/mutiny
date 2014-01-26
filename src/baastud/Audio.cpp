@@ -22,7 +22,7 @@ Audio::Audio()
   addSound("audio/baa.wav");
   addSound("audio/stressedBaa.wav");
 
-  music = Mix_LoadMUS(std::string(Application::getDataPath() + "/audio/baa.wav").c_str());
+  music = Mix_LoadMUS(std::string(Application::getDataPath() + "/audio/menuMusic.ogg").c_str());
   //music = Mix_LoadMUS(std::string(Application::getDataPath() + "/audio/music.ogg").c_str()));
 }
 
