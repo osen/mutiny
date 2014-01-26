@@ -107,27 +107,45 @@ void Sheep::onUpdate()
 
       if(rval > 97)
       {
-        gameScreen->getAudio()->playSound(0);
+        if(wolf == true)
+          gameScreen->getAudio()->playSound(12);
+        else
+          gameScreen->getAudio()->playSound(0);
       }
       else if(rval > 93)
       {
-        gameScreen->getAudio()->playSound(1);
+        if(wolf == true)
+          gameScreen->getAudio()->playSound(13);
+        else
+          gameScreen->getAudio()->playSound(1);
       }
       else if(rval > 90)
       {
-        gameScreen->getAudio()->playSound(2);
+        if(wolf == true)
+          gameScreen->getAudio()->playSound(14);
+        else
+          gameScreen->getAudio()->playSound(2);
       }
       else if(rval > 85)
       {
-        gameScreen->getAudio()->playSound(3);
+        if(wolf == true)
+          gameScreen->getAudio()->playSound(15);
+        else
+          gameScreen->getAudio()->playSound(3);
       }
       else if(rval > 82)
       {
-        gameScreen->getAudio()->playSound(4);
+        if(wolf == true)
+          gameScreen->getAudio()->playSound(13);
+        else
+          gameScreen->getAudio()->playSound(4);
       }
       else if(rval >= 80)
       {
-        gameScreen->getAudio()->playSound(5);
+        if(wolf == true)
+          gameScreen->getAudio()->playSound(14);
+        else
+          gameScreen->getAudio()->playSound(5);
       }
 
       sheepMr->setAnimation(walkAnimation);

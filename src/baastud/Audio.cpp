@@ -36,6 +36,11 @@ void Audio::initialize()
   addSound("audio/Wolf_Growl_3.ogg");
   addSound("audio/Wolf_Growl_4.ogg");
   addSound("audio/Wolf_Growl_5.ogg");
+//
+  addSound("audio/Wolf_1.ogg");
+  addSound("audio/Wolf_2.ogg");
+  addSound("audio/Wolf_3.ogg");
+  addSound("audio/Wolf_4.ogg");
 
   music = Mix_LoadMUS(std::string(Application::getDataPath() + "/audio/menuMusic.ogg").c_str());
   //music = Mix_LoadMUS(std::string(Application::getDataPath() + "/audio/music.ogg").c_str()));
