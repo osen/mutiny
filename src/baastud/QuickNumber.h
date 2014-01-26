@@ -13,9 +13,11 @@ public:
   QuickNumber();
 
   void draw(int number, int x, int y);
+  void drawW(int number, int x, int y);
 
 private:
   Texture2d* fontTexture;
+  Texture2d* wFontTexture;
 
 };
 

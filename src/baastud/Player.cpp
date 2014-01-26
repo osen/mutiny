@@ -5,6 +5,7 @@
 #include "Sheep.h"
 #include "GameCamera.h"
 #include "QuickNumber.h"
+#include "GameOverScreen.h"
 
 #include <iostream>
 
@@ -203,6 +204,7 @@ void Player::onUpdate()
       {
         Debug::logWarning("Wolf was humped. Ending match");
         Application::loadLevel("gameover");
+        GameOverScreen::score = score;
         return;
       }
 

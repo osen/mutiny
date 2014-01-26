@@ -3,6 +3,7 @@
 #include "GameScreen.h"
 #include "AudioTest.h"
 #include "MutinyScreen.h"
+#include "GameOverScreen.h"
 
 using namespace mutiny::engine;
 
@@ -37,6 +38,10 @@ void SceneManager::loadLevel()
   else if(Application::getLoadedLevelName() == "game")
   {
     GameScreen::create();
+  }
+  else if(Application::getLoadedLevelName() == "gameover")
+  {
+    GameOverScreen::create();
   }
 }
 
