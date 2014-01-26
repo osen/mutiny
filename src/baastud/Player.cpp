@@ -44,7 +44,7 @@ void Player::onAwake()
   mr->setFps(4);
   mr->play();
 
-  getGameObject()->getTransform()->setPosition(Vector3(0, 0, 0));
+  getGameObject()->getTransform()->setPosition(Vector3(0, 1, 0));
 
   getGameObject()->addComponent<CharacterController>();
 }
@@ -194,7 +194,7 @@ void Player::onUpdate()
         }
         else
         {
-          hTimeout = 1000.0f;
+          hTimeout = 2000.0f;
         }
         break;
       }
