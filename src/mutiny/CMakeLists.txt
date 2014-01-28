@@ -1,4 +1,4 @@
-add_library(mutiny SHARED 
+add_library(mutiny STATIC 
   internal/Util.cpp
   internal/tribox.cpp
   internal/WavefrontParser.cpp
@@ -47,4 +47,8 @@ add_library(mutiny SHARED
   Gui.cpp
 )
 
-target_link_libraries(mutiny GLEW glut GL png SDL SDL_image SDL_gfx)
+if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+target_link_libraries(mutiny GLEW32s opengl32 SDL SDLmain SDL_image)
+else()
+target_link_libraries(mutiny GLEW GL png SDL SDL_image SDL_gfx)
+endif(CMAKE_SYSTEM_NAME MATCHES "Windows")

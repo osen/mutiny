@@ -6,6 +6,8 @@
 
 #include <GL/glew.h>
 
+#include <string>
+
 namespace mutiny
 {
 
