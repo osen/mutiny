@@ -25,7 +25,6 @@ public:
 
 protected:
   Bounds bounds;
-  Vector3 lastPosition;
 
   virtual void awake();
   virtual void update();
