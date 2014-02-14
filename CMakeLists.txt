@@ -10,6 +10,7 @@ set(CMAKE_CXX_COMPILER "eg++")
 endif(CMAKE_SYSTEM_NAME MATCHES "OpenBSD")
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
+set(CMAKE_CXX_FLAGS "/EHsc -O2")
 add_definitions(-DWINDOWS)
 add_definitions(-DGLEW_STATIC)
 include_directories(${MUTINY_SOURCE_DIR}/src ${MUTINY_SOURCE_DIR}/import/msvc/include)

@@ -6,10 +6,12 @@
 
 using namespace mutiny::engine;
 
+#ifndef WINDOWS
 std::vector<Mix_Chunk*> Audio::sounds;
 Mix_Music* Audio::music = NULL;
 Mix_Music* Audio::musicA = NULL;
 Mix_Music* Audio::breathing = NULL;
+#endif
 
 void Audio::initialize()
 {

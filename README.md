@@ -1,5 +1,15 @@
 ![](http://devio.us/~kpedersen/mutiny/lib/tpl/prsnl10/user/logo.png)
 
+To build the software on Windows, follow these steps:
+
+```
+> cd mutiny
+> mkdir build
+> cd build
+> cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=RELEASE ..
+> nmake
+```
+
 To build the software on Linux, follow these steps:
 
 ```

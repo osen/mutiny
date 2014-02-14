@@ -1,7 +1,9 @@
 #ifndef AUDIO_H
 #define AUDIO_H
 
+#ifndef WINDOWS
 #include <SDL/SDL_mixer.h>
+#endif
 #include <vector>
 #include <string>
 
@@ -18,10 +20,12 @@ public:
   static void stopMusic();
 
 private:
+#ifndef WINDOWS
   static std::vector<Mix_Chunk*> sounds;
   static Mix_Music* music;
   static Mix_Music* musicA;
   static Mix_Music* breathing;
+#endif
 
 };
 
