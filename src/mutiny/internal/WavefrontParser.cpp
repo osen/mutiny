@@ -7,6 +7,8 @@
 #include <vector>
 #include <fstream>
 #include <iostream>
+#include <sstream>
+#include <algorithm>
 
 namespace mutiny
 {
@@ -84,7 +86,7 @@ WavefrontParser::WavefrontParser(std::string path)
     {
       vertexPositions.push_back(glm::vec3(atof(splitLine.at(1).c_str()),
         atof(splitLine.at(2).c_str()),
-        atof(splitLine.at(3).c_str())));
+        -atof(splitLine.at(3).c_str())));
     }
     else if(splitLine.at(0) == "vn")
     {
@@ -128,6 +130,7 @@ WavefrontParser::WavefrontParser(std::string path)
     }
     else if(splitLine.at(0) == "f")
     {
+      splitLine = mungeSplitLine(splitLine);
       currentFace = new FaceData();
       currentMaterialGroup->faces.push_back(std::shared_ptr<FaceData>(currentFace));
       subSplit.clear(); Util::splitString(splitLine.at(1), '/', &subSplit);
@@ -508,6 +511,23 @@ MaterialData* WavefrontParser::getMaterialData(std::string name)
   //throw Exception("Failed to obtain material \"" + name + "\"");
   std::cout << "Warning: Failed to obtain material \"" << name << "\"" << std::endl;
   return modelData.materials.at(0).get();
+}
+
+std::vector<std::string> WavefrontParser::mungeSplitLine(std::vector<std::string> splitLine)
+{
+  std::vector<std::string> rtn;
+
+  rtn.push_back(splitLine.at(0));
+  rtn.push_back(splitLine.at(3));
+  rtn.push_back(splitLine.at(2));
+  rtn.push_back(splitLine.at(1));
+
+  if(splitLine.size() > 4)
+  {
+    rtn.push_back(splitLine.at(4));
+  }
+
+  return rtn;
 }
 
 }

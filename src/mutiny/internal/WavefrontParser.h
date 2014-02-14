@@ -78,6 +78,7 @@ private:
   void parseMtl(std::string filename);
   void obtainSizes();
   glm::vec3 absVec3(glm::vec3 input);
+  std::vector<std::string> mungeSplitLine(std::vector<std::string> splitLine);
 
 public:
   WavefrontParser(std::string path);

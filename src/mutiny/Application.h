@@ -21,6 +21,7 @@ class Gui;
 class Graphics;
 class Material;
 class RenderTexture;
+class Screen;
 
 class Application
 {
@@ -32,6 +33,7 @@ class Application
   friend class mutiny::engine::Graphics;
   friend class mutiny::engine::Material;
   friend class mutiny::engine::RenderTexture;
+  friend class mutiny::engine::Screen;
 
 public:
   static void init(int argc, char* argv[]);

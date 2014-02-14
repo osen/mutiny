@@ -1,4 +1,5 @@
 #include "Screen.h"
+#include "Application.h"
 
 namespace mutiny
 {
@@ -6,17 +7,14 @@ namespace mutiny
 namespace engine
 {
 
-int Screen::width = 800;
-int Screen::height = 600;
-
 int Screen::getWidth()
 {
-  return width;
+  return Application::getInternal()->screenWidth;
 }
 
 int Screen::getHeight()
 {
-  return height;
+  return Application::getInternal()->screenHeight;
 }
 
 }

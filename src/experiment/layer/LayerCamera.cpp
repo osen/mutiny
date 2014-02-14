@@ -40,18 +40,18 @@ void LayerCamera::onAwake()
   getGameObject()->getTransform()->setPosition(Vector3(0, 0, -8));
 
   texturedMaterial = Resources::load<Material>("shaders/bloom/simple_2d");
-  texturedMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
   texturedMaterial->setMatrix("in_View", Matrix4x4::getIdentity());
   texturedMaterial->setMatrix("in_Model", Matrix4x4::getIdentity());
 
   mergeMaterial = Resources::load<Material>("shaders/bloom/merge");
-  mergeMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
   mergeMaterial->setMatrix("in_View", Matrix4x4::getIdentity());
   mergeMaterial->setMatrix("in_Model", Matrix4x4::getIdentity());
 }
 
 void LayerCamera::onUpdate()
 {
+  texturedMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
+  mergeMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
   getGameObject()->getTransform()->rotateAround(Vector3(0, 0, 0), Vector3(0, 1, 0), 100.0f * Time::getDeltaTime());
   getGameObject()->getTransform()->lookAt(Vector3(0, 0, 0));
 }

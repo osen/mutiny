@@ -25,7 +25,8 @@ namespace internal
 class Internal
 {
 public:
-  std::shared_ptr<SDL_Surface> screen;
+  //std::shared_ptr<SDL_Surface> screen;
+  SDL_Surface* screen;
   bool running;
   bool initialized;
   std::string loadedLevelName;
@@ -56,6 +57,9 @@ public:
 
   // RenderTexture
   RenderTexture* renderTextureActive;
+
+  int screenWidth;
+  int screenHeight;
 
   Internal();
 

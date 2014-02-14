@@ -65,9 +65,11 @@ void Application::init(int argc, char* argv[])
     throw std::exception();
   }
 
-  _internal->screen.reset(SDL_SetVideoMode(800, 600, 32, SDL_OPENGL), std::bind(SDL_Quit));
+  //_internal->screen.reset(SDL_SetVideoMode(800, 600, 32, SDL_OPENGL | SDL_RESIZABLE), std::bind(SDL_Quit));
+  _internal->screen = SDL_SetVideoMode(800, 600, 32, SDL_OPENGL | SDL_RESIZABLE);
 
-  if(_internal->screen.get() == NULL)
+  //if(_internal->screen.get() == NULL)
+  if(_internal->screen == NULL)
   {
     std::cout << "Error: Failed to create rendering context" << std::endl;
     throw std::exception();
@@ -229,8 +231,8 @@ void Application::loop()
   Time::deltaTime = diff / 1000.0f;
   lastTime = time;
 
-  Screen::width = _internal->screen->w;
-  Screen::height = _internal->screen->h;
+  _internal->screenWidth = _internal->screen->w;
+  _internal->screenHeight = _internal->screen->h;
 
   Input::downKeys.clear();
   Input::upKeys.clear();
@@ -242,6 +244,12 @@ void Application::loop()
     if(event.type == SDL_QUIT)
     {
       _internal->running = false;
+    }
+    else if(event.type == SDL_VIDEORESIZE)
+    {
+      _internal->screenWidth = event.resize.w;
+      _internal->screenHeight = event.resize.h;
+      _internal->screen = SDL_SetVideoMode(_internal->screenWidth, _internal->screenHeight, 32, SDL_OPENGL | SDL_RESIZABLE);
     }
     else if(event.type == SDL_MOUSEMOTION)
     {

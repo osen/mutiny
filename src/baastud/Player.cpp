@@ -55,7 +55,6 @@ void Player::onUpdate()
 
   if(Application::getLoadedLevelName() == "introduction")
   {
-    getGameObject()->getTransform()->setRotation(Vector3(0, 180, 0));
     getGameObject()->getTransform()->setPosition(Vector3(-13, 0, -19));
 
     return;
@@ -81,8 +80,10 @@ void Player::onUpdate()
     if(Input::getKey(KeyCode::UP) == true)
     {
       mr->setAnimation(walkAnimation);
+
       getGameObject()->getTransform()->translate(
-        getGameObject()->getTransform()->getForward() * 8 * Time::getDeltaTime());
+        getGameObject()->getTransform()->getForward() * -8 * Time::getDeltaTime());
+
       setToIdle = false;
     }
 
@@ -104,7 +105,7 @@ void Player::onUpdate()
     else if(Input::getKey(KeyCode::LEFT) == true)
       getGameObject()->getTransform()->rotate(Vector3(0, -1, 0) * 100 * Time::getDeltaTime());
 
-    getGameObject()->getTransform()->translate(getGameObject()->getTransform()->getForward() * speed * Time::getDeltaTime());
+    getGameObject()->getTransform()->translate(getGameObject()->getTransform()->getForward() * -speed * Time::getDeltaTime());
 
     std::vector<GameObject*> sheepGos;
     GameObject::findGameObjectsWithTag("sheep", &sheepGos);
@@ -119,7 +120,7 @@ void Player::onUpdate()
         hTarget = sheepGos.at(i);
         sheepGos.at(i)->getTransform()->setParent(getGameObject()->getTransform());
         sheepGos.at(i)->getTransform()->setLocalRotation(Vector3(0, 0, 0));
-        sheepGos.at(i)->getTransform()->setLocalPosition(Vector3(0, 0, 2));
+        sheepGos.at(i)->getTransform()->setLocalPosition(Vector3(0, 0, -2));
         sheepGos.at(i)->getComponent<Sheep>()->freeze();
 
         if(sheepGos.at(i)->getComponent<Sheep>()->isWolf() == true)

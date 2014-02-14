@@ -29,23 +29,23 @@ void MainCamera::onAwake()
   getGameObject()->getTransform()->setPosition(Vector3(0, 0, -8));
 
   texturedMaterial = Resources::load<Material>("shaders/simple_2d");
-  texturedMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
   texturedMaterial->setMatrix("in_View", Matrix4x4::getIdentity());
   texturedMaterial->setMatrix("in_Model", Matrix4x4::getIdentity());
 
   lightKeyMaterial = Resources::load<Material>("shaders/light_key");
-  lightKeyMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
   lightKeyMaterial->setMatrix("in_View", Matrix4x4::getIdentity());
   lightKeyMaterial->setMatrix("in_Model", Matrix4x4::getIdentity());
 
   mergeMaterial = Resources::load<Material>("shaders/merge");
-  mergeMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
   mergeMaterial->setMatrix("in_View", Matrix4x4::getIdentity());
   mergeMaterial->setMatrix("in_Model", Matrix4x4::getIdentity());
 }
 
 void MainCamera::onUpdate()
 {
+  mergeMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
+  lightKeyMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
+  texturedMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
   getGameObject()->getTransform()->rotateAround(Vector3(0, 0, 0), Vector3(0, 1, 0), 100.0f * Time::getDeltaTime());
   getGameObject()->getTransform()->lookAt(Vector3(0, 0, 0));
 }
