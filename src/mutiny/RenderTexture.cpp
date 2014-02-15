@@ -6,8 +6,6 @@
 
 #include <GL/glew.h>
 #include <SDL/SDL.h>
-#include <SDL/SDL_image.h>
-//#include <SDL/SDL_rotozoom.h>
 
 #include <memory>
 #include <functional>

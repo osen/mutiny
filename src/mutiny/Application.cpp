@@ -129,11 +129,13 @@ void Application::setupPaths()
 
   GetModuleFileName (NULL, strExePath, MAX_PATH);
   dirname = strExePath;
+  basename = dirname.substr(dirname.find_last_of("\\"));
+  basename = basename.substr(0, basename.length() - 4);
   dirname = dirname.substr(0, dirname.find_last_of("\\"));
   dirname = dirname.substr(0, dirname.find_last_of("\\"));
 
-  _internal->engineDataPath = "share/mutiny";
-  _internal->dataPath = "share/mygame";
+  _internal->engineDataPath = dirname + "/share/mutiny";
+  _internal->dataPath = dirname + "/share" + basename;
 #else
   FILE* process = NULL;
   std::string command;
@@ -154,7 +156,6 @@ void Application::setupPaths()
   }
 
   pclose(process);
-
   command = "basename " + std::string(_internal->argv.at(0)) + " | tr -d '\n'";
   process = popen(command.c_str(), "r");
 
