@@ -84,9 +84,9 @@ WavefrontParser::WavefrontParser(std::string path)
     }
     else if(splitLine.at(0) == "v")
     {
-      vertexPositions.push_back(glm::vec3(atof(splitLine.at(1).c_str()),
+      vertexPositions.push_back(glm::vec3(-atof(splitLine.at(1).c_str()),
         atof(splitLine.at(2).c_str()),
-        -atof(splitLine.at(3).c_str())));
+        atof(splitLine.at(3).c_str())));
     }
     else if(splitLine.at(0) == "vn")
     {

@@ -75,7 +75,7 @@ void Sheep::onUpdate()
 
   if(state == 0)
   {
-    getGameObject()->getTransform()->translate(getGameObject()->getTransform()->getForward() * -8.0f * Time::getDeltaTime());
+    getGameObject()->getTransform()->translate(getGameObject()->getTransform()->getForward() * 8.0f * Time::getDeltaTime());
     getGameObject()->getTransform()->rotate(Vector3(0, 1, 0));
   }
 

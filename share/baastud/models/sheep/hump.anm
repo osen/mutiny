@@ -1,14 +1,14 @@
 f
 t Body 0 0 0 -86 -2 0
-t Head 0 1.65 1.2 0 0 0
-t FrontLeftLeg 0.82 2.08 0.94 0 -23 122
-t FrontRightLeg -0.56 2.03 0.79 0 11 -132
-t BackRightLef_BackRightLeg -0.42 -0.48 -0.79 -1 -15 -76
-t BackLeftLeg 0.37 -0.55 -0.42 0 -18 70
+t Head 0 1.67 -0.88 0 0 0
+t FrontLeftLeg 1.23 2.3 -0.83 0 -23 122
+t FrontRightLeg -1.32 2.36 -0.83 0 11 -132
+t BackRightLef_BackRightLeg 0.64 -0.06 0.97 -1 -15 -76
+t BackLeftLeg -0.74 0.0399999 0.98 0 10 86
 f
 t Body 0 0.07 -0.4 -86 -2 0
-t Head 0 1.86 1 -35 -3 0
-t FrontLeftLeg 0.81 2.23 0.78 0 -44 108
-t FrontRightLeg -0.41 2.16 0.69 0 52 -120
-t BackRightLef_BackRightLeg -0.68 -0.39 -0.99 -1 26 -72
-t BackLeftLeg 0.1 -0.33 -0.4 0 -55 71
+t Head 0 1.86 -1.36 -35 -3 0
+t FrontLeftLeg 1.34 2.31 -0.78 0 -44 108
+t FrontRightLeg -1.28 2.22 -0.79 0 52 -120
+t BackRightLef_BackRightLeg 0.729999 -0.02 0.66 -1 -38 -87
+t BackLeftLeg -0.7 -0.0400001 0.69 0 41 93

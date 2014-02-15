@@ -1,12 +1,12 @@
 f
-t FrontLeftLeg -0.05 0 0 28 -5 12
+t FrontLeftLeg 0 -0.08 -0.03 31 -45 -30
 t BackRightLef_BackRightLeg 0 -0.11 -0.33 39 10 0
 t FrontRightLeg 0 -0.09 0.1 -41 6 0
 t BackLeftLeg 0 0 0 -29 4 0
 t Body -0.1 -0.05 0 0 0 0
 f
-t FrontLeftLeg -0.16 -0.11 0.16 -49 -18 12
-t BackRightLef_BackRightLeg 0 0 0 -35 1 0
-t FrontRightLeg 0.06 0.03 -0.17 29 29 0
+t FrontLeftLeg -0.16 -0.01 0.08 -49 -18 12
+t BackRightLef_BackRightLeg 0 -0.2 -0.03 -35 1 0
+t FrontRightLeg -0.11 -0.11 -0.1 23 -17 0
 t BackLeftLeg 0 0 0 35 -12 0
 t Body 0.05 0.04 0 0 2 -14
