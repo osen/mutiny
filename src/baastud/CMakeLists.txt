@@ -17,8 +17,4 @@ add_executable(baastud
   GameOverScreen.cpp
 )
 
-if(CMAKE_SYSTEM_NAME MATCHES "Windows")
 target_link_libraries(baastud mutiny)
-else()
-target_link_libraries(baastud mutiny SDL_mixer)
-endif(CMAKE_SYSTEM_NAME MATCHES "Windows")

@@ -4,6 +4,7 @@
 #include "AudioTest.h"
 #include "MutinyScreen.h"
 #include "GameOverScreen.h"
+#include "Audio.h"
 
 using namespace mutiny::engine;
 
@@ -22,18 +23,28 @@ void SceneManager::loadLevel()
 {
   Debug::log("Level loaded: " + Application::getLoadedLevelName());
 
+  Audio::initialize();
+
   if(Application::getLoadedLevelName() == "mutiny")
+  {
     MutinyScreen::create();
+  }
   else if(Application::getLoadedLevelName() == "introduction")
   {
     MenuScreen::create();
     GameScreen::create();
   }
   else if(Application::getLoadedLevelName() == "audiotest")
+  {
     AudioTest::create();
+  }
   else if(Application::getLoadedLevelName() == "game")
+  {
     GameScreen::create();
+  }
   else if(Application::getLoadedLevelName() == "gameover")
+  {
     GameOverScreen::create();
+  }
 }
 

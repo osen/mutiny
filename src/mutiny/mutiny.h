@@ -45,6 +45,8 @@
 #include "Font.h"
 #include "CharacterInfo.h"
 #include "RectOffset.h"
+#include "AudioClip.h"
+#include "AudioSource.h"
 
 #include "buccaneer/buccaneer.h"
 

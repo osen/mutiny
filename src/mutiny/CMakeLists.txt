@@ -45,10 +45,12 @@ add_library(mutiny STATIC
   Transform.cpp
   Screen.cpp
   Gui.cpp
+  AudioClip.cpp
+  AudioSource.cpp
 )
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-target_link_libraries(mutiny GLEW32s opengl32 SDL SDLmain SDL_image)
+target_link_libraries(mutiny GLEW32s opengl32 SDL SDLmain SDL_image SDL_mixer)
 else()
-target_link_libraries(mutiny GLEW GL png SDL SDL_image SDL_gfx)
+target_link_libraries(mutiny GLEW GL png SDL SDL_image SDL_gfx SDL_mixer)
 endif(CMAKE_SYSTEM_NAME MATCHES "Windows")

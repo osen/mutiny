@@ -1,11 +1,13 @@
 #ifndef AUDIO_H
 #define AUDIO_H
 
-#ifndef WINDOWS
+#include <mutiny/mutiny.h>
+
 #include <SDL/SDL_mixer.h>
-#endif
 #include <vector>
 #include <string>
+
+using namespace mutiny::engine;
 
 class Audio
 {
@@ -20,12 +22,10 @@ public:
   static void stopMusic();
 
 private:
-#ifndef WINDOWS
-  static std::vector<Mix_Chunk*> sounds;
+  static std::vector<AudioClip*> sounds;
   static Mix_Music* music;
   static Mix_Music* musicA;
   static Mix_Music* breathing;
-#endif
 
 };
 

@@ -18,6 +18,7 @@
 
 #include <GL/glew.h>
 #include <SDL/SDL.h>
+#include <SDL/SDL_mixer.h>
 
 #ifdef EMSCRIPTEN
 #include <emscripten.h>
@@ -89,6 +90,12 @@ void Application::init(int argc, char* argv[])
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_CULL_FACE);
   glCullFace(GL_FRONT);
+
+  if(Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024) == -1)
+  {
+    std::cout << "Audio failed to initialize" << std::endl;
+    throw std::exception();
+  }
 
   Material::defaultMaterial = Resources::load<Material>("shaders/default_diffuse");
   //if(Material::defaultMaterial == NULL) { throw Exception("Failed to load 'shaders/default_diffuse'"); }
