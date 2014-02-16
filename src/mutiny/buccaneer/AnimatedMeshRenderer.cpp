@@ -124,6 +124,8 @@ void AnimatedMeshRenderer::onUpdate()
         else
         {
           animationFrameB = &animation->frames.at(frame);
+          animationFrameA = &animation->frames.at(frame);
+          setFrame(0);
         }
       }
       else

@@ -25,13 +25,15 @@ void Horse::onAwake()
 
   mr->setAnimation(runAnimation);
   mr->setInterpolateEnd(false);
-  mr->setFps(5.0f);
+  mr->setFps(8.0f);
   mr->play();
+
+  getGameObject()->getTransform()->setPosition(Vector3(0, -0.5f, 0));
 }
 
 void Horse::onUpdate()
 {
-
+  getGameObject()->getTransform()->translate(Vector3(5, 0, 0) * Time::getDeltaTime());
 }
 
 void Horse::onGui()
