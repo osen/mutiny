@@ -14,21 +14,27 @@ GameObject* Terrain::create()
 
 void Terrain::onAwake()
 {
-  MeshRenderer* mr = getGameObject()->addComponent<MeshRenderer>();
-  MeshFilter* mf = getGameObject()->addComponent<MeshFilter>();
   Mesh* mesh = Resources::load<Mesh>("models/terrain/terrain");
   Texture2d* tex = Resources::load<Texture2d>("models/terrain/terrain");
 
-  Material* material = new Material(Resources::load<Material>("shaders/textured"));
-  material->setMainTexture(tex);
+  for(int i = 0; i < 3; i++)
+  {
+    GameObject* tGo = new GameObject();
+    tGo->getTransform()->setParent(getGameObject()->getTransform());
+    MeshRenderer* mr = tGo->addComponent<MeshRenderer>();
+    MeshFilter* mf = tGo->addComponent<MeshFilter>();
 
-  mr->setMaterial(material);
-  mf->setMesh(mesh);
+    Material* material = new Material(Resources::load<Material>("shaders/textured"));
+    material->setMainTexture(tex);
 
-  MeshCollider* meshCollider = getGameObject()->addComponent<MeshCollider>();
+    mr->setMaterial(material);
+    mf->setMesh(mesh);
 
-  getGameObject()->getTransform()->setPosition(Vector3(0, 0, 0));
-  getGameObject()->getTransform()->setRotation(Vector3(0, 180, 0));
+    MeshCollider* meshCollider = tGo->addComponent<MeshCollider>();
+
+    tGo->getTransform()->setPosition(Vector3(mesh->getBounds().size.x * i, 0, 20));
+    tGo->getTransform()->setRotation(Vector3(0, 180, 0));
+  }
 }
 
 void Terrain::onUpdate()

@@ -131,9 +131,5 @@ void SkyBox::onAwake()
 
 void SkyBox::onUpdate()
 {
-  //getGameObject()->getTransform()->rotate(Vector3(0, 100, 0) * Time::getDeltaTime());
-  //getGameObject()->getTransform()->translate(Vector3(0, Time::getDeltaTime(), 0));
-  Vector3 pos = getGameObject()->getTransform()->getPosition();
-  //pos.x = playerGo->getTransform()->getPosition().x;
-  getGameObject()->getTransform()->setPosition(pos);
+  getGameObject()->getTransform()->setPosition(playerGo->getTransform()->getPosition());
 }

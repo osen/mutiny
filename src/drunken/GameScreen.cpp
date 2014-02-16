@@ -2,6 +2,7 @@
 #include "GameCamera.h"
 #include "Terrain.h"
 #include "SkyBox.h"
+#include "Player.h"
 
 #include <iostream>
 
@@ -32,7 +33,8 @@ void GameScreen::onGui()
 
 void GameScreen::onStart()
 {
-  SkyBox::create(getGameObject());
-  cameraGo = GameCamera::create(getGameObject());
+  GameObject* playerGo = Player::create(this);
+  SkyBox::create(playerGo);
+  cameraGo = GameCamera::create(playerGo);
   Terrain::create();
 }

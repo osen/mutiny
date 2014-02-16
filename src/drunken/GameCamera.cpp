@@ -93,8 +93,8 @@ void GameCamera::onUpdate()
   getGameObject()->getTransform()->setRotation(final);
 
 
-  getGameObject()->getTransform()->setPosition(Vector3(0, 0, -10));
-  getGameObject()->getTransform()->setRotation(Vector3(0, 0, 0));
+  //getGameObject()->getTransform()->setPosition(Vector3(0, 0, -10));
+  //getGameObject()->getTransform()->setRotation(Vector3(0, 0, 0));
 }
 
 void GameCamera::onStart()

@@ -5,6 +5,7 @@ add_executable(drunken
   GameCamera.cpp
   Terrain.cpp
   SkyBox.cpp
+  Player.cpp
 )
 
 target_link_libraries(drunken mutiny)
