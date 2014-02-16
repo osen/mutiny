@@ -12,7 +12,7 @@ void safe_main(int argc, char* argv[])
   srand(time(NULL));
   Application::init(argc, argv);
 
-  Application::loadLevel("game");
+  Application::loadLevel("menu");
 
   GameObject* smGo = new GameObject();
   smGo->addComponent<SceneManager>();

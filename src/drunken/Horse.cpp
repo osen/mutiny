@@ -6,17 +6,17 @@
 
 using namespace mutiny::engine;
 
-Horse* Horse::create(GameScreen* gameScreen)
+Horse* Horse::create()
 {
   GameObject* mainGo = new GameObject("Horse");
   Horse* horse = mainGo->addComponent<Horse>();
-  horse->gameScreen = gameScreen;
 
   return horse;
 }
 
 void Horse::onAwake()
 {
+  cowboyGo = NULL;
   mr = getGameObject()->addComponent<AnimatedMeshRenderer>();
   AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/horse/horse");
   mr->setAnimatedMesh(mesh);
@@ -29,13 +29,11 @@ void Horse::onAwake()
   mr->play();
 
   getGameObject()->getTransform()->setPosition(Vector3(0, -0.5f, 0));
-
-  addCowboy();
 }
 
 void Horse::addCowboy()
 {
-  GameObject* cowboyGo = new GameObject();
+  cowboyGo = new GameObject();
   cowboyGo->getTransform()->setParent(getGameObject()->getTransform());
   AnimatedMeshRenderer* mr = cowboyGo->addComponent<AnimatedMeshRenderer>();
   AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/cowboy/cowboy");
@@ -82,12 +80,20 @@ void Horse::addCowboy()
 
   bmr->setMaterial(bmaterial);
   bmf->setMesh(bmesh);
-
 }
 
 void Horse::onUpdate()
 {
-  getGameObject()->getTransform()->translate(Vector3(5, 0, 0) * Time::getDeltaTime());
+  if(cowboyGo != NULL)
+  {
+    getGameObject()->getTransform()->translate(Vector3(9, 0, 0) * Time::getDeltaTime());
+  }
+}
+
+void Horse::wedge()
+{
+  getGameObject()->getTransform()->setRotation(Vector3(0, 0, -120));
+  getGameObject()->getTransform()->setPosition(Vector3(-5, 2, 5));
 }
 
 void Horse::onGui()

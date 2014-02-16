@@ -10,18 +10,19 @@ class GameScreen;
 class Horse : public Behaviour
 {
 public:
-  static Horse* create(GameScreen* gameScreen);
+  static Horse* create();
 
   virtual void onAwake();
   virtual void onUpdate();
   virtual void onGui();
 
+  void addCowboy();
+  void wedge();
+
 private:
-  GameScreen* gameScreen;
   AnimatedMeshRenderer* mr;
   Animation* runAnimation;
-
-  void addCowboy();
+  GameObject* cowboyGo;
 
 };
 

@@ -45,5 +45,7 @@ void GameScreen::onStart()
   cameraGo = GameCamera::create(player->getGameObject());
   Terrain::create();
   Pickup::create(this, PICKUP_GUN);
-  Horse::create(this);
+
+  Horse* horse = Horse::create();
+  horse->wedge();
 }
