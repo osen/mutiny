@@ -19,12 +19,16 @@ public:
 private:
   GameScreen* gameScreen;
   AnimatedMeshRenderer* mr;
+  AnimatedMeshRenderer* lmr;
   Animation* walkAnimation;
   Animation* idleAnimation;
   Animation* shootAnimation;
   Animation* duckAnimation;
+  GameObject* peacemakerGo;
+  GameObject* legsGo;
 
   void addPeacemaker();
+  void setupLegs();
 
 };
 

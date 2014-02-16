@@ -31,6 +31,11 @@ void AnimatedMeshRenderer::onAwake()
   rootGo->getTransform()->setLocalRotation(Vector3());
 }
 
+GameObject* AnimatedMeshRenderer::getRoot()
+{
+  return rootGo;
+}
+
 void AnimatedMeshRenderer::onDestroy()
 {
   for(int i = 0; i < rootGo->getTransform()->getChildCount(); i++)

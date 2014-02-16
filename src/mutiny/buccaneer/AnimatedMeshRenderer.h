@@ -30,6 +30,7 @@ public:
   float getFrame();
   void setFrame(float frame);
   void setFps(float fps);
+  GameObject* getRoot();
 
 private:
   std::vector<std::unique_ptr<Material> > materials;

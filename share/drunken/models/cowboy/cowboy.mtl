@@ -1,5 +1,5 @@
 # Blender MTL File: 'None'
-# Material Count: 10
+# Material Count: 8
 newmtl 
 Ns 0
 Ka 0.000000 0.000000 0.000000
@@ -75,34 +75,12 @@ illum 2
 map_Kd jeans.png
 
 
-newmtl _jeans.png_jeans.png
-Ns 0.000000
-Ka 0.000000 0.000000 0.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.800000 0.800000 0.800000
-Ni 1.000000
-d 1.000000
-illum 2
-map_Kd jeans.png
-
-
 newmtl _leather.png
 Ns 0
 Ka 0.000000 0.000000 0.000000
 Kd 0.8 0.8 0.8
 Ks 0.8 0.8 0.8
 d 1
-illum 2
-map_Kd leather.png
-
-
-newmtl _leather.png_leather.png
-Ns 0.000000
-Ka 0.000000 0.000000 0.000000
-Kd 0.640000 0.640000 0.640000
-Ks 0.800000 0.800000 0.800000
-Ni 1.000000
-d 1.000000
 illum 2
 map_Kd leather.png
 

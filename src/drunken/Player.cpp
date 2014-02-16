@@ -21,7 +21,7 @@ void Player::onAwake()
   AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/cowboy/cowboy");
   mr->setAnimatedMesh(mesh);
 
-  walkAnimation = Resources::load<Animation>("models/cowboy/run.anm");
+  walkAnimation = Resources::load<Animation>("models/cowboy/walk.anm");
   idleAnimation = Resources::load<Animation>("models/cowboy/idle.anm");
   shootAnimation = Resources::load<Animation>("models/cowboy/sprint.anm");
   duckAnimation = Resources::load<Animation>("models/cowboy/hump.anm");
@@ -34,7 +34,27 @@ void Player::onAwake()
   getGameObject()->getTransform()->setRotation(Vector3(0, 90, 0));
   getGameObject()->addComponent<CharacterController>();
 
+  peacemakerGo = NULL;
   addPeacemaker();
+
+  setupLegs();
+
+  lmr->setAnimation(walkAnimation);
+  lmr->setFps(4);
+  lmr->play();
+}
+
+void Player::setupLegs()
+{
+  legsGo = new GameObject();
+  legsGo->getTransform()->setParent(getGameObject()->getTransform());
+
+  lmr = legsGo->addComponent<AnimatedMeshRenderer>();
+  AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/cowboy/cowboy_lower");
+  lmr->setAnimatedMesh(mesh);
+
+  legsGo->getTransform()->setLocalPosition(Vector3(0, 0, 0));
+  legsGo->getTransform()->setLocalRotation(Vector3(0, 0, 0));
 }
 
 void Player::onUpdate()
@@ -48,6 +68,9 @@ void Player::onUpdate()
   }
 
   cc->simpleMove(Vector3(0, -5, 0) * Time::getDeltaTime());
+
+  //peacemakerGo->getTransform()->setLocalRotation(Vector3(0, 180, 0));
+  //peacemakerGo->getTransform()->setLocalPosition(Vector3(0, 1, 0));
 }
 
 void Player::onGui()
@@ -61,7 +84,22 @@ void Player::addPeacemaker()
   Texture2d* tex = Resources::load<Texture2d>("models/peacemaker/peacemaker");
 
   GameObject* tGo = new GameObject();
-  //tGo->getTransform()->setParent(getGameObject()->getTransform());
+
+  for(int i = 0; i < mr->getRoot()->getTransform()->getChildCount(); i++)
+  {
+    if(mr->getRoot()->getTransform()->getChild(i)->getGameObject()->getName() == "RightLowerArm")
+    {
+      tGo->getTransform()->setParent(mr->getRoot()->getTransform()->getChild(i));
+      //tGo->getTransform()->setLocalRotation(Vector3(-90, 180, 0));
+      //tGo->getTransform()->setLocalPosition(Vector3(0, -2, 0));
+      //tGo->getTransform()->setRotation(Vector3(0, -90, 0));
+      tGo->getTransform()->setLocalRotation(Vector3(0, 0, 0));
+      tGo->getTransform()->setLocalPosition(Vector3(0.1f, -1.1f, 0));
+    }
+  }
+
+  peacemakerGo = tGo;
+
   MeshRenderer* mr = tGo->addComponent<MeshRenderer>();
   MeshFilter* mf = tGo->addComponent<MeshFilter>();
 
