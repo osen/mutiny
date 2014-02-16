@@ -8,6 +8,7 @@
 using namespace mutiny::engine;
 
 class GameCamera;
+class Player;
 
 class GameScreen : public Behaviour
 {
@@ -19,9 +20,11 @@ public:
   virtual void onStart();
 
   GameCamera* getCamera();
+  Player* getPlayer();
 
 private:
   GameObject* cameraGo;
+  Player* player;
 
 };
 

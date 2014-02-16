@@ -6,13 +6,13 @@
 
 using namespace mutiny::engine;
 
-GameObject* Player::create(GameScreen* gameScreen)
+Player* Player::create(GameScreen* gameScreen)
 {
   GameObject* mainGo = new GameObject("Player");
   Player* player = mainGo->addComponent<Player>();
   player->gameScreen = gameScreen;
 
-  return mainGo;
+  return player;
 }
 
 void Player::onAwake()
@@ -35,7 +35,6 @@ void Player::onAwake()
   getGameObject()->addComponent<CharacterController>();
 
   peacemakerGo = NULL;
-  addPeacemaker();
 
   setupLegs();
 
@@ -88,6 +87,11 @@ void Player::onGui()
 
 void Player::addPeacemaker()
 {
+  if(peacemakerGo != NULL)
+  {
+    return;
+  }
+
   Mesh* mesh = Resources::load<Mesh>("models/peacemaker/peacemaker");
   Texture2d* tex = Resources::load<Texture2d>("models/peacemaker/peacemaker");
 

@@ -6,6 +6,7 @@ add_executable(drunken
   Terrain.cpp
   SkyBox.cpp
   Player.cpp
+  Pickup.cpp
 )
 
 target_link_libraries(drunken mutiny)

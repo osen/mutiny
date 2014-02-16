@@ -3,6 +3,7 @@
 #include "Terrain.h"
 #include "SkyBox.h"
 #include "Player.h"
+#include "Pickup.h"
 
 #include <iostream>
 
@@ -31,10 +32,16 @@ void GameScreen::onGui()
   Gui::label(Rect(10, 10, 100, 100), "game running...");
 }
 
+Player* GameScreen::getPlayer()
+{
+  return player;
+}
+
 void GameScreen::onStart()
 {
-  GameObject* playerGo = Player::create(this);
-  SkyBox::create(playerGo);
-  cameraGo = GameCamera::create(playerGo);
+  player = Player::create(this);
+  SkyBox::create(player->getGameObject());
+  cameraGo = GameCamera::create(player->getGameObject());
   Terrain::create();
+  Pickup::create(this, PICKUP_GUN);
 }

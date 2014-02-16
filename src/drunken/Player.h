@@ -10,11 +10,13 @@ class GameScreen;
 class Player : public Behaviour
 {
 public:
-  static GameObject* create(GameScreen* gameScreen);
+  static Player* create(GameScreen* gameScreen);
 
   virtual void onAwake();
   virtual void onUpdate();
   virtual void onGui();
+
+  void addPeacemaker();
 
 private:
   GameScreen* gameScreen;
@@ -27,7 +29,6 @@ private:
   GameObject* peacemakerGo;
   GameObject* legsGo;
 
-  void addPeacemaker();
   void setupLegs();
 
 };
