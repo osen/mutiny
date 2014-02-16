@@ -7,6 +7,7 @@ add_executable(drunken
   SkyBox.cpp
   Player.cpp
   Pickup.cpp
+  Horse.cpp
 )
 
 target_link_libraries(drunken mutiny)

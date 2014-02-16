@@ -20,6 +20,7 @@ namespace engine
 
 void AnimatedMeshRenderer::onAwake()
 {
+  interpolateEnd = true;
   mesh = NULL;
   animation = NULL;
   frame = 0;
@@ -116,8 +117,14 @@ void AnimatedMeshRenderer::onUpdate()
 
       if(frame + 1 >= animation->frames.size())
       {
-        animationFrameB = &animation->frames.at(0);
-        //animationFrameB = &animation->frames.at(frame);
+        if(interpolateEnd == true)
+        {
+          animationFrameB = &animation->frames.at(0);
+        }
+        else
+        {
+          animationFrameB = &animation->frames.at(frame);
+        }
       }
       else
       {
@@ -237,6 +244,11 @@ void AnimatedMeshRenderer::setAnimation(Animation* animation)
 
   this->animation = animation;
   frame = 0;
+}
+
+void AnimatedMeshRenderer::setInterpolateEnd(bool interpolateEnd)
+{
+  this->interpolateEnd = interpolateEnd;
 }
 
 }

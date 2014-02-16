@@ -4,6 +4,7 @@
 #include "SkyBox.h"
 #include "Player.h"
 #include "Pickup.h"
+#include "Horse.h"
 
 #include <iostream>
 
@@ -44,4 +45,5 @@ void GameScreen::onStart()
   cameraGo = GameCamera::create(player->getGameObject());
   Terrain::create();
   Pickup::create(this, PICKUP_GUN);
+  Horse::create(this);
 }

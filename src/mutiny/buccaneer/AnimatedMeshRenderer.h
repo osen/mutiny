@@ -31,6 +31,7 @@ public:
   void setFrame(float frame);
   void setFps(float fps);
   GameObject* getRoot();
+  void setInterpolateEnd(bool interpolateEnd);
 
 private:
   std::vector<std::unique_ptr<Material> > materials;
@@ -40,6 +41,7 @@ private:
   float frame;
   bool playing;
   float fps;
+  bool interpolateEnd;
 
   virtual void onAwake();
   virtual void onUpdate();
