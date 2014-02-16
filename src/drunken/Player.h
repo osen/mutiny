@@ -24,6 +24,8 @@ private:
   Animation* shootAnimation;
   Animation* duckAnimation;
 
+  void addPeacemaker();
+
 };
 
 #endif

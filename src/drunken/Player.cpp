@@ -18,13 +18,13 @@ GameObject* Player::create(GameScreen* gameScreen)
 void Player::onAwake()
 {
   mr = getGameObject()->addComponent<AnimatedMeshRenderer>();
-  AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/sheep/sheep");
+  AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/cowboy/cowboy");
   mr->setAnimatedMesh(mesh);
 
-  walkAnimation = Resources::load<Animation>("models/sheep/run.anm");
-  idleAnimation = Resources::load<Animation>("models/sheep/idle.anm");
-  shootAnimation = Resources::load<Animation>("models/sheep/sprint.anm");
-  duckAnimation = Resources::load<Animation>("models/sheep/hump.anm");
+  walkAnimation = Resources::load<Animation>("models/cowboy/run.anm");
+  idleAnimation = Resources::load<Animation>("models/cowboy/idle.anm");
+  shootAnimation = Resources::load<Animation>("models/cowboy/sprint.anm");
+  duckAnimation = Resources::load<Animation>("models/cowboy/hump.anm");
 
   mr->setAnimation(idleAnimation);
   mr->setFps(4);
@@ -33,6 +33,8 @@ void Player::onAwake()
   getGameObject()->getTransform()->setPosition(Vector3(0, 1, 0));
   getGameObject()->getTransform()->setRotation(Vector3(0, 90, 0));
   getGameObject()->addComponent<CharacterController>();
+
+  addPeacemaker();
 }
 
 void Player::onUpdate()
@@ -51,4 +53,22 @@ void Player::onUpdate()
 void Player::onGui()
 {
 
-} 
+}
+
+void Player::addPeacemaker()
+{
+  Mesh* mesh = Resources::load<Mesh>("models/peacemaker/peacemaker");
+  Texture2d* tex = Resources::load<Texture2d>("models/peacemaker/peacemaker");
+
+  GameObject* tGo = new GameObject();
+  //tGo->getTransform()->setParent(getGameObject()->getTransform());
+  MeshRenderer* mr = tGo->addComponent<MeshRenderer>();
+  MeshFilter* mf = tGo->addComponent<MeshFilter>();
+
+  Material* material = new Material(Resources::load<Material>("shaders/textured"));
+  material->setMainTexture(tex);
+
+  mr->setMaterial(material);
+  mf->setMesh(mesh);
+}
+
