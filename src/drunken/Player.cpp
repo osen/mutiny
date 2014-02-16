@@ -27,7 +27,7 @@ void Player::onAwake()
   duckAnimation = Resources::load<Animation>("models/cowboy/hump.anm");
 
   mr->setAnimation(idleAnimation);
-  mr->setFps(4);
+  mr->setFps(1.0f);
   mr->play();
 
   getGameObject()->getTransform()->setPosition(Vector3(0, 1, 0));
@@ -39,9 +39,7 @@ void Player::onAwake()
 
   setupLegs();
 
-  lmr->setAnimation(walkAnimation);
   lmr->setFps(4);
-  lmr->play();
 }
 
 void Player::setupLegs()
@@ -59,12 +57,22 @@ void Player::setupLegs()
 
 void Player::onUpdate()
 {
+  bool shouldIdle = true;
+
   CharacterController* cc = getGameObject()->getComponent<CharacterController>();
 
   if(Input::getKey(KeyCode::RIGHT) == true)
   {
+    lmr->setAnimation(walkAnimation);
+    lmr->play();
+    shouldIdle = false;
     getGameObject()->getTransform()->translate(
       getGameObject()->getTransform()->getForward() * 8 * Time::getDeltaTime());
+  }
+
+  if(shouldIdle == true)
+  {
+    lmr->setAnimation(NULL);
   }
 
   cc->simpleMove(Vector3(0, -5, 0) * Time::getDeltaTime());
