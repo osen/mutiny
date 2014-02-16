@@ -121,7 +121,7 @@ WavefrontParser::WavefrontParser(std::string path)
       }
       else
       {
-        currentMaterial = getMaterialData("");
+        currentMaterial = getMaterialData("noname");
       }
 
       currentMaterialGroup = new MaterialGroupData();
@@ -430,7 +430,7 @@ void WavefrontParser::parseMtl(std::string filename)
       }
       else
       {
-        currentMaterial->name = "";
+        currentMaterial->name = "noname";
       }
 
       currentMaterial->color = glm::vec4(1);

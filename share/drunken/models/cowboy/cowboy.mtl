@@ -1,0 +1,109 @@
+# Blender MTL File: 'None'
+# Material Count: 10
+newmtl 
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd skin.png
+
+
+newmtl Material.001
+Ns 92.156863
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd jeans.png
+
+
+newmtl Material.002
+Ns 92.156863
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.280135 0.272140
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd leather.png
+
+
+newmtl Material.004
+Ns 92.156863
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.535986 0.535986
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd skin.png
+
+
+newmtl Material.005
+Ns 92.156863
+Ka 0.000000 0.000000 0.000000
+Kd 0.216172 0.224168 0.512000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd leather.png
+
+
+newmtl Material.011
+Ns 92.156863
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.535986 0.535986
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd skin.png
+
+
+newmtl _jeans.png
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd jeans.png
+
+
+newmtl _jeans.png_jeans.png
+Ns 0.000000
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.800000 0.800000 0.800000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd jeans.png
+
+
+newmtl _leather.png
+Ns 0
+Ka 0.000000 0.000000 0.000000
+Kd 0.8 0.8 0.8
+Ks 0.8 0.8 0.8
+d 1
+illum 2
+map_Kd leather.png
+
+
+newmtl _leather.png_leather.png
+Ns 0.000000
+Ka 0.000000 0.000000 0.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.800000 0.800000 0.800000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd leather.png
+
+
