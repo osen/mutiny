@@ -21,6 +21,8 @@ private:
   AnimatedMeshRenderer* mr;
   Animation* runAnimation;
 
+  void addCowboy();
+
 };
 
 #endif
