@@ -1,0 +1,28 @@
+f
+t RightLowerArm -0.65 0.84 1.22 -83 -30 0
+t RightUpperArm -0.08 0.03 0.32 -24 -23 0
+f
+t RightLowerArm -0.65 1.00 1.22 -83 -30 0
+t RightUpperArm -0.08 0.20 0.32 -24 -23 0
+f
+t RightLowerArm -0.65 0.84 1.22 -83 -30 0
+t RightUpperArm -0.08 0.03 0.32 -24 -23 0
+f
+t RightLowerArm -0.65 1.00 1.22 -83 -30 0
+t RightUpperArm -0.08 0.20 0.32 -24 -23 0
+f
+t RightLowerArm -0.65 0.84 1.22 -83 -30 0
+t RightUpperArm -0.08 0.03 0.32 -24 -23 0
+f
+t RightLowerArm -0.65 1.00 1.22 -83 -30 0
+t RightUpperArm -0.08 0.20 0.32 -24 -23 0
+f
+t RightLowerArm -1.23 2.04 0.98 -187 -14 -53
+t RightUpperArm -0.24 0.31 0.81 -85 -39 0
+t Hat 0 -0.19 -0.78 -38 5 0
+t Head 0 -0.13 -0.5 -59 4 0
+f
+t RightLowerArm -1.23 2.04 0.98 -187 -14 -53
+t RightUpperArm -0.24 0.31 0.81 -85 -39 0
+t Hat 0 -0.19 -0.78 -38 5 0
+t Head 0 -0.13 -0.5 -59 4 0
