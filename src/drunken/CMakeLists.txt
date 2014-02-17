@@ -9,6 +9,7 @@ add_executable(drunken
   Pickup.cpp
   Horse.cpp
   MenuScreen.cpp
+  Bullet.cpp
 )
 
 target_link_libraries(drunken mutiny)

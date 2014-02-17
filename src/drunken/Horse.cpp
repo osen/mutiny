@@ -87,6 +87,11 @@ void Horse::onUpdate()
   if(cowboyGo != NULL)
   {
     getGameObject()->getTransform()->translate(Vector3(9, 0, 0) * Time::getDeltaTime());
+
+    if(getGameObject()->getTransform()->getPosition().x > 300)
+    {
+      getGameObject()->getTransform()->setPosition(Vector3(0, 0, 0));
+    }
   }
 }
 

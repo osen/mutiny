@@ -1,6 +1,7 @@
 #include "Player.h"
 #include "GameScreen.h"
 #include "GameCamera.h"
+#include "Bullet.h"
 
 #include <iostream>
 
@@ -81,6 +82,7 @@ void Player::onUpdate()
     mr->setAnimation(shootAnimation);
     //mr->play();
     shouldIdle = false;
+    Bullet::create(peacemakerGo);
   }
 
   if(shouldIdle == true)
