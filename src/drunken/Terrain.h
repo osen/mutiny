@@ -14,6 +14,7 @@ public:
   virtual void onAwake();
 
 private:
+  void setupCactusii();
 
 };
 

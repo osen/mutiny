@@ -35,6 +35,33 @@ void Terrain::onAwake()
     tGo->getTransform()->setPosition(Vector3(mesh->getBounds().size.x * i, 0, 20));
     tGo->getTransform()->setRotation(Vector3(0, 180, 0));
   }
+
+  setupCactusii();
+}
+
+void Terrain::setupCactusii()
+{
+  Mesh* mesh = Resources::load<Mesh>("models/cactus/cactus");
+  Texture2d* tex = Resources::load<Texture2d>("models/cactus/cactus");
+
+  for(int i = 0; i < 3; i++)
+  {
+    GameObject* tGo = new GameObject();
+    tGo->getTransform()->setParent(getGameObject()->getTransform());
+    MeshRenderer* mr = tGo->addComponent<MeshRenderer>();
+    MeshFilter* mf = tGo->addComponent<MeshFilter>();
+
+    Material* material = new Material(Resources::load<Material>("shaders/textured"));
+    material->setMainTexture(tex);
+
+    mr->setMaterial(material);
+    mf->setMesh(mesh);
+
+    MeshCollider* meshCollider = tGo->addComponent<MeshCollider>();
+
+    tGo->getTransform()->setPosition(Vector3(mesh->getBounds().size.x * 10 * i, 0, 10));
+    tGo->getTransform()->setRotation(Vector3(0, i * 45, 0));
+  }
 }
 
 void Terrain::onUpdate()
