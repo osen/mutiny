@@ -23,7 +23,7 @@ void Player::onAwake()
 
   walkAnimation = Resources::load<Animation>("models/cowboy/walk.anm");
   idleAnimation = Resources::load<Animation>("models/cowboy/idle.anm");
-  shootAnimation = Resources::load<Animation>("models/cowboy/sprint.anm");
+  shootAnimation = Resources::load<Animation>("models/cowboy/shoot.anm");
   duckAnimation = Resources::load<Animation>("models/cowboy/duck.anm");
 
   mr->setAnimation(idleAnimation);
@@ -71,7 +71,15 @@ void Player::onUpdate()
   else if(Input::getKey(KeyCode::DOWN) == true)
   {
     mr->setAnimation(duckAnimation);
-    mr->play();
+    mr->setFps(1.0f);
+    //mr->play();
+    shouldIdle = false;
+  }
+  else if(Input::getKey(KeyCode::SPACE) == true)
+  {
+    mr->setFps(10.0f);
+    mr->setAnimation(shootAnimation);
+    //mr->play();
     shouldIdle = false;
   }
 
@@ -79,7 +87,8 @@ void Player::onUpdate()
   {
     lmr->setAnimation(NULL);
     mr->setAnimation(idleAnimation);
-    mr->play();
+    mr->setFps(1.0f);
+    //mr->play();
   }
 
   cc->simpleMove(Vector3(0, -5, 0) * Time::getDeltaTime());
