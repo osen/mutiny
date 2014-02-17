@@ -25,7 +25,8 @@ void MenuScreen::onStart()
 {
   horse = Horse::create();
   horse->addCowboy();
-  cameraGo = GameCamera::create(horse->getGameObject());
+  camera = GameCamera::create(horse->getGameObject());
+  camera->toggleEventMode();
   SkyBox::create(horse->getGameObject());
   Terrain::create();
 }

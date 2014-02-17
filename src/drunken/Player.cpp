@@ -18,6 +18,7 @@ Player* Player::create(GameScreen* gameScreen)
 
 void Player::onAwake()
 {
+  shootTimeout = 0;
   mr = getGameObject()->addComponent<AnimatedMeshRenderer>();
   AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/cowboy/cowboy");
   mr->setAnimatedMesh(mesh);
@@ -59,6 +60,7 @@ void Player::onUpdate()
 {
   bool shouldIdle = true;
 
+  shootTimeout -= Time::getDeltaTime();
   CharacterController* cc = getGameObject()->getComponent<CharacterController>();
 
   if(Input::getKey(KeyCode::RIGHT) == true)
@@ -82,7 +84,7 @@ void Player::onUpdate()
     mr->setAnimation(shootAnimation);
     //mr->play();
     shouldIdle = false;
-    Bullet::create(peacemakerGo);
+    tryShoot();
   }
 
   if(shouldIdle == true)
@@ -97,6 +99,22 @@ void Player::onUpdate()
 
   //peacemakerGo->getTransform()->setLocalRotation(Vector3(0, 180, 0));
   //peacemakerGo->getTransform()->setLocalPosition(Vector3(0, 1, 0));
+}
+
+void Player::tryShoot()
+{
+  if(shootTimeout > 0)
+  {
+    return;
+  }
+
+  if(peacemakerGo == NULL)
+  {
+    return;
+  }
+
+  Bullet::create(peacemakerGo);
+  shootTimeout = 0.33333f;
 }
 
 void Player::onGui()

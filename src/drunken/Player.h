@@ -28,8 +28,10 @@ private:
   Animation* duckAnimation;
   GameObject* peacemakerGo;
   GameObject* legsGo;
+  float shootTimeout;
 
   void setupLegs();
+  void tryShoot();
 
 };
 

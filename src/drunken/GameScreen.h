@@ -23,7 +23,7 @@ public:
   Player* getPlayer();
 
 private:
-  GameObject* cameraGo;
+  GameCamera* camera;
   Player* player;
 
 };

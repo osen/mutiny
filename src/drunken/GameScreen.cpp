@@ -25,7 +25,7 @@ void GameScreen::onAwake()
 
 GameCamera* GameScreen::getCamera()
 {
-  return cameraGo->getComponent<GameCamera>();
+  return camera;
 }
 
 void GameScreen::onGui()
@@ -42,7 +42,7 @@ void GameScreen::onStart()
 {
   player = Player::create(this);
   SkyBox::create(player->getGameObject());
-  cameraGo = GameCamera::create(player->getGameObject());
+  camera = GameCamera::create(player->getGameObject());
   Terrain::create();
   Pickup::create(this, PICKUP_GUN);
 

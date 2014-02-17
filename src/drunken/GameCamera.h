@@ -11,7 +11,7 @@ using namespace mutiny::engine;
 class GameCamera : public Behaviour
 {
 public:
-  static GameObject* create(GameObject* playerGo);
+  static GameCamera* create(GameObject* playerGo);
 
   virtual void onAwake();
   virtual void onStart();

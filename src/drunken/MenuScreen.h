@@ -18,7 +18,7 @@ public:
   virtual void onStart();
 
 private:
-  GameObject* cameraGo;
+  GameCamera* camera;
   Horse* horse;
 
 };

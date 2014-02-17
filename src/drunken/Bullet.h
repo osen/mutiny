@@ -18,7 +18,7 @@ public:
 
 private:
   GameObject* emitterGo;
-  Vector3 direction;
+  float lifetime;
 
 };
 

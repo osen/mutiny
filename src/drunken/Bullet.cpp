@@ -17,27 +17,33 @@ Bullet* Bullet::create(GameObject* emitter)
 
 void Bullet::onStart()
 {
+  lifetime = 5;
+
   getGameObject()->getTransform()->setParent(emitterGo->getTransform());
-  getGameObject()->getTransform()->setLocalPosition(Vector3(0, 0, 0));
-  getGameObject()->getTransform()->setLocalRotation(Vector3(0, 0, 0));
+  getGameObject()->getTransform()->setLocalPosition(Vector3(0, -1, 0.3f));
   getGameObject()->getTransform()->setParent(NULL);
+  getGameObject()->getTransform()->setLocalRotation(emitterGo->getTransform()->getParent()->getParent()->getParent()->getRotation());
 
   MeshRenderer* mr = getGameObject()->addComponent<MeshRenderer>();
   MeshFilter* mf = getGameObject()->addComponent<MeshFilter>();
-  Mesh* mesh = Resources::load<Mesh>("models/horse/horse");
-  Texture2d* tex = Resources::load<Texture2d>("models/horse/horse");
+  Mesh* mesh = Resources::load<Mesh>("models/bullet/bullet");
+  Texture2d* tex = Resources::load<Texture2d>("models/bullet/bullet");
   Material* material = new Material(Resources::load<Material>("shaders/textured"));
   material->setMainTexture(tex);
   mf->setMesh(mesh);
   mr->setMaterial(material);
-
-  direction = emitterGo->getTransform()->getParent()->getParent()->getParent()->getForward() * 20.0f;
 }
 
 
 void Bullet::onUpdate()
 {
-  getGameObject()->getTransform()->translate(direction * Time::getDeltaTime());
+  getGameObject()->getTransform()->translate(getGameObject()->getTransform()->getForward() * 20.0f * Time::getDeltaTime());
+  lifetime -= Time::getDeltaTime();
+
+  if(lifetime <= 0)
+  {
+    Object::destroy(getGameObject());
+  }
 }
 
 void Bullet::onGui()

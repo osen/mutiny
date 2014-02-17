@@ -4,13 +4,13 @@
 
 using namespace mutiny::engine;
 
-GameObject* GameCamera::create(GameObject* playerGo)
+GameCamera* GameCamera::create(GameObject* playerGo)
 {
   GameObject* mainGo = new GameObject("GameCamera");
   GameCamera* gameCamera = mainGo->addComponent<GameCamera>();
   gameCamera->playerGo = playerGo;
 
-  return mainGo;
+  return gameCamera;
 }
 
 void GameCamera::toggleEventMode()
@@ -38,7 +38,7 @@ void GameCamera::onAwake()
   blurPass3.reset(new RenderTexture(64, 64));
   mergePass.reset(new RenderTexture(512, 512));
 
-  getGameObject()->getTransform()->setPosition(Vector3(0, 0, -8));
+  getGameObject()->getTransform()->setPosition(Vector3(0, 0, -10));
 
   texturedMaterial = Resources::load<Material>("shaders/bloom/simple_2d");
 
@@ -62,13 +62,15 @@ void GameCamera::onUpdate()
 
   if(eventMode == true)
   {
-    rotationBuffer.push_back(Vector3(20, 180, 0));
-    positionBuffer.push_back(playerGo->getTransform()->getPosition() + Vector3(0, 5, 10));
+    //rotationBuffer.push_back(Vector3(20, 180, 0));
+    //positionBuffer.push_back(playerGo->getTransform()->getPosition() + Vector3(0, 5, 10));
+    rotationBuffer.push_back(Vector3(20, 0, 0));
+    positionBuffer.push_back(playerGo->getTransform()->getPosition() + Vector3(0, 5, -10));
   }
   else
   {
-    rotationBuffer.push_back(Vector3(20, 0, 0));
-    positionBuffer.push_back(playerGo->getTransform()->getPosition() + Vector3(0, 5, -10));
+    rotationBuffer.push_back(Vector3(20, 5, 0));
+    positionBuffer.push_back(playerGo->getTransform()->getPosition() + Vector3(5, 5, -15));
   }
 
   while(positionBuffer.size() > 10)
