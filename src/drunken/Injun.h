@@ -20,6 +20,7 @@ private:
   AnimatedMeshRenderer* mr;
   Animation* walkAnimation;
   Animation* throwAnimation;
+  Animation* catchAnimation;
   GameObject* axeGo;
   float shootTimeout;
   float axeReleaseTimeout;

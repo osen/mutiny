@@ -26,6 +26,7 @@ void Injun::onAwake()
 
   walkAnimation = Resources::load<Animation>("models/injun/walk.anm");
   throwAnimation = Resources::load<Animation>("models/injun/throw.anm");
+  catchAnimation = Resources::load<Animation>("models/injun/catch.anm");
 
   getGameObject()->getTransform()->setRotation(Vector3(0, -90, 0));
   getGameObject()->getTransform()->setPosition(Vector3(20, 0, 0));
@@ -49,6 +50,8 @@ void Injun::onUpdate()
 
     if(axeReleaseTimeout >= 0.55f)
     {
+      mr->setAnimation(catchAnimation);
+      mr->play();
       axeGo->getTransform()->setParent(NULL);
       Vector3 currPos = axeGo->getTransform()->getPosition();
       currPos.y = 3.0f;
@@ -59,12 +62,14 @@ void Injun::onUpdate()
   else
   {
     axeGo->getTransform()->translate(axeVelocity * Time::getDeltaTime());
+    axeGo->getTransform()->rotate(Vector3(1, 0, 0) * 720 * Time::getDeltaTime());
     axeVelocity.x += 30 * Time::getDeltaTime();
 
     if(axeGo->getTransform()->getPosition().x > getGameObject()->getTransform()->getPosition().x)
     {
       shootTimeout = 1.5f;
       grabAxe();
+      mr->setAnimation(NULL);
     }
   }
 
