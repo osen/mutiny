@@ -5,6 +5,7 @@
 #include "Player.h"
 #include "Pickup.h"
 #include "Horse.h"
+#include "Injun.h"
 
 #include <iostream>
 
@@ -48,4 +49,6 @@ void GameScreen::onStart()
 
   Horse* horse = Horse::create();
   horse->wedge();
+
+  Injun::create(this);
 }
