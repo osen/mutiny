@@ -18,10 +18,14 @@ Player* Player::create(GameScreen* gameScreen)
 
 void Player::onAwake()
 {
+  invulnTimeout = 0;
+  health = 3;
   shootTimeout = 0;
   mr = getGameObject()->addComponent<AnimatedMeshRenderer>();
   AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/cowboy/cowboy");
   mr->setAnimatedMesh(mesh);
+
+  heartTexture = Resources::load<Texture2d>("images/heart");
 
   walkAnimation = Resources::load<Animation>("models/cowboy/walk.anm");
   idleAnimation = Resources::load<Animation>("models/cowboy/idle.anm");
@@ -60,6 +64,11 @@ void Player::onUpdate()
 {
   bool shouldIdle = true;
 
+  if(invulnTimeout > 0)
+  {
+    invulnTimeout -= Time::getDeltaTime();
+  }
+
   shootTimeout -= Time::getDeltaTime();
   CharacterController* cc = getGameObject()->getComponent<CharacterController>();
 
@@ -97,6 +106,22 @@ void Player::onUpdate()
 
   cc->simpleMove(Vector3(0, -5, 0) * Time::getDeltaTime());
 
+  std::vector<GameObject*> axeGos;
+  GameObject::findGameObjectsWithTag("axe", &axeGos);
+
+  for(int i = 0; i < axeGos.size(); i++)
+  {
+    if(Vector3::getDistance(axeGos.at(i)->getTransform()->getPosition(),
+                                getGameObject()->getTransform()->getPosition()) < 4 &&
+    mr->getAnimation() != duckAnimation &&
+    invulnTimeout <= 0)
+    {
+      invulnTimeout = 3;
+      health--;
+      Debug::log("ouch!");
+    }
+  }
+
   //peacemakerGo->getTransform()->setLocalRotation(Vector3(0, 180, 0));
   //peacemakerGo->getTransform()->setLocalPosition(Vector3(0, 1, 0));
 }
@@ -119,7 +144,10 @@ void Player::tryShoot()
 
 void Player::onGui()
 {
-
+  for(int i = 0; i < health; i++)
+  {
+    Gui::drawTexture(Rect(10 + ((heartTexture->getWidth() + 5) * i), 10, heartTexture->getWidth(), heartTexture->getHeight()), heartTexture);
+  }
 }
 
 void Player::addPeacemaker()

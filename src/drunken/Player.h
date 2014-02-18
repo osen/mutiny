@@ -29,6 +29,9 @@ private:
   GameObject* peacemakerGo;
   GameObject* legsGo;
   float shootTimeout;
+  int health;
+  float invulnTimeout;
+  Texture2d* heartTexture;
 
   void setupLegs();
   void tryShoot();

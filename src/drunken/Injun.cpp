@@ -111,6 +111,7 @@ void Injun::addAxe()
   Texture2d* tex = Resources::load<Texture2d>("models/axe/axe");
 
   GameObject* tGo = new GameObject();
+  tGo->setTag("axe");
   axeGo = tGo;
 
   MeshRenderer* mr = tGo->addComponent<MeshRenderer>();
