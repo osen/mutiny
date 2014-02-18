@@ -44,7 +44,7 @@ void Terrain::setupCactusii()
   Mesh* mesh = Resources::load<Mesh>("models/cactus/cactus");
   Texture2d* tex = Resources::load<Texture2d>("models/cactus/cactus");
 
-  for(int i = 0; i < 3; i++)
+  for(int i = 0; i < 20; i++)
   {
     GameObject* tGo = new GameObject();
     tGo->getTransform()->setParent(getGameObject()->getTransform());
@@ -59,8 +59,8 @@ void Terrain::setupCactusii()
 
     MeshCollider* meshCollider = tGo->addComponent<MeshCollider>();
 
-    tGo->getTransform()->setPosition(Vector3(mesh->getBounds().size.x * 10 * i, 0, 10));
-    tGo->getTransform()->setRotation(Vector3(0, i * 45, 0));
+    tGo->getTransform()->setPosition(Vector3(Random::range(0, 300), 0, Random::range(3, 10)));
+    tGo->getTransform()->setRotation(Vector3(0, Random::range(0, 360), 0));
   }
 }
 
