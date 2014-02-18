@@ -32,6 +32,7 @@ private:
   int health;
   float invulnTimeout;
   Texture2d* heartTexture;
+  int state;
 
   void setupLegs();
   void tryShoot();

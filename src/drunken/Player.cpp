@@ -5,6 +5,12 @@
 
 #include <iostream>
 
+#define IDLE 0
+#define WALK 1
+#define SHOOT 2
+#define CROUCH 3
+#define CRAWL 4
+
 using namespace mutiny::engine;
 
 Player* Player::create(GameScreen* gameScreen)
@@ -18,6 +24,7 @@ Player* Player::create(GameScreen* gameScreen)
 
 void Player::onAwake()
 {
+  state = IDLE;
   invulnTimeout = 0;
   health = 3;
   shootTimeout = 0;
@@ -72,7 +79,15 @@ void Player::onUpdate()
   shootTimeout -= Time::getDeltaTime();
   CharacterController* cc = getGameObject()->getComponent<CharacterController>();
 
-  if(Input::getKey(KeyCode::RIGHT) == true)
+  if(state == IDLE)
+  {
+    if(Input::getKey(KeyCode::SPACE) == true)
+    {
+      state = round(Random::range(1, 4));
+    }
+  }
+
+  if(state == WALK || state == CRAWL)
   {
     lmr->setAnimation(walkAnimation);
     lmr->play();
@@ -80,14 +95,14 @@ void Player::onUpdate()
     getGameObject()->getTransform()->translate(
       getGameObject()->getTransform()->getForward() * 8 * Time::getDeltaTime());
   }
-  else if(Input::getKey(KeyCode::DOWN) == true)
+  if(state == CROUCH || state == CRAWL)
   {
     mr->setAnimation(duckAnimation);
     mr->setFps(1.0f);
     //mr->play();
     shouldIdle = false;
   }
-  else if(Input::getKey(KeyCode::SPACE) == true)
+  if(state == SHOOT)
   {
     mr->setFps(10.0f);
     mr->setAnimation(shootAnimation);
@@ -102,6 +117,11 @@ void Player::onUpdate()
     mr->setAnimation(idleAnimation);
     mr->setFps(1.0f);
     //mr->play();
+  }
+
+  if(Input::getKey(KeyCode::SPACE) == false)
+  {
+    state = IDLE;
   }
 
   cc->simpleMove(Vector3(0, -5, 0) * Time::getDeltaTime());

@@ -74,6 +74,21 @@ void Injun::onUpdate()
   }
 
   tryThrowAxe();
+
+  std::vector<GameObject*> bulletGos;
+  GameObject::findGameObjectsWithTag("bullet", &bulletGos);
+
+  for(int i = 0; i < bulletGos.size(); i++)
+  {
+    if(Vector3::getDistance(bulletGos.at(i)->getTransform()->getPosition(),
+                                getGameObject()->getTransform()->getPosition()) < 4)
+    {
+      Object::destroy(getGameObject());
+      Object::destroy(axeGo);
+      Object::destroy(bulletGos.at(i));
+      break;
+    }
+  }
 }
 
 void Injun::tryThrowAxe()

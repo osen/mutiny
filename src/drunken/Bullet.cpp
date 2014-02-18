@@ -17,7 +17,8 @@ Bullet* Bullet::create(GameObject* emitter)
 
 void Bullet::onStart()
 {
-  lifetime = 5;
+  lifetime = 1;
+  getGameObject()->setTag("bullet");
 
   getGameObject()->getTransform()->setParent(emitterGo->getTransform());
   getGameObject()->getTransform()->setLocalPosition(Vector3(0, -1, 0.3f));
