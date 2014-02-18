@@ -34,6 +34,7 @@ void Injun::onAwake()
   mr->play();
 
   axeGo = NULL;
+  addAxe();
 }
 
 void Injun::onUpdate()
@@ -60,21 +61,18 @@ void Injun::addAxe()
     return;
   }
 
-  Mesh* mesh = Resources::load<Mesh>("models/peacemaker/peacemaker");
-  Texture2d* tex = Resources::load<Texture2d>("models/peacemaker/peacemaker");
+  Mesh* mesh = Resources::load<Mesh>("models/axe/axe");
+  Texture2d* tex = Resources::load<Texture2d>("models/axe/axe");
 
   GameObject* tGo = new GameObject();
 
   for(int i = 0; i < mr->getRoot()->getTransform()->getChildCount(); i++)
   {
-    if(mr->getRoot()->getTransform()->getChild(i)->getGameObject()->getName() == "RightLowerArm")
+    if(mr->getRoot()->getTransform()->getChild(i)->getGameObject()->getName() == "LeftLowerArm")
     {
       tGo->getTransform()->setParent(mr->getRoot()->getTransform()->getChild(i));
-      //tGo->getTransform()->setLocalRotation(Vector3(-90, 180, 0));
-      //tGo->getTransform()->setLocalPosition(Vector3(0, -2, 0));
-      //tGo->getTransform()->setRotation(Vector3(0, -90, 0));
       tGo->getTransform()->setLocalRotation(Vector3(0, 0, 0));
-      tGo->getTransform()->setLocalPosition(Vector3(0.1f, -1.1f, 0));
+      tGo->getTransform()->setLocalPosition(Vector3(0.1f, -1.0f, 0.4f));
     }
   }
 
