@@ -47,6 +47,7 @@ add_library(mutiny STATIC
   Gui.cpp
   AudioClip.cpp
   AudioSource.cpp
+  Random.cpp
 )
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")

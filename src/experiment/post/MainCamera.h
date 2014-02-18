@@ -14,7 +14,7 @@ public:
 
   virtual void onAwake();
   virtual void onUpdate();
-  virtual void onGui();
+  virtual void onPostRender();
 
 private:
   std::shared_ptr<RenderTexture> originalPass;

@@ -21,7 +21,7 @@ namespace engine
 class Component;
 class Transform;
 
-class GameObject : public Component
+class GameObject : public Object
 {
   friend class Application;
 

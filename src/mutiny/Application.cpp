@@ -30,6 +30,7 @@
 #include <unistd.h>
 #endif
 
+#include <ctime>
 #include <functional>
 #include <iostream>
 
@@ -57,6 +58,7 @@ void Application::init(int argc, char* argv[])
     _internal->argv.push_back(argv[i]);
   }
 
+  srand(time(NULL));
   setupPaths();
   //std::cout << "Paths: " << _internal->engineDataPath << " " << _internal->dataPath << std::endl;
 

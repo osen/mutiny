@@ -47,6 +47,7 @@
 #include "RectOffset.h"
 #include "AudioClip.h"
 #include "AudioSource.h"
+#include "Random.h"
 
 #include "buccaneer/buccaneer.h"
 

@@ -50,7 +50,7 @@ void MainCamera::onUpdate()
   getGameObject()->getTransform()->lookAt(Vector3(0, 0, 0));
 }
 
-void MainCamera::onGui()
+void MainCamera::onPostRender()
 {
   Graphics::setRenderTarget(blurPass1.get());
   Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), originalPass.get(), texturedMaterial);
