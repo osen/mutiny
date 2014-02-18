@@ -18,6 +18,7 @@ Injun* Injun::create(GameScreen* gameScreen)
 
 void Injun::onAwake()
 {
+  axeReleaseTimeout = 0;
   shootTimeout = 0;
   mr = getGameObject()->addComponent<AnimatedMeshRenderer>();
   AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/injun/injun");
@@ -29,10 +30,6 @@ void Injun::onAwake()
   getGameObject()->getTransform()->setRotation(Vector3(0, -90, 0));
   getGameObject()->getTransform()->setPosition(Vector3(20, 0, 0));
 
-  mr->setAnimation(walkAnimation);
-  mr->setFps(1.0f);
-  mr->play();
-
   axeGo = NULL;
   addAxe();
 }
@@ -41,7 +38,37 @@ void Injun::onUpdate()
 {
   bool shouldIdle = true;
 
-  shootTimeout -= Time::getDeltaTime();
+  if(axeGo->getTransform()->getParent() != NULL)
+  {
+    shootTimeout -= Time::getDeltaTime();
+
+    if(shootTimeout <= 0)
+    {
+      axeReleaseTimeout += Time::getDeltaTime();
+    }
+
+    if(axeReleaseTimeout >= 0.55f)
+    {
+      axeGo->getTransform()->setParent(NULL);
+      Vector3 currPos = axeGo->getTransform()->getPosition();
+      currPos.y = 3.0f;
+      axeGo->getTransform()->setPosition(currPos);
+      axeReleaseTimeout = 0;
+    }
+  }
+  else
+  {
+    axeGo->getTransform()->translate(axeVelocity * Time::getDeltaTime());
+    axeVelocity.x += 30 * Time::getDeltaTime();
+
+    if(axeGo->getTransform()->getPosition().x > getGameObject()->getTransform()->getPosition().x)
+    {
+      shootTimeout = 1.5f;
+      grabAxe();
+    }
+  }
+
+  tryThrowAxe();
 }
 
 void Injun::tryThrowAxe()
@@ -51,7 +78,21 @@ void Injun::tryThrowAxe()
     return;
   }
 
-  shootTimeout = 0.33333f;
+  if(axeGo->getTransform()->getParent() == NULL)
+  {
+    return;
+  }
+
+  if(mr->getAnimation() == throwAnimation)
+  {
+    return;
+  }
+
+  mr->setAnimation(throwAnimation);
+  mr->setFps(11.0f);
+  axeReleaseTimeout = 0;
+  axeVelocity = Vector3(-30, 0, 0);
+  mr->playOnce();
 }
 
 void Injun::addAxe()
@@ -65,17 +106,6 @@ void Injun::addAxe()
   Texture2d* tex = Resources::load<Texture2d>("models/axe/axe");
 
   GameObject* tGo = new GameObject();
-
-  for(int i = 0; i < mr->getRoot()->getTransform()->getChildCount(); i++)
-  {
-    if(mr->getRoot()->getTransform()->getChild(i)->getGameObject()->getName() == "LeftLowerArm")
-    {
-      tGo->getTransform()->setParent(mr->getRoot()->getTransform()->getChild(i));
-      tGo->getTransform()->setLocalRotation(Vector3(0, 0, 0));
-      tGo->getTransform()->setLocalPosition(Vector3(0.1f, -1.0f, 0.4f));
-    }
-  }
-
   axeGo = tGo;
 
   MeshRenderer* mr = tGo->addComponent<MeshRenderer>();
@@ -86,5 +116,22 @@ void Injun::addAxe()
 
   mr->setMaterial(material);
   mf->setMesh(mesh);
+
+  grabAxe();
+}
+
+void Injun::grabAxe()
+{
+  GameObject* tGo = axeGo;
+
+  for(int i = 0; i < mr->getRoot()->getTransform()->getChildCount(); i++)
+  {
+    if(mr->getRoot()->getTransform()->getChild(i)->getGameObject()->getName() == "LeftLowerArm")
+    {
+      tGo->getTransform()->setParent(mr->getRoot()->getTransform()->getChild(i));
+      tGo->getTransform()->setLocalRotation(Vector3(0, 0, 0));
+      tGo->getTransform()->setLocalPosition(Vector3(0.1f, -1.0f, 0.4f));
+    }
+  }
 }
 

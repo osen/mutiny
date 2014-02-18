@@ -22,8 +22,11 @@ private:
   Animation* throwAnimation;
   GameObject* axeGo;
   float shootTimeout;
+  float axeReleaseTimeout;
+  Vector3 axeVelocity;
 
   void addAxe();
+  void grabAxe();
   void tryThrowAxe();
 
 };

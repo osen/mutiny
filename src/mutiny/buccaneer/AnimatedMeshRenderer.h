@@ -25,6 +25,7 @@ public:
   void setAnimation(Animation* animation);
   Animation* getAnimation();
   void play();
+  void playOnce();
   void stop();
   bool isPlaying();
   float getFrame();
@@ -40,6 +41,7 @@ private:
   GameObject* rootGo;
   float frame;
   bool playing;
+  bool once;
   float fps;
   bool interpolateEnd;
 
