@@ -18,6 +18,7 @@ Injun* Injun::create(GameScreen* gameScreen)
 
 void Injun::onAwake()
 {
+  getGameObject()->setTag("injun");
   axeReleaseTimeout = 0;
   shootTimeout = 0;
   mr = getGameObject()->addComponent<AnimatedMeshRenderer>();

@@ -152,6 +152,25 @@ void Player::onUpdate()
     }
   }
 
+  axeGos.clear();
+  GameObject::findGameObjectsWithTag("injun", &axeGos);
+
+  for(int i = 0; i < axeGos.size(); i++)
+  {
+    if(Vector3::getDistance(axeGos.at(i)->getTransform()->getPosition(),
+                                getGameObject()->getTransform()->getPosition()) < 4 &&
+    invulnTimeout <= 0)
+    {
+      invulnTimeout = 3;
+      health--;
+
+      if(health <= 0)
+      {
+        Application::loadLevel("died");
+      }
+    }
+  }
+
   //peacemakerGo->getTransform()->setLocalRotation(Vector3(0, 180, 0));
   //peacemakerGo->getTransform()->setLocalPosition(Vector3(0, 1, 0));
 }
