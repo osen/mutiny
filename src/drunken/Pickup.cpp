@@ -16,7 +16,7 @@ GameObject* Pickup::create(GameScreen* gameScreen, int type)
   return mainGo;
 }
 
-void Pickup::onAwake()
+void Pickup::onStart()
 {
   Mesh* mesh = NULL;
   Texture2d* tex = NULL;

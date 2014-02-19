@@ -16,7 +16,7 @@ public:
   static GameObject* create(GameScreen* gameScreen, int type);
 
   virtual void onUpdate();
-  virtual void onAwake();
+  virtual void onStart();
 
 private:
   int type;
