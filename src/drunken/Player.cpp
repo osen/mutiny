@@ -32,6 +32,7 @@ void Player::onAwake()
   AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/cowboy/cowboy");
   mr->setAnimatedMesh(mesh);
 
+  hurtTexture = Resources::load<Texture2d>("images/hurt_tint");
   heartTexture = Resources::load<Texture2d>("images/heart");
 
   walkAnimation = Resources::load<Animation>("models/cowboy/walk.anm");
@@ -84,6 +85,11 @@ void Player::onUpdate()
     if(Input::getKey(KeyCode::SPACE) == true)
     {
       state = round(Random::range(1, 4));
+
+      if(state == SHOOT && peacemakerGo == NULL)
+      {
+        state = WALK;
+      }
     }
   }
 
@@ -138,7 +144,11 @@ void Player::onUpdate()
     {
       invulnTimeout = 3;
       health--;
-      Debug::log("ouch!");
+
+      if(health <= 0)
+      {
+        Application::loadLevel("died");
+      }
     }
   }
 
@@ -164,6 +174,11 @@ void Player::tryShoot()
 
 void Player::onGui()
 {
+  if(invulnTimeout > 0)
+  {
+    Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), hurtTexture);
+  }
+
   for(int i = 0; i < health; i++)
   {
     Gui::drawTexture(Rect(10 + ((heartTexture->getWidth() + 5) * i), 10, heartTexture->getWidth(), heartTexture->getHeight()), heartTexture);

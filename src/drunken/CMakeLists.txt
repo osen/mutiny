@@ -11,6 +11,7 @@ add_executable(drunken
   MenuScreen.cpp
   Bullet.cpp
   Injun.cpp
+  DiedScreen.cpp
 )
 
 target_link_libraries(drunken mutiny)
