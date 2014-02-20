@@ -3,6 +3,7 @@
 #include "Application.h"
 #include "Mathf.h"
 #include "Debug.h"
+#include "internal/pngwrapper.h"
 
 #include <SDL/SDL.h>
 #include <SDL/SDL_image.h>
@@ -92,6 +93,34 @@ void Texture2d::apply()
 
 Texture2d* Texture2d::load(std::string path)
 {
+#ifdef USE_LIBPNG
+  int pngId; std::shared_ptr<void> _pngId;
+
+  pngId = pngwrapper_load(path + ".png");
+
+  if(pngId == 0)
+  {
+    throw std::exception();
+  }
+
+  _pngId.reset(&pngId, std::bind(pngwrapper_unload, pngId));
+
+  Texture2d* texture = new Texture2d(pngwrapper_width(pngId), pngwrapper_height(pngId));
+
+  if(texture->nativeTexture == -1)
+  {
+    glGenTextures(1, &texture->nativeTexture);
+    texture->_nativeTexture.reset(&texture->nativeTexture, std::bind(deleteTexture, texture->nativeTexture));
+  }
+
+  glBindTexture(GL_TEXTURE_2D, texture->nativeTexture);
+  pngwrapper_texture(pngId);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glBindTexture(GL_TEXTURE_2D, 0);
+
+  return texture;
+#else
   std::shared_ptr<SDL_Surface> tmpSurface;
   std::shared_ptr<SDL_Surface> surface;
 
@@ -174,6 +203,7 @@ Texture2d* Texture2d::load(std::string path)
   glBindTexture(GL_TEXTURE_2D, 0);
 
   return texture;
+#endif
 }
 
 }

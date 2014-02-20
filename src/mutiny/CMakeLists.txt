@@ -3,6 +3,7 @@ add_library(mutiny STATIC
   internal/tribox.cpp
   internal/WavefrontParser.cpp
   internal/Internal.cpp
+  internal/pngwrapper.cpp
   buccaneer/AnimatedMeshRenderer.cpp
   buccaneer/AnimatedMesh.cpp
   buccaneer/Animation.cpp
