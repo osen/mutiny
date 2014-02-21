@@ -322,32 +322,6 @@ void Application::loop()
 
       Input::upKeys.push_back(event.key.keysym.sym);
     }
-    else if(event.type == SDL_MOUSEBUTTONUP)
-    {
-      for(int i = 0; i < Input::mouseButtons.size(); i++)
-      {
-        if(Input::mouseButtons.at(i) == event.button.button)
-        {
-          Input::mouseButtons.erase(Input::mouseButtons.begin() + i);
-          i--;
-        }
-      }
-
-      Input::upMouseButtons.push_back(event.button.button);
-    }
-    else if(event.type == SDL_MOUSEBUTTONDOWN)
-    {
-      for(int i = 0; i < Input::mouseButtons.size(); i++)
-      {
-        if(Input::mouseButtons.at(i) == event.button.button)
-        {
-          continue;
-        }
-      }
-
-      Input::mouseButtons.push_back(event.button.button);
-      Input::downMouseButtons.push_back(event.button.button);
-    }
   }
 
   for(int i = 0; i < _internal->gameObjects.size(); i++)
