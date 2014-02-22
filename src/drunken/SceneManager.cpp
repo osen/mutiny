@@ -3,6 +3,8 @@
 #include "MenuScreen.h"
 #include "DiedScreen.h"
 
+#include "GameCamera.h"
+
 using namespace mutiny::engine;
 
 void SceneManager::onAwake()
@@ -23,6 +25,11 @@ void SceneManager::loadLevel()
   if(Application::getLoadedLevelName() == "game")
   {
     GameScreen::create();
+  }
+  else if(Application::getLoadedLevelName() == "level1")
+  {
+    Application::loadLevelAdditive("scenes/level1");
+    GameCamera::create(getGameObject());
   }
   else if(Application::getLoadedLevelName() == "menu")
   {

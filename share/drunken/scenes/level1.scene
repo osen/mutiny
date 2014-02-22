@@ -1,0 +1,10 @@
+go models/terrain/terrain
+n CityBase
+tp 0 0 20
+tr 0 0 0
+
+go
+n Bench
+tp 0 2 10
+tr 0 0 0
+

@@ -33,9 +33,15 @@ void MenuScreen::onStart()
 
 void MenuScreen::onGui()
 {
-  if(Gui::button(Rect(100, 100, 100, 100), "play") == true)
+  if(Gui::button(Rect(100, 100, 100, 50), "play") == true)
   {
     Application::loadLevel("game");
+    return;
+  }
+
+  if(Gui::button(Rect(100, 200, 100, 50), "play city") == true)
+  {
+    Application::loadLevel("level1");
     return;
   }
 }

@@ -41,6 +41,7 @@ public:
   static void run();
   static void quit();
   static void loadLevel(std::string path);
+  static void loadLevelAdditive(std::string path);
   static std::string getLoadedLevelName();
   static std::string getDataPath();
   static int getArgc();

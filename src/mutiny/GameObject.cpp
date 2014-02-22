@@ -7,6 +7,8 @@
 #include "Transform.h"
 #include "Debug.h"
 
+#include "buccaneer/buccaneer.h"
+
 namespace mutiny
 {
 
@@ -22,6 +24,20 @@ GameObject* GameObject::createPrimitive(int primitiveType)
 
   MeshRenderer* meshRenderer = gameObject->addComponent<MeshRenderer>();
   //meshRenderer->setMaterial(material);
+
+  return gameObject;
+}
+
+GameObject* GameObject::createModel(std::string path)
+{
+  // TODO: Do we really want to be creating an AnimatedMesh?
+  // I have only done this because it does much of the work for me
+  // rather than manually loading textures per material group etc...
+  GameObject* gameObject = new GameObject();
+
+  AnimatedMeshRenderer* amr = gameObject->addComponent<AnimatedMeshRenderer>();
+  AnimatedMesh* mesh = Resources::load<AnimatedMesh>(path);
+  amr->setAnimatedMesh(mesh);
 
   return gameObject;
 }

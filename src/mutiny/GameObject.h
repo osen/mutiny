@@ -27,6 +27,7 @@ class GameObject : public Object
 
 public:
   static GameObject* createPrimitive(int primitiveType);
+  static GameObject* createModel(std::string path);
 
   template<class T> static std::vector<Object*> findObjectsOfType()
   {

@@ -14,7 +14,10 @@
 #include "Texture2d.h"
 #include "Gui.h"
 
+#include "Transform.h"
+
 #include "internal/Internal.h"
+#include "internal/Util.h"
 
 #include <GL/glew.h>
 #include <SDL/SDL.h>
@@ -33,6 +36,7 @@
 #include <ctime>
 #include <functional>
 #include <iostream>
+#include <fstream>
 
 namespace mutiny
 {
@@ -435,6 +439,64 @@ void Application::loadLevel()
   for(int i = 0; i < _internal->gameObjects.size(); i++)
   {
     _internal->gameObjects.at(i)->levelWasLoaded();
+  }
+}
+
+void Application::loadLevelAdditive(std::string path)
+{
+  std::ifstream file;
+  std::string line;
+  std::vector<std::string> tokens;
+  GameObject* go;
+
+  file.open(std::string(_internal->dataPath + "/" + path + ".scene").c_str());
+
+  if(file.is_open() == false)
+  {
+    Debug::logWarning("Failed to open scene file '" + path + ".scene'");
+    return;
+  }
+
+  while(file.eof() == false)
+  {
+    getline(file, line);
+    tokens.clear();
+    internal::Util::splitStringWhitespace(line, &tokens);
+
+    if(tokens.size() < 1)
+    {
+      continue;
+    }
+
+    if(tokens.at(0) == "go")
+    {
+      if(tokens.size() > 1)
+      {
+        go = GameObject::createModel(tokens.at(1));
+      }
+      else
+      {
+        go = new GameObject();
+      }
+    }
+    else if(tokens.at(0) == "n")
+    {
+      go->setName(tokens.at(1));
+    }
+    else if(tokens.at(0) == "tp")
+    {
+      go->getTransform()->setPosition(Vector3(
+        atof(tokens.at(1).c_str()),
+        atof(tokens.at(2).c_str()),
+        atof(tokens.at(3).c_str())));
+    }
+    else if(tokens.at(0) == "tr")
+    {
+      go->getTransform()->setRotation(Vector3(
+        atof(tokens.at(1).c_str()),
+        atof(tokens.at(2).c_str()),
+        atof(tokens.at(3).c_str())));
+    }
   }
 }
 
