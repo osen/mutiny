@@ -84,7 +84,7 @@ void Player::onUpdate()
   {
     if(Input::getKey(KeyCode::SPACE) == true)
     {
-      state = round(Random::range(1, 4));
+      state = floor(Random::range(1, 4) + 0.5f);
 
       if(state == SHOOT && peacemakerGo == NULL)
       {

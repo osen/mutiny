@@ -1,10 +1,10 @@
-go models/terrain/terrain
+go models/level1/level1
 n CityBase
-tp 0 0 20
-tr 0 0 0
+tp 0 0 0
+tr 0 180 0
 
 go
 n Bench
 tp 0 2 10
-tr 0 0 0
+tr 0 1 0
 
