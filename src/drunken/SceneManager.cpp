@@ -29,7 +29,7 @@ void SceneManager::loadLevel()
   else if(Application::getLoadedLevelName() == "level1")
   {
     Application::loadLevelAdditive("scenes/level1");
-    GameCamera::create(getGameObject());
+    GameScreen::create();
   }
   else if(Application::getLoadedLevelName() == "menu")
   {

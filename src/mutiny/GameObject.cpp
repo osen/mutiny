@@ -7,6 +7,7 @@
 #include "Transform.h"
 #include "Debug.h"
 
+#include "MeshCollider.h"
 #include "buccaneer/buccaneer.h"
 
 namespace mutiny
@@ -38,6 +39,11 @@ GameObject* GameObject::createModel(std::string path)
   AnimatedMeshRenderer* amr = gameObject->addComponent<AnimatedMeshRenderer>();
   AnimatedMesh* mesh = Resources::load<AnimatedMesh>(path);
   amr->setAnimatedMesh(mesh);
+
+  for(int i = 0; i < amr->getRoot()->getTransform()->getChildCount(); i++)
+  {
+    amr->getRoot()->getTransform()->getChild(i)->getGameObject()->addComponent<MeshCollider>();
+  }
 
   return gameObject;
 }

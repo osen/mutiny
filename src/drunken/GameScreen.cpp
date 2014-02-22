@@ -44,7 +44,12 @@ void GameScreen::onStart()
   player = Player::create(this);
   SkyBox::create(player->getGameObject());
   camera = GameCamera::create(player->getGameObject());
-  Terrain::create();
+
+  if(Application::getLoadedLevelName() == "game")
+  {
+    Terrain::create();
+  }
+
   Pickup::create(this, PICKUP_GUN);
 
   Horse* horse = Horse::create();
