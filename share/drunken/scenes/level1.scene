@@ -1,6 +1,6 @@
 go models/level1/level1
 n CityBase
-tp 0 0 0
+tp 80 0 70
 tr 0 180 0
 
 go
