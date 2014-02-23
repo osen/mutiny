@@ -4,16 +4,17 @@
 
 using namespace mutiny::engine;
 
-SkyBox* SkyBox::create(GameObject* playerGo)
+SkyBox* SkyBox::create(GameObject* playerGo, std::string texturePath)
 {
   GameObject* skyboxGo = new GameObject("SkyBox");
   SkyBox* skybox = skyboxGo->addComponent<SkyBox>();
   skybox->playerGo = playerGo;
+  skybox->texturePath = texturePath;
 
   return skybox;
 }
 
-void SkyBox::onAwake()
+void SkyBox::onStart()
 {
   Debug::log("SkyBox awoken");
 
@@ -113,7 +114,7 @@ void SkyBox::onAwake()
   MeshFilter* meshFilter = getGameObject()->addComponent<MeshFilter>();
   meshFilter->setMesh(mesh);
 
-  Texture2d* texture = Resources::load<Texture2d>("textures/clouds");
+  Texture2d* texture = Resources::load<Texture2d>(texturePath);
 
   //Texture2d* texture = new Texture2d(1, 1);
   //texture->setPixel(0, 0, Color(1, 0, 0));

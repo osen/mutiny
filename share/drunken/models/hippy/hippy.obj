@@ -1,6 +1,6 @@
 # Blender v2.57 (sub 1) OBJ File: 'defender_hippie.blend'
 # www.blender.org
-mtllib defender_hippie.mtl
+mtllib hippy.mtl
 o LeftLowerLeg
 v -0.521531 -2.147940 0.370259
 v -0.398670 -2.141082 0.387279

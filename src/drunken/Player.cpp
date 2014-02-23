@@ -30,6 +30,7 @@ void Player::onAwake()
   shootTimeout = 0;
   mr = getGameObject()->addComponent<AnimatedMeshRenderer>();
   AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/cowboy/cowboy");
+  //AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/tramp/tramp");
   mr->setAnimatedMesh(mesh);
 
   hurtTexture = Resources::load<Texture2d>("images/hurt_tint");

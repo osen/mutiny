@@ -27,7 +27,7 @@ void MenuScreen::onStart()
   horse->addCowboy();
   camera = GameCamera::create(horse->getGameObject());
   camera->toggleEventMode();
-  SkyBox::create(horse->getGameObject());
+  SkyBox::create(horse->getGameObject(), "textures/clouds");
   Terrain::create();
 }
 

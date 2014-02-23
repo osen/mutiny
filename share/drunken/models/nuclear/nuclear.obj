@@ -1,6 +1,6 @@
 # Blender v2.57 (sub 1) OBJ File: 'defiler_nuclear.blend'
 # www.blender.org
-mtllib defiler_nuclear.mtl
+mtllib nuclear.mtl
 o Weapon
 v -2.129021 2.398586 1.940886
 v -2.178346 2.338484 1.940886

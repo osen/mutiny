@@ -42,7 +42,16 @@ Player* GameScreen::getPlayer()
 void GameScreen::onStart()
 {
   player = Player::create(this);
-  SkyBox::create(player->getGameObject());
+
+  if(Application::getLoadedLevelName() == "game")
+  {
+    SkyBox::create(player->getGameObject(), "textures/clouds");
+  }
+  else
+  {
+    SkyBox::create(player->getGameObject(), "textures/polluted_clouds");
+  }
+
   camera = GameCamera::create(player->getGameObject());
 
   if(Application::getLoadedLevelName() == "game")

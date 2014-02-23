@@ -3,18 +3,21 @@
 
 #include <mutiny/mutiny.h>
 
+#include <string>
+
 using namespace mutiny::engine;
 
 class SkyBox : public Behaviour
 {
 public:
-  static SkyBox* create(GameObject* playerGo);
+  static SkyBox* create(GameObject* playerGo, std::string texturePath);
 
-  virtual void onAwake();
+  virtual void onStart();
   virtual void onUpdate();
 
 private:
   GameObject* playerGo;
+  std::string texturePath;
 
 };
 

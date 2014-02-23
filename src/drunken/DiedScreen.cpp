@@ -36,7 +36,7 @@ void DiedScreen::onStart()
 
   setupPlayer();
 
-  SkyBox::create(horse->getGameObject());
+  SkyBox::create(horse->getGameObject(), "textures/clouds");
   GameCamera::create(horse->getGameObject());
 }
 

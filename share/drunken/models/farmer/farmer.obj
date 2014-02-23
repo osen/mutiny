@@ -1,6 +1,6 @@
 # Blender v2.57 (sub 1) OBJ File: 'defender_farmer.blend'
 # www.blender.org
-mtllib defender_farmer.mtl
+mtllib farmer.mtl
 o Weapon
 v -2.460414 2.604596 1.576148
 v -2.342722 2.486904 1.576148
