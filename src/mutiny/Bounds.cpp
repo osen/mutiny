@@ -2,6 +2,7 @@
 #include "Debug.h"
 
 #include <sstream>
+#include <iostream>
 
 namespace mutiny
 {
@@ -16,6 +17,24 @@ Bounds::Bounds(Vector3 center, Vector3 size)
   this->extents = size / 2.0f;
   this->min = center - extents;
   this->max = center + extents;
+}
+
+void Bounds::setMinMax(Vector3 min, Vector3 max)
+{
+  center = (min + max) / 2.0f;
+  extents = max - center;
+  size = extents * 2.0f;
+  this->min = center - extents;
+  this->max = center + extents;
+}
+
+void Bounds::debug()
+{
+  std::cout << "Center: " << center.x << " " << center.y << " " << center.z << std::endl;
+  std::cout << "Size: " << size.x << " " << size.y << " " << size.z << std::endl;
+  std::cout << "Extents: " << extents.x << " " << extents.y << " " << extents.z << std::endl;
+  std::cout << "Min: " << min.x << " " << min.y << " " << min.z << std::endl;
+  std::cout << "Max: " << max.x << " " << max.y << " " << max.z << std::endl;
 }
 
 bool Bounds::intersects(Bounds target)

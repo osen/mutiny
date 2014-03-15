@@ -47,11 +47,13 @@ void Player::onAwake()
 
   getGameObject()->getTransform()->setPosition(Vector3(0, 1, 0));
   getGameObject()->getTransform()->setRotation(Vector3(0, 90, 0));
-  getGameObject()->addComponent<CharacterController>();
 
   peacemakerGo = NULL;
 
   setupLegs();
+
+  getGameObject()->addComponent<CharacterController>();
+  //legsGo->addComponent<CharacterController>();
 
   lmr->setFps(4);
 }
@@ -80,6 +82,7 @@ void Player::onUpdate()
 
   shootTimeout -= Time::getDeltaTime();
   CharacterController* cc = getGameObject()->getComponent<CharacterController>();
+  //CharacterController* cc = legsGo->getComponent<CharacterController>();
 
   if(state == IDLE)
   {

@@ -64,9 +64,9 @@ void GameScreen::onStart()
   Horse* horse = Horse::create();
   horse->wedge();
 
-  for(int i = 0; i < 10; i++)
-  {
-    Injun* injun = Injun::create(this);
-    injun->getGameObject()->getTransform()->setPosition(Vector3(Random::range(20, 400), 0, 0));
-  }
+  //for(int i = 0; i < 10; i++)
+  //{
+  //  Injun* injun = Injun::create(this);
+  //  injun->getGameObject()->getTransform()->setPosition(Vector3(Random::range(20, 400), 0, 0));
+  //}
 }

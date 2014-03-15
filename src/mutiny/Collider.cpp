@@ -5,6 +5,10 @@
 #include "Transform.h"
 #include "Matrix4x4.h"
 #include "Debug.h"
+#include "Exception.h"
+
+#include "buccaneer/AnimatedMeshRenderer.h"
+#include "buccaneer/AnimatedMesh.h"
 
 #include <sstream>
 
@@ -41,7 +45,8 @@ void Collider::updateBounds()
   Mesh* mesh = NULL;
   MeshFilter* meshFilter = NULL;
 
-  bounds = Bounds(Vector3(0, 0, 0), Vector3(2, 2, 2));
+  //bounds = Bounds(Vector3(0, 0, 0), Vector3(2, 2, 2));
+  //bounds.debug();
   meshFilter = getGameObject()->getComponent<MeshFilter>();
 
   if(meshFilter != NULL)
@@ -51,6 +56,24 @@ void Collider::updateBounds()
     if(mesh != NULL)
     {
       bounds = mesh->getBounds();
+    }
+  }
+  else
+  {
+    AnimatedMeshRenderer* amr;
+    AnimatedMesh* animatedMesh;
+
+    amr = getGameObject()->getComponent<AnimatedMeshRenderer>();
+
+    if(amr == NULL)
+    {
+      throw Exception("Cannot add collider since there is no MeshRenderer or AnimatedMeshRenderer");
+    }
+
+    if(amr->getAnimatedMesh() != NULL)
+    {
+      bounds = amr->getAnimatedMesh()->getBounds();
+      bounds.debug();
     }
   }
 }

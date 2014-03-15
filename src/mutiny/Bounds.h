@@ -21,6 +21,9 @@ public:
   Bounds(Vector3 center, Vector3 size);
 
   bool intersects(Bounds target);
+  void setMinMax(Vector3 min, Vector3 max);
+
+  void debug();
 
 };
 

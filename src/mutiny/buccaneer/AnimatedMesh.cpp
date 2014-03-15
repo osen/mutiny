@@ -20,6 +20,9 @@ AnimatedMesh* AnimatedMesh::load(std::string path)
   std::vector<std::vector<int> > triangles;
   int currentSubmesh = 0;
   std::unique_ptr<AnimatedMesh> animatedMesh(new AnimatedMesh());
+  Vector3 boundsMax;
+  Vector3 boundsMin;
+  bool boundsSet = false;
 
   for(int p = 0; p < modelData->parts.size(); p++)
   {
@@ -95,6 +98,16 @@ AnimatedMesh* AnimatedMesh::load(std::string path)
       currentSubmesh++;
     }
 
+    if(boundsSet == false) { boundsMax = max; boundsMin = min; boundsSet = true; }
+
+    if(max.x > boundsMax.x) boundsMax.x = max.x;
+    if(max.y > boundsMax.y) boundsMax.y = max.y;
+    if(max.z > boundsMax.z) boundsMax.z = max.z;
+
+    if(min.x < boundsMin.x) boundsMin.x = min.x;
+    if(min.y < boundsMin.y) boundsMin.y = min.y;
+    if(min.z < boundsMin.z) boundsMin.z = min.z;
+
     Vector3 offset = (max + min) / 2.0f;
     animatedMesh->meshOffsets.push_back(offset);
 
@@ -120,6 +133,8 @@ AnimatedMesh* AnimatedMesh::load(std::string path)
 
     //Debug::log("Loaded part");
   }
+
+  animatedMesh->bounds.setMinMax(boundsMin, boundsMax);
 
   return animatedMesh.release();
 }
