@@ -20,6 +20,7 @@ Mesh* Mesh::load(std::string path)
   internal::WavefrontParser parser(path + ".obj");
   internal::ModelData* modelData = parser.getModelData();
   std::vector<Vector3> vertices;
+  std::vector<Vector3> normals;
   std::vector<Vector2> uv;
   std::vector<Color> colors;
   std::vector<std::vector<int> > triangles;
@@ -45,6 +46,10 @@ Mesh* Mesh::load(std::string path)
         triangles.at(currentSubmesh).push_back(vertices.size());
         vertices.push_back(Vector3(face->c.position.x, face->c.position.y, face->c.position.z));
 
+        normals.push_back(Vector3(face->a.normal.x, face->a.normal.y, face->a.normal.z));
+        normals.push_back(Vector3(face->b.normal.x, face->b.normal.y, face->b.normal.z));
+        normals.push_back(Vector3(face->c.normal.x, face->c.normal.y, face->c.normal.z));
+
         uv.push_back(Vector2(face->a.coord.x, face->a.coord.y));
         uv.push_back(Vector2(face->b.coord.x, face->b.coord.y));
         uv.push_back(Vector2(face->c.coord.x, face->c.coord.y));
@@ -69,6 +74,7 @@ Mesh* Mesh::load(std::string path)
 
   Mesh* mesh = new Mesh();
   mesh->setVertices(vertices);
+  mesh->setNormals(normals);
   mesh->setUv(uv);
   mesh->setColors(colors);
 
@@ -124,6 +130,11 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
     this->triangles.push_back(triangles);
   }
 
+  if(normals.size() > 0)
+  {
+    std::cout << normals.size() << std::endl;
+  }
+
   recalculateBounds();
 
   std::vector<float> values;
@@ -142,6 +153,30 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
 
   glBindBuffer(GL_ARRAY_BUFFER, positionBufferId);
   glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_STATIC_DRAW);
+
+// Normals
+
+  if(normals.size() > 0)
+  {
+    values.clear();
+
+    for(int i = 0; i < triangles.size(); i++)
+    {
+      values.push_back(normals.at(triangles.at(i)).x);
+      values.push_back(normals.at(triangles.at(i)).y);
+      values.push_back(normals.at(triangles.at(i)).z);
+    }
+
+    GLuint normalBufferId = 0;
+    glGenBuffers(1, &normalBufferId);
+    normalBufferIds.push_back(normalBufferId);
+    _normalBufferIds.push_back(std::shared_ptr<GLuint>(&normalBufferId, std::bind(freeBuffer, normalBufferId)));
+
+    glBindBuffer(GL_ARRAY_BUFFER, normalBufferId);
+    glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_STATIC_DRAW);
+  }
+
+// UVs
 
   values.clear();
 

@@ -5,9 +5,7 @@
 uniform sampler2D in_Texture;
 uniform float in_Pulse;
 
-varying vec3 ex_Normal;
 varying vec2 ex_Uv;
-varying vec3 ex_L;
 
 void main()
 {
