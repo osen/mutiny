@@ -16,6 +16,7 @@ AnimatedMesh* AnimatedMesh::load(std::string path)
   internal::WavefrontParser parser(path + ".obj");
   internal::ModelData* modelData = parser.getModelData();
   std::vector<Vector3> vertices;
+  std::vector<Vector3> normals;
   std::vector<Vector2> uv;
   std::vector<std::vector<int> > triangles;
   int currentSubmesh = 0;
@@ -90,6 +91,10 @@ AnimatedMesh* AnimatedMesh::load(std::string path)
         triangles.at(currentSubmesh).push_back(vertices.size());
         vertices.push_back(Vector3(face->c.position.x, face->c.position.y, face->c.position.z));
 
+        normals.push_back(Vector3(face->a.normal.x, face->a.normal.y, face->a.normal.z));
+        normals.push_back(Vector3(face->b.normal.x, face->b.normal.y, face->b.normal.z));
+        normals.push_back(Vector3(face->c.normal.x, face->c.normal.y, face->c.normal.z));
+
         uv.push_back(Vector2(face->a.coord.x, face->a.coord.y));
         uv.push_back(Vector2(face->b.coord.x, face->b.coord.y));
         uv.push_back(Vector2(face->c.coord.x, face->c.coord.y));
@@ -119,6 +124,7 @@ AnimatedMesh* AnimatedMesh::load(std::string path)
     Mesh* mesh = new Mesh();
     animatedMesh->meshes.push_back(std::shared_ptr<Mesh>(mesh));
     mesh->setVertices(vertices);
+    mesh->setNormals(normals);
     mesh->setUv(uv);
 
     for(int i = 0; i < triangles.size(); i++)
@@ -128,6 +134,7 @@ AnimatedMesh* AnimatedMesh::load(std::string path)
 
     vertices.clear();
     uv.clear();
+    normals.clear();
     triangles.clear();
     currentSubmesh = 0;
 

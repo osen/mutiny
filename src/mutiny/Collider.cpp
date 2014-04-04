@@ -35,8 +35,6 @@ Bounds Collider::getBounds()
 
 void Collider::awake()
 {
-  Debug::log("Collider awaken");
-
   updateBounds();
 }
 
@@ -73,7 +71,7 @@ void Collider::updateBounds()
     if(amr->getAnimatedMesh() != NULL)
     {
       bounds = amr->getAnimatedMesh()->getBounds();
-      bounds.debug();
+      //bounds.debug();
     }
   }
 }

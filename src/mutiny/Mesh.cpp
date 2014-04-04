@@ -130,11 +130,6 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
     this->triangles.push_back(triangles);
   }
 
-  if(normals.size() > 0)
-  {
-    std::cout << normals.size() << std::endl;
-  }
-
   recalculateBounds();
 
   std::vector<float> values;
