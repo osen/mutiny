@@ -6,7 +6,6 @@
 #include "Color.h"
 
 #include <memory>
-
 #include <vector>
 
 namespace mutiny
@@ -40,6 +39,10 @@ public:
   void setCullMask(int cullMask);
 
 private:
+  static std::vector<Camera*> allCameras;
+  static Camera* current;
+  static Camera* main;
+
   Color backgroundColor;
   float fieldOfView;
   bool orthographic;

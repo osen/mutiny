@@ -11,13 +11,10 @@ namespace internal
 
 Internal::Internal()
 {
-  mainCamera = NULL;
-  currentCamera = NULL;
   skin = NULL;
   currentMaterial = NULL;
   graphicsDefaultMaterial = NULL;
   graphicsRenderTarget = NULL;
-  renderTextureActive = NULL;
 }
 
 }

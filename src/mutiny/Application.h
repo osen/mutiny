@@ -48,6 +48,18 @@ public:
   static std::string getArgv(int i);
 
 private:
+  static SDL_Surface* screen;
+  static bool running;
+  static bool initialized;
+  static std::string loadedLevelName;
+  static std::string levelChange;
+  static std::string dataPath;
+  static std::string engineDataPath;
+  static std::vector<std::shared_ptr<GameObject> > gameObjects;
+
+  static int argc;
+  static std::vector<std::string> argv;
+
   static std::shared_ptr<internal::Internal> _internal;
 
   static void loadLevel();

@@ -25,24 +25,6 @@ namespace internal
 class Internal
 {
 public:
-  //std::shared_ptr<SDL_Surface> screen;
-  SDL_Surface* screen;
-  bool running;
-  bool initialized;
-  std::string loadedLevelName;
-  std::string levelChange;
-  std::string dataPath;
-  std::string engineDataPath;
-  std::vector<std::shared_ptr<GameObject> > gameObjects;
-
-  int argc;
-  std::vector<std::string> argv;
-
-  // Camera
-  Camera* mainCamera;
-  Camera* currentCamera;
-  std::vector<Camera*> allCameras;
-
   // Gui
   GuiSkin* skin;
 
@@ -54,12 +36,6 @@ public:
   // Graphics
   Material* graphicsDefaultMaterial;
   RenderTexture* graphicsRenderTarget;
-
-  // RenderTexture
-  RenderTexture* renderTextureActive;
-
-  int screenWidth;
-  int screenHeight;
 
   Internal();
 

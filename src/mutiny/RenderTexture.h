@@ -25,6 +25,8 @@ public:
   virtual ~RenderTexture();
 
 private:
+  static RenderTexture* active;
+
   GLuint nativeFrameBuffer;
   std::shared_ptr<void> _nativeFrameBuffer;
 

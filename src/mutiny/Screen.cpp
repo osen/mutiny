@@ -7,14 +7,17 @@ namespace mutiny
 namespace engine
 {
 
+int Screen::width;
+int Screen::height;
+
 int Screen::getWidth()
 {
-  return Application::getInternal()->screenWidth;
+  return width;
 }
 
 int Screen::getHeight()
 {
-  return Application::getInternal()->screenHeight;
+  return height;
 }
 
 }

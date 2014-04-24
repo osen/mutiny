@@ -18,6 +18,8 @@ namespace mutiny
 namespace engine
 {
 
+RenderTexture* RenderTexture::active;
+
 RenderTexture::RenderTexture(int width, int height)
 {
   this->width = width;
@@ -73,7 +75,7 @@ RenderTexture::~RenderTexture()
 
 void RenderTexture::setActive(RenderTexture* renderTexture)
 {
-  if(Application::getInternal()->renderTextureActive == renderTexture)
+  if(active == renderTexture)
   {
     return;
   }
@@ -89,12 +91,12 @@ void RenderTexture::setActive(RenderTexture* renderTexture)
     glViewport(0, 0, Screen::getWidth(), Screen::getHeight());
   }
 
-  Application::getInternal()->renderTextureActive = renderTexture;
+  active = renderTexture;
 }
 
 RenderTexture* RenderTexture::getActive()
 {
-  return Application::getInternal()->renderTextureActive;
+  return active;
 }
 
 }

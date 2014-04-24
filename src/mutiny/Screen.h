@@ -17,6 +17,10 @@ public:
   static int getWidth();
   static int getHeight();
 
+private:
+  static int width;
+  static int height;
+
 };
 
 }

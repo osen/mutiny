@@ -45,6 +45,16 @@ namespace engine
 {
 
 std::shared_ptr<internal::Internal> Application::_internal;
+std::vector<std::shared_ptr<GameObject> > Application::gameObjects;
+SDL_Surface* Application::screen;
+bool Application::running;
+bool Application::initialized;
+std::string Application::loadedLevelName;
+std::string Application::levelChange;
+std::string Application::dataPath;
+std::string Application::engineDataPath;
+int Application::argc;
+std::vector<std::string> Application::argv;
 
 void Application::init(int argc, char* argv[])
 {
@@ -54,17 +64,17 @@ void Application::init(int argc, char* argv[])
   }
 
   _internal.reset(new internal::Internal());
-  _internal->running = false;
-  _internal->argc = argc;
+  running = false;
+  Application::argc = argc;
 
   for(int i = 0; i < argc; i++)
   {
-    _internal->argv.push_back(argv[i]);
+    Application::argv.push_back(argv[i]);
   }
 
   srand(time(NULL));
   setupPaths();
-  //std::cout << "Paths: " << _internal->engineDataPath << " " << _internal->dataPath << std::endl;
+  //std::cout << "Paths: " << engineDataPath << " " << dataPath << std::endl;
 
   if(SDL_Init(SDL_INIT_EVERYTHING) == -1)
   {
@@ -72,11 +82,11 @@ void Application::init(int argc, char* argv[])
     throw std::exception();
   }
 
-  //_internal->screen.reset(SDL_SetVideoMode(800, 600, 32, SDL_OPENGL | SDL_RESIZABLE), std::bind(SDL_Quit));
-  _internal->screen = SDL_SetVideoMode(800, 600, 32, SDL_OPENGL | SDL_RESIZABLE);
+  //screen.reset(SDL_SetVideoMode(800, 600, 32, SDL_OPENGL | SDL_RESIZABLE), std::bind(SDL_Quit));
+  screen = SDL_SetVideoMode(800, 600, 32, SDL_OPENGL | SDL_RESIZABLE);
 
-  //if(_internal->screen.get() == NULL)
-  if(_internal->screen == NULL)
+  //if(screen.get() == NULL)
+  if(screen == NULL)
   {
     std::cout << "Error: Failed to create rendering context" << std::endl;
     throw std::exception();
@@ -119,6 +129,10 @@ void Application::init(int argc, char* argv[])
 
   _internal->defaultGuiSkin.reset(new GuiSkin());
 
+  RenderTexture::active = NULL;
+  Camera::current = NULL;
+  Camera::main = NULL;
+
   //displaySplash();
 }
 
@@ -128,8 +142,8 @@ void Application::setupPaths()
   std::string basename;
 
 #ifdef EMSCRIPTEN
-  _internal->engineDataPath = "share/mutiny";
-  _internal->dataPath = "share/_data";
+  engineDataPath = "share/mutiny";
+  dataPath = "share/_data";
 #elif WINDOWS
   char strExePath [MAX_PATH];
 
@@ -140,14 +154,14 @@ void Application::setupPaths()
   dirname = dirname.substr(0, dirname.find_last_of("\\"));
   dirname = dirname.substr(0, dirname.find_last_of("\\"));
 
-  _internal->engineDataPath = dirname + "/share/mutiny";
-  _internal->dataPath = dirname + "/share" + basename;
+  engineDataPath = dirname + "/share/mutiny";
+  dataPath = dirname + "/share" + basename;
 #else
   FILE* process = NULL;
   std::string command;
   char buffer[8];
 
-  command = "cd `dirname \\`which " + std::string(_internal->argv.at(0)) + "\\``; cd ..; pwd | tr -d '\n'";
+  command = "cd `dirname \\`which " + std::string(argv.at(0)) + "\\``; cd ..; pwd | tr -d '\n'";
   process = popen(command.c_str(), "r");
 
   if(process == NULL)
@@ -162,7 +176,7 @@ void Application::setupPaths()
   }
 
   pclose(process);
-  command = "basename " + std::string(_internal->argv.at(0)) + " | tr -d '\n'";
+  command = "basename " + std::string(argv.at(0)) + " | tr -d '\n'";
   process = popen(command.c_str(), "r");
 
   if(process == NULL)
@@ -178,8 +192,8 @@ void Application::setupPaths()
 
   pclose(process);
 
-  _internal->engineDataPath = dirname + "/share/mutiny";
-  _internal->dataPath = dirname + "/share/" + basename;
+  engineDataPath = dirname + "/share/mutiny";
+  dataPath = dirname + "/share/" + basename;
 #endif
 }
 
@@ -191,12 +205,19 @@ void Application::destroy()
   }
 
   // TODO: Running is a flag, not a reliable state
-  if(_internal->running == true)
+  if(running == true)
   {
     throw std::exception();
   }
 
   _internal.reset();
+
+  Camera::allCameras.clear();
+  gameObjects.clear();
+  Resources::paths.clear();
+  Resources::objects.clear();
+
+  SDL_Quit();
 }
 
 void Application::displaySplash()
@@ -208,29 +229,29 @@ void Application::displaySplash()
 
 void Application::run()
 {
-  if(_internal->running == true)
+  if(running == true)
   {
     return;
   }
 
   //displaySplash();
 
-  _internal->running = true;
+  running = true;
 
 #ifdef EMSCRIPTEN
   //loop();
   emscripten_set_main_loop(loop, 60, true);
 #else
-  while(_internal->running == true)
+  while(running == true)
   {
     loop();
   }
 
-  _internal->running = false;
+  running = false;
 
-  for(int i = 0; i < _internal->gameObjects.size(); i++)
+  for(int i = 0; i < gameObjects.size(); i++)
   {
-    _internal->gameObjects.at(i)->destroy();
+    gameObjects.at(i)->destroy();
   }
 #endif
 }
@@ -245,8 +266,8 @@ void Application::loop()
   Time::deltaTime = diff / 1000.0f;
   lastTime = time;
 
-  _internal->screenWidth = _internal->screen->w;
-  _internal->screenHeight = _internal->screen->h;
+  Screen::width = screen->w;
+  Screen::height = screen->h;
 
   Input::downKeys.clear();
   Input::upKeys.clear();
@@ -257,13 +278,13 @@ void Application::loop()
   {
     if(event.type == SDL_QUIT)
     {
-      _internal->running = false;
+      running = false;
     }
     else if(event.type == SDL_VIDEORESIZE)
     {
-      _internal->screenWidth = event.resize.w;
-      _internal->screenHeight = event.resize.h;
-      _internal->screen = SDL_SetVideoMode(_internal->screenWidth, _internal->screenHeight, 32, SDL_OPENGL | SDL_RESIZABLE);
+      Screen::width = event.resize.w;
+      Screen::height = event.resize.h;
+      screen = SDL_SetVideoMode(Screen::width, Screen::height, 32, SDL_OPENGL | SDL_RESIZABLE);
     }
     else if(event.type == SDL_MOUSEMOTION)
     {
@@ -328,19 +349,19 @@ void Application::loop()
     }
   }
 
-  for(int i = 0; i < _internal->gameObjects.size(); i++)
+  for(int i = 0; i < gameObjects.size(); i++)
   {
-    _internal->gameObjects.at(i)->update();
+    gameObjects.at(i)->update();
   }
 
   std::vector<std::shared_ptr<GameObject> > destroyedGos;
-  for(int i = 0; i < _internal->gameObjects.size(); i++)
+  for(int i = 0; i < gameObjects.size(); i++)
   {
-    if(_internal->gameObjects.at(i)->destroyed == true)
+    if(gameObjects.at(i)->destroyed == true)
     {
-      _internal->gameObjects.at(i)->destroy();
-      destroyedGos.push_back(_internal->gameObjects.at(i));
-      _internal->gameObjects.erase(_internal->gameObjects.begin() + i);
+      gameObjects.at(i)->destroy();
+      destroyedGos.push_back(gameObjects.at(i));
+      gameObjects.erase(gameObjects.begin() + i);
       i--;
     }
   }
@@ -357,70 +378,70 @@ void Application::loop()
       continue;
     }
 
-    _internal->currentCamera = Camera::getAllCameras()->at(h);
+    Camera::current = Camera::getAllCameras()->at(h);
 
-    if(_internal->currentCamera->targetTexture != NULL)
+    if(Camera::getCurrent()->targetTexture != NULL)
     {
-      RenderTexture::setActive(_internal->currentCamera->targetTexture);
+      RenderTexture::setActive(Camera::getCurrent()->targetTexture);
     }
 
     //glClearColor(0.2f, 0.2f, 0.5f, 1.0f);
-    Color clearColor = _internal->currentCamera->getBackgroundColor();
+    Color clearColor = Camera::getCurrent()->getBackgroundColor();
     glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    for(int i = 0; i < _internal->gameObjects.size(); i++)
+    for(int i = 0; i < gameObjects.size(); i++)
     {
-      if((_internal->currentCamera->getCullMask() & _internal->gameObjects.at(i)->getLayer()) !=
-        _internal->gameObjects.at(i)->getLayer())
+      if((Camera::getCurrent()->getCullMask() & gameObjects.at(i)->getLayer()) !=
+        gameObjects.at(i)->getLayer())
       {
         continue;
       }
 
-      _internal->gameObjects.at(i)->render();
+      gameObjects.at(i)->render();
     }
 
-    if(_internal->currentCamera->targetTexture != NULL)
+    if(Camera::getCurrent()->targetTexture != NULL)
     {
       RenderTexture::setActive(NULL);
     }
   }
 
-  for(int i = 0; i < _internal->gameObjects.size(); i++)
+  for(int i = 0; i < gameObjects.size(); i++)
   {
-    _internal->gameObjects.at(i)->postRender();
+    gameObjects.at(i)->postRender();
   }
 
-  for(int i = 0; i < _internal->gameObjects.size(); i++)
+  for(int i = 0; i < gameObjects.size(); i++)
   {
-    _internal->gameObjects.at(i)->gui();
+    gameObjects.at(i)->gui();
   }
 
   SDL_GL_SwapBuffers();
 
-  if(_internal->levelChange != "")
+  if(levelChange != "")
   {
-    _internal->loadedLevelName = _internal->levelChange;
-    _internal->levelChange = "";
+    loadedLevelName = levelChange;
+    levelChange = "";
     loadLevel();
   }
 }
 
 void Application::quit()
 {
-  _internal->running = false;
+  running = false;
 }
 
 void Application::loadLevel()
 {
   std::vector<std::shared_ptr<GameObject> > destroyedGos;
-  for(int i = 0; i < _internal->gameObjects.size(); i++)
+  for(int i = 0; i < gameObjects.size(); i++)
   {
-    if(_internal->gameObjects.at(i)->destroyOnLoad == true)
+    if(gameObjects.at(i)->destroyOnLoad == true)
     {
-      _internal->gameObjects.at(i)->destroy();
-      destroyedGos.push_back(_internal->gameObjects.at(i));
-      _internal->gameObjects.erase(_internal->gameObjects.begin() + i);
+      gameObjects.at(i)->destroy();
+      destroyedGos.push_back(gameObjects.at(i));
+      gameObjects.erase(gameObjects.begin() + i);
       i--;
     }
   }
@@ -436,9 +457,9 @@ void Application::loadLevel()
     }
   }
 
-  for(int i = 0; i < _internal->gameObjects.size(); i++)
+  for(int i = 0; i < gameObjects.size(); i++)
   {
-    _internal->gameObjects.at(i)->levelWasLoaded();
+    gameObjects.at(i)->levelWasLoaded();
   }
 }
 
@@ -449,7 +470,7 @@ void Application::loadLevelAdditive(std::string path)
   std::vector<std::string> tokens;
   GameObject* go;
 
-  file.open(std::string(_internal->dataPath + "/" + path + ".scene").c_str());
+  file.open(std::string(dataPath + "/" + path + ".scene").c_str());
 
   if(file.is_open() == false)
   {
@@ -502,35 +523,35 @@ void Application::loadLevelAdditive(std::string path)
 
 void Application::loadLevel(std::string path)
 {
-  if(_internal->running == true)
+  if(running == true)
   {
-    _internal->levelChange = path;
+    levelChange = path;
   }
   else
   {
-    _internal->loadedLevelName = path;
+    loadedLevelName = path;
     loadLevel();
   }
 }
 
 std::string Application::getLoadedLevelName()
 {
-  return _internal->loadedLevelName;
+  return loadedLevelName;
 }
 
 std::string Application::getDataPath()
 {
-  return _internal->dataPath;
+  return dataPath;
 }
 
 int Application::getArgc()
 {
-  return _internal->argc;
+  return argc;
 }
 
 std::string Application::getArgv(int i)
 {
-  return _internal->argv.at(i);
+  return argv.at(i);
 }
 
 internal::Internal* Application::getInternal()

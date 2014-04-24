@@ -45,7 +45,7 @@ public:
     // Game specific resources
     try
     {
-      t = T::load(Application::getInternal()->dataPath + "/" + path);
+      t = T::load(Application::dataPath + "/" + path);
     }
     catch(std::exception& e){}
 
@@ -54,7 +54,7 @@ public:
     {
       try
       {
-        t = T::load(Application::getInternal()->engineDataPath + "/" + path);
+        t = T::load(Application::engineDataPath + "/" + path);
       }
       catch(std::exception& e){}
     }

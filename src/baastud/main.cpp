@@ -18,6 +18,8 @@ void safe_main(int argc, char* argv[])
   smGo->addComponent<SceneManager>();
 
   Application::run();
+
+  Application::destroy();
 }
 
 int main(int argc, char* argv[])

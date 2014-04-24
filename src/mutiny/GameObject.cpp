@@ -52,7 +52,7 @@ GameObject::GameObject(std::string name)
 {
   setName(name);
   addComponent<Transform>();
-  Application::getInternal()->gameObjects.push_back(std::shared_ptr<GameObject>(this));
+  Application::gameObjects.push_back(std::shared_ptr<GameObject>(this));
   activeSelf = true;
   layer = 1 << 0;
 }
@@ -60,7 +60,7 @@ GameObject::GameObject(std::string name)
 GameObject::GameObject()
 {
   addComponent<Transform>();
-  Application::getInternal()->gameObjects.push_back(std::shared_ptr<GameObject>(this));
+  Application::gameObjects.push_back(std::shared_ptr<GameObject>(this));
   activeSelf = true;
   layer = 1 << 0;
 }
@@ -186,11 +186,11 @@ void GameObject::setTag(std::string tag)
 
 void GameObject::findGameObjectsWithTag(std::string tag, std::vector<GameObject*>* gameObjects)
 {
-  for(int i = 0; i < Application::getInternal()->gameObjects.size(); i++)
+  for(int i = 0; i < Application::gameObjects.size(); i++)
   {
-    if(Application::getInternal()->gameObjects.at(i)->getTag() == tag)
+    if(Application::gameObjects.at(i)->getTag() == tag)
     {
-      gameObjects->push_back(Application::getInternal()->gameObjects.at(i).get());
+      gameObjects->push_back(Application::gameObjects.at(i).get());
     }
   }
 }
