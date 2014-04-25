@@ -21,10 +21,12 @@ class Matrix4x4;
 class Mesh;
 class Camera;
 class Gui;
+class Application;
 
 class Graphics
 {
   friend class mutiny::engine::Gui;
+  friend class mutiny::engine::Application;
 
 public:
   static void setRenderTarget(RenderTexture* renderTarget);
@@ -36,6 +38,9 @@ public:
   static void drawMeshNow(Mesh* mesh, Matrix4x4 matrix, int materialIndex);
 
 private:
+  static Material* defaultMaterial;
+  static RenderTexture* renderTarget;
+
   static void drawMeshNow(Mesh* mesh, int materialIndex);
 
 };

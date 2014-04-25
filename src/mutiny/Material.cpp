@@ -18,6 +18,7 @@ namespace mutiny
 namespace engine
 {
 
+Material* Material::current = NULL;
 Material* Material::defaultMaterial = NULL;
 Material* Material::guiMaterial = NULL;
 Material* Material::particleMaterial = NULL;
@@ -221,7 +222,7 @@ void Material::setShader(Shader* shader)
 
 void Material::setPass(int pass)
 {
-  Application::getInternal()->currentMaterial = this;
+  Material::current = this;
   glUseProgram(shader->programId);
 }
 

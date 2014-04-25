@@ -12,6 +12,8 @@ namespace mutiny
 namespace engine
 {
 
+GuiSkin* GuiSkin::_default;
+
 GuiSkin::GuiSkin()
 {
   Texture2d* tex = NULL;

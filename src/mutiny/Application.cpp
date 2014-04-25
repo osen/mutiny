@@ -13,7 +13,7 @@
 #include "Debug.h"
 #include "Texture2d.h"
 #include "Gui.h"
-
+#include "Graphics.h"
 #include "Transform.h"
 
 #include "internal/Internal.h"
@@ -124,14 +124,17 @@ void Application::init(int argc, char* argv[])
   Material::particleMaterial = Resources::load<Material>("shaders/default_particle");
   Object::dontDestroyOnLoad(Material::particleMaterial);
 
-  _internal->graphicsDefaultMaterial = Resources::load<Material>("shaders/Internal-GUITexture");
-  Object::dontDestroyOnLoad(_internal->graphicsDefaultMaterial);
+  Graphics::defaultMaterial = Resources::load<Material>("shaders/Internal-GUITexture");
+  Object::dontDestroyOnLoad(Graphics::defaultMaterial);
 
-  _internal->defaultGuiSkin.reset(new GuiSkin());
-
+  GuiSkin::_default = new GuiSkin();
+  Material::current = NULL;
   RenderTexture::active = NULL;
   Camera::current = NULL;
   Camera::main = NULL;
+  Gui::skin = NULL;
+  Graphics::defaultMaterial = NULL;
+  Graphics::renderTarget = NULL;
 
   //displaySplash();
 }
@@ -211,6 +214,8 @@ void Application::destroy()
   }
 
   _internal.reset();
+
+  delete GuiSkin::_default;
 
   Camera::allCameras.clear();
   gameObjects.clear();

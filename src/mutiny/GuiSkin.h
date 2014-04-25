@@ -26,6 +26,8 @@ public:
   GuiStyle* getBox();
 
 private:
+  static GuiSkin* _default;
+
   std::shared_ptr<GuiStyle> button;
   std::shared_ptr<GuiStyle> box;
 

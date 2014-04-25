@@ -11,10 +11,7 @@ namespace internal
 
 Internal::Internal()
 {
-  skin = NULL;
-  currentMaterial = NULL;
-  graphicsDefaultMaterial = NULL;
-  graphicsRenderTarget = NULL;
+
 }
 
 }

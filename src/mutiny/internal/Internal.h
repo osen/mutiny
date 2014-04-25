@@ -25,17 +25,6 @@ namespace internal
 class Internal
 {
 public:
-  // Gui
-  GuiSkin* skin;
-
-  // GuiSkin
-  std::shared_ptr<GuiSkin> defaultGuiSkin;
-
-  Material* currentMaterial;
-
-  // Graphics
-  Material* graphicsDefaultMaterial;
-  RenderTexture* graphicsRenderTarget;
 
   Internal();
 

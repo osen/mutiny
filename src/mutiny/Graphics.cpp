@@ -26,10 +26,13 @@ namespace mutiny
 namespace engine
 {
 
+Material* Graphics::defaultMaterial;
+RenderTexture* Graphics::renderTarget;
+
 // TODO: Does this need to be re-enabled every draw?
 void Graphics::setRenderTarget(RenderTexture* renderTarget)
 {
-  Application::getInternal()->graphicsRenderTarget = renderTarget;
+  Graphics::renderTarget = renderTarget;
 }
 
 // if material is null, a default material with internal-GUITexture.shader is used.
@@ -50,7 +53,7 @@ void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, Materia
   if(material == NULL)
   {
     // TODO: Use a unique material with MVP set
-    material = Application::getInternal()->graphicsDefaultMaterial;
+    material = Graphics::defaultMaterial;
     material->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
     material->setMatrix("in_View", Matrix4x4::getIdentity());
     material->setMatrix("in_Model", Matrix4x4::getIdentity());
@@ -94,7 +97,7 @@ void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, Materia
   material->setPass(0);
 
   currentRenderTexture = RenderTexture::getActive();
-  RenderTexture::setActive(Application::getInternal()->graphicsRenderTarget);
+  RenderTexture::setActive(Graphics::renderTarget);
 
   glDisable(GL_DEPTH_TEST);
   glCullFace(GL_BACK);
@@ -142,7 +145,7 @@ void Graphics::drawMeshNow(Mesh* mesh, Matrix4x4 matrix, int materialIndex)
 {
   Material* material;
 
-  material = Application::getInternal()->currentMaterial;
+  material = Material::current;
   material->setMatrix("in_Model", matrix);
 
   drawMeshNow(mesh, materialIndex);
@@ -165,7 +168,7 @@ void Graphics::drawMeshNow(Mesh* mesh, int materialIndex)
     return;
   }
 
-  material = Application::getInternal()->currentMaterial;
+  material = Material::current;
 
   if(material == NULL)
   {

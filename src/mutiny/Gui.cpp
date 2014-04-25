@@ -26,6 +26,8 @@ namespace mutiny
 namespace engine
 {
 
+GuiSkin* Gui::skin;
+
 Matrix4x4 Gui::getMatrix()
 {
   return Matrix4x4::getIdentity();
@@ -33,11 +35,11 @@ Matrix4x4 Gui::getMatrix()
 
 void Gui::label(Rect rect, std::string text)
 {
-  GuiSkin* skin = Application::getInternal()->skin;
+  GuiSkin* skin = Gui::skin;
 
   if(skin == NULL)
   {
-    skin = Application::getInternal()->defaultGuiSkin.get();
+    skin = GuiSkin::_default;
   }
 
   for(int i = 0; i < text.length(); i++)
@@ -59,11 +61,11 @@ void Gui::label(Rect rect, std::string text)
 
 bool Gui::button(Rect rect, std::string text)
 {
-  GuiSkin* skin = Application::getInternal()->skin;
+  GuiSkin* skin = Gui::skin;
 
   if(skin == NULL)
   {
-    skin = Application::getInternal()->defaultGuiSkin.get();
+    skin = GuiSkin::_default;
   }
 
   if(rect.contains(Input::getMousePosition()) == true)
@@ -132,11 +134,11 @@ void Gui::drawUi(Rect rect, Texture* texture, GuiStyle* style)
 
 void Gui::box(Rect rect, std::string text)
 {
-  GuiSkin* skin = Application::getInternal()->skin;
+  GuiSkin* skin = Gui::skin;
 
   if(skin == NULL)
   {
-    skin = Application::getInternal()->defaultGuiSkin.get();
+    skin = GuiSkin::_default;
   }
 
   drawUi(rect, (Texture*)skin->getBox()->getNormal()->getBackground(), skin->getBox());

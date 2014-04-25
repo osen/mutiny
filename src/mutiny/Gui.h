@@ -17,9 +17,12 @@ namespace engine
 class GuiSkin;
 class Texture;
 class GuiStyle;
+class Application;
 
 class Gui
 {
+  friend class mutiny::engine::Application;
+
 public:
   static Matrix4x4 getMatrix();
   static void label(Rect rect, std::string text);
@@ -29,6 +32,8 @@ public:
   static void drawTextureWithTexCoords(Rect position, Texture* texture, Rect texCoords);
 
 private:
+  static GuiSkin* skin;
+
   static void drawUi(Rect rect, Texture* texture, GuiStyle* style);
 
 };

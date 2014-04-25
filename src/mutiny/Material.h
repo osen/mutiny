@@ -51,6 +51,7 @@ public:
   void setPass(int pass);
 
 private:
+  static Material* current;
   static Material* defaultMaterial;
   static Material* guiMaterial;
   static Material* particleMaterial;
