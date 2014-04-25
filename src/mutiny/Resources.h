@@ -5,8 +5,6 @@
 #include "Material.h"
 #include "Application.h"
 
-#include "internal/Internal.h"
-
 #include <memory>
 #include <string>
 #include <vector>

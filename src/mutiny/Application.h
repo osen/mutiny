@@ -1,7 +1,7 @@
 #ifndef MUTINY_ENGINE_APPLICATION_H
 #define MUTINY_ENGINE_APPLICATION_H
 
-#include "internal/Internal.h"
+#include <SDL/SDL.h>
 
 #include <memory>
 #include <vector>
@@ -50,7 +50,6 @@ public:
 private:
   static SDL_Surface* screen;
   static bool running;
-  static bool initialized;
   static std::string loadedLevelName;
   static std::string levelChange;
   static std::string dataPath;
@@ -60,14 +59,10 @@ private:
   static int argc;
   static std::vector<std::string> argv;
 
-  static std::shared_ptr<internal::Internal> _internal;
-
   static void loadLevel();
   static void loop();
   static void displaySplash();
   static void setupPaths();
-
-  static internal::Internal* getInternal();
 
 };
 

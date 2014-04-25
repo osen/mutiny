@@ -4,8 +4,6 @@
 #include "Component.h"
 #include "Application.h"
 
-#include "internal/Internal.h"
-
 #include <memory>
 
 #include <string>

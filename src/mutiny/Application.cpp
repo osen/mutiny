@@ -16,7 +16,6 @@
 #include "Graphics.h"
 #include "Transform.h"
 
-#include "internal/Internal.h"
 #include "internal/Util.h"
 
 #include <GL/glew.h>
@@ -44,11 +43,9 @@ namespace mutiny
 namespace engine
 {
 
-std::shared_ptr<internal::Internal> Application::_internal;
 std::vector<std::shared_ptr<GameObject> > Application::gameObjects;
 SDL_Surface* Application::screen;
 bool Application::running;
-bool Application::initialized;
 std::string Application::loadedLevelName;
 std::string Application::levelChange;
 std::string Application::dataPath;
@@ -58,12 +55,6 @@ std::vector<std::string> Application::argv;
 
 void Application::init(int argc, char* argv[])
 {
-  if(_internal.get() != NULL)
-  {
-    return;
-  }
-
-  _internal.reset(new internal::Internal());
   running = false;
   Application::argc = argc;
 
@@ -74,7 +65,6 @@ void Application::init(int argc, char* argv[])
 
   srand(time(NULL));
   setupPaths();
-  //std::cout << "Paths: " << engineDataPath << " " << dataPath << std::endl;
 
   if(SDL_Init(SDL_INIT_EVERYTHING) == -1)
   {
@@ -198,22 +188,17 @@ void Application::setupPaths()
   engineDataPath = dirname + "/share/mutiny";
   dataPath = dirname + "/share/" + basename;
 #endif
+
+  //std::cout << "Paths: " << engineDataPath << " " << dataPath << std::endl;
 }
 
 void Application::destroy()
 {
-  if(_internal.get() == NULL)
-  {
-    throw std::exception();
-  }
-
   // TODO: Running is a flag, not a reliable state
   if(running == true)
   {
     throw std::exception();
   }
-
-  _internal.reset();
 
   delete GuiSkin::_default;
 
@@ -557,11 +542,6 @@ int Application::getArgc()
 std::string Application::getArgv(int i)
 {
   return argv.at(i);
-}
-
-internal::Internal* Application::getInternal()
-{
-  return _internal.get();
 }
 
 }
