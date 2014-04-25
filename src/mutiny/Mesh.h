@@ -5,6 +5,7 @@
 #include "Vector2.h"
 #include "Object.h"
 #include "Bounds.h"
+#include "Color.h"
 
 #include <GL/glew.h>
 
@@ -20,7 +21,6 @@ namespace engine
 
 class Resources;
 class MeshRenderer;
-class Color;
 class Graphics;
 
 class Mesh : public Object
@@ -30,9 +30,6 @@ class Mesh : public Object
   friend class mutiny::engine::Graphics;
 
 public:
-  Mesh();
-  ~Mesh();
-
   void recalculateNormals();
   void recalculateBounds();
 

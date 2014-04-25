@@ -18,6 +18,7 @@ public:
   Vector3 min;
   Vector3 max;
 
+  Bounds();
   Bounds(Vector3 center, Vector3 size);
 
   bool intersects(Bounds target);

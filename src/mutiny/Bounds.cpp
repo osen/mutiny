@@ -10,6 +10,11 @@ namespace mutiny
 namespace engine
 {
 
+Bounds::Bounds()
+{
+
+}
+
 Bounds::Bounds(Vector3 center, Vector3 size)
 {
   this->center = center;

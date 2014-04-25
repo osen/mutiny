@@ -93,21 +93,6 @@ void Mesh::freeBuffer(GLuint bufferId)
   glDeleteBuffers(1, &bufferId);
 }
 
-Mesh::Mesh() : bounds(Vector3(), Vector3())
-{
-  //glGenBuffers(1, &positionBufferId);
-  //_positionBufferId.reset(&positionBufferId, std::bind(glDeleteBuffers, 1, &positionBufferId));
-  //glGenBuffers(1, &uvBufferId);
-  //_uvBufferId.reset(&uvBufferId, std::bind(glDeleteBuffers, 1, &uvBufferId));
-  //glGenBuffers(1, &normalBufferId);
-  //_normalBufferId.reset(&normalBufferId, std::bind(glDeleteBuffers, 1, &normalBufferId));
-}
-
-Mesh::~Mesh()
-{
-
-}
-
 void Mesh::setVertices(std::vector<Vector3> vertices)
 {
   this->vertices = vertices;
