@@ -32,7 +32,6 @@ public:
 
 private:
   virtual void render();
-  virtual void awake();
 
   std::vector<Material*> materials;
 

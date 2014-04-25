@@ -6,6 +6,7 @@
 #include "Camera.h"
 #include "Shader.h"
 #include "Transform.h"
+#include "Graphics.h"
 #include "Debug.h"
 
 #include <memory>
@@ -20,10 +21,6 @@ namespace engine
 MeshRenderer::~MeshRenderer()
 {
 
-}
-
-void MeshRenderer::awake()
-{
 }
 
 void MeshRenderer::render()
@@ -79,58 +76,12 @@ void MeshRenderer::render()
     if(material == NULL)
     {
       material = Material::defaultMaterial;
-      //Debug::log("MeshRenderer set to default material");
     }
-
-    shader = material->getShader();
-    GLint positionAttribId = glGetAttribLocation(shader->programId, "in_Position");
-    GLint normalAttribId = glGetAttribLocation(shader->programId, "in_Normal");
-    GLint uvAttribId = glGetAttribLocation(shader->programId, "in_Uv");
 
     material->setMatrix("in_Projection", Camera::getCurrent()->getProjectionMatrix());
     material->setMatrix("in_View", viewMat);
-    material->setMatrix("in_Model", modelMat);
-
     material->setPass(0);
-
-    if(positionAttribId != -1 && mesh->positionBufferIds.size() > i)
-    {
-      glBindBuffer(GL_ARRAY_BUFFER, mesh->positionBufferIds.at(i));
-      glVertexAttribPointer(positionAttribId, 3, GL_FLOAT, GL_FALSE, 0, 0);
-      glEnableVertexAttribArray(positionAttribId);
-    }
-
-    if(normalAttribId != -1 && mesh->normalBufferIds.size() > i)
-    {
-      glBindBuffer(GL_ARRAY_BUFFER, mesh->normalBufferIds.at(i));
-      glVertexAttribPointer(normalAttribId, 3, GL_FLOAT, GL_FALSE, 0, 0);
-      glEnableVertexAttribArray(normalAttribId);
-    }
-
-    if(uvAttribId != -1 && mesh->uvBufferIds.size() > i)
-    {
-      glBindBuffer(GL_ARRAY_BUFFER, mesh->uvBufferIds.at(i));
-      glVertexAttribPointer(uvAttribId, 2, GL_FLOAT, GL_FALSE, 0, 0);
-      glEnableVertexAttribArray(uvAttribId);
-    }
-
-    material->apply();
-    glDrawArrays(GL_TRIANGLES, 0, mesh->getTriangles(i)->size());
-
-    if(positionAttribId != -1 && mesh->positionBufferIds.size() > i)
-    {
-      glDisableVertexAttribArray(positionAttribId);
-    }
-
-    if(normalAttribId != -1 && mesh->normalBufferIds.size() > i)
-    {
-      glDisableVertexAttribArray(normalAttribId);
-    }
-
-    if(uvAttribId != -1 && mesh->uvBufferIds.size() > i)
-    {
-      glDisableVertexAttribArray(uvAttribId);
-    }
+    Graphics::drawMeshNow(mesh, modelMat, i);
   }
 }
 

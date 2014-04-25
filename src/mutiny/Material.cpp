@@ -215,7 +215,6 @@ Shader* Material::getShader()
 
 void Material::setShader(Shader* shader)
 {
-  // Should set deleter func to do nothing.
   this->shader.reset(shader, std::bind(dummyDeleter));
   refreshIndexes();
 }

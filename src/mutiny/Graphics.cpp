@@ -185,6 +185,7 @@ void Graphics::drawMeshNow(Mesh* mesh, int materialIndex)
   }
 
   GLint positionAttribId = glGetAttribLocation(shader->programId, "in_Position");
+  GLint normalAttribId = glGetAttribLocation(shader->programId, "in_Normal");
   GLint uvAttribId = glGetAttribLocation(shader->programId, "in_Uv");
 
   if(positionAttribId != -1)
@@ -192,6 +193,13 @@ void Graphics::drawMeshNow(Mesh* mesh, int materialIndex)
     glBindBuffer(GL_ARRAY_BUFFER, mesh->positionBufferIds.at(materialIndex));
     glVertexAttribPointer(positionAttribId, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(positionAttribId);
+  }
+
+  if(normalAttribId != -1 && mesh->normalBufferIds.size() > materialIndex)
+  {
+    glBindBuffer(GL_ARRAY_BUFFER, mesh->normalBufferIds.at(materialIndex));
+    glVertexAttribPointer(normalAttribId, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glEnableVertexAttribArray(normalAttribId);
   }
 
   if(uvAttribId != -1)
@@ -207,6 +215,11 @@ void Graphics::drawMeshNow(Mesh* mesh, int materialIndex)
   if(positionAttribId != -1)
   {
     glDisableVertexAttribArray(positionAttribId);
+  }
+
+  if(normalAttribId != -1 && mesh->normalBufferIds.size() > materialIndex)
+  {
+    glDisableVertexAttribArray(normalAttribId);
   }
 
   if(uvAttribId != -1)
