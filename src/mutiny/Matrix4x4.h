@@ -1,6 +1,7 @@
 #ifndef MUTINY_ENGINE_MATRIX4X4_H
 #define MUTINY_ENGINE_MATRIX4X4_H
 
+#include "internal/linmath.h"
 #include "glm/glm.hpp"
 
 namespace mutiny
@@ -41,7 +42,8 @@ public:
   Matrix4x4 operator*(Matrix4x4 param);
 
 private:
-  float m[16];
+  mat4x4 m;
+  //float m[16];
   glm::mat4 mat;
 
   Matrix4x4();
