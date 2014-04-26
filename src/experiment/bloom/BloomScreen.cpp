@@ -15,7 +15,7 @@ void BloomScreen::onAwake()
 {
   BloomCamera::create();
   GameObject* playerGo = new GameObject("Player");
-  playerGo->getTransform()->setPosition(Vector3(0, 0, 0));
+  playerGo->getTransform()->setPosition(Vector3(-10, 0, -10));
 
   MeshRenderer* playerMr = playerGo->addComponent<MeshRenderer>();
   playerMr->setMaterial(Resources::load<Material>("shaders/textured"));

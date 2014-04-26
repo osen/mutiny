@@ -26,7 +26,7 @@ void BloomCamera::onAwake()
   blurPass3.reset(new RenderTexture(64, 64));
   mergePass.reset(new RenderTexture(512, 512));
 
-  getGameObject()->getTransform()->setPosition(Vector3(0, 0, -8));
+  getGameObject()->getTransform()->setPosition(Vector3(-10, 0, -18));
 
   texturedMaterial = Resources::load<Material>("shaders/bloom/simple_2d");
   texturedMaterial->setMatrix("in_View", Matrix4x4::getIdentity());
@@ -41,8 +41,8 @@ void BloomCamera::onUpdate()
 {
   texturedMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
   mergeMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
-  getGameObject()->getTransform()->rotateAround(Vector3(0, 0, 0), Vector3(0, 1, 0), 100.0f * Time::getDeltaTime());
-  getGameObject()->getTransform()->lookAt(Vector3(0, 0, 0));
+  getGameObject()->getTransform()->rotateAround(Vector3(-10, 0, -10), Vector3(0, 1, 0), 100.0f * Time::getDeltaTime());
+  getGameObject()->getTransform()->lookAt(Vector3(-10, 0, -10));
 }
 
 void BloomCamera::onPostRender()

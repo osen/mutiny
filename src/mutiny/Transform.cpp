@@ -226,19 +226,19 @@ void Transform::lookAt(Vector3 worldPosition)
   localRotation.y = angle - 180.0f;
 }
 
-// TODO: Should use Matrix4x4 rather than the unwrapped glm.
 void Transform::rotateAround(Vector3 center, Vector3 axis, float amount)
 {
-  Matrix4x4 pos = Matrix4x4::getTrs(Vector3(center.x, center.y, center.z),
+  Matrix4x4 pos = Matrix4x4::getTrs(center,
                                     Vector3(0, 0, 0), Vector3(1, 1, 1));
 
   Matrix4x4 rot = Matrix4x4::getTrs(Vector3(0, 0, 0),
-                                    Vector3(axis.x * amount, axis.y * amount, axis.z * amount), Vector3(1, 1, 1));
+                                    Vector3(axis * amount), Vector3(1, 1, 1));
 
   Matrix4x4 curr = Matrix4x4::getIdentity();
   curr = curr * pos;
   curr = curr * rot;
   curr = curr * pos.inverse();
+
   localPosition = curr * localPosition;
 }
 
