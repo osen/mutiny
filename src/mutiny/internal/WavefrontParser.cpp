@@ -1,8 +1,6 @@
 #include "WavefrontParser.h"
 #include "Util.h"
 
-#include "../glm/glm.hpp"
-
 #include <string>
 #include <vector>
 #include <fstream>
@@ -24,9 +22,9 @@ WavefrontParser::WavefrontParser(std::string path)
   std::string line;
   std::vector<std::string> splitLine;
   std::vector<std::string> subSplit;
-  std::vector<glm::vec3> vertexPositions;
-  std::vector<glm::vec3> vertexNormals;
-  std::vector<glm::vec2> vertexCoords;
+  std::vector<Vector3> vertexPositions;
+  std::vector<Vector3> vertexNormals;
+  std::vector<Vector2> vertexCoords;
   std::ifstream file;
 
   MaterialData* currentMaterial = NULL;
@@ -50,7 +48,7 @@ WavefrontParser::WavefrontParser(std::string path)
   currentMaterial = new MaterialData();
   modelData.materials.push_back(std::shared_ptr<MaterialData>(currentMaterial));
   currentMaterial->name = "";
-  currentMaterial->color = glm::vec4(1, 1, 1, 1);
+  currentMaterial->color = Vector4(1, 1, 1, 1);
   currentMaterial->texture = "";
 
   currentMaterialGroup = new MaterialGroupData();
@@ -84,19 +82,19 @@ WavefrontParser::WavefrontParser(std::string path)
     }
     else if(splitLine.at(0) == "v")
     {
-      vertexPositions.push_back(glm::vec3(-atof(splitLine.at(1).c_str()),
+      vertexPositions.push_back(Vector3(-atof(splitLine.at(1).c_str()),
         atof(splitLine.at(2).c_str()),
         atof(splitLine.at(3).c_str())));
     }
     else if(splitLine.at(0) == "vn")
     {
-      vertexNormals.push_back(glm::vec3(atof(splitLine.at(1).c_str()),
+      vertexNormals.push_back(Vector3(atof(splitLine.at(1).c_str()),
         atof(splitLine.at(2).c_str()),
         atof(splitLine.at(3).c_str())));
     }
     else if(splitLine.at(0) == "vt")
     {
-      vertexCoords.push_back(glm::vec2(atof(splitLine.at(1).c_str()),
+      vertexCoords.push_back(Vector2(atof(splitLine.at(1).c_str()),
         -atof(splitLine.at(2).c_str())));
     }
     else if(splitLine.at(0) == "g" || splitLine.at(0) == "o")
@@ -135,46 +133,46 @@ WavefrontParser::WavefrontParser(std::string path)
       currentMaterialGroup->faces.push_back(std::shared_ptr<FaceData>(currentFace));
       subSplit.clear(); Util::splitString(splitLine.at(1), '/', &subSplit);
 
-      currentFace->a.position = glm::vec3(vertexPositions.at(atoi(subSplit.at(0).c_str()) - 1));
+      currentFace->a.position = Vector3(vertexPositions.at(atoi(subSplit.at(0).c_str()) - 1));
 
       if(subSplit.size() > 1 && subSplit.at(1) != "")
       {
         _hasCoords = true;
-        currentFace->a.coord = glm::vec2(vertexCoords.at(atoi(subSplit.at(1).c_str()) - 1));
+        currentFace->a.coord = Vector2(vertexCoords.at(atoi(subSplit.at(1).c_str()) - 1));
       }
 
       if(subSplit.size() > 2)
       {
         _hasNormals = true;
-        currentFace->a.normal = glm::vec3(vertexNormals.at(atoi(subSplit.at(2).c_str()) - 1));
+        currentFace->a.normal = Vector3(vertexNormals.at(atoi(subSplit.at(2).c_str()) - 1));
       }
 
       subSplit.clear(); Util::splitString(splitLine.at(2), '/', &subSplit);
 
-      currentFace->b.position = glm::vec3(vertexPositions.at(atoi(subSplit.at(0).c_str()) - 1));
+      currentFace->b.position = Vector3(vertexPositions.at(atoi(subSplit.at(0).c_str()) - 1));
 
       if(subSplit.size() > 1 && subSplit.at(1) != "")
       {
-        currentFace->b.coord = glm::vec2(vertexCoords.at(atoi(subSplit.at(1).c_str()) - 1));
+        currentFace->b.coord = Vector2(vertexCoords.at(atoi(subSplit.at(1).c_str()) - 1));
       }
 
       if(subSplit.size() > 2)
       {
-        currentFace->b.normal = glm::vec3(vertexNormals.at(atoi(subSplit.at(2).c_str()) - 1));
+        currentFace->b.normal = Vector3(vertexNormals.at(atoi(subSplit.at(2).c_str()) - 1));
       }
 
       subSplit.clear(); Util::splitString(splitLine.at(3), '/', &subSplit);
 
-      currentFace->c.position = glm::vec3(vertexPositions.at(atoi(subSplit.at(0).c_str()) - 1));
+      currentFace->c.position = Vector3(vertexPositions.at(atoi(subSplit.at(0).c_str()) - 1));
 
       if(subSplit.size() > 1 && subSplit.at(1) != "")
       {
-        currentFace->c.coord = glm::vec2(vertexCoords.at(atoi(subSplit.at(1).c_str()) - 1));
+        currentFace->c.coord = Vector2(vertexCoords.at(atoi(subSplit.at(1).c_str()) - 1));
       }
 
       if(subSplit.size() > 2)
       {
-        currentFace->c.normal = glm::vec3(vertexNormals.at(atoi(subSplit.at(2).c_str()) - 1));
+        currentFace->c.normal = Vector3(vertexNormals.at(atoi(subSplit.at(2).c_str()) - 1));
       }
 
       if(splitLine.size() >= 5)
@@ -183,44 +181,44 @@ WavefrontParser::WavefrontParser(std::string path)
         currentMaterialGroup->faces.push_back(std::shared_ptr<FaceData>(currentFace));
         subSplit.clear(); Util::splitString(splitLine.at(3), '/', &subSplit);
 
-        currentFace->a.position = glm::vec3(vertexPositions.at(atoi(subSplit.at(0).c_str()) - 1));
+        currentFace->a.position = Vector3(vertexPositions.at(atoi(subSplit.at(0).c_str()) - 1));
 
         if(subSplit.size() > 1 && subSplit.at(1) != "")
         {
-          currentFace->a.coord = glm::vec2(vertexCoords.at(atoi(subSplit.at(1).c_str()) - 1));
+          currentFace->a.coord = Vector2(vertexCoords.at(atoi(subSplit.at(1).c_str()) - 1));
         }
 
         if(subSplit.size() > 2)
         {
-          currentFace->a.normal = glm::vec3(vertexNormals.at(atoi(subSplit.at(2).c_str()) - 1));
+          currentFace->a.normal = Vector3(vertexNormals.at(atoi(subSplit.at(2).c_str()) - 1));
         }
 
         subSplit.clear(); Util::splitString(splitLine.at(4), '/', &subSplit);
 
-        currentFace->b.position = glm::vec3(vertexPositions.at(atoi(subSplit.at(0).c_str()) - 1));
+        currentFace->b.position = Vector3(vertexPositions.at(atoi(subSplit.at(0).c_str()) - 1));
 
         if(subSplit.size() > 1 && subSplit.at(1) != "")
         {
-          currentFace->b.coord = glm::vec2(vertexCoords.at(atoi(subSplit.at(1).c_str()) - 1));
+          currentFace->b.coord = Vector2(vertexCoords.at(atoi(subSplit.at(1).c_str()) - 1));
         }
 
         if(subSplit.size() > 2)
         {
-          currentFace->b.normal = glm::vec3(vertexNormals.at(atoi(subSplit.at(2).c_str()) - 1));
+          currentFace->b.normal = Vector3(vertexNormals.at(atoi(subSplit.at(2).c_str()) - 1));
         }
 
         subSplit.clear(); Util::splitString(splitLine.at(1), '/', &subSplit);
 
-        currentFace->c.position = glm::vec3(vertexPositions.at(atoi(subSplit.at(0).c_str()) - 1));
+        currentFace->c.position = Vector3(vertexPositions.at(atoi(subSplit.at(0).c_str()) - 1));
 
         if(subSplit.size() > 1 && subSplit.at(1) != "")
         {
-          currentFace->c.coord = glm::vec2(vertexCoords.at(atoi(subSplit.at(1).c_str()) - 1));
+          currentFace->c.coord = Vector2(vertexCoords.at(atoi(subSplit.at(1).c_str()) - 1));
         }
 
         if(subSplit.size() > 2)
         {
-          currentFace->c.normal = glm::vec3(vertexNormals.at(atoi(subSplit.at(2).c_str()) - 1));
+          currentFace->c.normal = Vector3(vertexNormals.at(atoi(subSplit.at(2).c_str()) - 1));
         }
       }
     }
@@ -271,7 +269,7 @@ void WavefrontParser::obtainSizes()
   float modelMaxZ = 0; float modelMinZ = 0;
   bool initialSet = false;
   bool modelInitialSet = false;
-  glm::vec3* current = NULL;
+  Vector3* current = NULL;
 
   for(int a = 0; a < modelData.parts.size(); a++)
   {
@@ -322,7 +320,7 @@ void WavefrontParser::obtainSizes()
       }
     }
 
-    part->size = absVec3(glm::vec3(maxX - minX, maxY - minY, maxZ - minZ));
+    part->size = absVec3(Vector3(maxX - minX, maxY - minY, maxZ - minZ));
     part->center.x = (maxX + minX) / 2;
     part->center.y = (maxY + minY) / 2;
     part->center.z = (maxZ + minZ) / 2;
@@ -348,7 +346,7 @@ void WavefrontParser::obtainSizes()
     }
   }
 
-  modelData.size = absVec3(glm::vec3(modelMaxX - modelMinX, modelMaxY - modelMinY, modelMaxZ - modelMinZ));
+  modelData.size = absVec3(Vector3(modelMaxX - modelMinX, modelMaxY - modelMinY, modelMaxZ - modelMinZ));
   modelData.center.x = (modelMaxX + modelMinX) / 2;
   modelData.center.y = (modelMaxY + modelMinY) / 2;
   modelData.center.z = (modelMaxZ + modelMinZ) / 2;
@@ -356,9 +354,9 @@ void WavefrontParser::obtainSizes()
   //std::cout << modelData.center.x << " " << modelData.center.y << " " << modelData.center.z << std::endl;
 }
 
-glm::vec3 WavefrontParser::absVec3(glm::vec3 input)
+Vector3 WavefrontParser::absVec3(Vector3 input)
 {
-  glm::vec3 output;
+  Vector3 output;
 
   if(input.x < 0)
   {
@@ -433,13 +431,13 @@ void WavefrontParser::parseMtl(std::string filename)
         currentMaterial->name = "noname";
       }
 
-      currentMaterial->color = glm::vec4(1);
+      currentMaterial->color = Vector4(1);
     }
     else if(splitLine.at(0) == "Kd")
     {
-      currentMaterial->color.r = atof(splitLine.at(1).c_str());
-      currentMaterial->color.g = atof(splitLine.at(2).c_str());
-      currentMaterial->color.b = atof(splitLine.at(3).c_str());
+      currentMaterial->color.x = atof(splitLine.at(1).c_str());
+      currentMaterial->color.y = atof(splitLine.at(2).c_str());
+      currentMaterial->color.z = atof(splitLine.at(3).c_str());
     }
     else if(splitLine.at(0) == "map_Kd")
     {
@@ -460,10 +458,10 @@ void WavefrontParser::output()
   for(int a = 0; a < modelData.materials.size(); a++)
   {
     std::cout << "  Material: " << modelData.materials.at(a)->name << std::endl;
-    std::cout << "    R: " << modelData.materials.at(a)->color.r << std::endl;
-    std::cout << "    G: " << modelData.materials.at(a)->color.g << std::endl;
-    std::cout << "    B: " << modelData.materials.at(a)->color.b << std::endl;
-    std::cout << "    A: " << modelData.materials.at(a)->color.a << std::endl;
+    std::cout << "    R: " << modelData.materials.at(a)->color.x << std::endl;
+    std::cout << "    G: " << modelData.materials.at(a)->color.y << std::endl;
+    std::cout << "    B: " << modelData.materials.at(a)->color.z << std::endl;
+    std::cout << "    A: " << modelData.materials.at(a)->color.w << std::endl;
 
     if(modelData.materials.at(a)->texture != "")
     {

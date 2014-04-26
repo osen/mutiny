@@ -29,6 +29,7 @@ add_library(mutiny STATIC
   Color.cpp
   Vector2.cpp
   Vector3.cpp
+  Vector4.cpp
   Rect.cpp
   Material.cpp
   RenderTexture.cpp

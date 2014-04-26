@@ -2,7 +2,6 @@
 #define MUTINY_ENGINE_MATRIX4X4_H
 
 #include "internal/linmath.h"
-#include "glm/glm.hpp"
 
 namespace mutiny
 {
@@ -43,8 +42,6 @@ public:
 
 private:
   mat4x4 m;
-  //float m[16];
-  glm::mat4 mat;
 
   Matrix4x4();
   float* getValue();

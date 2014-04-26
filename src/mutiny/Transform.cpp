@@ -4,9 +4,6 @@
 #include "GameObject.h"
 #include "Debug.h"
 
-#include "glm/glm.hpp"
-#include "glm/ext.hpp"
-
 namespace mutiny
 {
 
@@ -229,22 +226,20 @@ void Transform::lookAt(Vector3 worldPosition)
   localRotation.y = angle - 180.0f;
 }
 
-// Should use Matrix4x4 rather than the unwrapped glm.
+// TODO: Should use Matrix4x4 rather than the unwrapped glm.
 void Transform::rotateAround(Vector3 center, Vector3 axis, float amount)
 {
-  glm::mat4 mat;
+  Matrix4x4 pos = Matrix4x4::getTrs(Vector3(center.x, center.y, center.z),
+                                    Vector3(0, 0, 0), Vector3(1, 1, 1));
 
-  mat = glm::translate(mat, glm::vec3(center.x, center.y, center.z));
-  mat = glm::rotate(mat, amount, glm::vec3(axis.x, axis.y, axis.z));
-  mat = glm::translate(mat, -glm::vec3(center.x, center.y, center.z));
-  mat = glm::translate(mat, glm::vec3(localPosition.x, localPosition.y, localPosition.z));
-  glm::vec4 out = mat * glm::vec4(glm::vec3(), 1.0f);
+  Matrix4x4 rot = Matrix4x4::getTrs(Vector3(0, 0, 0),
+                                    Vector3(axis.x * amount, axis.y * amount, axis.z * amount), Vector3(1, 1, 1));
 
-  localPosition.x = out.x;
-  localPosition.y = out.y;
-  localPosition.z = out.z;
-
-  //std::cout << localPosition.x << " " << localPosition.z << std::endl;
+  Matrix4x4 curr = Matrix4x4::getIdentity();
+  curr = curr * pos;
+  curr = curr * rot;
+  curr = curr * pos.inverse();
+  localPosition = curr * localPosition;
 }
 
 Vector3 Transform::getForward()

@@ -1,7 +1,9 @@
 #ifndef MUTINY_ENGINE_INTERNAL_WAVEFRONTPARSER_H
 #define MUTINY_ENGINE_INTERNAL_WAVEFRONTPARSER_H
 
-#include "../glm/glm.hpp"
+#include "../Vector2.h"
+#include "../Vector3.h"
+#include "../Vector4.h"
 
 #include <string>
 #include <vector>
@@ -18,7 +20,7 @@ namespace internal
 
 struct MaterialData
 {
-  glm::vec4 color;
+  Vector4 color;
   std::string texture;
   std::string name;
 
@@ -26,9 +28,9 @@ struct MaterialData
 
 struct VertexData
 {
-  glm::vec3 position;
-  glm::vec3 normal;
-  glm::vec2 coord;
+  Vector3 position;
+  Vector3 normal;
+  Vector2 coord;
 
 };
 
@@ -51,8 +53,8 @@ struct PartData
 {
   std::vector<std::shared_ptr<MaterialGroupData> > materialGroups;
   std::string name;
-  glm::vec3 size;
-  glm::vec3 center;
+  Vector3 size;
+  Vector3 center;
 
 };
 
@@ -60,8 +62,8 @@ struct ModelData
 {
   std::vector<std::shared_ptr<PartData> > parts;
   std::vector<std::shared_ptr<MaterialData> > materials;
-  glm::vec3 size;
-  glm::vec3 center;
+  Vector3 size;
+  Vector3 center;
 
 };
 
@@ -77,7 +79,7 @@ private:
   MaterialData* getMaterialData(std::string name);
   void parseMtl(std::string filename);
   void obtainSizes();
-  glm::vec3 absVec3(glm::vec3 input);
+  Vector3 absVec3(Vector3 input);
   std::vector<std::string> mungeSplitLine(std::vector<std::string> splitLine);
 
 public:
