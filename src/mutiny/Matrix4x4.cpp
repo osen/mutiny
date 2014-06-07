@@ -37,9 +37,8 @@ Matrix4x4 Matrix4x4::getTrs(Vector3 position, Vector3 rotation, Vector3 scale)
 
   mat4x4_translate(mat.m, position.x, position.y, position.z);
 
-  // Todo: rotate
-  mat4x4_rotate(tmpMat, mat.m, 0, 0, 1, Mathf::deg2Rad(rotation.z));
-  mat4x4_rotate(mat.m, tmpMat, 0, 1, 0, Mathf::deg2Rad(rotation.y));
+  mat4x4_rotate(tmpMat, mat.m, 0, 1, 0, Mathf::deg2Rad(rotation.y));
+  mat4x4_rotate(mat.m, tmpMat, 0, 0, 1, Mathf::deg2Rad(rotation.z));
   mat4x4_rotate(tmpMat, mat.m, 1, 0, 0, Mathf::deg2Rad(rotation.x));
 
   // Todo: scale
