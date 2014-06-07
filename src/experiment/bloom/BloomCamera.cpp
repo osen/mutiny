@@ -21,16 +21,21 @@ void BloomCamera::onAwake()
   originalPass.reset(new RenderTexture(512, 512));
   camera->setTargetTexture(originalPass.get());
 
-  blurPass1.reset(new RenderTexture(64, 64));
-  blurPass2.reset(new RenderTexture(256, 256));
-  blurPass3.reset(new RenderTexture(64, 64));
+  lightKeyPass.reset(new RenderTexture(512, 512));
+  lightKeyMaterial = Resources::load<Material>("shaders/bloom/light_key");
+  lightKeyMaterial->setMatrix("in_View", Matrix4x4::getIdentity());
+  lightKeyMaterial->setMatrix("in_Model", Matrix4x4::getIdentity());
+
+  blurPass1.reset(new RenderTexture(512, 512));
+  blurPass2.reset(new RenderTexture(512, 512));
   mergePass.reset(new RenderTexture(512, 512));
 
   getGameObject()->getTransform()->setPosition(Vector3(-10, 0, -18));
 
-  texturedMaterial = Resources::load<Material>("shaders/bloom/simple_2d");
+  texturedMaterial = Resources::load<Material>("shaders/bloom/blur");
   texturedMaterial->setMatrix("in_View", Matrix4x4::getIdentity());
   texturedMaterial->setMatrix("in_Model", Matrix4x4::getIdentity());
+  texturedMaterial->setFloat("in_Direction", 0);
 
   mergeMaterial = Resources::load<Material>("shaders/bloom/merge");
   mergeMaterial->setMatrix("in_View", Matrix4x4::getIdentity());
@@ -39,6 +44,7 @@ void BloomCamera::onAwake()
 
 void BloomCamera::onUpdate()
 {
+  lightKeyMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
   texturedMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
   mergeMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
   getGameObject()->getTransform()->rotateAround(Vector3(-10, 0, -10), Vector3(0, 1, 0), 100.0f * Time::getDeltaTime());
@@ -47,24 +53,38 @@ void BloomCamera::onUpdate()
 
 void BloomCamera::onPostRender()
 {
+  Graphics::setRenderTarget(lightKeyPass.get());
+  Graphics::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), originalPass.get(), lightKeyMaterial);
+  Graphics::setRenderTarget(NULL);
+
   Graphics::setRenderTarget(blurPass1.get());
-  //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), originalPass.get(), texturedMaterial);
+  Graphics::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), lightKeyPass.get(), texturedMaterial);
   Graphics::setRenderTarget(NULL);
 
-  Graphics::setRenderTarget(blurPass2.get());
-  //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), blurPass1.get(), texturedMaterial);
-  Graphics::setRenderTarget(NULL);
+  bool swap = false;
 
-  Graphics::setRenderTarget(blurPass3.get());
-  //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), blurPass2.get(), texturedMaterial);
-  Graphics::setRenderTarget(NULL);
+  for(int i = 0; i < 6; i++)
+  {
+    if(swap == false)
+    {
+      texturedMaterial->setFloat("in_Direction", 0);
+      Graphics::setRenderTarget(blurPass2.get());
+      Graphics::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), blurPass1.get(), texturedMaterial);
+      swap = true;
+    }
+    else
+    {
+      texturedMaterial->setFloat("in_Direction", 1);
+      Graphics::setRenderTarget(blurPass1.get());
+      Graphics::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), blurPass2.get(), texturedMaterial);
+      swap = false;
+    }
+
+    Graphics::setRenderTarget(NULL);
+  }
 
   Graphics::setRenderTarget(mergePass.get());
-  //glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  mergeMaterial->setTexture("in_Merge", blurPass3.get());
+  mergeMaterial->setTexture("in_Merge", blurPass1.get());
   Graphics::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), originalPass.get(), mergeMaterial);
   Graphics::setRenderTarget(NULL);
 
