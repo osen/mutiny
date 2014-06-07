@@ -1,6 +1,7 @@
-![](https://raw.githubusercontent.com/osen/mutiny/master/docs/mutinybanner.png)
+![](https://raw.githubusercontent.com/osen/mutiny/master/docs/logo.png)
 
-![](https://raw.githubusercontent.com/osen/mutiny/master/docs/ss1.jpg)
+[I'm an inline-style link with title](https://raw.githubusercontent.com/osen/mutiny/master/docs/ss1.jpg "Screenshot of Baastud")
+[I'm an inline-style link with title](https://raw.githubusercontent.com/osen/mutiny/master/docs/ss2.jpg "Screenshot of Drunken Cowboy")
 
 To build the software on Windows, follow these steps:
 
@@ -22,8 +23,6 @@ $ cd build
 $ cmake ..
 $ make
 ```
-
-![](https://raw.githubusercontent.com/osen/mutiny/master/docs/ss2.jpg)
 
 ![](https://raw.githubusercontent.com/osen/mutiny/master/docs/cppbarrel.png)
 
