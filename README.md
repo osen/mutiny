@@ -1,4 +1,6 @@
-![](http://devio.us/~kpedersen/mutiny/lib/tpl/prsnl10/user/logo.png)
+![](https://raw.githubusercontent.com/osen/mutiny/master/docs/mutinybanner.png)
+
+![](https://github.com/osen/mutiny/blob/master/docs/ss1.jpg)
 
 To build the software on Windows, follow these steps:
 
@@ -9,21 +11,20 @@ To build the software on Windows, follow these steps:
 > cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=RELEASE ..
 > nmake
 ```
+![](https://github.com/osen/mutiny/blob/master/docs/mutinytux.png)
 
 To build the software on Linux, follow these steps:
 
 ```
 $ cd mutiny
-$ make -f Makefile.linux
-$ bin/collision
+$ mkdir build
+$ cd build
+$ cmake ..
+$ make
 ```
 
-To build the software using the Emscripten cross compiler, use:
+![](https://github.com/osen/mutiny/blob/master/docs/ss2.jpg)
 
-```
-$ cd mutiny
-$ make -f Makefile.emscripten
-$ firefox index.html
-```
+![](https://github.com/osen/mutiny/blob/master/docs/cppbarrel.png)
 
 Mutiny is licensed under the GPLv3
