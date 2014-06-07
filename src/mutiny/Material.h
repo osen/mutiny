@@ -48,6 +48,7 @@ public:
   void setMainTexture(Texture* texture);
   Texture* getMainTexture();
 
+  int getPassCount();
   void setPass(int pass);
 
 private:
@@ -64,9 +65,9 @@ private:
 
   std::shared_ptr<Shader> shader;
 
+  bool indexesDirty;
   void refreshIndexes();
   static void dummyDeleter();
-  void apply();
 
 };
 

@@ -92,16 +92,20 @@ void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, Materia
   //mesh.setColors(colors);
 
   mesh.setTriangles(triangles, 0);
-
   material->setMainTexture(texture);
-  material->setPass(0);
 
   currentRenderTexture = RenderTexture::getActive();
   RenderTexture::setActive(Graphics::renderTarget);
 
   glDisable(GL_DEPTH_TEST);
   glCullFace(GL_BACK);
-  drawMeshNow(&mesh, 0);
+
+  for(int i = 0; i < material->getPassCount(); i++)
+  {
+    material->setPass(i);
+    drawMeshNow(&mesh, 0);
+  }
+
   glCullFace(GL_FRONT);
   glEnable(GL_DEPTH_TEST);
 
@@ -209,7 +213,6 @@ void Graphics::drawMeshNow(Mesh* mesh, int materialIndex)
     glEnableVertexAttribArray(uvAttribId);
   }
 
-  material->apply();
   glDrawArrays(GL_TRIANGLES, 0, mesh->getTriangles(materialIndex)->size());
 
   if(positionAttribId != -1)

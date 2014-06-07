@@ -32,11 +32,13 @@ class Shader : public Object
   friend class mutiny::engine::Resources;
 
 private:
+  static void deleteVertexArray(GLuint id);
   static Shader* load(std::string path);
 
   GLuint vertexShaderId; std::shared_ptr<void> _vertexShaderId;
   GLuint fragmentShaderId; std::shared_ptr<void> _fragmentShaderId;
   GLuint programId; std::shared_ptr<void> _programId;
+  GLuint vertexArrayId; std::shared_ptr<void> _vertexArrayId;
 
   Shader(std::string vertContents, std::string fragContents);
 

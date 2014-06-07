@@ -16,6 +16,11 @@ namespace mutiny
 namespace engine
 {
 
+void Shader::deleteVertexArray(GLuint id)
+{
+  glDeleteVertexArrays(1, &id);
+}
+
 Shader* Shader::load(std::string path)
 {
   std::string vertPath = path + ".vert";
@@ -65,6 +70,9 @@ Shader::Shader(std::string vertContents, std::string fragContents)
   const char* vertSrc = NULL;
   const char* fragSrc = NULL;
   GLint isCompiled = GL_FALSE;
+
+  glGenVertexArrays(1, &vertexArrayId);
+  _vertexArrayId.reset(&vertexArrayId, std::bind(deleteVertexArray, vertexArrayId));
 
   vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
   _vertexShaderId.reset(&vertexShaderId, std::bind(glDeleteShader, vertexShaderId));

@@ -70,16 +70,19 @@ Material* Material::load(std::string path)
 Material::Material(std::string vertContents, std::string fragContents)
 {
   shader.reset(new Shader(vertContents, fragContents));
+  indexesDirty = true;
 }
 
 Material::Material(Material* material)
 {
   shader.reset(material->shader.get(), std::bind(dummyDeleter));
+  indexesDirty = true;
 }
 
 Material::Material(Shader* shader)
 {
   this->shader.reset(shader, std::bind(dummyDeleter));
+  indexesDirty = true;
 }
 
 void Material::dummyDeleter()
@@ -114,7 +117,7 @@ void Material::setTexture(std::string propertyName, Texture* texture)
   textures.push_back(texture);
   textureIndexes.push_back(-1);
   textureNames.push_back(propertyName);
-  refreshIndexes();
+  indexesDirty = true;
 }
 
 void Material::setFloat(std::string propertyName, float value)
@@ -131,7 +134,7 @@ void Material::setFloat(std::string propertyName, float value)
   floats.push_back(value);
   floatIndexes.push_back(-1);
   floatNames.push_back(propertyName);
-  refreshIndexes();
+  indexesDirty = true;
 }
 
 void Material::setMatrix(std::string propertyName, Matrix4x4 matrix)
@@ -148,13 +151,11 @@ void Material::setMatrix(std::string propertyName, Matrix4x4 matrix)
   matrices.push_back(matrix);
   matrixIndexes.push_back(-1);
   matrixNames.push_back(propertyName);
-  refreshIndexes();
+  indexesDirty = true;
 }
 
 void Material::refreshIndexes()
 {
-  glUseProgram(shader->programId);
-
   for(int i = 0; i < matrixNames.size(); i++)
   {
     GLuint uniformId = glGetUniformLocation(shader->programId, matrixNames.at(i).c_str());
@@ -192,9 +193,6 @@ void Material::refreshIndexes()
     }
 
     textureIndexes[i] = uniformId;
-    //glUniform1i(uniformId, i);
-    //glActiveTexture(GL_TEXTURE0 + i);
-    //glBindTexture(GL_TEXTURE_2D, textures[i]->getNativeTexture());
   }
 }
 
@@ -216,17 +214,24 @@ Shader* Material::getShader()
 void Material::setShader(Shader* shader)
 {
   this->shader.reset(shader, std::bind(dummyDeleter));
-  refreshIndexes();
+  indexesDirty = true;
+}
+
+int Material::getPassCount()
+{
+  return 1;
 }
 
 void Material::setPass(int pass)
 {
   Material::current = this;
   glUseProgram(shader->programId);
-}
 
-void Material::apply()
-{
+  if(indexesDirty == true)
+  {
+    refreshIndexes();
+  }
+
   for(int i = 0; i < matrixNames.size(); i++)
   {
     glUniformMatrix4fv(matrixIndexes[i], 1, GL_FALSE, matrices[i].getValue());

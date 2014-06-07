@@ -80,8 +80,12 @@ void MeshRenderer::render()
 
     material->setMatrix("in_Projection", Camera::getCurrent()->getProjectionMatrix());
     material->setMatrix("in_View", viewMat);
-    material->setPass(0);
-    Graphics::drawMeshNow(mesh, modelMat, i);
+
+    for(int j = 0; j < material->getPassCount(); j++)
+    {
+      material->setPass(j);
+      Graphics::drawMeshNow(mesh, modelMat, i);
+    }
   }
 }
 
