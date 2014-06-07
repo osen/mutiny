@@ -26,5 +26,4 @@ add_subdirectory(src/mutiny)
 add_subdirectory(src/tools/buccaneer)
 add_subdirectory(src/experiment)
 add_subdirectory(src/baastud)
-add_subdirectory(src/drunken)
 
