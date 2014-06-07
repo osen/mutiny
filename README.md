@@ -1,6 +1,7 @@
 ![](https://raw.githubusercontent.com/osen/mutiny/master/docs/logo.png)
 
 [Screenshot of Baastud](https://raw.githubusercontent.com/osen/mutiny/master/docs/ss1.jpg "Screenshot of Baastud")
+
 [Screenshot of Drunken Cowboy](https://raw.githubusercontent.com/osen/mutiny/master/docs/ss2.jpg "Screenshot of Drunken Cowboy")
 
 To build the software on Windows, follow these steps:
