@@ -21,38 +21,19 @@ Font* Font::load(std::string path)
   //Debug::log("Loading font from '" + path + "'");
   font->texture.reset(Texture2d::load(path));
 
-  std::ifstream file(path + ".font");
-
-  if(file.is_open() == false)
-  {
-    Debug::logError("Failed to open font");
-    throw std::exception();
-  }
-
   std::vector<std::string> characters;
   int maxChars = 0;
+  std::string chars;
 
-  while(file.eof() == false)
+  for(int i = 32; i < 127; i++)
   {
-    std::string line;
-    getline(file, line);
-
-    if(line.length() < 1)
-    {
-      break;
-    }
-
-    if(line.length() > maxChars)
-    {
-      maxChars = line.length();
-    }
-
-    characters.push_back(line);
+    chars += (char)i;
   }
 
-  Vector2 charSize((float)font->texture->getWidth() / (float)maxChars, (float)font->texture->getHeight() / (float)characters.size());
+  maxChars = chars.length();
+  characters.push_back(chars);
 
-  //std::cout << charSize.x << " " << charSize.y << std::endl;
+  Vector2 charSize((float)font->texture->getWidth() / (float)maxChars, (float)font->texture->getHeight() / (float)characters.size());
 
   for(int y = 0; y < characters.size(); y++)
   {
