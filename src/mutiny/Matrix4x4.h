@@ -35,6 +35,7 @@ public:
   Matrix4x4 rotate(Vector3 vector);
   Matrix4x4 rotate(float angle, Vector3 vector);
   Matrix4x4 inverse();
+  Matrix4x4 transpose();
 
   Vector3 multiplyPoint(Vector3 v);
   Vector3 multiplyVector(Vector3 v);

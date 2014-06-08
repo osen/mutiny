@@ -121,6 +121,15 @@ Matrix4x4 Matrix4x4::inverse()
   return mat;
 }
 
+Matrix4x4 Matrix4x4::transpose()
+{
+  Matrix4x4 mat;
+
+  mat4x4_transpose(mat.m, m);
+
+  return mat;
+}
+
 Vector3 Matrix4x4::multiplyPoint(Vector3 v)
 {
   vec3 rtnVec;

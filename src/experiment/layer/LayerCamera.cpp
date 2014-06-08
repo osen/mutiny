@@ -24,7 +24,7 @@ void LayerCamera::onAwake()
 
 void LayerCamera::onUpdate()
 {
-  getGameObject()->getTransform()->rotateAround(Vector3(0, 0, 0), Vector3(0, 1, 0), 100.0f * Time::getDeltaTime());
+  //getGameObject()->getTransform()->rotateAround(Vector3(0, 0, 0), Vector3(0, 1, 0), 100.0f * Time::getDeltaTime());
   getGameObject()->getTransform()->lookAt(Vector3(0, 0, 0));
 }
 

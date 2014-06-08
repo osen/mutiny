@@ -26,8 +26,11 @@ void LayerScreen::onAwake()
   Mesh* mesh = Resources::load<Mesh>("models/curuthers/curuthers");
   MeshFilter* playerMf = playerGo->addComponent<MeshFilter>();
   playerMf->setMesh(mesh);
-  
-  
+}
+
+void LayerScreen::onUpdate()
+{
+  playerGo->getComponent<Transform>()->rotate(Vector3(0, 100, 0) * Time::getDeltaTime());
 }
 
 void LayerScreen::onGui()
