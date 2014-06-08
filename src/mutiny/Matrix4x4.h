@@ -9,12 +9,14 @@ namespace mutiny
 namespace engine
 {
 
+class Graphics;
 class Material;
 class Gui;
 class Vector3;
 
 class Matrix4x4
 {
+  friend class mutiny::engine::Graphics;
   friend class mutiny::engine::Material;
   friend class mutiny::engine::Gui;
 

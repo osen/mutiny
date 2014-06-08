@@ -41,8 +41,6 @@ private:
   static Material* defaultMaterial;
   static RenderTexture* renderTarget;
 
-  static void drawMeshNow(Mesh* mesh, int materialIndex);
-
 };
 
 }

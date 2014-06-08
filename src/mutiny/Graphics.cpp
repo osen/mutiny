@@ -103,7 +103,8 @@ void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, Materia
   for(int i = 0; i < material->getPassCount(); i++)
   {
     material->setPass(i);
-    drawMeshNow(&mesh, 0);
+    // HACK: A matrix is required to be passed into drawMeshNow.
+    drawMeshNow(&mesh, Matrix4x4::getIdentity(), 0);
   }
 
   glCullFace(GL_FRONT);
@@ -148,16 +149,6 @@ void Graphics::drawTexture(Rect rect, Texture* texture, Material* material)
 void Graphics::drawMeshNow(Mesh* mesh, Matrix4x4 matrix, int materialIndex)
 {
   Material* material;
-
-  material = Material::current;
-  material->setMatrix("in_Model", matrix);
-
-  drawMeshNow(mesh, materialIndex);
-}
-
-void Graphics::drawMeshNow(Mesh* mesh, int materialIndex)
-{
-  Material* material;
   Shader* shader;
 
   if(mesh == NULL)
@@ -186,6 +177,14 @@ void Graphics::drawMeshNow(Mesh* mesh, int materialIndex)
   {
     Debug::log("Shader is NULL");
     return;
+  }
+
+  GLuint modelUniformId = glGetUniformLocation(shader->programId, "in_Model");
+
+  if(modelUniformId != -1)
+  {
+    //material->setMatrix("in_Model", matrix);
+    glUniformMatrix4fv(modelUniformId, 1, GL_FALSE, matrix.getValue());
   }
 
   GLint positionAttribId = glGetAttribLocation(shader->programId, "in_Position");

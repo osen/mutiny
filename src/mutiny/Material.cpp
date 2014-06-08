@@ -162,7 +162,7 @@ void Material::refreshIndexes()
 
     if(uniformId == -1)
     {
-      Debug::logWarning("The specified matrix name was not found in the shader");
+      Debug::logWarning("The specified matrix name '" + matrixNames.at(i) + "' was not found in the shader");
       continue;
     }
 
