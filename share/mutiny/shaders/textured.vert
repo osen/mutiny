@@ -17,8 +17,8 @@ varying vec3 ex_N;
 
 void main()
 {
-  ex_V = vec3(in_View * in_Model * vec4(in_Position, 1)); 
   ex_N = normalize(in_NormalMatrix * vec4(in_Normal, 1)).xyz;
+  ex_V = vec3(in_View * in_Model * vec4(in_Position, 1)); 
   ex_Uv = in_Uv;
   ex_LightPos = vec4(in_View * in_Model * vec4(10, 0, 10, 1)).xyz;
   gl_Position = in_Projection * in_View * in_Model * vec4(in_Position, 1);
