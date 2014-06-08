@@ -55,7 +55,7 @@ void SkyBox::onAwake()
   //texture->setPixel(0, 0, Color(1, 0, 0));
   //texture->apply();
 
-  Material* material = new Material(Resources::load<Material>("shaders/textured"));
+  Material* material = new Material(Resources::load<Material>("shaders/Internal-MeshRendererTexture"));
   material->setMainTexture(texture);
 
   MeshRenderer* meshRenderer = getGameObject()->addComponent<MeshRenderer>();

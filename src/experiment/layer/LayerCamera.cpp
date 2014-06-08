@@ -19,7 +19,7 @@ void LayerCamera::onAwake()
   Camera* camera = getGameObject()->addComponent<Camera>();
   camera->setBackgroundColor(Color(0, 0, 0, 1));
 
-  getGameObject()->getTransform()->setPosition(Vector3(0, 0, -8));
+  getGameObject()->getTransform()->setPosition(Vector3(0, 0, 8));
 }
 
 void LayerCamera::onUpdate()

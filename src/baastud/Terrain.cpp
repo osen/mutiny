@@ -19,7 +19,7 @@ void Terrain::onAwake()
   Mesh* mesh = Resources::load<Mesh>("models/terrain/terrain");
   Texture2d* tex = Resources::load<Texture2d>("models/terrain/terrain");
 
-  Material* material = new Material(Resources::load<Material>("shaders/textured"));
+  Material* material = new Material(Resources::load<Material>("shaders/Internal-MeshRendererTexture"));
   material->setMainTexture(tex);
 
   mr->setMaterial(material);

@@ -19,7 +19,7 @@ void Level::onAwake()
   Texture* texture = Resources::load<Texture2d>("models/level/level");
   Mesh* mesh = Resources::load<Mesh>("models/level/level");
   getGameObject()->addComponent<MeshFilter>()->setMesh(mesh);
-  material = new Material(Resources::load<Material>("shaders/textured"));
+  material = new Material(Resources::load<Material>("shaders/Internal-MeshRendererTexture"));
   getGameObject()->addComponent<MeshRenderer>()->setMaterial(material);
   material->setMainTexture(texture);
 

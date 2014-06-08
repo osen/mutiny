@@ -103,8 +103,8 @@ void Application::init(int argc, char* argv[])
     throw std::exception();
   }
 
-  Material::defaultMaterial = Resources::load<Material>("shaders/default_diffuse");
-  //if(Material::defaultMaterial == NULL) { throw Exception("Failed to load 'shaders/default_diffuse'"); }
+  Material::defaultMaterial = Resources::load<Material>("shaders/Internal-DefaultDiffuseTexture");
+  //if(Material::defaultMaterial == NULL) { throw Exception("Failed to load 'shaders/Internal-DefaultDiffuseTexture'"); }
   if(Material::defaultMaterial == NULL) { throw std::exception(); }
   Object::dontDestroyOnLoad(Material::defaultMaterial);
 

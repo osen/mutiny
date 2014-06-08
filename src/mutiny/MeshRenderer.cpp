@@ -80,7 +80,7 @@ void MeshRenderer::render()
 
     material->setMatrix("in_Projection", Camera::getCurrent()->getProjectionMatrix());
     material->setMatrix("in_View", viewMat);
-    material->setMatrix("in_NormalMatrix", (viewMat * modelMat).inverse().transpose());
+    material->setMatrix("in_NormalMatrix", (viewMat * modelMat.inverse()).transpose());
 
     for(int j = 0; j < material->getPassCount(); j++)
     {

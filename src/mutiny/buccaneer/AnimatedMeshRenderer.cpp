@@ -224,12 +224,12 @@ void AnimatedMeshRenderer::setAnimatedMesh(AnimatedMesh* mesh)
 
       if(tex != NULL)
       {
-        material = new Material(Resources::load<Shader>("shaders/textured"));
+        material = new Material(Resources::load<Shader>("shaders/Internal-MeshRendererTexture"));
         material->setMainTexture(tex);
       }
       else
       {
-        material = new Material(Resources::load<Shader>("shaders/default_diffuse"));
+        material = new Material(Resources::load<Shader>("shaders/Internal-DefaultDiffuseTexture"));
       }
 
       materials.push_back(std::unique_ptr<Material>(material));

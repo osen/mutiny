@@ -38,7 +38,7 @@ void CollisionScreen::onAwake()
   SkyBox::create(cameraGo);
 
   levelMesh = Resources::load<Mesh>("models/level/level");
-  levelMaterial = Resources::load<Material>("shaders/textured");
+  levelMaterial = Resources::load<Material>("shaders/Internal-MeshRendererTexture");
   levelTexture = Resources::load<Texture2d>("models/level/level");
   levelMaterial->setMainTexture(levelTexture);
 
