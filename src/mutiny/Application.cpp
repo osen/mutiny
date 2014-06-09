@@ -121,7 +121,7 @@ void Application::init(int argc, char* argv[])
   Material::current = NULL;
   RenderTexture::active = NULL;
   Camera::current = NULL;
-  Camera::main = NULL;
+  Camera::_main = NULL;
   Gui::skin = NULL;
   Graphics::defaultMaterial = NULL;
   Graphics::renderTarget = NULL;

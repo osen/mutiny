@@ -41,7 +41,7 @@ public:
 private:
   static std::vector<Camera*> allCameras;
   static Camera* current;
-  static Camera* main;
+  static Camera* _main;
 
   Color backgroundColor;
   float fieldOfView;

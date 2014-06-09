@@ -12,11 +12,11 @@ namespace engine
 
 std::vector<Camera*> Camera::allCameras;
 Camera* Camera::current;
-Camera* Camera::main;
+Camera* Camera::_main;
 
 Camera* Camera::getMain()
 {
-  return main;
+  return Camera::_main;
 }
 
 Camera* Camera::getCurrent()
@@ -96,10 +96,10 @@ void Camera::setTargetTexture(RenderTexture* targetTexture)
 
 void Camera::onStart()
 {
-  if(main == NULL && getGameObject()->getName() == "MainCamera")
+  if(_main == NULL && getGameObject()->getName() == "MainCamera")
   {
     //Debug::log("MainCamera added");
-    main = this;
+    _main = this;
   }
 
   allCameras.push_back(this);
@@ -119,9 +119,9 @@ void Camera::onDestroy()
 {
   //Debug::log("Camera destroyed");
 
-  if(main == this)
+  if(_main == this)
   {
-    main = NULL;
+    _main = NULL;
   }
 
   for(int i = 0; i < allCameras.size(); i++)
