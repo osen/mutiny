@@ -30,7 +30,8 @@ void BloomCamera::onAwake()
   texturedMaterial->setFloat("in_Direction", 0);
   mergeMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, 1, 1, 0, -1, 1));
 
-  getGameObject()->getTransform()->setPosition(Vector3(-10, 0, -18));
+  getGameObject()->getTransform()->setPosition(Vector3(-10, 0, 0));
+  getGameObject()->getTransform()->lookAt(Vector3(-10, 0, -10));
 }
 
 void BloomCamera::regenRenderTextures()
@@ -60,8 +61,7 @@ void BloomCamera::regenRenderTextures()
 
 void BloomCamera::onUpdate()
 {
-  getGameObject()->getTransform()->rotateAround(Vector3(-10, 0, -10), Vector3(0, 1, 0), 100.0f * Time::getDeltaTime());
-  getGameObject()->getTransform()->lookAt(Vector3(-10, 0, -10));
+  //getGameObject()->getTransform()->rotateAround(Vector3(-10, 0, -10), Vector3(0, 1, 0), 100.0f * Time::getDeltaTime());
   regenRenderTextures();
 }
 

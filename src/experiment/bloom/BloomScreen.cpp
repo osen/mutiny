@@ -14,7 +14,7 @@ GameObject* BloomScreen::create()
 void BloomScreen::onAwake()
 {
   BloomCamera::create();
-  GameObject* playerGo = new GameObject("Player");
+  playerGo = new GameObject("Player");
   playerGo->getTransform()->setPosition(Vector3(-10, 0, -10));
 
   MeshRenderer* playerMr = playerGo->addComponent<MeshRenderer>();
@@ -24,8 +24,11 @@ void BloomScreen::onAwake()
   Mesh* mesh = Resources::load<Mesh>("models/curuthers/curuthers");
   MeshFilter* playerMf = playerGo->addComponent<MeshFilter>();
   playerMf->setMesh(mesh);
-  
-  
+}
+
+void BloomScreen::onUpdate()
+{
+  playerGo->getComponent<Transform>()->rotate(Vector3(0, -100, 0) * Time::getDeltaTime());
 }
 
 void BloomScreen::onGui()
