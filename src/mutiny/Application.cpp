@@ -259,11 +259,6 @@ void Application::loop()
   Screen::width = screen->w;
   Screen::height = screen->h;
 
-  Input::downKeys.clear();
-  Input::upKeys.clear();
-  Input::downMouseButtons.clear();
-  Input::upMouseButtons.clear();
-
   while(SDL_PollEvent(&event))
   {
     if(event.type == SDL_QUIT)
@@ -272,142 +267,37 @@ void Application::loop()
     }
     else if(event.type == SDL_VIDEORESIZE)
     {
-      Screen::width = event.resize.w;
-      Screen::height = event.resize.h;
-      screen = SDL_SetVideoMode(Screen::width, Screen::height, 32, SDL_OPENGL | SDL_RESIZABLE);
+      reshape(event.resize.w, event.resize.h);
     }
     else if(event.type == SDL_MOUSEMOTION)
     {
-      Input::mousePosition.x = event.motion.x;
-      Input::mousePosition.y = event.motion.y;
+      motion(event.motion.x, event.motion.y);
     }
     else if(event.type == SDL_MOUSEBUTTONDOWN)
     {
-      for(int i = 0; i < Input::mouseButtons.size(); i++)
-      {
-        if(Input::mouseButtons.at(i) == event.button.button)
-        {
-          continue;
-        }
-      }
-
-      Input::mouseDownPosition.x = Input::mousePosition.x;
-      Input::mouseDownPosition.y = Input::mousePosition.y;
-      Input::mouseButtons.push_back(event.button.button);
-      Input::downMouseButtons.push_back(event.button.button);
+      mouse(event.button.button, SDL_MOUSEBUTTONDOWN, Input::mousePosition.x, Input::mousePosition.y);
     }
     else if(event.type == SDL_MOUSEBUTTONUP)
     {
-      for(int i = 0; i < Input::mouseButtons.size(); i++)
-      {
-        if(Input::mouseButtons.at(i) == event.button.button)
-        {
-          Input::mouseButtons.erase(Input::mouseButtons.begin() + i);
-          i--;
-        }
-      }
-
-      Input::upMouseButtons.push_back(event.button.button);
-      //std::cout << (int)event.button.button << std::endl;
+      mouse(event.button.button, SDL_MOUSEBUTTONUP, Input::mousePosition.x, Input::mousePosition.y);
     }
     else if(event.type == SDL_KEYDOWN)
     {
-      //std::cout << event.key.keysym.sym << std::endl;
-      for(int i = 0; i < Input::keys.size(); i++)
-      {
-        if(Input::keys.at(i) == event.key.keysym.sym)
-        {
-          continue;
-        }
-      }
-
-      Input::keys.push_back(event.key.keysym.sym);
-      Input::downKeys.push_back(event.key.keysym.sym);
+      keyboard(event.key.keysym.sym, Input::mousePosition.x, Input::mousePosition.y);
     }
     else if(event.type == SDL_KEYUP)
     {
-      for(int i = 0; i < Input::keys.size(); i++)
-      {
-        if(Input::keys.at(i) == event.key.keysym.sym)
-        {
-          Input::keys.erase(Input::keys.begin() + i);
-          i--;
-        }
-      }
-
-      Input::upKeys.push_back(event.key.keysym.sym);
+      keyboardUp(event.key.keysym.sym, Input::mousePosition.x, Input::mousePosition.y);
     }
   }
 
-  for(int i = 0; i < gameObjects.size(); i++)
-  {
-    gameObjects.at(i)->update();
-  }
+  idle();
+  display();
 
-  std::vector<std::shared_ptr<GameObject> > destroyedGos;
-  for(int i = 0; i < gameObjects.size(); i++)
-  {
-    if(gameObjects.at(i)->destroyed == true)
-    {
-      gameObjects.at(i)->destroy();
-      destroyedGos.push_back(gameObjects.at(i));
-      gameObjects.erase(gameObjects.begin() + i);
-      i--;
-    }
-  }
-  destroyedGos.clear();
-
-  glClearColor(32.0f / 255.0f, 32.0f / 255.0f, 32.0f / 255.0f, 1.0f);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glViewport(0, 0, Screen::getWidth(), Screen::getHeight());
-
-  for(int h = 0; h < Camera::getAllCameras()->size(); h++)
-  {
-    if(Camera::getAllCameras()->at(h)->getGameObject()->getActive() == false)
-    {
-      continue;
-    }
-
-    Camera::current = Camera::getAllCameras()->at(h);
-
-    if(Camera::getCurrent()->targetTexture != NULL)
-    {
-      RenderTexture::setActive(Camera::getCurrent()->targetTexture);
-    }
-
-    //glClearColor(0.2f, 0.2f, 0.5f, 1.0f);
-    Color clearColor = Camera::getCurrent()->getBackgroundColor();
-    glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-    for(int i = 0; i < gameObjects.size(); i++)
-    {
-      if((Camera::getCurrent()->getCullMask() & gameObjects.at(i)->getLayer()) !=
-        gameObjects.at(i)->getLayer())
-      {
-        continue;
-      }
-
-      gameObjects.at(i)->render();
-    }
-
-    if(Camera::getCurrent()->targetTexture != NULL)
-    {
-      RenderTexture::setActive(NULL);
-    }
-  }
-
-  for(int i = 0; i < gameObjects.size(); i++)
-  {
-    gameObjects.at(i)->postRender();
-  }
-
-  for(int i = 0; i < gameObjects.size(); i++)
-  {
-    gameObjects.at(i)->gui();
-  }
-
-  SDL_GL_SwapBuffers();
+  Input::downKeys.clear();
+  Input::upKeys.clear();
+  Input::downMouseButtons.clear();
+  Input::upMouseButtons.clear();
 
   if(levelChange != "")
   {
@@ -542,6 +432,157 @@ int Application::getArgc()
 std::string Application::getArgv(int i)
 {
   return argv.at(i);
+}
+
+void Application::reshape(int width, int height)
+{
+  Screen::width = width;
+  Screen::height = height;
+  screen = SDL_SetVideoMode(Screen::width, Screen::height, 32, SDL_OPENGL | SDL_RESIZABLE);
+}
+
+void Application::display()
+{
+  glClearColor(32.0f / 255.0f, 32.0f / 255.0f, 32.0f / 255.0f, 1.0f);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glViewport(0, 0, Screen::getWidth(), Screen::getHeight());
+
+  for(int h = 0; h < Camera::getAllCameras()->size(); h++)
+  {
+    if(Camera::getAllCameras()->at(h)->getGameObject()->getActive() == false)
+    {
+      continue;
+    }
+
+    Camera::current = Camera::getAllCameras()->at(h);
+
+    if(Camera::getCurrent()->targetTexture != NULL)
+    {
+      RenderTexture::setActive(Camera::getCurrent()->targetTexture);
+    }
+
+    //glClearColor(0.2f, 0.2f, 0.5f, 1.0f);
+    Color clearColor = Camera::getCurrent()->getBackgroundColor();
+    glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    for(int i = 0; i < gameObjects.size(); i++)
+    {
+      if((Camera::getCurrent()->getCullMask() & gameObjects.at(i)->getLayer()) !=
+        gameObjects.at(i)->getLayer())
+      {
+        continue;
+      }
+
+      gameObjects.at(i)->render();
+    }
+
+    if(Camera::getCurrent()->targetTexture != NULL)
+    {
+      RenderTexture::setActive(NULL);
+    }
+  }
+
+  for(int i = 0; i < gameObjects.size(); i++)
+  {
+    gameObjects.at(i)->postRender();
+  }
+
+  for(int i = 0; i < gameObjects.size(); i++)
+  {
+    gameObjects.at(i)->gui();
+  }
+
+  SDL_GL_SwapBuffers();
+}
+
+void Application::idle()
+{
+  for(int i = 0; i < gameObjects.size(); i++)
+  {
+    gameObjects.at(i)->update();
+  }
+
+  std::vector<std::shared_ptr<GameObject> > destroyedGos;
+  for(int i = 0; i < gameObjects.size(); i++)
+  {
+    if(gameObjects.at(i)->destroyed == true)
+    {
+      gameObjects.at(i)->destroy();
+      destroyedGos.push_back(gameObjects.at(i));
+      gameObjects.erase(gameObjects.begin() + i);
+      i--;
+    }
+  }
+  destroyedGos.clear();
+}
+
+void Application::motion(int x, int y)
+{
+  Input::mousePosition.x = x;
+  Input::mousePosition.y = y;
+}
+
+void Application::mouse(int button, int state, int x, int y)
+{
+  if(state == SDL_MOUSEBUTTONDOWN)
+  {
+    for(int i = 0; i < Input::mouseButtons.size(); i++)
+    {
+      if(Input::mouseButtons.at(i) == button)
+      {
+        return;
+      }
+    }
+
+    Input::mouseDownPosition.x = x;
+    Input::mouseDownPosition.y = y;
+    Input::mouseButtons.push_back(button);
+    Input::downMouseButtons.push_back(button);
+  }
+  else
+  {
+    for(int i = 0; i < Input::mouseButtons.size(); i++)
+    {
+      if(Input::mouseButtons.at(i) == button)
+      {
+        Input::mouseButtons.erase(Input::mouseButtons.begin() + i);
+        i--;
+      }
+    }
+
+    Input::upMouseButtons.push_back(button);
+    //std::cout << (int)button << std::endl;
+  }
+}
+
+void Application::keyboard(int key, int x, int y)
+{
+  //std::cout << key << std::endl;
+  for(int i = 0; i < Input::keys.size(); i++)
+  {
+    if(Input::keys.at(i) == key)
+    {
+      return;
+    }
+  }
+
+  Input::keys.push_back(key);
+  Input::downKeys.push_back(key);
+}
+
+void Application::keyboardUp(int key, int x, int y)
+{
+  for(int i = 0; i < Input::keys.size(); i++)
+  {
+    if(Input::keys.at(i) == key)
+    {
+      Input::keys.erase(Input::keys.begin() + i);
+      i--;
+    }
+  }
+
+  Input::upKeys.push_back(key);
 }
 
 }

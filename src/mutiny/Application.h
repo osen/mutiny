@@ -64,6 +64,14 @@ private:
   static void displaySplash();
   static void setupPaths();
 
+  static void reshape(int width, int height);
+  static void display();
+  static void idle();
+  static void motion(int x, int y);
+  static void mouse(int button, int state, int x, int y);
+  static void keyboard(int key, int x, int y);
+  static void keyboardUp(int key, int x, int y);
+
 };
 
 }
