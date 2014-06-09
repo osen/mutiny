@@ -48,6 +48,7 @@
 #include "AudioClip.h"
 #include "AudioSource.h"
 #include "Random.h"
+#include "Mathf.h"
 
 #include "buccaneer/buccaneer.h"
 

@@ -16,11 +16,10 @@ void BloomCamera::onAwake()
 {
   Debug::log("BloomCamera awoken");
 
-  originalPass.reset(new RenderTexture(512, 512));
-  lightKeyPass.reset(new RenderTexture(512, 512));
-  blurPass1.reset(new RenderTexture(512, 512));
-  blurPass2.reset(new RenderTexture(512, 512));
-  mergePass.reset(new RenderTexture(512, 512));
+  Camera* camera = getGameObject()->addComponent<Camera>();
+  camera->setBackgroundColor(Color(0, 0, 0, 1));
+
+  regenRenderTextures();
 
   lightKeyMaterial = Resources::load<Material>("shaders/bloom/light_key");
   texturedMaterial = Resources::load<Material>("shaders/bloom/blur");
@@ -31,17 +30,39 @@ void BloomCamera::onAwake()
   texturedMaterial->setFloat("in_Direction", 0);
   mergeMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, 1, 1, 0, -1, 1));
 
-  Camera* camera = getGameObject()->addComponent<Camera>();
-  camera->setBackgroundColor(Color(0, 0, 0, 1));
-  camera->setTargetTexture(originalPass.get());
-
   getGameObject()->getTransform()->setPosition(Vector3(-10, 0, -18));
+}
+
+void BloomCamera::regenRenderTextures()
+{
+  int idealWidth = Mathf::nextPowerOfTwo(Screen::getWidth());
+  int idealHeight = Mathf::nextPowerOfTwo(Screen::getHeight());
+
+  if(originalPass.get() != NULL)
+  {
+    if(originalPass->getWidth() == idealWidth &&
+       originalPass->getHeight() == idealHeight)
+    {
+      return;
+    }
+  }
+
+  Debug::logWarning("Resizing render textures");
+
+  originalPass.reset(new RenderTexture(idealWidth, idealHeight));
+  lightKeyPass.reset(new RenderTexture(idealWidth, idealHeight));
+  blurPass1.reset(new RenderTexture(idealWidth, idealHeight));
+  blurPass2.reset(new RenderTexture(idealWidth, idealHeight));
+  mergePass.reset(new RenderTexture(idealWidth, idealHeight));
+
+  getGameObject()->getComponent<Camera>()->setTargetTexture(originalPass.get());
 }
 
 void BloomCamera::onUpdate()
 {
   getGameObject()->getTransform()->rotateAround(Vector3(-10, 0, -10), Vector3(0, 1, 0), 100.0f * Time::getDeltaTime());
   getGameObject()->getTransform()->lookAt(Vector3(-10, 0, -10));
+  regenRenderTextures();
 }
 
 void BloomCamera::onPostRender()
@@ -58,18 +79,18 @@ void BloomCamera::onPostRender()
 
   bool swap = false;
 
-  for(int i = 0; i < 6; i++)
+  for(int i = 0; i < 4; i++)
   {
     if(swap == false)
     {
-      texturedMaterial->setFloat("in_Direction", 0);
+      texturedMaterial->setVector("in_Scale", Vector2(1.0f / ((float)Screen::getWidth() * 0.4f), 0));
       Graphics::setRenderTarget(blurPass2.get());
       Graphics::drawTexture(rect, blurPass1.get(), texturedMaterial);
       swap = true;
     }
     else
     {
-      texturedMaterial->setFloat("in_Direction", 1);
+      texturedMaterial->setVector("in_Scale", Vector2(0, 1.0f / ((float)Screen::getHeight() * 0.4f)));
       Graphics::setRenderTarget(blurPass1.get());
       Graphics::drawTexture(rect, blurPass2.get(), texturedMaterial);
       swap = false;

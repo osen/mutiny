@@ -3,6 +3,7 @@
 
 #include "Object.h"
 #include "Matrix4x4.h"
+#include "Vector2.h"
 
 #include <GL/glew.h>
 
@@ -43,6 +44,7 @@ public:
   void setShader(Shader* shader);
   void setMatrix(std::string propertyName, Matrix4x4 matrix);
   void setFloat(std::string propertyName, float value);
+  void setVector(std::string propertyName, Vector2 value);
   void setTexture(std::string propertyName, Texture* texture);
   Texture* getTexture(std::string propertyName);
   void setMainTexture(Texture* texture);
@@ -61,6 +63,7 @@ private:
 
   std::vector<Matrix4x4> matrices; std::vector<GLuint> matrixIndexes; std::vector<std::string> matrixNames;
   std::vector<float> floats; std::vector<GLuint> floatIndexes; std::vector<std::string> floatNames;
+  std::vector<Vector2> vector2s; std::vector<GLuint> vector2Indexes; std::vector<std::string> vector2Names;
   std::vector<Texture*> textures; std::vector<GLuint> textureIndexes; std::vector<std::string> textureNames;
 
   std::shared_ptr<Shader> shader;

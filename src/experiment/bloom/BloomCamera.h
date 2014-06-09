@@ -26,6 +26,8 @@ private:
   Material* lightKeyMaterial;
   Material* mergeMaterial;
 
+  void regenRenderTextures();
+
 };
 
 #endif

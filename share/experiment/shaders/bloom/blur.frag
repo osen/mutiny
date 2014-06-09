@@ -3,7 +3,7 @@
 #endif
 
 uniform sampler2D in_Texture;
-uniform float in_Direction;
+uniform vec2 in_Scale;
 
 varying vec2 ex_Uv;
 
@@ -21,20 +21,9 @@ void main()
 
 	vec4 color = vec4(0, 0, 0, 0);
 
-  vec2 scale;
-
-  if(in_Direction == 0.0)
-  {
-    scale = vec2(0, 1.0 / 200.0);
-  }
-  else
-  {
-    scale = vec2(1.0 / 200.0, 0);
-  }
-
 	for( int i = 0; i < 7; i++ )
 	{
-		color += texture2D(in_Texture, vec2(ex_Uv.x+gaussFilter[i].x*scale.x, ex_Uv.y+gaussFilter[i].x*scale.y)) * gaussFilter[i].y;
+		color += texture2D(in_Texture, vec2(ex_Uv.x+gaussFilter[i].x*in_Scale.x, ex_Uv.y+gaussFilter[i].x*in_Scale.y)) * gaussFilter[i].y;
 	}
 
   gl_FragColor = color;

@@ -120,6 +120,23 @@ void Material::setTexture(std::string propertyName, Texture* texture)
   indexesDirty = true;
 }
 
+void Material::setVector(std::string propertyName, Vector2 value)
+{
+  for(int i = 0; i < vector2Names.size(); i++)
+  {
+    if(vector2Names.at(i) == propertyName)
+    {
+      vector2s[i] = value;
+      return;
+    }
+  }
+
+  vector2s.push_back(value);
+  vector2Indexes.push_back(-1);
+  vector2Names.push_back(propertyName);
+  indexesDirty = true;
+}
+
 void Material::setFloat(std::string propertyName, float value)
 {
   for(int i = 0; i < floatNames.size(); i++)
@@ -167,6 +184,19 @@ void Material::refreshIndexes()
     }
 
     matrixIndexes[i] = uniformId;
+  }
+
+  for(int i = 0; i < vector2Names.size(); i++)
+  {
+    GLuint uniformId = glGetUniformLocation(shader->programId, vector2Names.at(i).c_str());
+
+    if(uniformId == -1)
+    {
+      //Debug::logWarning("The specified vector2 name was not found in the shader");
+      continue;
+    }
+
+    vector2Indexes[i] = uniformId;
   }
 
   for(int i = 0; i < floatNames.size(); i++)
@@ -235,6 +265,11 @@ void Material::setPass(int pass)
   for(int i = 0; i < matrixNames.size(); i++)
   {
     glUniformMatrix4fv(matrixIndexes[i], 1, GL_FALSE, matrices[i].getValue());
+  }
+
+  for(int i = 0; i < vector2Names.size(); i++)
+  {
+    glUniform2f(vector2Indexes[i], vector2s[i].x, vector2s[i].y);
   }
 
   for(int i = 0; i < floatNames.size(); i++)
