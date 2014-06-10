@@ -51,5 +51,10 @@ void IntroductionScreen::onGui()
   {
     Application::loadLevel("layer");
   }
+
+  if(Gui::button(Rect(410, 400, 200, 50), "Accumulation Example") == true)
+  {
+    Application::loadLevel("accum");
+  }
 }
 

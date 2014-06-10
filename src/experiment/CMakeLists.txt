@@ -19,6 +19,9 @@ add_executable(experiment
 
   layer/LayerCamera.cpp
   layer/LayerScreen.cpp
+
+  accum/AccumCamera.cpp
+  accum/AccumScreen.cpp
 )
 
 target_link_libraries(experiment mutiny)

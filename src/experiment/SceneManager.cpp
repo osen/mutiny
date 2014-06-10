@@ -6,6 +6,7 @@
 #include "post/PostScreen.h"
 #include "bloom/BloomScreen.h"
 #include "layer/LayerScreen.h"
+#include "accum/AccumScreen.h"
 
 using namespace mutiny::engine;
 
@@ -51,6 +52,10 @@ void SceneManager::loadLevel()
   else if (Application::getLoadedLevelName() == "layer")
   {
     LayerScreen::create();
+  }
+  else if (Application::getLoadedLevelName() == "accum")
+  {
+    AccumScreen::create();
   }
 }
 
