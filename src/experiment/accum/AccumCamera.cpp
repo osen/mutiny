@@ -25,12 +25,14 @@ void AccumCamera::onAwake()
   texturedMaterial = Resources::load<Material>("shaders/accum/blur");
   mergeMaterial = Resources::load<Material>("shaders/accum/merge");
   accumMaterial = Resources::load<Material>("shaders/accum/accum");
+  deaccumMaterial = Resources::load<Material>("shaders/accum/deaccum");
 
   lightKeyMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, 1, 1, 0, -1, 1));
   texturedMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, 1, 1, 0, -1, 1));
   texturedMaterial->setFloat("in_Direction", 0);
   mergeMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, 1, 1, 0, -1, 1));
   accumMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, 1, 1, 0, -1, 1));
+  deaccumMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, 1, 1, 0, -1, 1));
 
   getGameObject()->getTransform()->setPosition(Vector3(-5, 3, -2));
   getGameObject()->getTransform()->lookAt(Vector3(-10, 0, -10));
@@ -58,6 +60,10 @@ void AccumCamera::regenRenderTextures()
   blurPass2.reset(new RenderTexture(idealWidth/2.0f, idealHeight/2.0f));
   mergePass.reset(new RenderTexture(idealWidth, idealHeight));
   accumPass.reset(new RenderTexture(idealWidth, idealHeight));
+  deaccumPass.reset(new RenderTexture(idealWidth, idealHeight));
+
+  accumA = accumPass.get();
+  accumB = deaccumPass.get();
 
   getGameObject()->getComponent<Camera>()->setTargetTexture(originalPass.get());
 }
@@ -76,15 +82,25 @@ void AccumCamera::onPostRender()
   Graphics::drawTexture(rect, originalPass.get(), lightKeyMaterial);
   Graphics::setRenderTarget(NULL);
 
-  Graphics::setRenderTarget(accumPass.get());
+  Graphics::setRenderTarget(accumA);
   Graphics::drawTexture(rect, lightKeyPass.get(), accumMaterial);
   Graphics::setRenderTarget(NULL);
 
+  deaccumMaterial->setFloat("in_TimeDelta", Time::getDeltaTime());
+  Graphics::setRenderTarget(accumB);
+  Graphics::drawTexture(rect, accumA, deaccumMaterial);
+  Graphics::setRenderTarget(NULL);
+
+  RenderTexture* tmp = accumA;
+  accumA = accumB;
+  accumB = tmp;
+
   Graphics::setRenderTarget(blurPass1.get());
-  Graphics::drawTexture(rect, accumPass.get(), texturedMaterial);
+  Graphics::drawTexture(rect, accumB, texturedMaterial);
   Graphics::setRenderTarget(NULL);
 
   bool swap = false;
+
   int idealWidth = Mathf::nextPowerOfTwo(Screen::getWidth());
   int idealHeight = Mathf::nextPowerOfTwo(Screen::getHeight());
 
@@ -114,6 +130,6 @@ void AccumCamera::onPostRender()
   Graphics::setRenderTarget(NULL);
 
   Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), mergePass.get());
-  //Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), accumPass.get());
+  //Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), accumA);
 }
 

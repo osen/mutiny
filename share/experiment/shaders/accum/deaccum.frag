@@ -3,6 +3,7 @@
 #endif
 
 uniform sampler2D in_Texture;
+uniform float in_TimeDelta;
 
 varying vec2 ex_Uv;
 
@@ -10,8 +11,6 @@ void main()
 {
   gl_FragColor = texture2D(in_Texture, vec2(ex_Uv.x, 1.0 - ex_Uv.y));
 
-  if(gl_FragColor.x != 1.0)
-  {
-    gl_FragColor = vec4(0, 0, 0, 1);
-  }
+  gl_FragColor = gl_FragColor - ((gl_FragColor * 5.0) * in_TimeDelta);
+  gl_FragColor.w = 1.0;
 }

@@ -8,10 +8,10 @@ varying vec2 ex_Uv;
 
 void main()
 {
-  gl_FragColor = texture2D(in_Texture, vec2(ex_Uv.x, 1.0 - ex_Uv.y));
+  gl_FragColor = texture2D(in_Texture, ex_Uv);
 
   if(gl_FragColor.x == 0.0)
   {
-    gl_FragColor.w = 0.3;
+    discard;
   }
 }
