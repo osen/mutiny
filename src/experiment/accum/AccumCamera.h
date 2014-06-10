@@ -22,9 +22,11 @@ private:
   std::shared_ptr<RenderTexture> blurPass2;
   std::shared_ptr<RenderTexture> lightKeyPass;
   std::shared_ptr<RenderTexture> mergePass;
+  std::shared_ptr<RenderTexture> accumPass;
   Material* texturedMaterial;
   Material* lightKeyMaterial;
   Material* mergeMaterial;
+  Material* accumMaterial;
 
   void regenRenderTextures();
 

@@ -24,11 +24,13 @@ void AccumCamera::onAwake()
   lightKeyMaterial = Resources::load<Material>("shaders/accum/light_key");
   texturedMaterial = Resources::load<Material>("shaders/accum/blur");
   mergeMaterial = Resources::load<Material>("shaders/accum/merge");
+  accumMaterial = Resources::load<Material>("shaders/accum/accum");
 
   lightKeyMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, 1, 1, 0, -1, 1));
   texturedMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, 1, 1, 0, -1, 1));
   texturedMaterial->setFloat("in_Direction", 0);
   mergeMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, 1, 1, 0, -1, 1));
+  accumMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, 1, 1, 0, -1, 1));
 
   getGameObject()->getTransform()->setPosition(Vector3(-5, 3, -2));
   getGameObject()->getTransform()->lookAt(Vector3(-10, 0, -10));
@@ -55,6 +57,7 @@ void AccumCamera::regenRenderTextures()
   blurPass1.reset(new RenderTexture(idealWidth/2.0f, idealHeight/2.0f));
   blurPass2.reset(new RenderTexture(idealWidth/2.0f, idealHeight/2.0f));
   mergePass.reset(new RenderTexture(idealWidth, idealHeight));
+  accumPass.reset(new RenderTexture(idealWidth, idealHeight));
 
   getGameObject()->getComponent<Camera>()->setTargetTexture(originalPass.get());
 }
@@ -73,8 +76,12 @@ void AccumCamera::onPostRender()
   Graphics::drawTexture(rect, originalPass.get(), lightKeyMaterial);
   Graphics::setRenderTarget(NULL);
 
+  Graphics::setRenderTarget(accumPass.get());
+  Graphics::drawTexture(rect, lightKeyPass.get(), accumMaterial);
+  Graphics::setRenderTarget(NULL);
+
   Graphics::setRenderTarget(blurPass1.get());
-  Graphics::drawTexture(rect, lightKeyPass.get(), texturedMaterial);
+  Graphics::drawTexture(rect, accumPass.get(), texturedMaterial);
   Graphics::setRenderTarget(NULL);
 
   bool swap = false;
@@ -107,5 +114,6 @@ void AccumCamera::onPostRender()
   Graphics::setRenderTarget(NULL);
 
   Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), mergePass.get());
+  //Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), accumPass.get());
 }
 
