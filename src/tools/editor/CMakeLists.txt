@@ -3,6 +3,9 @@ add_executable(editor
   ProjectScreen.cpp
   main.cpp
   SceneManager.cpp
+  Header.cpp
+  FilesPanel.cpp
+  HierarchyPanel.cpp
 #  AuthorCamera.cpp
 )
 
