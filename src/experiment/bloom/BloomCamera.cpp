@@ -30,7 +30,7 @@ void BloomCamera::onAwake()
   texturedMaterial->setFloat("in_Direction", 0);
   mergeMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, 1, 1, 0, -1, 1));
 
-  getGameObject()->getTransform()->setPosition(Vector3(-10, 0, 0));
+  getGameObject()->getTransform()->setPosition(Vector3(-5, 0, -5));
   getGameObject()->getTransform()->lookAt(Vector3(-10, 0, -10));
 }
 
@@ -78,19 +78,21 @@ void BloomCamera::onPostRender()
   Graphics::setRenderTarget(NULL);
 
   bool swap = false;
+  int idealWidth = Mathf::nextPowerOfTwo(Screen::getWidth());
+  int idealHeight = Mathf::nextPowerOfTwo(Screen::getHeight());
 
-  for(int i = 0; i < 4; i++)
+  for(int i = 0; i < 6; i++)
   {
     if(swap == false)
     {
-      texturedMaterial->setVector("in_Scale", Vector2(1.0f / ((float)Screen::getWidth() * 0.4f), 0));
+      texturedMaterial->setVector("in_Scale", Vector2(1.0f / ((float)idealWidth * 0.4f), 0));
       Graphics::setRenderTarget(blurPass2.get());
       Graphics::drawTexture(rect, blurPass1.get(), texturedMaterial);
       swap = true;
     }
     else
     {
-      texturedMaterial->setVector("in_Scale", Vector2(0, 1.0f / ((float)Screen::getHeight() * 0.4f)));
+      texturedMaterial->setVector("in_Scale", Vector2(0, 1.0f / ((float)idealHeight * 0.4f)));
       Graphics::setRenderTarget(blurPass1.get());
       Graphics::drawTexture(rect, blurPass2.get(), texturedMaterial);
       swap = false;
