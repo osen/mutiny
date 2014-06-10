@@ -1,17 +1,13 @@
 #ifndef HEADER_H
 #define HEADER_H
 
-#include <mutiny/mutiny.h>
-
-using namespace mutiny::engine;
+#include "EditorWindow.h"
 
 class ProjectScreen;
 
-class Header
+class Header : public EditorWindow
 {
 public:
-  Rect rect;
-
   Header(ProjectScreen* parent);
 
   void onGui();

@@ -9,13 +9,13 @@ FilesPanel::FilesPanel(ProjectScreen* parent)
 
 void FilesPanel::onGui()
 {
-  rect.x = 0;
-  rect.y = parent->header->rect.height;
-  rect.width = 200;
-  rect.height = Screen::getHeight()
-                - parent->header->rect.height
+  position.x = 0;
+  position.y = parent->header->position.height;
+  position.width = 200;
+  position.height = Screen::getHeight()
+                - parent->header->position.height
                 - parent->logRect.height;
 
-  Gui::box(rect, "");
+  Gui::box(position, "");
 }
 

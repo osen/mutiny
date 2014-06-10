@@ -1,16 +1,13 @@
 #ifndef FILESPANEL_H
 #define FILESPANEL_H
 
-#include <mutiny/mutiny.h>
-
-using namespace mutiny::engine;
+#include "EditorWindow.h"
 
 class ProjectScreen;
 
-class FilesPanel
+class FilesPanel : public EditorWindow
 {
 public:
-  Rect rect;
   ProjectScreen* parent;
 
   FilesPanel(ProjectScreen* parent);

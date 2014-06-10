@@ -1,16 +1,13 @@
 #ifndef HIERARCHYPANEL_H
 #define HIERARCHYPANEL_H
 
-#include <mutiny/mutiny.h>
-
-using namespace mutiny::engine;
+#include "EditorWindow.h"
 
 class ProjectScreen;
 
-class HierarchyPanel
+class HierarchyPanel : public EditorWindow
 {
 public:
-  Rect rect;
   ProjectScreen* parent;
 
   HierarchyPanel(ProjectScreen* parent);

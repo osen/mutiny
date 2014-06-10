@@ -10,6 +10,7 @@ using namespace mutiny::engine;
 class Header;
 class FilesPanel;
 class HierarchyPanel;
+class InspectorPanel;
 
 class ProjectScreen : public Behaviour
 {
@@ -17,11 +18,11 @@ public:
   std::shared_ptr<Header> header;
   std::shared_ptr<FilesPanel> filesPanel;
   std::shared_ptr<HierarchyPanel> hierarchyPanel;
+  std::shared_ptr<InspectorPanel> inspectorPanel;
 
   virtual void onAwake();
   virtual void onGui();
 
-  Rect inspectorRect;
   Rect logRect;
 
 };

@@ -6,6 +6,8 @@ add_executable(editor
   Header.cpp
   FilesPanel.cpp
   HierarchyPanel.cpp
+  InspectorPanel.cpp
+  EditorWindow.cpp
 #  AuthorCamera.cpp
 )
 

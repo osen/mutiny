@@ -9,11 +9,11 @@ HierarchyPanel::HierarchyPanel(ProjectScreen* parent)
 
 void HierarchyPanel::onGui()
 {
-  rect.width = parent->filesPanel->rect.width;
-  rect.x = parent->filesPanel->rect.x;
-  rect.y = parent->logRect.y;
-  rect.height = parent->logRect.height;
+  position.width = parent->filesPanel->position.width;
+  position.x = parent->filesPanel->position.x;
+  position.y = parent->logRect.y;
+  position.height = parent->logRect.height;
 
-  Gui::box(rect, "");
+  Gui::box(position, "");
 }
 
