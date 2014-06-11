@@ -132,19 +132,19 @@ Texture2d* Texture2d::load(std::string path)
     throw std::exception();
   }
 
-#if defined EMSCRIPTEN || defined WINDOWS
+//#if defined EMSCRIPTEN || defined WINDOWS
   surface = tmpSurface;
-#else
-  float targetX = Mathf::nextPowerOfTwo(tmpSurface->w);
-  float targetY = Mathf::nextPowerOfTwo(tmpSurface->h);
-  float scaleX = tmpSurface->w / targetX;
-  float scaleY = tmpSurface->h / targetY;
-
-  //std::cout << scaleX << " " << scaleY << std::endl;
-  //std::cout << tmpSurface->w / scaleX << " " << tmpSurface->h / scaleY << std::endl;
-  
-  surface.reset(zoomSurface(tmpSurface.get(), scaleX, scaleY, SMOOTHING_ON), std::bind(SDL_FreeSurface, std::placeholders::_1));
-#endif
+//#else
+//  float targetX = Mathf::nextPowerOfTwo(tmpSurface->w);
+//  float targetY = Mathf::nextPowerOfTwo(tmpSurface->h);
+//  float scaleX = tmpSurface->w / targetX;
+//  float scaleY = tmpSurface->h / targetY;
+//
+//  //std::cout << scaleX << " " << scaleY << std::endl;
+//  //std::cout << tmpSurface->w / scaleX << " " << tmpSurface->h / scaleY << std::endl;
+//  
+//  surface.reset(zoomSurface(tmpSurface.get(), scaleX, scaleY, SMOOTHING_ON), std::bind(SDL_FreeSurface, std::placeholders::_1));
+//#endif
 
   if(surface.get() == NULL)
   {

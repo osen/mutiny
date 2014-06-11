@@ -33,6 +33,8 @@ Font* Font::load(std::string path)
   maxChars = chars.length();
   characters.push_back(chars);
 
+  //Debug::log(chars);
+
   Vector2 charSize((float)font->texture->getWidth() / (float)maxChars, (float)font->texture->getHeight() / (float)characters.size());
 
   for(int y = 0; y < characters.size(); y++)
