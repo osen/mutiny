@@ -18,7 +18,7 @@ void AccumCamera::onAwake()
 
   Camera* camera = getGameObject()->addComponent<Camera>();
   //camera->setBackgroundColor(Color(0, 0, 0, 1));
-  camera->setBackgroundColor(Color(0.0f, 0.0f, 0.10f, 1));
+  camera->setBackgroundColor(Color(0.5f, 0.5f, 0.6f, 1));
 
   regenRenderTextures();
 

@@ -82,7 +82,9 @@ void AccumScreen::onUpdate()
 
     if(Input::getKey(KeyCode::UP) == true)
     {
-      accel = 1.0f;
+      //accel = 2.0f;
+      //accel = 1.0f;
+      accel = 0.9f;
       playerGo->getTransform()->translate(Vector3(0, accel, 0));
       playerMr->setAnimation(jumpAnimation);
       playerMr->setFps(5);
@@ -99,7 +101,13 @@ void AccumScreen::onUpdate()
   else
   {
     accel -= 2.0f * Time::getDeltaTime();
-    playerGo->getTransform()->translate(Vector3(0, accel, 0));
+
+    if(accel < -1.0)
+    {
+      accel = -1;
+    }
+
+    playerGo->getTransform()->translate(Vector3(0, accel * 20.0f * Time::getDeltaTime(), 0));
 
     if(Input::getKey(KeyCode::RIGHT) == true)
     {
