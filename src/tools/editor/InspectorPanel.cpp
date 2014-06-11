@@ -5,6 +5,7 @@
 
 InspectorPanel::InspectorPanel(ProjectScreen* parent)
 {
+  setTitle("Inspector");
   this->parent = parent;
 }
 
@@ -14,7 +15,5 @@ void InspectorPanel::onGui()
   position.x = Screen::getWidth() - position.width;
   position.y = parent->header->position.height;
   position.height = Screen::getHeight() - parent->header->position.height;
-
-  Gui::box(position, "");
 }
 

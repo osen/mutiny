@@ -12,6 +12,10 @@ public:
 
   void onGui();
 
+private:
+  Texture2d* playTexture;
+  Texture2d* buildTexture;
+
 };
 
 #endif

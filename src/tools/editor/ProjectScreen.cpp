@@ -22,10 +22,10 @@ void ProjectScreen::onAwake()
 
 void ProjectScreen::onGui()
 {
-  header->onGui();
-  filesPanel->onGui();
-  hierarchyPanel->onGui();
-  inspectorPanel->onGui();
+  header->gui();
+  filesPanel->gui();
+  hierarchyPanel->gui();
+  inspectorPanel->gui();
 
   logRect.x = filesPanel->position.width;
   logRect.width = Screen::getWidth() - inspectorPanel->position.width - logRect.x;

@@ -4,6 +4,7 @@
 
 HierarchyPanel::HierarchyPanel(ProjectScreen* parent)
 {
+  setTitle("Hierarchy");
   this->parent = parent;
 }
 
@@ -13,7 +14,5 @@ void HierarchyPanel::onGui()
   position.x = parent->filesPanel->position.x;
   position.y = parent->logRect.y;
   position.height = parent->logRect.height;
-
-  Gui::box(position, "");
 }
 

@@ -13,6 +13,7 @@
 #include "Font.h"
 #include "Application.h"
 #include "Debug.h"
+#include "Texture.h"
 
 #include <GL/glew.h>
 
@@ -57,6 +58,21 @@ void Gui::label(Rect rect, std::string text)
                                   info.vert.height),
                                   (Texture*)skin->getButton()->font->texture.get(), info.uv);
   }
+}
+
+bool Gui::button(Rect rect, Texture* image)
+{
+  bool result;
+  Rect imgRect;
+
+  result = button(rect, "");
+  imgRect.width = image->getWidth();
+  imgRect.height = image->getHeight();
+  imgRect.x = rect.x + (rect.width / 2.0f) - (imgRect.width / 2.0f);
+  imgRect.y = rect.y + (rect.height / 2.0f) - (imgRect.height / 2.0f);
+  drawTexture(imgRect, image);
+
+  return result;
 }
 
 bool Gui::button(Rect rect, std::string text)

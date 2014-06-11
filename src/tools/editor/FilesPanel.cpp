@@ -4,6 +4,7 @@
 
 FilesPanel::FilesPanel(ProjectScreen* parent)
 {
+  setTitle("Project");
   this->parent = parent;
 }
 
@@ -15,7 +16,5 @@ void FilesPanel::onGui()
   position.height = Screen::getHeight()
                 - parent->header->position.height
                 - parent->logRect.height;
-
-  Gui::box(position, "");
 }
 
