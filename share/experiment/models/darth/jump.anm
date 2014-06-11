@@ -1,8 +1,12 @@
 f
 t RightLeg 0 0.18 -0.36 64 -3 0
-t LeftLeg 0 0.23 0.24 -46 1 0
+t LeftLeg 0 0.1 -0.28 35 0 0
 t LeftArm 0 0.64 -0.26 -75 4 0
 f
+t RightLeg 0 0.04 -0.28 35 -3 0
+t LeftLeg 0 0.06 -0.13 13 1 0
+t LeftArm 0 0.53 -0.11 -58 7 0
+f
 t RightLeg 0 0.09 -0.3 44 -2 0
-t LeftLeg -0.06 0.14 0.22 -39 1 0
+t LeftLeg -0.06 0.04 -0.11 10 1 0
 t LeftArm 0 0.5 -0.09 -51 0 0

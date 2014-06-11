@@ -17,7 +17,8 @@ void AccumCamera::onAwake()
   Debug::log("AccumCamera awoken");
 
   Camera* camera = getGameObject()->addComponent<Camera>();
-  camera->setBackgroundColor(Color(0, 0, 0, 1));
+  //camera->setBackgroundColor(Color(0, 0, 0, 1));
+  camera->setBackgroundColor(Color(0.0f, 0.0f, 0.10f, 1));
 
   regenRenderTextures();
 
@@ -34,8 +35,8 @@ void AccumCamera::onAwake()
   accumMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, 1, 1, 0, -1, 1));
   deaccumMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, 1, 1, 0, -1, 1));
 
-  getGameObject()->getTransform()->setPosition(Vector3(-5, 3, -2));
-  getGameObject()->getTransform()->lookAt(Vector3(-10, 0, -10));
+  getGameObject()->getTransform()->setPosition(Vector3(0, 3, 13));
+  getGameObject()->getTransform()->lookAt(Vector3(0, 0, 0));
 }
 
 void AccumCamera::regenRenderTextures()
