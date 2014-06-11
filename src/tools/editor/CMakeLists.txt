@@ -8,7 +8,7 @@ add_executable(editor
   HierarchyPanel.cpp
   InspectorPanel.cpp
   EditorWindow.cpp
-#  AuthorCamera.cpp
+  AuthorCamera.cpp
 )
 
 target_link_libraries(editor mutiny)
