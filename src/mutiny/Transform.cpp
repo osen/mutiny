@@ -249,6 +249,13 @@ Vector3 Transform::getForward()
   return m.multiplyVector(Vector3(0, 0, 1));  
 }
 
+Vector3 Transform::getRight()
+{
+  Matrix4x4 m = Matrix4x4::getTrs(localPosition, localRotation, Vector3(1, 1, 1));
+
+  return m.multiplyVector(Vector3(1, 0, 0));  
+}
+
 }
 
 }

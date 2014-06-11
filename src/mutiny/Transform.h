@@ -41,6 +41,7 @@ public:
   void rotateAround(Vector3 center, Vector3 axis, float amount);
 
   Vector3 getForward();
+  Vector3 getRight();
 
 private:
   Vector3 localPosition;

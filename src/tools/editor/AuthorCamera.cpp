@@ -37,6 +37,19 @@ void AuthorCamera::onUpdate()
     {
       transform->translate(transform->getForward() * 10.0f * Time::getDeltaTime());
     }
+    else if(Input::getKey(KeyCode::S) == true)
+    {
+      transform->translate(transform->getForward() * -10.0f * Time::getDeltaTime());
+    }
+
+    if(Input::getKey(KeyCode::A) == true)
+    {
+      transform->translate(transform->getRight() * -10.0f * Time::getDeltaTime());
+    }
+    else if(Input::getKey(KeyCode::D) == true)
+    {
+      transform->translate(transform->getRight() * 10.0f * Time::getDeltaTime());
+    }
 
     transform->rotate(Vector3(mouseDelta.y, mouseDelta.x, 0));
   }
