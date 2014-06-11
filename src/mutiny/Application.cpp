@@ -250,12 +250,6 @@ void Application::loop()
 {
   SDL_Event event = { 0 };
 
-  static float lastTime = SDL_GetTicks();
-  float time = SDL_GetTicks();
-  float diff = time - lastTime;
-  Time::deltaTime = diff / 1000.0f;
-  lastTime = time;
-
   float idealTime = 1.0f / 60.0f;
 
   //std::cout << "Ideal: " << idealTime << std::endl;
@@ -270,8 +264,14 @@ void Application::loop()
     // Sleep off remaining time
     SDL_Delay((idealTime - Time::deltaTime) * 1000.0f);
     //usleep((idealTime - Time::deltaTime) * 1000000.0f);
-    Time::deltaTime = idealTime;
+    //Time::deltaTime = idealTime;
   }
+
+  static float lastTime = SDL_GetTicks();
+  float time = SDL_GetTicks();
+  float diff = time - lastTime;
+  Time::deltaTime = diff / 1000.0f;
+  lastTime = time;
 
   Screen::width = screen->w;
   Screen::height = screen->h;
