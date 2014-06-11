@@ -7,6 +7,7 @@
 #include "bloom/BloomScreen.h"
 #include "layer/LayerScreen.h"
 #include "accum/AccumScreen.h"
+#include "water/WaterScreen.h"
 
 using namespace mutiny::engine;
 
@@ -56,6 +57,10 @@ void SceneManager::loadLevel()
   else if (Application::getLoadedLevelName() == "accum")
   {
     AccumScreen::create();
+  }
+  else if (Application::getLoadedLevelName() == "water")
+  {
+    WaterScreen::create();
   }
 }
 

@@ -256,6 +256,23 @@ void Application::loop()
   Time::deltaTime = diff / 1000.0f;
   lastTime = time;
 
+  float idealTime = 1.0f / 60.0f;
+
+  //std::cout << "Ideal: " << idealTime << std::endl;
+  //std::cout << "Current: " << Time::deltaTime << std::endl;
+
+  if(idealTime > Time::deltaTime)
+  {
+    //std::cout << "Ideal: " << idealTime << std::endl;
+    //std::cout << "Current: " << Time::deltaTime << std::endl;
+    //std::cout << "So Sleeping: " << (idealTime - Time::deltaTime) * 1000.0f << std::endl;
+
+    // Sleep off remaining time
+    SDL_Delay((idealTime - Time::deltaTime) * 1000.0f);
+    //usleep((idealTime - Time::deltaTime) * 1000000.0f);
+    Time::deltaTime = idealTime;
+  }
+
   Screen::width = screen->w;
   Screen::height = screen->h;
 

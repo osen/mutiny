@@ -56,5 +56,10 @@ void IntroductionScreen::onGui()
   {
     Application::loadLevel("accum");
   }
+
+  if(Gui::button(Rect(410, 500, 200, 50), "Water Example") == true)
+  {
+    Application::loadLevel("water");
+  }
 }
 

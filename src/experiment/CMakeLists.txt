@@ -22,6 +22,9 @@ add_executable(experiment
 
   accum/AccumCamera.cpp
   accum/AccumScreen.cpp
+
+  water/WaterCamera.cpp
+  water/WaterScreen.cpp
 )
 
 target_link_libraries(experiment mutiny)
