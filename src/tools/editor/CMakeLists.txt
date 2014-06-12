@@ -10,6 +10,7 @@ add_executable(editor
   ScenePanel.cpp
   EditorWindow.cpp
   AuthorCamera.cpp
+  EditorGuiUtil.cpp
 )
 
 target_link_libraries(editor mutiny)

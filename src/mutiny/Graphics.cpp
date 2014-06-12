@@ -54,6 +54,7 @@ void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, Materia
   {
     // TODO: Use a unique material with MVP set
     material = Graphics::defaultMaterial;
+    //material = Material::guiMaterial;
     material->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
     material->setMatrix("in_View", Matrix4x4::getIdentity());
     material->setMatrix("in_Model", Matrix4x4::getIdentity());

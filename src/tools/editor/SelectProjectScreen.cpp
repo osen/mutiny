@@ -1,4 +1,5 @@
 #include "SelectProjectScreen.h"
+#include "EditorGuiUtil.h"
 
 #define PADDING 10
 
@@ -11,11 +12,17 @@ void SelectProjectScreen::onAwake()
 
 void SelectProjectScreen::onGui()
 {
+  std::vector<std::string> tabs;
   centerPanel.width = 500;
   centerPanel.height = 300;
 
+  tabs.push_back("Open Project");
+  tabs.push_back("Create New Project");
+
   centerPanel.x = (Screen::getWidth() / 2) - (centerPanel.width / 2);
   centerPanel.y = (Screen::getHeight() / 2) - (centerPanel.height / 2);
+
+  EditorGuiUtil::tabs(Rect(10, 10, 100, 30), &tabs, "Open Project");
 
   Gui::box(centerPanel, "");
 

@@ -123,7 +123,6 @@ void Application::init(int argc, char* argv[])
   Camera::current = NULL;
   Camera::_main = NULL;
   Gui::skin = NULL;
-  Graphics::defaultMaterial = NULL;
   Graphics::renderTarget = NULL;
 
   //displaySplash();
