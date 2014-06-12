@@ -22,6 +22,13 @@ private:
   Animation* jumpAnimation;
   float accel;
 
+  GameObject* waterGo;
+  MeshRenderer* waterMr;
+  Material* waterMaterial;
+  float effectOffset;
+  float texOffset;
+  bool effectUp;
+
 };
 
 #endif

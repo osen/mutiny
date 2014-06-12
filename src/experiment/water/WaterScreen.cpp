@@ -15,6 +15,21 @@ void WaterScreen::onAwake()
 {
   accel = 0.0f;
   WaterCamera::create();
+  effectUp = true;
+  effectOffset = 0.0f;
+  texOffset = 0.0f;
+
+  waterGo = new GameObject("Water");
+  waterGo->getTransform()->rotate(Vector3(0, 180, 0));
+  waterGo->getTransform()->translate(Vector3(0, -1, 0));
+  waterMr = waterGo->addComponent<MeshRenderer>();
+  MeshFilter* waterMf = waterGo->addComponent<MeshFilter>();
+  waterMf->setMesh(Resources::load<Mesh>("models/water/water"));
+  waterMaterial = Resources::load<Material>("shaders/water");
+  waterMr->setMaterial(waterMaterial);
+  Texture2d* waterTexture = Resources::load<Texture2d>("models/water/water");
+  waterMaterial->setMainTexture(waterTexture);
+
   playerGo = new GameObject("Player");
   playerGo->getTransform()->setPosition(Vector3(0, 0, 0));
 
@@ -48,6 +63,37 @@ void WaterScreen::onAwake()
 
 void WaterScreen::onUpdate()
 {
+  texOffset += Time::getDeltaTime() * 0.1f;
+
+  if(texOffset >= 1.0f)
+  {
+    texOffset = 0.0f;
+  }
+
+  if(effectUp == true)
+  {
+    effectOffset += Time::getDeltaTime();
+
+    if(effectOffset >= 1.0f)
+    {
+      effectOffset = 1.0f;
+      effectUp = false;
+    }
+  }
+  else
+  {
+    effectOffset -= Time::getDeltaTime();
+
+    if(effectOffset <= 0.0f)
+    {
+      effectOffset = 0.0f;
+      effectUp = true;
+    }
+  }
+
+  waterMaterial->setFloat("in_Offset", effectOffset);
+  waterMaterial->setFloat("in_TexOffset", texOffset);
+
   //playerGo->getComponent<Transform>()->rotate(Vector3(0, -100, 0) * Time::getDeltaTime());
   bool setToIdle = true;
 
