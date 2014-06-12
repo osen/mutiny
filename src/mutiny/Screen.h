@@ -16,6 +16,7 @@ class Screen
 public:
   static int getWidth();
   static int getHeight();
+  static void setResolution(int width, int height, bool fullscreen, int preferredRefreshRate = 0);
 
 private:
   static int width;

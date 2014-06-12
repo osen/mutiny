@@ -10,6 +10,8 @@
 
 void ProjectScreen::onAwake()
 {
+  Screen::setResolution(800, 600, false);
+
   header.reset(new Header(this));
   filesPanel.reset(new FilesPanel(this));
   hierarchyPanel.reset(new HierarchyPanel(this));

@@ -4,6 +4,7 @@
 
 void SelectProjectScreen::onAwake()
 {
+  Screen::setResolution(500, 300, false);
   Gui::getSkin()->getButton()->setAlignment(TextAnchor::MiddleLeft);
   displayOpenGui = true;
 }

@@ -20,6 +20,12 @@ int Screen::getHeight()
   return height;
 }
 
+
+void Screen::setResolution(int width, int height, bool fullscreen, int preferredRefreshRate)
+{
+  Application::reshape(width, height);
+}
+
 }
 
 }
