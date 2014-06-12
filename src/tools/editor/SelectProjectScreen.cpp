@@ -5,28 +5,28 @@
 
 void SelectProjectScreen::onAwake()
 {
-  Screen::setResolution(500, 300, false);
+  Screen::setResolution(600, 375, false);
   Gui::getSkin()->getButton()->setAlignment(TextAnchor::MiddleLeft);
   displayOpenGui = true;
+  currentTab = "Open Project";
 }
 
 void SelectProjectScreen::onGui()
 {
   std::vector<std::string> tabs;
-  centerPanel.width = 500;
+  centerPanel.width = 550;
   centerPanel.height = 300;
 
   tabs.push_back("Open Project");
-  tabs.push_back("Create New Project");
+  tabs.push_back("New Project");
 
   centerPanel.x = (Screen::getWidth() / 2) - (centerPanel.width / 2);
-  centerPanel.y = (Screen::getHeight() / 2) - (centerPanel.height / 2);
-
-  EditorGuiUtil::tabs(Rect(10, 10, 100, 30), &tabs, "Open Project");
+  centerPanel.y = 15 + (Screen::getHeight() / 2) - (centerPanel.height / 2);
 
   Gui::box(centerPanel, "");
+  currentTab = EditorGuiUtil::tabs(Rect(centerPanel.x, centerPanel.y - 30, 100, 30), &tabs, currentTab);
 
-  if(displayOpenGui == true)
+  if(currentTab == "Open Project")
   {
     openProjectGui();
   }
@@ -38,13 +38,6 @@ void SelectProjectScreen::onGui()
 
 void SelectProjectScreen::openProjectGui()
 {
-  if(Gui::button(Rect(centerPanel.x + PADDING,
-                      centerPanel.y + PADDING, 225, 30),
-                      "Create New Project") == true)
-  {
-    displayOpenGui = !displayOpenGui;
-  }
-
   Gui::label(Rect(centerPanel.x + PADDING,
                   centerPanel.y + PADDING + 30 + PADDING, 300, 30),
                   "Select project to open:");
@@ -59,13 +52,6 @@ void SelectProjectScreen::openProjectGui()
 
 void SelectProjectScreen::createProjectGui()
 {
-  if(Gui::button(Rect(centerPanel.x + PADDING,
-                      centerPanel.y + PADDING, 225, 30),
-                      "Open Project") == true)
-  {
-    displayOpenGui = !displayOpenGui;
-  }
-
   Gui::label(Rect(centerPanel.x + PADDING,
                   centerPanel.y + PADDING + 30 + PADDING, 300, 30),
                   "Project Location:");

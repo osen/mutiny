@@ -14,6 +14,7 @@ public:
 private:
   Rect centerPanel;
   bool displayOpenGui;
+  std::string currentTab;
 
   void openProjectGui();
   void createProjectGui();

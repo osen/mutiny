@@ -14,7 +14,7 @@
 #include "Application.h"
 #include "Debug.h"
 #include "Texture.h"
-#include "textAnchor.h"
+#include "TextAnchor.h"
 
 #include <GL/glew.h>
 

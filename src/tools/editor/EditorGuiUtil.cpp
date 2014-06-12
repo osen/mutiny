@@ -6,6 +6,8 @@ Texture2d* EditorGuiUtil::noTabTexture = NULL;
 std::string EditorGuiUtil::tabs(Rect rect, std::vector<std::string>* names,
     std::string current)
 {
+  std::string rtn = current;
+
   if(tabTexture == NULL || noTabTexture == NULL)
   {
     tabTexture = Resources::load<Texture2d>("gui/tab_active");
@@ -26,9 +28,18 @@ std::string EditorGuiUtil::tabs(Rect rect, std::vector<std::string>* names,
       Gui::drawTexture(Rect(rect.x + (rect.width * i), rect.y, rect.width,
         rect.height), noTabTexture);
     }
+
+    Gui::label(Rect(rect.x + (rect.width * i), rect.y, rect.width, rect.height), names->at(i));
+
+    if(Input::getMouseButtonDown(0) == true)
+    {
+      if(Rect(rect.x + (rect.width * i), rect.y, rect.width, rect.height).contains(Input::getMousePosition()) == true)
+      {
+        rtn = names->at(i);
+      }
+    }
   }
 
-
-  return "";
+  return rtn;
 }
 
