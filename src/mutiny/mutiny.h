@@ -49,6 +49,7 @@
 #include "AudioSource.h"
 #include "Random.h"
 #include "Mathf.h"
+#include "TextAnchor.h"
 
 #include "buccaneer/buccaneer.h"
 

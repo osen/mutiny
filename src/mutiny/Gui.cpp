@@ -14,6 +14,7 @@
 #include "Application.h"
 #include "Debug.h"
 #include "Texture.h"
+#include "textAnchor.h"
 
 #include <GL/glew.h>
 
@@ -52,12 +53,34 @@ void Gui::label(Rect rect, std::string text)
       continue;
     }
 
-    drawTextureWithTexCoords(Rect(rect.x + (rect.width / 2) - ((info.vert.width * text.length()) / 2) + info.vert.width * i,
-                                  rect.y + (rect.height / 2) - (info.vert.height / 2),
-                                  info.vert.width,
-                                  info.vert.height),
-                                  (Texture*)skin->getButton()->font->texture.get(), info.uv);
+    if(skin->getButton()->getAlignment() == TextAnchor::MiddleLeft)
+    {
+      drawTextureWithTexCoords(Rect(rect.x + 10 + info.vert.width * i,
+                                    rect.y + (rect.height / 2) - (info.vert.height / 2),
+                                    info.vert.width,
+                                    info.vert.height),
+                                    (Texture*)skin->getButton()->font->texture.get(), info.uv);
+
+    }
+    else
+    {
+      drawTextureWithTexCoords(Rect(rect.x + (rect.width / 2) - ((info.vert.width * text.length()) / 2) + info.vert.width * i,
+                                    rect.y + (rect.height / 2) - (info.vert.height / 2),
+                                    info.vert.width,
+                                    info.vert.height),
+                                    (Texture*)skin->getButton()->font->texture.get(), info.uv);
+    }
   }
+}
+
+GuiSkin* Gui::getSkin()
+{
+  if(skin == NULL)
+  {
+    return GuiSkin::_default;
+  }
+
+  return skin;
 }
 
 bool Gui::button(Rect rect, Texture* image)

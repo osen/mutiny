@@ -25,12 +25,16 @@ public:
   GuiStyleState* getHover();
   GuiStyleState* getActive();
 
+  void setAlignment(int alignment);
+  int getAlignment();
+
 private:
   std::shared_ptr<GuiStyleState> normal;
   std::shared_ptr<GuiStyleState> hover;
   std::shared_ptr<GuiStyleState> active;
   Font* font;
   RectOffset border;
+  int alignment;
 
 };
 

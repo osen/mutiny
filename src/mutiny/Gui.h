@@ -25,6 +25,8 @@ class Gui
 
 public:
   static Matrix4x4 getMatrix();
+  static GuiSkin* getSkin();
+
   static void label(Rect rect, std::string text);
   static bool button(Rect rect, std::string text);
   static bool button(Rect rect, Texture* image);
