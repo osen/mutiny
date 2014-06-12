@@ -39,7 +39,7 @@ void SelectProjectScreen::onGui()
 void SelectProjectScreen::openProjectGui()
 {
   Gui::label(Rect(centerPanel.x + PADDING,
-                  centerPanel.y + PADDING + 30 + PADDING, 300, 30),
+                  centerPanel.y + PADDING, 300, 30),
                   "Select project to open:");
 
   if(Gui::button(Rect(centerPanel.x + centerPanel.width - 100 - PADDING,
@@ -53,7 +53,7 @@ void SelectProjectScreen::openProjectGui()
 void SelectProjectScreen::createProjectGui()
 {
   Gui::label(Rect(centerPanel.x + PADDING,
-                  centerPanel.y + PADDING + 30 + PADDING, 300, 30),
+                  centerPanel.y + PADDING, 300, 30),
                   "Project Location:");
 
   if(Gui::button(Rect(centerPanel.x + centerPanel.width - 100 - PADDING,

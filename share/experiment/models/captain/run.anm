@@ -1,1 +1,12 @@
 f
+t RightLeg 0 0.15 0.29 -42 4 0
+t LeftLeg 0 0.09 -0.33 50 -1 0
+f
+t RightLeg 0 0.15 0.23 -28 4 0
+t LeftLeg 0 0.09 -0.21 29 1 0
+f
+t RightLeg 0 0.17 -0.24 45 5 0
+t LeftLeg 0 0.14 0.26 -38 -9 0
+f
+t RightLeg 0 0.0999999 -0.1 22 5 0
+t LeftLeg 0 0.07 0.19 -25 -2 0

@@ -20,7 +20,7 @@ void WaterScreen::onAwake()
 
   playerMr = playerGo->addComponent<AnimatedMeshRenderer>();
 
-  AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/darth/darth");
+  AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/captain/captain");
   playerMr->setAnimatedMesh(mesh);
 
   for(int i = 0; i < playerMr->getRoot()->getTransform()->getChildCount(); i++)
@@ -28,20 +28,20 @@ void WaterScreen::onAwake()
     if(playerMr->getRoot()->getTransform()->getChild(i)->getGameObject()->getName() == "Lightsaber")
     {
       Material* fullRed = Resources::load<Material>("shaders/accum/full_red");
-      fullRed->setMainTexture(Resources::load<Texture2d>("models/darth/darth"));
+      fullRed->setMainTexture(Resources::load<Texture2d>("models/captain/captain"));
       playerMr->getRoot()->getTransform()->getChild(i)->getGameObject()->getComponent<MeshRenderer>()
         ->setMaterial(fullRed);
     }
   }
 
-  runAnimation = Resources::load<Animation>("models/darth/run.anm");
-  idleAnimation = Resources::load<Animation>("models/darth/idle.anm");
-  jumpAnimation = Resources::load<Animation>("models/darth/jump.anm");
+  runAnimation = Resources::load<Animation>("models/captain/run.anm");
+  idleAnimation = Resources::load<Animation>("models/captain/idle.anm");
+  jumpAnimation = Resources::load<Animation>("models/captain/jump.anm");
   playerMr->setAnimation(idleAnimation);
   playerMr->setFps(1);
   playerMr->play();
 
-  //Mesh* mesh = Resources::load<Mesh>("models/darth/darth");
+  //Mesh* mesh = Resources::load<Mesh>("models/captain/captain");
   //MeshFilter* playerMf = playerGo->addComponent<MeshFilter>();
   //playerMf->setMesh(mesh);
 }

@@ -1,4 +1,7 @@
 #include "EditorWindow.h"
+#include "EditorGuiUtil.h"
+
+#include <vector>
 
 EditorWindow::EditorWindow()
 {
@@ -15,6 +18,7 @@ void EditorWindow::gui()
 
   if(title == "Header")
   {
+    Gui::box(Rect(position.x, position.y, position.width, position.height + headerHeight + 1), "");
     Gui::drawTexture(Rect(position.x, position.y, position.width, position.height + headerHeight), headerTexture.get());
     onGui();
   }
@@ -30,6 +34,15 @@ void EditorWindow::gui()
     onGui();
     Gui::drawTexture(Rect(position.x, position.y, position.width, headerHeight), headerTexture.get());
     Gui::label(Rect(position.x, position.y, 200, headerHeight), title);
+  }
+
+  if(title != "Header")
+  {
+    std::vector<std::string> tabNames;
+    tabNames.push_back(title);
+
+    EditorGuiUtil::tabs(Rect(position.x, position.y, 85, headerHeight),
+      &tabNames, title);
   }
 }
 
