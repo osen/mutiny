@@ -29,10 +29,16 @@ namespace engine
 {
 
 GuiSkin* Gui::skin;
+Matrix4x4 Gui::matrix;
 
 Matrix4x4 Gui::getMatrix()
 {
-  return Matrix4x4::getIdentity();
+  return matrix;
+}
+
+void Gui::setMatrix(Matrix4x4 matrix)
+{
+  Gui::matrix = matrix;
 }
 
 void Gui::label(Rect rect, std::string text)

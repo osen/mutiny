@@ -25,6 +25,7 @@ class Gui
 
 public:
   static Matrix4x4 getMatrix();
+  static void setMatrix(Matrix4x4 matrix);
   static GuiSkin* getSkin();
 
   static void label(Rect rect, std::string text);
@@ -36,6 +37,7 @@ public:
 
 private:
   static GuiSkin* skin;
+  static Matrix4x4 matrix;
 
   static void drawUi(Rect rect, Texture* texture, GuiStyle* style);
 

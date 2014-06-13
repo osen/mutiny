@@ -43,6 +43,7 @@ public:
   Shader* getShader();
   void setShader(Shader* shader);
   void setMatrix(std::string propertyName, Matrix4x4 matrix);
+  Matrix4x4 getMatrix(std::string propertyName);
   void setFloat(std::string propertyName, float value);
   void setVector(std::string propertyName, Vector2 value);
   void setTexture(std::string propertyName, Texture* texture);

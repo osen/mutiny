@@ -105,7 +105,7 @@ void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, Materia
   {
     material->setPass(i);
     // HACK: A matrix is required to be passed into drawMeshNow.
-    drawMeshNow(&mesh, Matrix4x4::getIdentity(), 0);
+    drawMeshNow(&mesh, material->getMatrix("in_Model"), 0);
   }
 
   glCullFace(GL_FRONT);

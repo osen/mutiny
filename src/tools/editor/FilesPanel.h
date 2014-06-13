@@ -11,6 +11,7 @@ class FilesPanel : public EditorWindow
 public:
   ProjectScreen* parent;
   std::shared_ptr<FileTree> files;
+  Texture2d* expandTexture;
 
   FilesPanel(ProjectScreen* parent);
 

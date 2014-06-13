@@ -8,6 +8,7 @@ FilesPanel::FilesPanel(ProjectScreen* parent)
   setTitle("Project");
   this->parent = parent;
   files.reset(new FileTree("../share/baastud"));
+  expandTexture = Resources::load<Texture2d>("gui/expand");
 }
 
 void FilesPanel::onGui()
@@ -43,12 +44,20 @@ void FilesPanel::listFiles(int* indent, int* y, FileTree* item)
   rect.y = position.y + rect.height + (*y * rect.height);
   rect.width = position.width;
 
-  Gui::label(rect, item->getName());
+  Gui::label(Rect(rect.x + expandTexture->getWidth(), rect.y, rect.width,
+    rect.height), item->getName());
+
   *y = *y + 1;
 
   if(item->directory == false)
   {
     return;
+  }
+
+  if(item->children.size() > 0)
+  {
+    Gui::drawTexture(Rect(rect.x, rect.y, expandTexture->getWidth(),
+      expandTexture->getHeight()), expandTexture);
   }
 
   if(Input::getMouseButtonDown(0) == true &&
@@ -69,3 +78,4 @@ void FilesPanel::listFiles(int* indent, int* y, FileTree* item)
   }
   *indent = *indent - 1;
 }
+

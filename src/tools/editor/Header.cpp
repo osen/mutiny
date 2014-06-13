@@ -15,7 +15,9 @@ void Header::onGui()
   position.width = Screen::getWidth();
   position.height = 35;
 
+  GuiUtility::rotateAroundPivot(10, Vector2(buttonsBegin, 5));
   Gui::button(Rect(buttonsBegin, 5, 30, 25), playTexture);
+  GuiUtility::rotateAroundPivot(-10, Vector2(buttonsBegin, 5));
   Gui::button(Rect(buttonsBegin + 31, 5, 30, 25), buildTexture);
 }
 

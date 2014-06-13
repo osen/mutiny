@@ -171,6 +171,20 @@ void Material::setMatrix(std::string propertyName, Matrix4x4 matrix)
   indexesDirty = true;
 }
 
+Matrix4x4 Material::getMatrix(std::string propertyName)
+{
+  for(int i = 0; i < matrixNames.size(); i++)
+  {
+    if(matrixNames.at(i) == propertyName)
+    {
+      return matrices[i];
+    }
+  }
+
+  Debug::logWarning("Matrix with specified name does not exist in shader");
+  return Matrix4x4::getIdentity();
+}
+
 void Material::refreshIndexes()
 {
   for(int i = 0; i < matrixNames.size(); i++)

@@ -50,6 +50,7 @@
 #include "Random.h"
 #include "Mathf.h"
 #include "TextAnchor.h"
+#include "GuiUtility.h"
 
 #include "buccaneer/buccaneer.h"
 
