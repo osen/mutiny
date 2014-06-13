@@ -50,6 +50,9 @@ void Gui::label(Rect rect, std::string text)
     skin = GuiSkin::_default;
   }
 
+  std::vector<Rect> positions;
+  std::vector<Rect> uvs;
+
   for(int i = 0; i < text.length(); i++)
   {
     CharacterInfo info;
@@ -72,21 +75,38 @@ void Gui::label(Rect rect, std::string text)
 
     if(skin->getButton()->getAlignment() == TextAnchor::MiddleLeft)
     {
-      drawTextureWithTexCoords(Rect(rect.x + padding + info.vert.width * i,
-                                    rect.y + (rect.height / 2) - (info.vert.height / 2),
-                                    info.vert.width,
-                                    info.vert.height),
-                                    (Texture*)skin->getButton()->font->texture.get(), info.uv);
+      positions.push_back(Rect(rect.x + padding + info.vert.width * i,
+                               rect.y + (rect.height / 2) - (info.vert.height / 2),
+                               info.vert.width, info.vert.height));
+
+      uvs.push_back(info.uv);
+
+      //drawTextureWithTexCoords(Rect(rect.x + padding + info.vert.width * i,
+      //                              rect.y + (rect.height / 2) - (info.vert.height / 2),
+      //                              info.vert.width,
+      //                              info.vert.height),
+      //                              (Texture*)skin->getButton()->font->texture.get(), info.uv);
 
     }
     else
     {
-      drawTextureWithTexCoords(Rect(rect.x + (rect.width / 2) - ((info.vert.width * text.length()) / 2) + info.vert.width * i,
-                                    rect.y + (rect.height / 2) - (info.vert.height / 2),
-                                    info.vert.width,
-                                    info.vert.height),
-                                    (Texture*)skin->getButton()->font->texture.get(), info.uv);
+      positions.push_back(Rect(rect.x + (rect.width / 2) - ((info.vert.width * text.length()) / 2) + info.vert.width * i,
+                               rect.y + (rect.height / 2) - (info.vert.height / 2),
+                               info.vert.width, info.vert.height));
+
+      uvs.push_back(info.uv);
+
+      //drawTextureWithTexCoords(Rect(rect.x + (rect.width / 2) - ((info.vert.width * text.length()) / 2) + info.vert.width * i,
+      //                              rect.y + (rect.height / 2) - (info.vert.height / 2),
+      //                              info.vert.width,
+      //                              info.vert.height),
+      //                              (Texture*)skin->getButton()->font->texture.get(), info.uv);
     }
+  }
+
+  if(positions.size() == uvs.size() && positions.size() > 0)
+  {
+    drawTextureWithTexCoords(positions, (Texture*)skin->getButton()->font->texture.get(), uvs);
   }
 }
 
@@ -150,6 +170,16 @@ bool Gui::button(Rect rect, std::string text)
   label(rect, text);
 
   return false;
+}
+
+void Gui::drawTextureWithTexCoords(std::vector<Rect> positions, Texture* texture, std::vector<Rect> texCoords)
+{
+  Material* guiMaterial = Material::guiMaterial;
+
+  guiMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
+  guiMaterial->setMatrix("in_View", Matrix4x4::getIdentity());
+  guiMaterial->setMatrix("in_Model", getMatrix());
+  Graphics::drawTextureBatch(positions, texture, texCoords, guiMaterial);
 }
 
 void Gui::drawTexture(Rect rect, Texture* texture)

@@ -7,6 +7,7 @@
 #include <GL/glew.h>
 
 #include <string>
+#include <vector>
 
 namespace mutiny
 {
@@ -40,6 +41,8 @@ public:
 private:
   static Material* defaultMaterial;
   static RenderTexture* renderTarget;
+
+  static void drawTextureBatch(std::vector<Rect> rects, Texture* texture, std::vector<Rect> sourceRects, Material* material);
 
 };
 

@@ -7,6 +7,7 @@
 #include <GL/glew.h>
 
 #include <string>
+#include <vector>
 
 namespace mutiny
 {
@@ -40,6 +41,7 @@ private:
   static Matrix4x4 matrix;
 
   static void drawUi(Rect rect, Texture* texture, GuiStyle* style);
+  static void drawTextureWithTexCoords(std::vector<Rect> positions, Texture* texture, std::vector<Rect> texCoords);
 
 };
 

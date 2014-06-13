@@ -38,17 +38,23 @@ void Graphics::setRenderTarget(RenderTexture* renderTarget)
 // if material is null, a default material with internal-GUITexture.shader is used.
 void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, Material* material)
 {
+  std::vector<Rect> rects;
+  std::vector<Rect> sourceRects;
+
+  rects.push_back(rect);
+  sourceRects.push_back(sourceRect);
+
+  drawTextureBatch(rects, texture, sourceRects, material);
+}
+
+void Graphics::drawTextureBatch(std::vector<Rect> rects, Texture* texture, std::vector<Rect> sourceRects, Material* material)
+{
   RenderTexture* currentRenderTexture = NULL;
 
   std::vector<Vector3> vertices;
   std::vector<Vector2> uv;
   std::vector<Color> colors;
   std::vector<int> triangles;
-
-  float x = (float)rect.x;
-  float y = (float)rect.y;
-  float xw = (float)rect.x + (float)rect.width;
-  float yh = (float)rect.y + (float)rect.height;
 
   if(material == NULL)
   {
@@ -66,26 +72,34 @@ void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, Materia
     return;
   }
 
-  triangles.push_back(0);
-  triangles.push_back(1);
-  triangles.push_back(2);
-  triangles.push_back(3);
-  triangles.push_back(4);
-  triangles.push_back(5);
+  for(int i = 0; i < rects.size(); i++)
+  {
+    float x = (float)rects.at(i).x;
+    float y = (float)rects.at(i).y;
+    float xw = (float)rects.at(i).x + (float)rects.at(i).width;
+    float yh = (float)rects.at(i).y + (float)rects.at(i).height;
 
-  vertices.push_back(Vector3(x, y, 0));
-  vertices.push_back(Vector3(x, yh, 0));
-  vertices.push_back(Vector3(xw, yh));
-  vertices.push_back(Vector3(xw, yh));
-  vertices.push_back(Vector3(xw, y));
-  vertices.push_back(Vector3(x, y));
+    triangles.push_back((i*6) + 0);
+    triangles.push_back((i*6) + 1);
+    triangles.push_back((i*6) + 2);
+    triangles.push_back((i*6) + 3);
+    triangles.push_back((i*6) + 4);
+    triangles.push_back((i*6) + 5);
 
-  uv.push_back(Vector2(sourceRect.x, sourceRect.y));
-  uv.push_back(Vector2(sourceRect.x, sourceRect.height));
-  uv.push_back(Vector2(sourceRect.width, sourceRect.height));
-  uv.push_back(Vector2(sourceRect.width, sourceRect.height));
-  uv.push_back(Vector2(sourceRect.width, sourceRect.y));
-  uv.push_back(Vector2(sourceRect.x, sourceRect.y));
+    vertices.push_back(Vector3(x, y, 0));
+    vertices.push_back(Vector3(x, yh, 0));
+    vertices.push_back(Vector3(xw, yh));
+    vertices.push_back(Vector3(xw, yh));
+    vertices.push_back(Vector3(xw, y));
+    vertices.push_back(Vector3(x, y));
+
+    uv.push_back(Vector2(sourceRects.at(i).x, sourceRects.at(i).y));
+    uv.push_back(Vector2(sourceRects.at(i).x, sourceRects.at(i).height));
+    uv.push_back(Vector2(sourceRects.at(i).width, sourceRects.at(i).height));
+    uv.push_back(Vector2(sourceRects.at(i).width, sourceRects.at(i).height));
+    uv.push_back(Vector2(sourceRects.at(i).width, sourceRects.at(i).y));
+    uv.push_back(Vector2(sourceRects.at(i).x, sourceRects.at(i).y));
+  }
 
   Mesh mesh;
   mesh.setVertices(vertices);
