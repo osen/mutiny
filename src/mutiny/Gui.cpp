@@ -53,15 +53,26 @@ void Gui::label(Rect rect, std::string text)
   for(int i = 0; i < text.length(); i++)
   {
     CharacterInfo info;
+    int padding = 0;
+
+    if(skin->getButton()->getAlignment() == TextAnchor::MiddleLeft)
+    {
+      padding = 10;
+    }
 
     if(skin->getButton()->font->getCharacterInfo(text[i], &info) == false)
     {
       continue;
     }
 
+    if((info.vert.width * (float)i) + padding > rect.width - padding)
+    {
+      break;
+    }
+
     if(skin->getButton()->getAlignment() == TextAnchor::MiddleLeft)
     {
-      drawTextureWithTexCoords(Rect(rect.x + 10 + info.vert.width * i,
+      drawTextureWithTexCoords(Rect(rect.x + padding + info.vert.width * i,
                                     rect.y + (rect.height / 2) - (info.vert.height / 2),
                                     info.vert.width,
                                     info.vert.height),

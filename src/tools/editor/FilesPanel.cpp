@@ -9,6 +9,10 @@ FilesPanel::FilesPanel(ProjectScreen* parent)
   this->parent = parent;
   files.reset(new FileTree("../share/baastud"));
   expandTexture = Resources::load<Texture2d>("gui/expand");
+
+  selectedTexture.reset(new Texture2d(1, 1));
+  selectedTexture->setPixel(0, 0, Color(1.0f, 1.0f, 1.0f, 0.1f));
+  selectedTexture->apply();
 }
 
 void FilesPanel::onGui()
@@ -36,6 +40,7 @@ void FilesPanel::listFiles()
 void FilesPanel::listFiles(int* indent, int* y, FileTree* item)
 {
   Rect rect;
+  Rect expandRect;
 
   if(*y > 10) return;
 
@@ -44,10 +49,28 @@ void FilesPanel::listFiles(int* indent, int* y, FileTree* item)
   rect.y = position.y + rect.height + (*y * rect.height);
   rect.width = position.width;
 
-  Gui::label(Rect(rect.x + expandTexture->getWidth(), rect.y, rect.width,
+  expandRect = Rect(rect.x, rect.y, expandTexture->getWidth(),
+        expandTexture->getHeight());
+
+  if(item->path == selectedPath)
+  {
+    Gui::drawTexture(Rect(position.x, rect.y, rect.width, rect.height), selectedTexture.get());
+  }
+
+  Gui::label(Rect(rect.x + expandTexture->getWidth(), rect.y, rect.width
+    - ((position.x + rect.x) - position.x + expandTexture->getWidth()),
     rect.height), item->getName());
 
   *y = *y + 1;
+
+
+  if(Input::getMouseButtonDown(0) == true)
+  {
+    if(rect.contains(Input::getMousePosition()) == true)
+    {
+      selectedPath = item->path;
+    }
+  }
 
   if(item->directory == false)
   {
@@ -56,14 +79,28 @@ void FilesPanel::listFiles(int* indent, int* y, FileTree* item)
 
   if(item->children.size() > 0)
   {
-    Gui::drawTexture(Rect(rect.x, rect.y, expandTexture->getWidth(),
-      expandTexture->getHeight()), expandTexture);
+    if(item->expanded == true)
+    {
+      Gui::drawTexture(expandRect, expandTexture);
+    }
+    else
+    {
+      GuiUtility::rotateAroundPivot(90, Vector2(rect.x +
+        (expandTexture->getWidth() / 2), rect.y + (expandTexture->getHeight() / 2)));
+
+      Gui::drawTexture(expandRect, expandTexture);
+
+      GuiUtility::rotateAroundPivot(-90, Vector2(rect.x +
+        (expandTexture->getWidth() / 2), rect.y + (expandTexture->getHeight() / 2)));
+    }
   }
 
-  if(Input::getMouseButtonDown(0) == true &&
-     rect.contains(Input::getMousePosition()) == true)
+  if(Input::getMouseButtonDown(0) == true)
   {
-    item->expanded = !item->expanded;
+    if(expandRect.contains(Input::getMousePosition()) == true)
+    {
+      item->expanded = !item->expanded;
+    }
   }
 
   if(item->expanded == false)

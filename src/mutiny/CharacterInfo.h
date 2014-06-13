@@ -16,6 +16,8 @@ public:
   Rect uv;
   Rect vert;
 
+  int getWidth() { return uv.width; }
+
 };
 
 }

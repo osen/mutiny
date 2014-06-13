@@ -181,7 +181,7 @@ Matrix4x4 Material::getMatrix(std::string propertyName)
     }
   }
 
-  Debug::logWarning("Matrix with specified name does not exist in shader");
+  //Debug::logWarning("Matrix with specified name '"+propertyName+"' does not exist in shader");
   return Matrix4x4::getIdentity();
 }
 

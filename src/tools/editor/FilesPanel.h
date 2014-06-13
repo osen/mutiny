@@ -12,6 +12,8 @@ public:
   ProjectScreen* parent;
   std::shared_ptr<FileTree> files;
   Texture2d* expandTexture;
+  std::shared_ptr<Texture2d> selectedTexture;
+  std::string selectedPath;
 
   FilesPanel(ProjectScreen* parent);
 
