@@ -1,6 +1,7 @@
 #include "HierarchyPanel.h"
 #include "ProjectScreen.h"
 #include "FilesPanel.h"
+#include "FileTree.h"
 
 HierarchyPanel::HierarchyPanel(ProjectScreen* parent)
 {
@@ -12,7 +13,16 @@ void HierarchyPanel::onGui()
 {
   position.width = parent->filesPanel->position.width;
   position.x = parent->filesPanel->position.x;
-  position.y = parent->logRect.y;
-  position.height = parent->logRect.height;
+
+  position.height = parent->filesPanel->position.height;
+
+  position.y = parent->filesPanel->position.y +
+    parent->filesPanel->position.height;
+
+  listHierarchy();
 }
 
+void HierarchyPanel::listHierarchy()
+{
+
+}

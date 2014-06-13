@@ -132,7 +132,8 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
   _positionBufferIds.push_back(std::shared_ptr<GLuint>(&positionBufferId, std::bind(freeBuffer, positionBufferId)));
 
   glBindBuffer(GL_ARRAY_BUFFER, positionBufferId);
-  glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_STATIC_DRAW);
+  //glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_DYNAMIC_DRAW);
 
 // Normals
 

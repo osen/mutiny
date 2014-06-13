@@ -3,6 +3,8 @@
 
 #include "EditorWindow.h"
 
+#include <memory>
+
 class ProjectScreen;
 
 class HierarchyPanel : public EditorWindow
@@ -13,6 +15,7 @@ public:
   HierarchyPanel(ProjectScreen* parent);
 
   void onGui();
+  void listHierarchy();
 
 };
 
