@@ -16,7 +16,10 @@ void main()
 
   float brightness = dot(ex_N, L) / (length(L) * length(ex_N));
   brightness += 0.4;
+
+#ifndef GL_ES
   brightness = clamp(brightness, 0, 1);
+#endif
 
   //vec4 Idiff = vec4(1, 1, 1, 1) * max(dot(ex_N,L), 0.0);  
   //Idiff = clamp(Idiff, 0.0, 1.0); 

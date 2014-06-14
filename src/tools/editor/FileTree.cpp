@@ -12,7 +12,7 @@ FileTree::FileTree(std::string path)
   struct dirent* ep = NULL;
   std::vector<std::string> filenames;
 
-  std::cout << path << std::endl;
+  //std::cout << path << std::endl;
 
   this->path = path;
   expanded = false;

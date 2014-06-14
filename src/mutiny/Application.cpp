@@ -249,22 +249,19 @@ void Application::loop()
 {
   SDL_Event event = { 0 };
 
+#ifdef EMSCRIPTEN
+  // Does not allow SDL_Delay. Assumes it is in an infinite loop.
+#else
   float idealTime = 1.0f / 60.0f;
-
-  //std::cout << "Ideal: " << idealTime << std::endl;
-  //std::cout << "Current: " << Time::deltaTime << std::endl;
 
   if(idealTime > Time::deltaTime)
   {
-    //std::cout << "Ideal: " << idealTime << std::endl;
-    //std::cout << "Current: " << Time::deltaTime << std::endl;
-    //std::cout << "So Sleeping: " << (idealTime - Time::deltaTime) * 1000.0f << std::endl;
-
     // Sleep off remaining time
     SDL_Delay((idealTime - Time::deltaTime) * 1000.0f);
     //usleep((idealTime - Time::deltaTime) * 1000000.0f);
     //Time::deltaTime = idealTime;
   }
+#endif
 
   static float lastTime = SDL_GetTicks();
   float time = SDL_GetTicks();

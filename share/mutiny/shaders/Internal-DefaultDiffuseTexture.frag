@@ -12,7 +12,10 @@ void main()
 
   float brightness = dot(ex_N, L) / (length(L) * length(ex_N));
   brightness += 0.4;
+
+#ifndef GL_ES
   brightness = clamp(brightness, 0, 1);
+#endif
 
   vec4 tex = vec4(0.5, 0.5, 0.5, 1.0);
   gl_FragColor = tex * brightness;
