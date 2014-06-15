@@ -1,0 +1,9 @@
+all:
+	cd .. && em++ -O2 -s DISABLE_EXCEPTION_CATCHING=0 -std=c++11 \
+		-s ALLOW_MEMORY_GROWTH=1 \
+		--preload-file share/mutiny \
+		--preload-file share/_data \
+		-Isrc \
+		`find src/mutiny -name '*.cpp'` \
+		`find src/experiment -name '*.cpp'` \
+		-o package/index.html
