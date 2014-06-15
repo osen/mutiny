@@ -9,9 +9,11 @@ class SceneManager : public Behaviour
 {
 public:
   virtual void onAwake();
+  virtual void onGui();
   virtual void onLevelWasLoaded();
 
 private:
+  Texture2d* watermark;
 
   void loadLevel();
 

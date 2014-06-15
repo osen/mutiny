@@ -20,44 +20,45 @@ void IntroductionScreen::onAwake()
 
 void IntroductionScreen::onGui()
 {
-  Gui::label(Rect(10, 10, 100, 100), "Welcome");
+  int middle = Screen::getWidth() / 2;
+  int padding = 5;
 
-  if(Gui::button(Rect(200, 200, 200, 50), "Transform Example") == true)
+  if(Gui::button(Rect(middle - 200 - padding, 200, 200, 50), "Transform") == true)
   {
     Application::loadLevel("transform");
   }
 
-  if(Gui::button(Rect(200, 300, 200, 50), "Model Example") == true)
+  if(Gui::button(Rect(middle - 200 - padding, 300, 200, 50), "Simple Model") == true)
   {
     Application::loadLevel("model");
   }
 
-  if(Gui::button(Rect(200, 400, 200, 50), "Collision Example") == true)
+  if(Gui::button(Rect(middle - 200 - padding, 400, 200, 50), "Mesh Collision") == true)
   {
     Application::loadLevel("collision");
   }
 
-  if(Gui::button(Rect(200, 500, 200, 50), "Postprocess Example") == true)
+  if(Gui::button(Rect(middle - 200 - padding, 500, 200, 50), "Post-processing") == true)
   {
     Application::loadLevel("post");
   }
 
-  if(Gui::button(Rect(410, 200, 200, 50), "Bloom Example") == true)
+  if(Gui::button(Rect(middle + padding, 200, 200, 50), "Bloom Shader") == true)
   {
     Application::loadLevel("bloom");
   }
 
-  if(Gui::button(Rect(410, 300, 200, 50), "Layer Example") == true)
+  if(Gui::button(Rect(middle + padding, 300, 200, 50), "Camera Layers") == true)
   {
     Application::loadLevel("layer");
   }
 
-  if(Gui::button(Rect(410, 400, 200, 50), "Accumulation Example") == true)
+  if(Gui::button(Rect(middle + padding, 400, 200, 50), "Lightsaber!") == true)
   {
     Application::loadLevel("accum");
   }
 
-  if(Gui::button(Rect(410, 500, 200, 50), "Water Example") == true)
+  if(Gui::button(Rect(middle + padding, 500, 200, 50), "Water Shader") == true)
   {
     Application::loadLevel("water");
   }

@@ -32,8 +32,6 @@ void TransformScreen::onUpdate()
 
 void TransformScreen::onGui()
 {
-  Gui::label(Rect(10, 10, 100, 100), "Welcome");
-
   if(Gui::button(Rect(200, 200, 200, 50), "Back") == true)
   {
     Application::loadLevel("introduction");

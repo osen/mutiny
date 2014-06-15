@@ -24,8 +24,6 @@ void PostScreen::onAwake()
   Mesh* mesh = Resources::load<Mesh>("models/curuthers/curuthers");
   MeshFilter* playerMf = playerGo->addComponent<MeshFilter>();
   playerMf->setMesh(mesh);
-  
-  
 }
 
 void PostScreen::onGui()
