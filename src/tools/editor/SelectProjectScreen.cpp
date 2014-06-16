@@ -48,6 +48,10 @@ void SelectProjectScreen::openProjectGui()
   {
     openButtonClicked();
   }
+
+  int yPad = 50;
+  Rect selectRect(centerPanel.x + PADDING, centerPanel.y + yPad, centerPanel.width - (PADDING * 2), centerPanel.height - (yPad * 2));
+  Gui::box(selectRect, "");
 }
 
 void SelectProjectScreen::createProjectGui()

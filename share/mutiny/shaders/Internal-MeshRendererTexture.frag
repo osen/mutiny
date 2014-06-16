@@ -10,6 +10,13 @@ varying vec3 ex_LightPos;
 varying vec3 ex_V;
 varying vec3 ex_N;
 
+//#ifdef GL_ES
+float mut_clamp(float x, float a, float b)
+{
+  return max(a, min(b, x));
+}
+//#endif
+
 void main()
 {
   vec3 L = ex_LightPos - ex_V;
@@ -17,17 +24,8 @@ void main()
   float brightness = dot(ex_N, L) / (length(L) * length(ex_N));
   brightness += 0.4;
 
-#ifndef GL_ES
-  brightness = clamp(brightness, 0, 1);
-#endif
+  brightness = mut_clamp(brightness, 0.0, 1.0);
 
-  //vec4 Idiff = vec4(1, 1, 1, 1) * max(dot(ex_N,L), 0.0);  
-  //Idiff = clamp(Idiff, 0.0, 1.0); 
-
-  //gl_FragColor = texture2D(in_Texture, ex_Uv);
-  //gl_FragColor = gl_FragColor - gl_FragColor;
-  //gl_FragColor += Idiff;
-  //gl_FragColor.w = 1.0;
   vec4 tex = texture2D(in_Texture, ex_Uv);
   gl_FragColor = tex * brightness;
   gl_FragColor.w = tex.w;

@@ -13,9 +13,18 @@ void main()
   float brightness = dot(ex_N, L) / (length(L) * length(ex_N));
   brightness += 0.4;
 
-#ifndef GL_ES
-  brightness = clamp(brightness, 0, 1);
-#endif
+//#ifndef GL_ES
+//  brightness = clamp(brightness, 0, 1);
+//#endif
+
+  if(brightness > 1.0)
+  {
+    brightness = 1.0;
+  }
+  else if(brightness < 0.0)
+  {
+    brightness = 0.0;
+  }
 
   vec4 tex = vec4(0.5, 0.5, 0.5, 1.0);
   gl_FragColor = tex * brightness;
