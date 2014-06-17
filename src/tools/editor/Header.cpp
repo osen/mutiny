@@ -1,5 +1,7 @@
 #include "Header.h"
 
+#define ITEM_HEIGHT 20
+
 Header::Header(ProjectScreen* parent)
 {
   playTexture = Resources::load<Texture2d>("images/play");
@@ -13,11 +15,11 @@ void Header::onGui()
   buttonsBegin -= 15;
 
   position.width = Screen::getWidth();
-  position.height = 35;
+  position.height = 35 + ITEM_HEIGHT;
 
-  GuiUtility::rotateAroundPivot(10, Vector2(buttonsBegin, 5));
-  Gui::button(Rect(buttonsBegin, 5, 30, 25), playTexture);
-  GuiUtility::rotateAroundPivot(-10, Vector2(buttonsBegin, 5));
-  Gui::button(Rect(buttonsBegin + 31, 5, 30, 25), buildTexture);
+  Gui::box(Rect(0, 0, position.width, 20), "");
+
+  Gui::button(Rect(buttonsBegin, 5 + ITEM_HEIGHT, 30, 25), playTexture);
+  Gui::button(Rect(buttonsBegin + 31, 5 + ITEM_HEIGHT, 30, 25), buildTexture);
 }
 

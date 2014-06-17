@@ -82,7 +82,7 @@ void Application::init(int argc, char* argv[])
     throw std::exception();
   }
 
-  SDL_WM_SetCaption("Mutiny Engine", NULL);
+  setTitle("Mutiny Engine");
 
   glewInit();
   //if(glewInit() != 0)
@@ -126,6 +126,11 @@ void Application::init(int argc, char* argv[])
   Graphics::renderTarget = NULL;
 
   //displaySplash();
+}
+
+void Application::setTitle(std::string title)
+{
+  SDL_WM_SetCaption(title.c_str(), NULL);
 }
 
 void Application::setupPaths()

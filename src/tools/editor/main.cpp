@@ -10,6 +10,7 @@ using namespace mutiny::engine;
 void safe_main(int argc, char* argv[])
 {
   Application::init(argc, argv);
+  Application::setTitle("Mutiny - Project Wizard");
 
   GameObject* smGo = new GameObject();
   smGo->addComponent<SceneManager>();

@@ -41,6 +41,8 @@ void FilesPanel::onGui()
 
 void FilesPanel::refreshFiles()
 {
+  Application::setTitle("Mutiny - " + SelectProjectScreen::selectedProject);
+
   files.reset(new FileTree(Application::getDataPath() + "/../" +
     SelectProjectScreen::selectedProject));
 
@@ -54,7 +56,7 @@ void FilesPanel::header()
   Gui::box(rect, "");
 
   if(Gui::button(Rect(rect.x + 2, rect.y + 2, 65, ITEM_HEIGHT - 4),
-      "Create") == true)
+    "Create") == true)
   {
 
   }

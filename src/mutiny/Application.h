@@ -46,6 +46,7 @@ public:
   static std::string getDataPath();
   static int getArgc();
   static std::string getArgv(int i);
+  static void setTitle(std::string title);
 
 private:
   static SDL_Surface* screen;
