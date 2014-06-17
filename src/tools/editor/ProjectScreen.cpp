@@ -5,8 +5,7 @@
 #include "InspectorPanel.h"
 #include "ScenePanel.h"
 #include "AuthorCamera.h"
-
-#define PADDING 10
+#include "LogPanel.h"
 
 void ProjectScreen::onAwake()
 {
@@ -17,11 +16,12 @@ void ProjectScreen::onAwake()
   hierarchyPanel.reset(new HierarchyPanel(this));
   inspectorPanel.reset(new InspectorPanel(this));
   scenePanel.reset(new ScenePanel(this));
+  logPanel.reset(new LogPanel(this));
 
   AuthorCamera::create();
 
   // Temp (So I can see something...)
-  GameObject::createPrimitive(PrimitiveType::CUBE);
+  GameObject::createPrimitive(PrimitiveType::CUBE)->setName("Da Cube?");
 }
 
 void ProjectScreen::onGui()
@@ -31,12 +31,6 @@ void ProjectScreen::onGui()
   hierarchyPanel->gui();
   inspectorPanel->gui();
   scenePanel->gui();
-
-  logRect.x = filesPanel->position.width;
-  logRect.width = Screen::getWidth() - inspectorPanel->position.width - logRect.x;
-  logRect.height = 200;
-  logRect.y = Screen::getHeight() - logRect.height;
-
-  Gui::box(logRect, "");
+  logPanel->gui();
 }
 

@@ -12,6 +12,7 @@ add_executable(editor
   AuthorCamera.cpp
   EditorGuiUtil.cpp
   FileTree.cpp
+  LogPanel.cpp
 )
 
 target_link_libraries(editor mutiny)
