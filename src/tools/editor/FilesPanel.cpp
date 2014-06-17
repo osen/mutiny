@@ -11,8 +11,7 @@ FilesPanel::FilesPanel(ProjectScreen* parent)
   setTitle("Project");
   this->parent = parent;
 
-  files.reset(new FileTree(Application::getDataPath() + "/../" +
-    SelectProjectScreen::selectedProject));
+  refreshFiles();
 
   expandTexture = Resources::load<Texture2d>("gui/expand");
   scrollbarTexture = Resources::load<Texture2d>("gui/scrollbar");
@@ -36,7 +35,35 @@ void FilesPanel::onGui()
   position.height = (Screen::getHeight() - parent->header->position.height)
     / 2.0;
 
+  header();
   listFiles();
+}
+
+void FilesPanel::refreshFiles()
+{
+  files.reset(new FileTree(Application::getDataPath() + "/../" +
+    SelectProjectScreen::selectedProject));
+
+  startDisplay = 0;
+}
+
+void FilesPanel::header()
+{
+  Rect rect(position.x, position.y + ITEM_HEIGHT, position.width, ITEM_HEIGHT);
+
+  Gui::box(rect, "");
+
+  if(Gui::button(Rect(rect.x + 2, rect.y + 2, 65, ITEM_HEIGHT - 4),
+      "Create") == true)
+  {
+
+  }
+
+  if(Gui::button(Rect(rect.x + rect.width - ITEM_HEIGHT - 2, rect.y + 2,
+    ITEM_HEIGHT, ITEM_HEIGHT - 4), "") == true)
+  {
+    refreshFiles();
+  }
 }
 
 void FilesPanel::listFiles()
@@ -66,19 +93,43 @@ void FilesPanel::listFiles()
 void FilesPanel::displayScrollbars()
 {
   Rect container(position.x + position.width - 20,
-                 position.y + (ITEM_HEIGHT * 2),
+                 position.y + (ITEM_HEIGHT * 3),
                  20,
-                 position.height - (ITEM_HEIGHT * 2));
+                 position.height - (ITEM_HEIGHT * 4));
 
   Rect scrollbarRect(container.x, container.y + scrollPos,
                      container.width, 20);
 
-  scrollbarRect.height = ((float)maxDisplay / (float)totalDisplay
-    ) * (float)container.height;
+  Gui::box(container, "");
 
-  float totH = ((float)maxDisplay / (float)totalDisplay) * (float)container.height;
+  Rect upRect(container.x, container.y - ITEM_HEIGHT, ITEM_HEIGHT, ITEM_HEIGHT);
+  Gui::button(upRect, "");
 
-  Gui::drawTexture(scrollbarRect, scrollbarTexture);
+  if(Input::getMouseButton(0) == true &&
+    upRect.contains(Input::getMousePosition()) == true)
+  {
+    scrollPos -= 100 * Time::getDeltaTime();
+  }
+
+  Rect downRect(container.x, container.y + container.height,
+    ITEM_HEIGHT, ITEM_HEIGHT);
+
+  Gui::button(downRect, "");
+
+  if(Input::getMouseButton(0) == true &&
+    downRect.contains(Input::getMousePosition()) == true)
+  {
+    scrollPos += 100 * Time::getDeltaTime();
+  }
+
+  scrollbarRect.height = ((float)maxDisplay / (float)totalDisplay)
+    * (float)container.height;
+
+  //Gui::drawTexture(scrollbarRect, scrollbarTexture);
+  //Gui::button(scrollbarRect, "");
+
+  Graphics::drawTexture(scrollbarRect, scrollbarTexture, Rect(0, 0, 1, 1),
+                        5, 5, 5, 5);
 
   if(scrolling == false)
   {
@@ -119,10 +170,9 @@ void FilesPanel::displayScrollbars()
   else
   {
     percent = scrollPos / (container.height - scrollbarRect.height);
-    //percent = scrollPos / (container.height - totH);
   }
 
-  std::cout << percent << std::endl;
+  //std::cout << percent << std::endl;
   startDisplay = (totalDisplay - maxDisplay) * percent;
 }
 

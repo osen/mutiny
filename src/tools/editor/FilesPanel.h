@@ -29,6 +29,8 @@ public:
   void listFiles();
   void listFiles(int* indent, int* y, int* total, FileTree* item);
   void displayScrollbars();
+  void header();
+  void refreshFiles();
 
 };
 
