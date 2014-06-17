@@ -8,7 +8,7 @@
 
 LogPanel::LogPanel(ProjectScreen* parent)
 {
-  setTitle("Log");
+  setTitle("Console");
   this->parent = parent;
 }
 

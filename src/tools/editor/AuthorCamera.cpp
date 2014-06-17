@@ -13,8 +13,12 @@ AuthorCamera* AuthorCamera::create()
 
 void AuthorCamera::onAwake()
 {
+  Camera* camera;
+
   getGameObject()->getTransform()->setPosition(Vector3(0, 0, -10));
-  getGameObject()->addComponent<Camera>();
+  camera = getGameObject()->addComponent<Camera>();
+
+  camera->setBackgroundColor(Color(0.5f, 0.5f, 0.5f, 1.0f));
 }
 
 void AuthorCamera::onUpdate()
