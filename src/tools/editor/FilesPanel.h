@@ -12,6 +12,7 @@ public:
   ProjectScreen* parent;
   std::shared_ptr<FileTree> files;
   Texture2d* expandTexture;
+  Texture2d* scrollbarTexture;
   std::shared_ptr<Texture2d> selectedTexture;
   std::string selectedPath;
   int startDisplay;
@@ -23,6 +24,7 @@ public:
   void onGui();
   void listFiles();
   void listFiles(int* indent, int* y, int* total, FileTree* item);
+  void displayScrollbars();
 
 };
 

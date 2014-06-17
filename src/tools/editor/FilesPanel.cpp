@@ -15,6 +15,7 @@ FilesPanel::FilesPanel(ProjectScreen* parent)
     SelectProjectScreen::selectedProject));
 
   expandTexture = Resources::load<Texture2d>("gui/expand");
+  scrollbarTexture = Resources::load<Texture2d>("gui/scrollbar");
 
   selectedTexture.reset(new Texture2d(1, 1));
   selectedTexture->setPixel(0, 0, Color(1.0f, 1.0f, 1.0f, 0.1f));
@@ -53,6 +54,17 @@ void FilesPanel::listFiles()
   }
 
   totalDisplay = total;
+
+  if(totalDisplay >= maxDisplay)
+  {
+    displayScrollbars();
+  }
+}
+
+void FilesPanel::displayScrollbars()
+{
+  Gui::drawTexture(Rect(position.x + position.width - 20, position.y, 20,
+    position.height), scrollbarTexture);
 }
 
 void FilesPanel::listFiles(int* indent, int* y, int* total, FileTree* item)
@@ -82,18 +94,23 @@ void FilesPanel::listFiles(int* indent, int* y, int* total, FileTree* item)
 
   if(display == true)
   {
+    Rect labelRect(rect.x + expandTexture->getWidth(), rect.y, rect.width
+      - ((position.x + rect.x) - position.x + expandTexture->getWidth()),
+      rect.height);
+
+    Rect clickRect(position.x, rect.y, rect.width, rect.height);
+
     if(item->path == selectedPath)
     {
       Gui::drawTexture(Rect(position.x, rect.y, rect.width, rect.height), selectedTexture.get());
     }
 
-    Gui::label(Rect(rect.x + expandTexture->getWidth(), rect.y, rect.width
-      - ((position.x + rect.x) - position.x + expandTexture->getWidth()),
-      rect.height), item->getName());
+    Gui::label(labelRect, item->getName());
 
     if(Input::getMouseButtonDown(0) == true)
     {
-      if(rect.contains(Input::getMousePosition()) == true)
+      if(clickRect.contains(Input::getMousePosition()) == true &&
+         expandRect.contains(Input::getMousePosition()) == false)
       {
         selectedPath = item->path;
       }
@@ -111,7 +128,7 @@ void FilesPanel::listFiles(int* indent, int* y, int* total, FileTree* item)
   {
     if(item->children.size() > 0)
     {
-      if(item->expanded == true)
+      if(item->expanded == false)
       {
         Gui::drawTexture(expandRect, expandTexture);
       }
