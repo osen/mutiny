@@ -2,17 +2,24 @@
 #include "ProjectScreen.h"
 #include "Header.h"
 #include "FileTree.h"
+#include "SelectProjectScreen.h"
 
 FilesPanel::FilesPanel(ProjectScreen* parent)
 {
   setTitle("Project");
   this->parent = parent;
-  files.reset(new FileTree("../share/baastud"));
+
+  files.reset(new FileTree(Application::getDataPath() + "/../" +
+    SelectProjectScreen::selectedProject));
+
   expandTexture = Resources::load<Texture2d>("gui/expand");
 
   selectedTexture.reset(new Texture2d(1, 1));
   selectedTexture->setPixel(0, 0, Color(1.0f, 1.0f, 1.0f, 0.1f));
   selectedTexture->apply();
+
+  startDisplay = 0;
+  maxDisplay = 0;
 }
 
 void FilesPanel::onGui()
@@ -42,15 +49,21 @@ void FilesPanel::listFiles(int* indent, int* y, FileTree* item)
   Rect rect;
   Rect expandRect;
 
-  if(*y > 10) return;
-
   rect.x = position.x + (10 * *indent);
   rect.height = 20;
-  rect.y = position.y + rect.height + (*y * rect.height);
+  rect.y = position.y + rect.height + (*y * rect.height) + 20;
   rect.width = position.width;
 
   expandRect = Rect(rect.x, rect.y, expandTexture->getWidth(),
-        expandTexture->getHeight());
+    expandTexture->getHeight());
+
+  //if(*y <= maxDisplay)
+  //if(*y > 10)
+  if(rect.y > position.x + position.height + (rect.height * 2))
+  {
+    maxDisplay = *y;
+    return;
+  }
 
   if(item->path == selectedPath)
   {
@@ -61,9 +74,6 @@ void FilesPanel::listFiles(int* indent, int* y, FileTree* item)
     - ((position.x + rect.x) - position.x + expandTexture->getWidth()),
     rect.height), item->getName());
 
-  *y = *y + 1;
-
-
   if(Input::getMouseButtonDown(0) == true)
   {
     if(rect.contains(Input::getMousePosition()) == true)
@@ -71,6 +81,8 @@ void FilesPanel::listFiles(int* indent, int* y, FileTree* item)
       selectedPath = item->path;
     }
   }
+
+  *y = *y + 1;
 
   if(item->directory == false)
   {

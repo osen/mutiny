@@ -6,6 +6,8 @@
 
 #define PADDING 10
 
+std::string SelectProjectScreen::selectedProject;
+
 void SelectProjectScreen::onAwake()
 {
   DIR* dp = NULL;

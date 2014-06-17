@@ -14,6 +14,8 @@ public:
   Texture2d* expandTexture;
   std::shared_ptr<Texture2d> selectedTexture;
   std::string selectedPath;
+  int startDisplay;
+  int maxDisplay;
 
   FilesPanel(ProjectScreen* parent);
 

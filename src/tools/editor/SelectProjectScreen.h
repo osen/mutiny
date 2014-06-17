@@ -11,6 +11,8 @@ using namespace mutiny::engine;
 class SelectProjectScreen : public Behaviour
 {
 public:
+  static std::string selectedProject;
+
   virtual void onAwake();
   virtual void onGui();
 
@@ -19,7 +21,6 @@ private:
   bool displayOpenGui;
   std::string currentTab;
   std::vector<std::string> projects;
-  std::string selectedProject;
 
   void openProjectGui();
   void createProjectGui();
