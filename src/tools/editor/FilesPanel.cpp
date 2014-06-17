@@ -4,6 +4,8 @@
 #include "FileTree.h"
 #include "SelectProjectScreen.h"
 
+#define ITEM_HEIGHT 20
+
 FilesPanel::FilesPanel(ProjectScreen* parent)
 {
   setTitle("Project");
@@ -20,6 +22,7 @@ FilesPanel::FilesPanel(ProjectScreen* parent)
 
   startDisplay = 0;
   maxDisplay = 0;
+  totalDisplay = 0;
 }
 
 void FilesPanel::onGui()
@@ -37,48 +40,63 @@ void FilesPanel::listFiles()
 {
   int indent = 0;
   int y = 0;
+  int total = 0;
+
+  //maxDisplay = (position.height - ITEM_HEIGHT) / ITEM_HEIGHT;
+  maxDisplay = (position.height - (ITEM_HEIGHT * 2)) / ITEM_HEIGHT;
+
+  y = y - startDisplay;
 
   for(int i = 0; i < files->children.size(); i++)
   {
-    listFiles(&indent, &y, &files->children.at(i));
+    listFiles(&indent, &y, &total, &files->children.at(i));
   }
+
+  totalDisplay = total;
 }
 
-void FilesPanel::listFiles(int* indent, int* y, FileTree* item)
+void FilesPanel::listFiles(int* indent, int* y, int* total, FileTree* item)
 {
   Rect rect;
   Rect expandRect;
+  bool display = false;
 
+  *total = *y;
   rect.x = position.x + (10 * *indent);
-  rect.height = 20;
-  rect.y = position.y + rect.height + (*y * rect.height) + 20;
+  rect.height = ITEM_HEIGHT;
+  rect.y = position.y + rect.height + (*y * rect.height) + ITEM_HEIGHT;
   rect.width = position.width;
+
+  if(totalDisplay >= maxDisplay)
+  {
+    rect.width -= 20;
+  }
 
   expandRect = Rect(rect.x, rect.y, expandTexture->getWidth(),
     expandTexture->getHeight());
 
-  //if(*y <= maxDisplay)
-  //if(*y > 10)
-  if(rect.y > position.x + position.height + (rect.height * 2))
+  if(*y <= maxDisplay && *y >= 0)
   {
-    maxDisplay = *y;
-    return;
+    display = true;
   }
 
-  if(item->path == selectedPath)
+  if(display == true)
   {
-    Gui::drawTexture(Rect(position.x, rect.y, rect.width, rect.height), selectedTexture.get());
-  }
-
-  Gui::label(Rect(rect.x + expandTexture->getWidth(), rect.y, rect.width
-    - ((position.x + rect.x) - position.x + expandTexture->getWidth()),
-    rect.height), item->getName());
-
-  if(Input::getMouseButtonDown(0) == true)
-  {
-    if(rect.contains(Input::getMousePosition()) == true)
+    if(item->path == selectedPath)
     {
-      selectedPath = item->path;
+      Gui::drawTexture(Rect(position.x, rect.y, rect.width, rect.height), selectedTexture.get());
+    }
+
+    Gui::label(Rect(rect.x + expandTexture->getWidth(), rect.y, rect.width
+      - ((position.x + rect.x) - position.x + expandTexture->getWidth()),
+      rect.height), item->getName());
+
+    if(Input::getMouseButtonDown(0) == true)
+    {
+      if(rect.contains(Input::getMousePosition()) == true)
+      {
+        selectedPath = item->path;
+      }
     }
   }
 
@@ -89,29 +107,32 @@ void FilesPanel::listFiles(int* indent, int* y, FileTree* item)
     return;
   }
 
-  if(item->children.size() > 0)
+  if(display == true)
   {
-    if(item->expanded == true)
+    if(item->children.size() > 0)
     {
-      Gui::drawTexture(expandRect, expandTexture);
+      if(item->expanded == true)
+      {
+        Gui::drawTexture(expandRect, expandTexture);
+      }
+      else
+      {
+        GuiUtility::rotateAroundPivot(90, Vector2(rect.x +
+          (expandTexture->getWidth() / 2), rect.y + (expandTexture->getHeight() / 2)));
+
+        Gui::drawTexture(expandRect, expandTexture);
+
+        GuiUtility::rotateAroundPivot(-90, Vector2(rect.x +
+          (expandTexture->getWidth() / 2), rect.y + (expandTexture->getHeight() / 2)));
+      }
     }
-    else
+
+    if(Input::getMouseButtonDown(0) == true)
     {
-      GuiUtility::rotateAroundPivot(90, Vector2(rect.x +
-        (expandTexture->getWidth() / 2), rect.y + (expandTexture->getHeight() / 2)));
-
-      Gui::drawTexture(expandRect, expandTexture);
-
-      GuiUtility::rotateAroundPivot(-90, Vector2(rect.x +
-        (expandTexture->getWidth() / 2), rect.y + (expandTexture->getHeight() / 2)));
-    }
-  }
-
-  if(Input::getMouseButtonDown(0) == true)
-  {
-    if(expandRect.contains(Input::getMousePosition()) == true)
-    {
-      item->expanded = !item->expanded;
+      if(expandRect.contains(Input::getMousePosition()) == true)
+      {
+        item->expanded = !item->expanded;
+      }
     }
   }
 
@@ -123,7 +144,7 @@ void FilesPanel::listFiles(int* indent, int* y, FileTree* item)
   *indent = *indent + 1;
   for(int i = 0; i < item->children.size(); i++)
   {
-    listFiles(indent, y, &item->children.at(i));
+    listFiles(indent, y, total, &item->children.at(i));
   }
   *indent = *indent - 1;
 }

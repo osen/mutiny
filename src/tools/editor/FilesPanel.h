@@ -16,12 +16,13 @@ public:
   std::string selectedPath;
   int startDisplay;
   int maxDisplay;
+  int totalDisplay;
 
   FilesPanel(ProjectScreen* parent);
 
   void onGui();
   void listFiles();
-  void listFiles(int* indent, int* y, FileTree* item);
+  void listFiles(int* indent, int* y, int* total, FileTree* item);
 
 };
 
