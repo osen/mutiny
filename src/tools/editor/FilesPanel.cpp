@@ -24,6 +24,8 @@ FilesPanel::FilesPanel(ProjectScreen* parent)
   startDisplay = 0;
   maxDisplay = 0;
   totalDisplay = 0;
+  scrolling = false;
+  scrollPos = 0;
 }
 
 void FilesPanel::onGui()
@@ -63,8 +65,65 @@ void FilesPanel::listFiles()
 
 void FilesPanel::displayScrollbars()
 {
-  Gui::drawTexture(Rect(position.x + position.width - 20, position.y, 20,
-    position.height), scrollbarTexture);
+  Rect container(position.x + position.width - 20,
+                 position.y + (ITEM_HEIGHT * 2),
+                 20,
+                 position.height - (ITEM_HEIGHT * 2));
+
+  Rect scrollbarRect(container.x, container.y + scrollPos,
+                     container.width, 20);
+
+  scrollbarRect.height = ((float)maxDisplay / (float)totalDisplay
+    ) * (float)container.height;
+
+  float totH = ((float)maxDisplay / (float)totalDisplay) * (float)container.height;
+
+  Gui::drawTexture(scrollbarRect, scrollbarTexture);
+
+  if(scrolling == false)
+  {
+    if(Input::getMouseButtonDown(0) == true &&
+       scrollbarRect.contains(Input::getMousePosition()) == true)
+    {
+      mousePos = Input::getMousePosition().y;
+      scrolling = true;
+    }
+  }
+  else
+  {
+    scrollPos += Input::getMousePosition().y - mousePos;
+    mousePos = Input::getMousePosition().y;
+
+    if(Input::getMouseButtonUp(0) == true)
+    {
+      scrolling = false;
+    }
+  }
+
+  if(scrollPos + scrollbarRect.height > container.height)
+  {
+    scrollPos = container.height - scrollbarRect.height;
+  }
+
+  if(scrollPos < 0)
+  {
+    scrollPos = 0;
+  }
+
+  float percent = 0;
+
+  if(scrollPos == 0)
+  {
+    percent = 0;
+  }
+  else
+  {
+    percent = scrollPos / (container.height - scrollbarRect.height);
+    //percent = scrollPos / (container.height - totH);
+  }
+
+  std::cout << percent << std::endl;
+  startDisplay = (totalDisplay - maxDisplay) * percent;
 }
 
 void FilesPanel::listFiles(int* indent, int* y, int* total, FileTree* item)
@@ -73,7 +132,8 @@ void FilesPanel::listFiles(int* indent, int* y, int* total, FileTree* item)
   Rect expandRect;
   bool display = false;
 
-  *total = *y;
+  //*total = *y;
+  *total = *total + 1;
   rect.x = position.x + (10 * *indent);
   rect.height = ITEM_HEIGHT;
   rect.y = position.y + rect.height + (*y * rect.height) + ITEM_HEIGHT;

@@ -19,6 +19,10 @@ public:
   int maxDisplay;
   int totalDisplay;
 
+  bool scrolling;
+  float scrollPos;
+  float mousePos;
+
   FilesPanel(ProjectScreen* parent);
 
   void onGui();
