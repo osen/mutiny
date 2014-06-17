@@ -50,7 +50,7 @@ void CharacterController::update()
 
   for(int i = 0; i < collidableObjects.size(); i++)
   {
-    MeshCollider* meshCollider = ((GameObject*)collidableObjects.at(i))->getComponent<MeshCollider>();
+    MeshCollider* meshCollider = ((MeshCollider*)collidableObjects.at(i));
 
     if(meshCollider->getBounds().intersects(bounds) == true)
     {

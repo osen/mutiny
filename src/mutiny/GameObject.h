@@ -33,11 +33,20 @@ public:
 
     for(int i = 0; i < Application::gameObjects.size(); i++)
     {
-      Component* component = Application::gameObjects.at(i)->getComponent<T>();
+      void* gameObject =
+        dynamic_cast<T*>(Application::gameObjects.at(i).get());
+
+      if(gameObject != NULL)
+      {
+        objects.push_back((Object*)gameObject);
+      }
+
+      void* component =
+        dynamic_cast<T*>(Application::gameObjects.at(i)->getComponent<T>());
 
       if(component != NULL)
       {
-        objects.push_back((Object*)Application::gameObjects.at(i).get());
+        objects.push_back((Object*)component);
       }
     }
 

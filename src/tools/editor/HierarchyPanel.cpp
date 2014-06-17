@@ -3,6 +3,8 @@
 #include "FilesPanel.h"
 #include "FileTree.h"
 
+#include <vector>
+
 HierarchyPanel::HierarchyPanel(ProjectScreen* parent)
 {
   setTitle("Hierarchy");
@@ -24,5 +26,12 @@ void HierarchyPanel::onGui()
 
 void HierarchyPanel::listHierarchy()
 {
+  std::vector<Object*> gameObjects = 
+    GameObject::findObjectsOfType<GameObject>();
 
+  for(int i = 0; i < gameObjects.size(); i++)
+  {
+    Gui::label(Rect(position.x, position.y + 20 + 20 + (20 * i), position.width,
+      20), gameObjects.at(i)->getName());
+  }
 }
