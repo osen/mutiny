@@ -21,7 +21,25 @@ void ProjectScreen::onAwake()
   AuthorCamera::create();
 
   // Temp (So I can see something...)
-  GameObject::createPrimitive(PrimitiveType::CUBE)->setName("Da Cube?");
+  GameObject* go = GameObject::createPrimitive(PrimitiveType::CUBE);
+  go->setName("Da Cube?");
+  go->getTransform()->setPosition(Vector3(0, 10, 0));
+
+  go = GameObject::createPrimitive(PrimitiveType::CUBE);
+  go->setName("Da Other Cube");
+  go->getTransform()->setPosition(Vector3(10, 10, 0));
+
+  go = GameObject::createPrimitive(PrimitiveType::CUBE);
+  go->setName("Da Third Cube!");
+  go->getTransform()->setPosition(Vector3(0, 0, 0));
+
+  go = GameObject::createPrimitive(PrimitiveType::CUBE);
+  go->setName("Da Final Cube!");
+  go->getTransform()->setPosition(Vector3(10, 0, 0));
+
+  go = GameObject::createPrimitive(PrimitiveType::CUBE);
+  go->setName("Ok, just one more cube");
+  go->getTransform()->setPosition(Vector3(10, 0, 10));
 }
 
 void ProjectScreen::onGui()

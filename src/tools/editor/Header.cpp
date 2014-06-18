@@ -19,6 +19,19 @@ void Header::onGui()
 
   Gui::box(Rect(0, 0, position.width, 20), "");
 
+  Rect lblRect(0, 0, 45, ITEM_HEIGHT);
+  Gui::label(lblRect, "File");
+  lblRect.x += lblRect.width;
+  Gui::label(lblRect, "Edit");
+  lblRect.x += lblRect.width; lblRect.width = 55;
+  Gui::label(lblRect, "Assets");
+  lblRect.x += lblRect.width; lblRect.width = 85;
+  Gui::label(lblRect, "GameObject");
+  lblRect.x += lblRect.width; lblRect.width = 80;
+  Gui::label(lblRect, "Component");
+  lblRect.x += lblRect.width; lblRect.width = 45;
+  Gui::label(lblRect, "Help");
+
   Gui::button(Rect(buttonsBegin, 5 + ITEM_HEIGHT, 30, 25), playTexture);
   Gui::button(Rect(buttonsBegin + 31, 5 + ITEM_HEIGHT, 30, 25), buildTexture);
 }
