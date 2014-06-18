@@ -18,6 +18,7 @@ public:
   Rect captionRect;
   std::string caption;
   bool released;
+  std::string items;
 
   std::shared_ptr<Texture2d> color;
 

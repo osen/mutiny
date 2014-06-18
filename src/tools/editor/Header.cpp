@@ -21,7 +21,7 @@ void Header::onGui()
   Gui::box(Rect(0, 0, position.width, 20), "");
 
   Rect lblRect(0, 0, 45, ITEM_HEIGHT);
-  EditorGuiUtil::dropDown(lblRect, "File", "New Scene|---|Exit");
+  EditorGuiUtil::dropDown(lblRect, "File", "New Scene|Reopen Scene|---|Save Scene|---|Exit");
   lblRect.x += lblRect.width;
   EditorGuiUtil::dropDown(lblRect, "Edit", "");
   lblRect.x += lblRect.width; lblRect.width = 55;

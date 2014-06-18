@@ -14,6 +14,7 @@ add_executable(editor
   FileTree.cpp
   LogPanel.cpp
   DropdownLayer.cpp
+  Util.cpp
 )
 
 target_link_libraries(editor mutiny)

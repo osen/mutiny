@@ -59,11 +59,12 @@ void EditorGuiUtil::dropDown(Rect rect, std::string caption, std::string items)
       }
       else
       {
+        dropdownLayer->items = items;
         dropdownLayer->enabled = true;
         dropdownLayer->released = false;
         dropdownLayer->captionRect = rect;
         dropdownLayer->caption = caption;
-        dropdownLayer->rect = Rect(rect.x, rect.y + rect.height - 1, 200, 200);
+        dropdownLayer->rect = Rect(rect.x, rect.y + rect.height - 1, 200, 10);
       }
     }
   }

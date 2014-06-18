@@ -1,8 +1,11 @@
 #include "DropdownLayer.h"
 #include "ProjectScreen.h"
 #include "EditorGuiUtil.h"
+#include "Util.h"
 
 #include <vector>
+
+#define ITEM_HEIGHT 24
 
 DropdownLayer::DropdownLayer(ProjectScreen* parent)
 {
@@ -38,5 +41,39 @@ void DropdownLayer::onGui()
     rect.contains(Input::getMousePosition()) == false)
   {
     enabled = false;
+    return;
   }
+
+  std::vector<std::string> splitItems;
+  Util::splitString(items, '|', &splitItems);
+  Rect itemRect(rect.x + ITEM_HEIGHT, rect.y, rect.width - ITEM_HEIGHT, ITEM_HEIGHT);
+  rect.height = 0;
+  bool contained = false;
+
+  for(int i = 0; i < splitItems.size(); i++)
+  {
+    if(splitItems.at(i) != "---")
+    {
+      if(Rect(rect.x, itemRect.y, rect.width, itemRect.height).contains(
+        Input::getMousePosition()) == true && contained == false)
+      {
+        contained = true;
+        Gui::drawTexture(itemRect, color.get());
+      }
+
+      Gui::label(itemRect, splitItems.at(i));
+      itemRect.y += itemRect.height;
+      rect.height += itemRect.height;
+    }
+    else
+    {
+      Gui::drawTexture(Rect(itemRect.x, itemRect.y + 2, itemRect.width, 1),
+        color.get());
+
+      itemRect.y += 4;
+      rect.height += 4;
+    }
+  }
+
+  Gui::box(Rect(rect.x, rect.y, ITEM_HEIGHT, rect.height), "");
 }
