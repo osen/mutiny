@@ -13,6 +13,7 @@ class HierarchyPanel;
 class InspectorPanel;
 class ScenePanel;
 class LogPanel;
+class DropdownLayer;
 
 class ProjectScreen : public Behaviour
 {
@@ -23,6 +24,7 @@ public:
   std::shared_ptr<InspectorPanel> inspectorPanel;
   std::shared_ptr<ScenePanel> scenePanel;
   std::shared_ptr<LogPanel> logPanel;
+  std::shared_ptr<DropdownLayer> dropdownLayer;
 
   virtual void onAwake();
   virtual void onGui();

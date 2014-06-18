@@ -6,6 +6,7 @@
 #include "ScenePanel.h"
 #include "AuthorCamera.h"
 #include "LogPanel.h"
+#include "DropdownLayer.h"
 
 void ProjectScreen::onAwake()
 {
@@ -17,6 +18,7 @@ void ProjectScreen::onAwake()
   inspectorPanel.reset(new InspectorPanel(this));
   scenePanel.reset(new ScenePanel(this));
   logPanel.reset(new LogPanel(this));
+  dropdownLayer.reset(new DropdownLayer(this));
 
   AuthorCamera::create();
 
@@ -50,5 +52,6 @@ void ProjectScreen::onGui()
   inspectorPanel->gui();
   scenePanel->gui();
   logPanel->gui();
+  dropdownLayer->onGui();
 }
 

@@ -90,6 +90,10 @@ void FilesPanel::listFiles()
   {
     displayScrollbars();
   }
+  else
+  {
+    startDisplay = 0;
+  }
 }
 
 void FilesPanel::displayScrollbars()

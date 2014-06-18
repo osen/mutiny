@@ -1,4 +1,5 @@
 #include "Header.h"
+#include "EditorGuiUtil.h"
 
 #define ITEM_HEIGHT 20
 
@@ -20,17 +21,17 @@ void Header::onGui()
   Gui::box(Rect(0, 0, position.width, 20), "");
 
   Rect lblRect(0, 0, 45, ITEM_HEIGHT);
-  Gui::label(lblRect, "File");
+  EditorGuiUtil::dropDown(lblRect, "File", "New Scene|---|Exit");
   lblRect.x += lblRect.width;
-  Gui::label(lblRect, "Edit");
+  EditorGuiUtil::dropDown(lblRect, "Edit", "");
   lblRect.x += lblRect.width; lblRect.width = 55;
-  Gui::label(lblRect, "Assets");
+  EditorGuiUtil::dropDown(lblRect, "Assets", "");
   lblRect.x += lblRect.width; lblRect.width = 85;
-  Gui::label(lblRect, "GameObject");
+  EditorGuiUtil::dropDown(lblRect, "GameObject", "");
   lblRect.x += lblRect.width; lblRect.width = 80;
-  Gui::label(lblRect, "Component");
+  EditorGuiUtil::dropDown(lblRect, "Component", "");
   lblRect.x += lblRect.width; lblRect.width = 45;
-  Gui::label(lblRect, "Help");
+  EditorGuiUtil::dropDown(lblRect, "Help", "");
 
   Gui::button(Rect(buttonsBegin, 5 + ITEM_HEIGHT, 30, 25), playTexture);
   Gui::button(Rect(buttonsBegin + 31, 5 + ITEM_HEIGHT, 30, 25), buildTexture);
