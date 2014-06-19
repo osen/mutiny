@@ -3,6 +3,7 @@
 #include "Header.h"
 #include "FileTree.h"
 #include "SelectProjectScreen.h"
+#include "InspectorPanel.h"
 
 #define ITEM_HEIGHT 20
 
@@ -15,6 +16,7 @@ FilesPanel::FilesPanel(ProjectScreen* parent)
 
   expandTexture = Resources::load<Texture2d>("gui/expand");
   scrollbarTexture = Resources::load<Texture2d>("gui/scrollbar");
+  headerTexture = Resources::load<Texture2d>("gui/header");
 
   selectedTexture.reset(new Texture2d(1, 1));
   selectedTexture->setPixel(0, 0, Color(1.0f, 1.0f, 1.0f, 0.1f));
@@ -41,8 +43,6 @@ void FilesPanel::onGui()
 
 void FilesPanel::refreshFiles()
 {
-  Application::setTitle("Mutiny - " + SelectProjectScreen::selectedProject);
-
   files.reset(new FileTree(Application::getDataPath() + "/../" +
     SelectProjectScreen::selectedProject));
 
@@ -53,7 +53,7 @@ void FilesPanel::header()
 {
   Rect rect(position.x, position.y + ITEM_HEIGHT, position.width, ITEM_HEIGHT);
 
-  Gui::box(rect, "");
+  Gui::drawTexture(rect, headerTexture);
 
   if(Gui::button(Rect(rect.x + 2, rect.y + 2, 65, ITEM_HEIGHT - 4),
     "Create") == true)
@@ -229,6 +229,7 @@ void FilesPanel::listFiles(int* indent, int* y, int* total, FileTree* item)
          expandRect.contains(Input::getMousePosition()) == false)
       {
         selectedPath = item->path;
+        parent->inspectorPanel->onPathChanged(selectedPath);
       }
     }
   }

@@ -13,6 +13,7 @@ public:
   std::shared_ptr<FileTree> files;
   Texture2d* expandTexture;
   Texture2d* scrollbarTexture;
+  Texture2d* headerTexture;
   std::shared_ptr<Texture2d> selectedTexture;
   std::string selectedPath;
   int startDisplay;

@@ -26,6 +26,8 @@ public:
   std::shared_ptr<LogPanel> logPanel;
   std::shared_ptr<DropdownLayer> dropdownLayer;
 
+  std::string sceneName;
+
   virtual void onAwake();
   virtual void onGui();
 

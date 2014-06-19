@@ -7,6 +7,7 @@
 #include "AuthorCamera.h"
 #include "LogPanel.h"
 #include "DropdownLayer.h"
+#include "SelectProjectScreen.h"
 
 void ProjectScreen::onAwake()
 {
@@ -21,6 +22,9 @@ void ProjectScreen::onAwake()
   dropdownLayer.reset(new DropdownLayer(this));
 
   AuthorCamera::create();
+
+  sceneName = "Untitled.mutiny";
+  Application::setTitle("Mutiny - " + sceneName + " - " + SelectProjectScreen::selectedProject);
 
   // Temp (So I can see something...)
   GameObject* go = GameObject::createPrimitive(PrimitiveType::CUBE);

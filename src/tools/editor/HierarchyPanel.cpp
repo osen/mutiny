@@ -14,6 +14,7 @@ HierarchyPanel::HierarchyPanel(ProjectScreen* parent)
 
   expandTexture = Resources::load<Texture2d>("gui/expand");
   scrollbarTexture = Resources::load<Texture2d>("gui/scrollbar");
+  headerTexture = Resources::load<Texture2d>("gui/header");
 
   selectedTexture.reset(new Texture2d(1, 1));
   selectedTexture->setPixel(0, 0, Color(1.0f, 1.0f, 1.0f, 0.1f));
@@ -186,7 +187,7 @@ void HierarchyPanel::header()
 {
   Rect rect(position.x, position.y + ITEM_HEIGHT, position.width, ITEM_HEIGHT);
 
-  Gui::box(rect, "");
+  Gui::drawTexture(rect, headerTexture);
 
   if(Gui::button(Rect(rect.x + 2, rect.y + 2, 65, ITEM_HEIGHT - 4),
     "Create") == true)
