@@ -6,6 +6,7 @@ using namespace mutiny::engine;
 
 void SceneManager::onStart()
 {
+  getGameObject()->setName("_EDITOR_SceneManager");
   dontDestroyOnLoad(getGameObject());
   Application::loadLevel("SelectProject");
 }
@@ -19,7 +20,7 @@ void SceneManager::loadLevel()
 {
   Debug::log("Level loaded: " + Application::getLoadedLevelName());
 
-  GameObject* go = new GameObject(Application::getLoadedLevelName() + "Screen");
+  GameObject* go = new GameObject("_EDITOR_" + Application::getLoadedLevelName() + "Screen");
 
   if(Application::getLoadedLevelName() == "SelectProject")
   {

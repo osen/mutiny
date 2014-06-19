@@ -5,7 +5,7 @@ AuthorCamera* AuthorCamera::create()
   AuthorCamera* rtn;
   GameObject* go;
 
-  go = new GameObject("Camera");
+  go = new GameObject("_EDITOR_AuthorCamera");
   rtn = go->addComponent<AuthorCamera>();
 
   return rtn;

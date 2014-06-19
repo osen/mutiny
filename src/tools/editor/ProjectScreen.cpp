@@ -31,9 +31,10 @@ void ProjectScreen::onAwake()
   go->setName("Da Other Cube");
   go->getTransform()->setPosition(Vector3(10, 10, 0));
 
-  go = GameObject::createPrimitive(PrimitiveType::CUBE);
-  go->setName("Da Third Cube!");
-  go->getTransform()->setPosition(Vector3(0, 0, 0));
+  GameObject* go2 = GameObject::createPrimitive(PrimitiveType::CUBE);
+  go2->setName("Da Third Cube!");
+  go2->getTransform()->setPosition(Vector3(0, 0, 0));
+  go2->getTransform()->setParent(go->getTransform());
 
   go = GameObject::createPrimitive(PrimitiveType::CUBE);
   go->setName("Da Final Cube!");
