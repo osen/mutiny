@@ -21,19 +21,32 @@ void Header::onGui()
   Gui::box(Rect(0, 0, position.width, 20), "");
 
   Rect lblRect(0, 0, 45, ITEM_HEIGHT);
-  EditorGuiUtil::dropDown(lblRect, "File", "New Scene|Reopen Scene|---|Save Scene|---|Exit");
+
+  EditorGuiUtil::dropDown(lblRect, "File",
+    "New Scene|Reopen Scene|---|Save Scene|---|Exit",
+    dropdownClicked);
+
   lblRect.x += lblRect.width;
-  EditorGuiUtil::dropDown(lblRect, "Edit", "");
+  EditorGuiUtil::dropDown(lblRect, "Edit", "", dropdownClicked);
   lblRect.x += lblRect.width; lblRect.width = 55;
-  EditorGuiUtil::dropDown(lblRect, "Assets", "");
+  EditorGuiUtil::dropDown(lblRect, "Assets", "", dropdownClicked);
   lblRect.x += lblRect.width; lblRect.width = 85;
-  EditorGuiUtil::dropDown(lblRect, "GameObject", "");
+  EditorGuiUtil::dropDown(lblRect, "GameObject", "", dropdownClicked);
   lblRect.x += lblRect.width; lblRect.width = 80;
-  EditorGuiUtil::dropDown(lblRect, "Component", "");
+  EditorGuiUtil::dropDown(lblRect, "Component", "", dropdownClicked);
   lblRect.x += lblRect.width; lblRect.width = 45;
-  EditorGuiUtil::dropDown(lblRect, "Help", "");
+  EditorGuiUtil::dropDown(lblRect, "Help", "", dropdownClicked);
 
   Gui::button(Rect(buttonsBegin, 5 + ITEM_HEIGHT, 30, 25), playTexture);
   Gui::button(Rect(buttonsBegin + 31, 5 + ITEM_HEIGHT, 30, 25), buildTexture);
 }
 
+void Header::dropdownClicked(std::string item)
+{
+  std::cout << item << std::endl;
+
+  if(item == "Exit")
+  {
+    Application::quit();
+  }
+}

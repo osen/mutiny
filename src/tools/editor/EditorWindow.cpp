@@ -16,6 +16,12 @@ void EditorWindow::gui()
 {
   int headerHeight = 20;
 
+  if(Input::getMouseButtonDown(0) == true &&
+     position.contains(Input::getMousePosition()) == true)
+  {
+    // TODO: Unselect GUI elements.
+  }
+
   if(title == "Header")
   {
     Gui::box(Rect(position.x, position.y, position.width, position.height + headerHeight + 1), "");

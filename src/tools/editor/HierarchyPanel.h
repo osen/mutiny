@@ -29,6 +29,7 @@ public:
 
   void onGui();
 
+  void header();
   void listGameObjects();
   void listGameObjects(int* indent, int* y, int* total, GameObject* gameObject);
   void displayScrollbars();

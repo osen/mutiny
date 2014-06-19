@@ -19,6 +19,7 @@ public:
   std::string caption;
   bool released;
   std::string items;
+  void (*callback)(std::string);
 
   std::shared_ptr<Texture2d> color;
 

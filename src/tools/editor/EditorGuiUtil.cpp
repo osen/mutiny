@@ -45,7 +45,8 @@ std::string EditorGuiUtil::tabs(Rect rect, std::vector<std::string>* names,
   return rtn;
 }
 
-void EditorGuiUtil::dropDown(Rect rect, std::string caption, std::string items)
+void EditorGuiUtil::dropDown(Rect rect, std::string caption, std::string items,
+  void (*callback)(std::string))
 {
   Gui::label(rect, caption);
 
@@ -59,6 +60,7 @@ void EditorGuiUtil::dropDown(Rect rect, std::string caption, std::string items)
       }
       else
       {
+        dropdownLayer->callback = callback;
         dropdownLayer->items = items;
         dropdownLayer->enabled = true;
         dropdownLayer->released = false;

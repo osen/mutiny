@@ -13,6 +13,7 @@ DropdownLayer::DropdownLayer(ProjectScreen* parent)
   enabled = false;
   this->parent = parent;
   EditorGuiUtil::dropdownLayer = this;
+  callback = NULL;
 
   color.reset(new Texture2d(1, 1));
   //color->setPixel(0, 0, Color(0.5f, 0.5f, 0.5f, 1.0f));
@@ -62,6 +63,15 @@ void DropdownLayer::onGui()
       }
 
       Gui::label(itemRect, splitItems.at(i));
+
+      if(released == true && Input::getMouseButtonDown(0) == true &&
+        itemRect.contains(Input::getMousePosition()) == true)
+      {
+        enabled = false;
+        callback(splitItems.at(i));
+        return;
+      }
+
       itemRect.y += itemRect.height;
       rect.height += itemRect.height;
     }

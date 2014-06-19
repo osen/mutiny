@@ -24,24 +24,24 @@ void ProjectScreen::onAwake()
 
   // Temp (So I can see something...)
   GameObject* go = GameObject::createPrimitive(PrimitiveType::CUBE);
-  go->setName("Da Cube?");
+  go->setName("Player");
   go->getTransform()->setPosition(Vector3(0, 10, 0));
 
   go = GameObject::createPrimitive(PrimitiveType::CUBE);
-  go->setName("Da Other Cube");
+  go->setName("WeaponSpawner");
   go->getTransform()->setPosition(Vector3(10, 10, 0));
 
   GameObject* go2 = GameObject::createPrimitive(PrimitiveType::CUBE);
-  go2->setName("Da Third Cube!");
+  go2->setName("Sword");
   go2->getTransform()->setPosition(Vector3(0, 0, 0));
   go2->getTransform()->setParent(go->getTransform());
 
   go = GameObject::createPrimitive(PrimitiveType::CUBE);
-  go->setName("Da Final Cube!");
+  go->setName("Terrain");
   go->getTransform()->setPosition(Vector3(10, 0, 0));
 
   go = GameObject::createPrimitive(PrimitiveType::CUBE);
-  go->setName("Ok, just one more cube");
+  go->setName("House");
   go->getTransform()->setPosition(Vector3(10, 0, 10));
 }
 

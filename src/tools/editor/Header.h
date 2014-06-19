@@ -3,6 +3,8 @@
 
 #include "EditorWindow.h"
 
+#include <string>
+
 class ProjectScreen;
 
 class Header : public EditorWindow
@@ -15,6 +17,8 @@ public:
 private:
   Texture2d* playTexture;
   Texture2d* buildTexture;
+
+  static void dropdownClicked(std::string item);
 
 };
 

@@ -18,7 +18,8 @@ public:
   static std::string tabs(Rect rect, std::vector<std::string>* names,
     std::string current);
 
-  static void dropDown(Rect rect, std::string caption, std::string items);
+  static void dropDown(Rect rect, std::string caption, std::string items,
+    void(*callback)(std::string));
 
 private:
   static DropdownLayer* dropdownLayer;

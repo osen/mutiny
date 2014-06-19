@@ -37,6 +37,7 @@ void HierarchyPanel::onGui()
   position.y = parent->filesPanel->position.y +
     parent->filesPanel->position.height;
 
+  header();
   listGameObjects();
 }
 
@@ -179,6 +180,19 @@ void HierarchyPanel::listGameObjects(int* indent, int* y, int* total, GameObject
       gameObject->getTransform()->getChild(i)->getGameObject());
   }
   *indent = *indent - 1;
+}
+
+void HierarchyPanel::header()
+{
+  Rect rect(position.x, position.y + ITEM_HEIGHT, position.width, ITEM_HEIGHT);
+
+  Gui::box(rect, "");
+
+  if(Gui::button(Rect(rect.x + 2, rect.y + 2, 65, ITEM_HEIGHT - 4),
+    "Create") == true)
+  {
+
+  }
 }
 
 void HierarchyPanel::displayScrollbars()
