@@ -3,6 +3,7 @@
 #include "FilesPanel.h"
 #include "Header.h"
 #include "Util.h"
+#include "InspectorCamera.h"
 
 #include <string>
 
@@ -20,17 +21,43 @@ void InspectorPanel::onGui()
   position.y = parent->header->position.height;
   position.height = Screen::getHeight() - parent->header->position.height;
 
+  if(suffix == "png")
+  {
+    textureGui();
+  }
+  else if(suffix == "obj")
+  {
+    meshGui();
+  }
+  else if(suffix == "ogg")
+  {
+    audioClipGui();
+  }
+}
+
+void InspectorPanel::textureGui()
+{
   if(previewTexture != NULL)
   {
     Gui::drawTexture(Rect(position.x, position.y, 128, 128), previewTexture);
   }
 }
 
+void InspectorPanel::audioClipGui()
+{
+  Gui::button(Rect(position.x + 20, position.y + 20, 75, 25), "Play");
+}
+
+void InspectorPanel::meshGui()
+{
+  Gui::button(Rect(position.x + 20, position.y + 20, 75, 25), "Edit");
+
+  Gui::drawTexture(Rect(position.x, position.y, 128, 128),
+    parent->inspectorCamera->getRenderTexture());
+}
+
 void InspectorPanel::onPathChanged(std::string newPath)
 {
-  std::string suffix;
-  std::string path;
-
   for(int i = newPath.length() - 1; i >= 0; i--)
   {
     if(newPath[i] == '.')
@@ -40,19 +67,23 @@ void InspectorPanel::onPathChanged(std::string newPath)
     }
   }
 
-  if(suffix != "png")
-  {
-    return;
-  }
-
-  std::cout << "Suffix: " << suffix << std::endl;
   path = newPath.substr(0, newPath.length() - suffix.length() - 1);
 
-  std::cout << "Loading: " << path << std::endl;
-  previewTexture = Resources::load<Texture2d>(path);
-
-  if(previewTexture == NULL)
+  if(suffix == "png")
   {
-    std::cout << "Failed to load" << std::endl;
+    previewTexture = Resources::load<Texture2d>(path);
+
+    if(previewTexture == NULL)
+    {
+      std::cout << "Failed to load" << std::endl;
+    }
+  }
+  else if(suffix == "obj")
+  {
+
+  }
+  else if(suffix == "ogg")
+  {
+
   }
 }

@@ -14,6 +14,7 @@ class InspectorPanel;
 class ScenePanel;
 class LogPanel;
 class DropdownLayer;
+class InspectorCamera;
 
 class ProjectScreen : public Behaviour
 {
@@ -25,6 +26,8 @@ public:
   std::shared_ptr<ScenePanel> scenePanel;
   std::shared_ptr<LogPanel> logPanel;
   std::shared_ptr<DropdownLayer> dropdownLayer;
+
+  InspectorCamera* inspectorCamera;
 
   std::string sceneName;
 

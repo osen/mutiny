@@ -15,6 +15,7 @@ add_executable(editor
   LogPanel.cpp
   DropdownLayer.cpp
   Util.cpp
+  InspectorCamera.cpp
 )
 
 target_link_libraries(editor mutiny)
