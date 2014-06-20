@@ -11,6 +11,7 @@ public:
   static InspectorCamera* create();
 
   virtual void onAwake();
+  virtual void onUpdate();
 
   RenderTexture* getRenderTexture();
 

@@ -27,7 +27,10 @@ public:
   std::shared_ptr<LogPanel> logPanel;
   std::shared_ptr<DropdownLayer> dropdownLayer;
 
+  std::shared_ptr<Material> inspectorMat;
+
   InspectorCamera* inspectorCamera;
+  MeshFilter* inspectorMf;
 
   std::string sceneName;
 

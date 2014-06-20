@@ -15,13 +15,24 @@ void InspectorCamera::onAwake()
 {
   Camera* camera;
 
-  getGameObject()->getTransform()->setPosition(Vector3(0, 0, -10));
+  getGameObject()->getTransform()->setPosition(Vector3(0, 0, 7.5f));
+  getGameObject()->getTransform()->lookAt(Vector3(0, 0, 0));
   camera = getGameObject()->addComponent<Camera>();
 
-  camera->setBackgroundColor(Color(1.0f, 0.5f, 0.5f, 1.0f));
+  camera->setCullMask(1 << 1);
+
+  camera->setBackgroundColor(Color(0.171f, 0.171f, 0.171f, 1));
 
   rt.reset(new RenderTexture(512, 512));
   camera->setTargetTexture(rt.get());
+}
+
+void InspectorCamera::onUpdate()
+{
+  getGameObject()->getTransform()->rotateAround(
+    Vector3(0, 0, 0), Vector3(0, 1, 0), 50 * Time::getDeltaTime());
+
+  getGameObject()->getTransform()->lookAt(Vector3(0, 0, 0));
 }
 
 RenderTexture* InspectorCamera::getRenderTexture()

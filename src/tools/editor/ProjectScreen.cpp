@@ -25,6 +25,18 @@ void ProjectScreen::onAwake()
   AuthorCamera::create();
   inspectorCamera = InspectorCamera::create();
 
+  GameObject* inspectorGo = new GameObject("_EDITOR_InspectorMesh");
+  inspectorGo->setLayer(1 << 1);
+  //inspectorGo->getTransform()->setPosition(Vector3(0, 0, 0));
+  MeshRenderer* inspectorMr = inspectorGo->addComponent<MeshRenderer>();
+  inspectorMf = inspectorGo->addComponent<MeshFilter>();
+  inspectorMf->setMesh(Resources::load<Mesh>("primitives/cube"));
+
+  inspectorMat.reset(new Material(Resources::load<Shader>(
+    "shaders/EditorDiffuseTexture")));
+
+  inspectorMr->setMaterial(inspectorMat.get());
+
   sceneName = "Untitled.mutiny";
   Application::setTitle("Mutiny - " + sceneName + " - " + SelectProjectScreen::selectedProject);
 

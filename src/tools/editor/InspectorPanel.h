@@ -3,6 +3,8 @@
 
 #include "EditorWindow.h"
 
+#include <memory>
+
 class ProjectScreen;
 
 class InspectorPanel : public EditorWindow
@@ -14,6 +16,7 @@ public:
 
   Texture2d* previewTexture;
   Texture2d* headerTexture;
+  std::shared_ptr<Texture2d> previewBg;
 
   InspectorPanel(ProjectScreen* parent);
 

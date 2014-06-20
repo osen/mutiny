@@ -13,6 +13,10 @@ InspectorPanel::InspectorPanel(ProjectScreen* parent)
   this->parent = parent;
   previewTexture = NULL;
   headerTexture = Resources::load<Texture2d>("gui/header");
+
+  previewBg.reset(new Texture2d(1, 1));
+  previewBg->setPixel(0, 0, Color(0.171f, 0.171f, 0.171f, 1));
+  previewBg->apply();
 }
 
 void InspectorPanel::onGui()
@@ -40,6 +44,8 @@ void InspectorPanel::textureGui()
 {
   Rect previewRect(position.x, position.y + position.height -
     (position.width / 2), position.width, (position.width / 2));
+
+  Gui::drawTexture(previewRect, previewBg.get());
 
   Gui::drawTexture(Rect(previewRect.x, previewRect.y - 20, previewRect.width,
     20), headerTexture);
@@ -87,10 +93,58 @@ void InspectorPanel::audioClipGui()
 
 void InspectorPanel::meshGui()
 {
+  Texture* rt = parent->inspectorCamera->getRenderTexture();
   Gui::button(Rect(position.x + 20, position.y + 20, 75, 25), "Edit");
 
-  Gui::drawTexture(Rect(position.x, position.y, 128, 128),
-    parent->inspectorCamera->getRenderTexture());
+  Rect previewRect(position.x, position.y + position.height -
+    (position.width / 2), position.width, (position.width / 2));
+
+  Gui::drawTexture(previewRect, previewBg.get());
+
+  Gui::drawTexture(Rect(previewRect.x, previewRect.y - 20, previewRect.width,
+    20), headerTexture);
+
+  Gui::label(Rect(previewRect.x, previewRect.y - 20, previewRect.width,
+    20), "Preview");
+
+  if(rt != NULL)
+  {
+    float xscale = 1.0f;
+    float yscale = 1.0f;
+    float scale = 1.0f;
+
+    if(Screen::getWidth() > previewRect.width)
+    {
+      xscale = previewRect.width / Screen::getWidth();
+    }
+
+    if(Screen::getHeight() > previewRect.height)
+    {
+      yscale = previewRect.height / Screen::getHeight();
+    }
+
+    scale = xscale;
+
+    if(yscale < scale)
+    {
+      scale = yscale;
+    }
+
+    Rect texRect(previewRect.x, previewRect.y,
+      Screen::getWidth() * scale, Screen::getHeight() * scale);
+
+    texRect.x = previewRect.x + previewRect.width / 2 - texRect.width / 2;
+    texRect.y = previewRect.y + previewRect.height / 2 - texRect.height / 2;
+
+
+    GuiUtility::rotateAroundPivot(180, Vector2(texRect.x + texRect.width / 2,
+      texRect.y + texRect.height / 2));
+
+    Gui::drawTexture(texRect, rt);
+
+    GuiUtility::rotateAroundPivot(-180, Vector2(texRect.x + texRect.width / 2,
+      texRect.y + texRect.height / 2));
+  }
 }
 
 void InspectorPanel::onPathChanged(std::string newPath)
@@ -117,7 +171,14 @@ void InspectorPanel::onPathChanged(std::string newPath)
   }
   else if(suffix == "obj")
   {
+    Mesh* previewMesh = Resources::load<Mesh>(path);
 
+    if(previewMesh == NULL)
+    {
+      std::cout << "Failed to load" << std::endl;
+    }
+
+    parent->inspectorMf->setMesh(previewMesh);
   }
   else if(suffix == "ogg")
   {
