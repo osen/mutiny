@@ -58,6 +58,7 @@ void InspectorPanel::textureGui()
     float xscale = 1.0f;
     float yscale = 1.0f;
     float scale = 1.0f;
+
     if(previewTexture->getWidth() > previewRect.width)
     {
       xscale = previewRect.width / previewTexture->getWidth();

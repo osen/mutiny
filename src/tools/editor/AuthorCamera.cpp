@@ -18,8 +18,8 @@ void AuthorCamera::onAwake()
   getGameObject()->getTransform()->setPosition(Vector3(0, 0, -10));
   camera = getGameObject()->addComponent<Camera>();
 
-  //camera->setBackgroundColor(Color(0.171f, 0.171f, 0.171f, 1));
-  camera->setBackgroundColor(Color(0.5f, 0.5f, 0.5f, 1.0f));
+  camera->setBackgroundColor(Color(0.171f, 0.171f, 0.171f, 1));
+  //camera->setBackgroundColor(Color(0.5f, 0.5f, 0.5f, 1.0f));
 }
 
 void AuthorCamera::onUpdate()

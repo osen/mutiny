@@ -107,6 +107,7 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
 {
   if(submesh > positionBufferIds.size())
   {
+    Debug::logError("Submesh > positionBufferIds");
     throw std::exception();
   }
 
@@ -154,26 +155,31 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
     _normalBufferIds.push_back(std::shared_ptr<GLuint>(&normalBufferId, std::bind(freeBuffer, normalBufferId)));
 
     glBindBuffer(GL_ARRAY_BUFFER, normalBufferId);
-    glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_STATIC_DRAW);
+    //glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_DYNAMIC_DRAW);
   }
 
 // UVs
 
-  values.clear();
-
-  for(int i = 0; i < triangles.size(); i++)
+  if(uv.size() > 0)
   {
-    values.push_back(uv.at(triangles.at(i)).x);
-    values.push_back(uv.at(triangles.at(i)).y);
+    values.clear();
+
+    for(int i = 0; i < triangles.size(); i++)
+    {
+      values.push_back(uv.at(triangles.at(i)).x);
+      values.push_back(uv.at(triangles.at(i)).y);
+    }
+
+    GLuint uvBufferId = 0;
+    glGenBuffers(1, &uvBufferId);
+    uvBufferIds.push_back(uvBufferId);
+    _uvBufferIds.push_back(std::shared_ptr<GLuint>(&uvBufferId, std::bind(freeBuffer, uvBufferId)));
+
+    glBindBuffer(GL_ARRAY_BUFFER, uvBufferId);
+    //glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_DYNAMIC_DRAW);
   }
-
-  GLuint uvBufferId = 0;
-  glGenBuffers(1, &uvBufferId);
-  uvBufferIds.push_back(uvBufferId);
-  _uvBufferIds.push_back(std::shared_ptr<GLuint>(&uvBufferId, std::bind(freeBuffer, uvBufferId)));
-
-  glBindBuffer(GL_ARRAY_BUFFER, uvBufferId);
-  glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_STATIC_DRAW);
 }
 
 void Mesh::setUv(std::vector<Vector2> uv)

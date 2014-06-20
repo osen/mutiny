@@ -9,6 +9,7 @@
 #include "DropdownLayer.h"
 #include "SelectProjectScreen.h"
 #include "InspectorCamera.h"
+#include "Floor.h"
 
 void ProjectScreen::onAwake()
 {
@@ -24,6 +25,7 @@ void ProjectScreen::onAwake()
 
   AuthorCamera::create();
   inspectorCamera = InspectorCamera::create();
+  Floor::create();
 
   GameObject* inspectorGo = new GameObject("_EDITOR_InspectorMesh");
   inspectorGo->setLayer(1 << 1);
