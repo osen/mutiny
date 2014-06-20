@@ -13,6 +13,7 @@ public:
   std::string path;
 
   Texture2d* previewTexture;
+  Texture2d* headerTexture;
 
   InspectorPanel(ProjectScreen* parent);
 

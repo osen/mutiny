@@ -12,6 +12,7 @@ InspectorPanel::InspectorPanel(ProjectScreen* parent)
   setTitle("Inspector");
   this->parent = parent;
   previewTexture = NULL;
+  headerTexture = Resources::load<Texture2d>("gui/header");
 }
 
 void InspectorPanel::onGui()
@@ -37,9 +38,45 @@ void InspectorPanel::onGui()
 
 void InspectorPanel::textureGui()
 {
+  Rect previewRect(position.x, position.y + position.height -
+    (position.width / 2), position.width, (position.width / 2));
+
+  Gui::drawTexture(Rect(previewRect.x, previewRect.y - 20, previewRect.width,
+    20), headerTexture);
+
+  Gui::label(Rect(previewRect.x, previewRect.y - 20, previewRect.width,
+    20), "Preview");
+
   if(previewTexture != NULL)
   {
-    Gui::drawTexture(Rect(position.x, position.y, 128, 128), previewTexture);
+    float xscale = 1.0f;
+    float yscale = 1.0f;
+    float scale = 1.0f;
+    if(previewTexture->getWidth() > previewRect.width)
+    {
+      xscale = previewRect.width / previewTexture->getWidth();
+    }
+
+    if(previewTexture->getHeight() > previewRect.height)
+    {
+      yscale = previewRect.height / previewTexture->getHeight();
+    }
+
+    scale = xscale;
+
+    if(yscale < scale)
+    {
+      scale = yscale;
+    }
+
+    Rect texRect(previewRect.x, previewRect.y,
+      previewTexture->getWidth() * scale, previewTexture->getHeight() * scale);
+
+    texRect.x = previewRect.x + previewRect.width / 2 - texRect.width / 2;
+    texRect.y = previewRect.y + previewRect.height / 2 - texRect.height / 2;
+
+    Gui::drawTexture(texRect,
+      previewTexture);
   }
 }
 
