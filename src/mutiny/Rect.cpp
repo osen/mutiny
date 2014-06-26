@@ -1,5 +1,6 @@
 #include "Rect.h"
 #include "Vector3.h"
+#include "Vector2.h"
 
 namespace mutiny
 {
@@ -21,6 +22,11 @@ Rect::Rect(float x, float y, float width, float height)
   this->y = y;
   this->width = width;
   this->height = height;
+}
+
+bool Rect::contains(Vector2 point)
+{
+  return contains(Vector3(point.x, point.y, 0));
 }
 
 bool Rect::contains(Vector3 point)

@@ -8,6 +8,7 @@ namespace engine
 {
 
 class Vector3;
+class Vector2;
 class Rect
 {
 public:
@@ -20,6 +21,7 @@ public:
   Rect(float x, float y, float width, float height);
 
   bool contains(Vector3 point);
+  bool contains(Vector2 point);
 
 };
 
