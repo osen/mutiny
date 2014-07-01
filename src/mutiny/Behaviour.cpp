@@ -31,11 +31,21 @@ void Behaviour::update()
 
 void Behaviour::postRender()
 {
+  if(started == false)
+  {
+    return;
+  }
+
   onPostRender();
 }
 
 void Behaviour::gui()
 {
+  if(started == false)
+  {
+    return;
+  }
+
   onGui();
 }
 
