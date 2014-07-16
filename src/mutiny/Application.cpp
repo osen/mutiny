@@ -288,17 +288,44 @@ void Application::loop()
     {
       reshape(event.resize.w, event.resize.h);
     }
+#ifdef EMSCRIPTEN
+    else if(event.type == SDL_FINGERMOTION)
+    {
+      motion(event.tfinger.x * Screen::getWidth(),
+             event.tfinger.y * Screen::getHeight());
+    }
+#endif
     else if(event.type == SDL_MOUSEMOTION)
     {
       motion(event.motion.x, event.motion.y);
     }
+#ifdef EMSCRIPTEN
+    else if(event.type == SDL_FINGERDOWN)
+    {
+      motion(event.tfinger.x * Screen::getWidth(),
+             event.tfinger.y * Screen::getHeight());
+
+      mouse(0, SDL_MOUSEBUTTONDOWN, Input::mousePosition.x, Input::mousePosition.y);
+    }
+#endif
     else if(event.type == SDL_MOUSEBUTTONDOWN)
     {
-      mouse(event.button.button, SDL_MOUSEBUTTONDOWN, Input::mousePosition.x, Input::mousePosition.y);
+      mouse(event.button.button, SDL_MOUSEBUTTONDOWN, Input::mousePosition.x,
+        Input::mousePosition.y);
     }
+#ifdef EMSCRIPTEN
+    else if(event.type == SDL_FINGERUP)
+    {
+      motion(event.tfinger.x * Screen::getWidth(),
+             event.tfinger.y * Screen::getHeight());
+
+      mouse(0, SDL_MOUSEBUTTONUP, Input::mousePosition.x, Input::mousePosition.y);
+    }
+#endif
     else if(event.type == SDL_MOUSEBUTTONUP)
     {
-      mouse(event.button.button, SDL_MOUSEBUTTONUP, Input::mousePosition.x, Input::mousePosition.y);
+	  mouse(event.button.button, SDL_MOUSEBUTTONUP, Input::mousePosition.x,
+        Input::mousePosition.y);
     }
     else if(event.type == SDL_KEYDOWN)
     {

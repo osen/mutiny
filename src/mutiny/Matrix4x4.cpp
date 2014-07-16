@@ -132,7 +132,7 @@ Matrix4x4 Matrix4x4::transpose()
 
 Vector3 Matrix4x4::multiplyPoint(Vector3 v)
 {
-  vec3 rtnVec;
+  vec4 rtnVec;
   vec4 tmpVec;
 
   tmpVec[0] = v.x;
@@ -146,7 +146,7 @@ Vector3 Matrix4x4::multiplyPoint(Vector3 v)
 
 Vector3 Matrix4x4::multiplyVector(Vector3 v)
 {
-  vec3 rtnVec;
+  vec4 rtnVec;
   vec4 tmpVec;
 
   tmpVec[0] = v.x;
@@ -160,7 +160,7 @@ Vector3 Matrix4x4::multiplyVector(Vector3 v)
 
 Vector3 Matrix4x4::operator*(Vector3 param)
 {
-  vec3 rtnVec;
+  vec4 rtnVec;
   vec4 tmpVec;
 
   tmpVec[0] = param.x;
