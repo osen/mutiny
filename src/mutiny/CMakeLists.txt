@@ -2,7 +2,7 @@ add_library(mutiny STATIC
   internal/Util.cpp
   internal/tribox.cpp
   internal/WavefrontParser.cpp
-  internal/pngwrapper.cpp
+  internal/lodepng.cpp
   buccaneer/AnimatedMeshRenderer.cpp
   buccaneer/AnimatedMesh.cpp
   buccaneer/Animation.cpp
@@ -53,7 +53,7 @@ add_library(mutiny STATIC
 )
 
 if(CMAKE_SYSTEM_NAME MATCHES "Windows")
-target_link_libraries(mutiny GLEW32s opengl32 SDL SDLmain SDL_image SDL_mixer)
+target_link_libraries(mutiny GLEW32s opengl32 SDL SDLmain SDL_mixer)
 else()
 target_link_libraries(mutiny GLEW GL png SDL SDL_image SDL_gfx SDL_mixer)
 endif(CMAKE_SYSTEM_NAME MATCHES "Windows")

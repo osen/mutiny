@@ -3,15 +3,9 @@
 #include "Application.h"
 #include "Mathf.h"
 #include "Debug.h"
-#include "internal/pngwrapper.h"
+#include "internal/lodepng.h"
 
 #include <SDL/SDL.h>
-#include <SDL/SDL_image.h>
-
-#ifdef WINDOWS
-#else
-#include <SDL/SDL_rotozoom.h>
-#endif
 
 #include <memory>
 #include <functional>
@@ -94,21 +88,51 @@ void Texture2d::apply()
   glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+class PngData
+{
+public:
+  static std::shared_ptr<PngData> create()
+  {
+    static PngData s;
+    std::shared_ptr<PngData> rtn(new PngData(s));
+
+    return rtn;
+  }
+
+  ~PngData()
+  {
+    free(image);
+  }
+
+  unsigned char* image;
+  unsigned width;
+  unsigned height;
+};
+
+int poweroftwo(int input)
+{
+  input--;
+  input |= input >> 1;
+  input |= input >> 2;
+  input |= input >> 4;
+  input |= input >> 8;
+  input |= input >> 16;
+  input++;
+
+  return input;
+}
+
 Texture2d* Texture2d::load(std::string path)
 {
-#ifdef USE_LIBPNG
-  int pngId; std::shared_ptr<void> _pngId;
+  std::shared_ptr<PngData> image = PngData::create();
+  path = path + ".png";
 
-  pngId = pngwrapper_load(path + ".png");
-
-  if(pngId == 0)
+  if(lodepng_decode32_file(&image->image, &image->width, &image->height, path.c_str()) != 0)
   {
     throw std::exception();
   }
 
-  _pngId.reset(&pngId, std::bind(pngwrapper_unload, pngId));
-
-  Texture2d* texture = new Texture2d(pngwrapper_width(pngId), pngwrapper_height(pngId));
+  Texture2d* texture = new Texture2d(image->width, image->height);
 
   if(texture->nativeTexture == -1)
   {
@@ -116,8 +140,34 @@ Texture2d* Texture2d::load(std::string path)
     texture->_nativeTexture.reset(&texture->nativeTexture, std::bind(deleteTexture, texture->nativeTexture));
   }
 
+  int sampleWidth = image->width;
+  int sampleHeight = image->height;
+
+  sampleWidth = poweroftwo(image->width);
+  sampleHeight = poweroftwo(image->height);
+
+  std::cout << sampleWidth << " " << sampleHeight << std::endl;
+
+  std::vector<GLbyte> imageBytes(sampleHeight * sampleWidth * 4);
+
+  double scaleWidth =  (double)sampleWidth / (double)image->width;
+  double scaleHeight = (double)sampleHeight / (double)image->height;
+
+  for(int cy = 0; cy < sampleHeight; cy++)
+  {
+    for(int cx = 0; cx < sampleWidth; cx++)
+    {
+      int pixel = (cy * (sampleWidth * 4)) + (cx * 4);
+      int nearestMatch =  (((int)(cy / scaleHeight) * (image->width * 4)) + ((int)(cx / scaleWidth) * 4) );
+      imageBytes[pixel    ] =  image->image[nearestMatch    ];
+      imageBytes[pixel + 1] =  image->image[nearestMatch + 1];
+      imageBytes[pixel + 2] =  image->image[nearestMatch + 2];
+      imageBytes[pixel + 3] =  image->image[nearestMatch + 3];
+    }
+  }
+
   glBindTexture(GL_TEXTURE_2D, texture->nativeTexture);
-  pngwrapper_texture(pngId);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, sampleWidth, sampleHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, &imageBytes[0]);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
   //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -126,93 +176,6 @@ Texture2d* Texture2d::load(std::string path)
   glBindTexture(GL_TEXTURE_2D, 0);
 
   return texture;
-#else
-  std::shared_ptr<SDL_Surface> tmpSurface;
-  std::shared_ptr<SDL_Surface> surface;
-
-  tmpSurface.reset(IMG_Load(std::string(path + ".png").c_str()), std::bind(SDL_FreeSurface, std::placeholders::_1));
-
-  if(tmpSurface.get() == NULL)
-  {
-    //Debug::logError("Failed to load image '" + path + "'");
-    throw std::exception();
-  }
-
-//#if defined EMSCRIPTEN || defined WINDOWS
-  surface = tmpSurface;
-//#else
-//  float targetX = Mathf::nextPowerOfTwo(tmpSurface->w);
-//  float targetY = Mathf::nextPowerOfTwo(tmpSurface->h);
-//  float scaleX = tmpSurface->w / targetX;
-//  float scaleY = tmpSurface->h / targetY;
-//
-//  //std::cout << scaleX << " " << scaleY << std::endl;
-//  //std::cout << tmpSurface->w / scaleX << " " << tmpSurface->h / scaleY << std::endl;
-//  
-//  surface.reset(zoomSurface(tmpSurface.get(), scaleX, scaleY, SMOOTHING_ON), std::bind(SDL_FreeSurface, std::placeholders::_1));
-//#endif
-
-  if(surface.get() == NULL)
-  {
-    //Debug::logError("Failed to load image '" + path + "'");
-    throw std::exception();
-  }
-
-  Texture2d* texture = new Texture2d(tmpSurface->w, tmpSurface->h);
-
-  if(texture->nativeTexture == -1)
-  {
-    glGenTextures(1, &texture->nativeTexture);
-    texture->_nativeTexture.reset(&texture->nativeTexture, std::bind(deleteTexture, texture->nativeTexture));
-  }
-
-  GLint bpp = surface->format->BytesPerPixel;
-  GLint noc = 0;
-  GLint fmt = 0;
-
-  if(bpp == 4)
-  {
-    noc = GL_RGBA;
-
-    if (surface->format->Rmask == 0x000000ff)
-    {
-      fmt = GL_RGBA;
-    }
-    else
-    {
-      fmt = GL_BGRA;
-    }
-  }
-  else if(bpp == 3)
-  {
-    noc = GL_RGB;
-
-    if(surface->format->Rmask == 0x000000ff)
-    {
-      fmt = GL_RGB;
-    }
-    else
-    {
-      fmt = GL_BGR;
-    }
-  }
-  else
-  {
-    Debug::logError("Invalid texture format");
-    throw std::exception();
-  }
-
-  glBindTexture(GL_TEXTURE_2D, texture->nativeTexture);
-  glTexImage2D(GL_TEXTURE_2D, 0, noc, surface->w, surface->h, 0, fmt, GL_UNSIGNED_BYTE, surface->pixels);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-  glGenerateMipmap(GL_TEXTURE_2D);
-  glBindTexture(GL_TEXTURE_2D, 0);
-
-  return texture;
-#endif
 }
 
 }
