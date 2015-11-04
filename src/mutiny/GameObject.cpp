@@ -65,6 +65,32 @@ GameObject::GameObject()
   layer = 1 << 0;
 }
 
+GameObject::GameObject(int dummy)
+{
+
+}
+
+std::shared_ptr<GameObject> GameObject::create(std::string name)
+{
+  std::shared_ptr<GameObject> rtn = create();
+  rtn->name = name;
+
+  return rtn;
+}
+
+std::shared_ptr<GameObject> GameObject::create()
+{
+  static GameObject s(8);
+  std::shared_ptr<GameObject> rtn(new GameObject(s));
+
+  rtn->addComponent<Transform>();
+  Application::gameObjects.push_back(rtn);
+  rtn->activeSelf = true;
+  rtn->layer = 1 << 0;
+
+  return rtn;
+}
+
 GameObject::~GameObject()
 {
 

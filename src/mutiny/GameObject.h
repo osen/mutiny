@@ -54,9 +54,12 @@ public:
   }
 
   static void findGameObjectsWithTag(std::string tag, std::vector<GameObject*>* gameObjects);
+  static std::shared_ptr<GameObject> create();
+  static std::shared_ptr<GameObject> create(std::string name);
 
   GameObject();
   GameObject(std::string name);
+  GameObject(int dummy);
   ~GameObject();
 
   void setActive(bool active);

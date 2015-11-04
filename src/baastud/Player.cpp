@@ -13,11 +13,11 @@ using namespace mutiny::engine;
 
 GameObject* Player::create(GameScreen* gameScreen)
 {
-  GameObject* mainGo = new GameObject("Player");
+  std::shared_ptr<GameObject> mainGo = GameObject::create("Player");
   Player* player = mainGo->addComponent<Player>();
   player->gameScreen = gameScreen;
 
-  return mainGo;
+  return mainGo.get();
 }
 
 void Player::onAwake()
