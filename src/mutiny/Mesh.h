@@ -6,6 +6,7 @@
 #include "Object.h"
 #include "Bounds.h"
 #include "Color.h"
+#include "internal/CWrapper.h"
 
 #include <GL/glew.h>
 
@@ -58,9 +59,9 @@ private:
   std::vector<Vector3> normals;
   std::vector<Color> colors;
 
-  std::vector<GLuint> positionBufferIds; std::vector<std::shared_ptr<void> > _positionBufferIds;
-  std::vector<GLuint> uvBufferIds; std::vector<std::shared_ptr<void> > _uvBufferIds;
-  std::vector<GLuint> normalBufferIds; std::vector<std::shared_ptr<void> > _normalBufferIds;
+  std::vector<std::shared_ptr<internal::GlBuffer>> positionBufferIds;
+  std::vector<std::shared_ptr<internal::GlBuffer>> uvBufferIds;
+  std::vector<std::shared_ptr<internal::GlBuffer>> normalBufferIds;
 
   Bounds bounds;
 

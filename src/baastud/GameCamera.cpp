@@ -4,7 +4,7 @@
 
 using namespace mutiny::engine;
 
-GameObject* GameCamera::create(GameObject* playerGo)
+GameObject* GameCamera::create(std::shared_ptr<GameObject> playerGo)
 {
   GameObject* mainGo = new GameObject("GameCamera");
   GameCamera* gameCamera = mainGo->addComponent<GameCamera>();

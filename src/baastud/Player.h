@@ -11,7 +11,7 @@ class QuickNumber;
 class Player : public Behaviour
 {
 public:
-  static GameObject* create(GameScreen* gameScreen);
+  static std::shared_ptr<GameObject> create(GameScreen* gameScreen);
 
   virtual void onAwake();
   virtual void onUpdate();

@@ -127,14 +127,14 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
     values.push_back(vertices.at(triangles.at(i)).z);
   }
 
-  GLuint positionBufferId = 0;
-  glGenBuffers(1, &positionBufferId);
+  std::shared_ptr<internal::GlBuffer> positionBufferId = internal::GlBuffer::create();
+  glGenBuffers(1, &positionBufferId->id);
   positionBufferIds.push_back(positionBufferId);
-  _positionBufferIds.push_back(std::shared_ptr<GLuint>(&positionBufferId, std::bind(freeBuffer, positionBufferId)));
 
-  glBindBuffer(GL_ARRAY_BUFFER, positionBufferId);
+  glBindBuffer(GL_ARRAY_BUFFER, positionBufferId->id);
   //glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_STATIC_DRAW);
   glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_DYNAMIC_DRAW);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 // Normals
 
@@ -149,14 +149,13 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
       values.push_back(normals.at(triangles.at(i)).z);
     }
 
-    GLuint normalBufferId = 0;
-    glGenBuffers(1, &normalBufferId);
+    std::shared_ptr<internal::GlBuffer> normalBufferId = internal::GlBuffer::create();
+    glGenBuffers(1, &normalBufferId->id);
     normalBufferIds.push_back(normalBufferId);
-    _normalBufferIds.push_back(std::shared_ptr<GLuint>(&normalBufferId, std::bind(freeBuffer, normalBufferId)));
-
-    glBindBuffer(GL_ARRAY_BUFFER, normalBufferId);
+    glBindBuffer(GL_ARRAY_BUFFER, normalBufferId->id);
     //glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_STATIC_DRAW);
     glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
   }
 
 // UVs
@@ -171,14 +170,13 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
       values.push_back(uv.at(triangles.at(i)).y);
     }
 
-    GLuint uvBufferId = 0;
-    glGenBuffers(1, &uvBufferId);
+    std::shared_ptr<internal::GlBuffer> uvBufferId = internal::GlBuffer::create();
+    glGenBuffers(1, &uvBufferId->id);
     uvBufferIds.push_back(uvBufferId);
-    _uvBufferIds.push_back(std::shared_ptr<GLuint>(&uvBufferId, std::bind(freeBuffer, uvBufferId)));
-
-    glBindBuffer(GL_ARRAY_BUFFER, uvBufferId);
+    glBindBuffer(GL_ARRAY_BUFFER, uvBufferId->id);
     //glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_STATIC_DRAW);
     glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_DYNAMIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
   }
 }
 

@@ -11,7 +11,7 @@ using namespace mutiny::engine;
 class GameCamera : public Behaviour
 {
 public:
-  static GameObject* create(GameObject* playerGo);
+  static GameObject* create(std::shared_ptr<GameObject> playerGo);
 
   virtual void onAwake();
   virtual void onStart();
@@ -31,7 +31,7 @@ private:
   Material* lightKeyMaterial;
   Material* mergeMaterial;
   Camera* camera;
-  GameObject* playerGo;
+  std::shared_ptr<GameObject> playerGo;
   std::vector<Vector3> positionBuffer;
   std::vector<Vector3> rotationBuffer;
   bool eventMode;

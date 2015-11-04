@@ -56,7 +56,7 @@ void GameScreen::onStart()
     Sheep::create(this);
  
   fenceGo = Fence::create();
-  GameObject* playerGo = Player::create(this);
+  std::shared_ptr<GameObject> playerGo = Player::create(this);
   SkyBox::create(playerGo);
   cameraGo = GameCamera::create(playerGo);
   Terrain::create();

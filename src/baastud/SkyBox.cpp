@@ -4,7 +4,7 @@
 
 using namespace mutiny::engine;
 
-SkyBox* SkyBox::create(GameObject* playerGo)
+SkyBox* SkyBox::create(std::shared_ptr<GameObject> playerGo)
 {
   GameObject* skyboxGo = new GameObject("SkyBox");
   SkyBox* skybox = skyboxGo->addComponent<SkyBox>();

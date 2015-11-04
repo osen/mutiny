@@ -3,7 +3,7 @@
 #include "Application.h"
 #include "Mathf.h"
 #include "Debug.h"
-#include "internal/lodepng.h"
+#include "internal/CWrapper.h"
 
 #include <SDL/SDL.h>
 
@@ -88,27 +88,6 @@ void Texture2d::apply()
   glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-class PngData
-{
-public:
-  static std::shared_ptr<PngData> create()
-  {
-    static PngData s;
-    std::shared_ptr<PngData> rtn(new PngData(s));
-
-    return rtn;
-  }
-
-  ~PngData()
-  {
-    free(image);
-  }
-
-  unsigned char* image;
-  unsigned width;
-  unsigned height;
-};
-
 int poweroftwo(int input)
 {
   input--;
@@ -124,7 +103,7 @@ int poweroftwo(int input)
 
 Texture2d* Texture2d::load(std::string path)
 {
-  std::shared_ptr<PngData> image = PngData::create();
+  std::shared_ptr<internal::PngData> image = internal::PngData::create();
   path = path + ".png";
 
   if(lodepng_decode32_file(&image->image, &image->width, &image->height, path.c_str()) != 0)
