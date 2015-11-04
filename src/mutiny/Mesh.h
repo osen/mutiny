@@ -39,11 +39,11 @@ public:
   void setNormals(std::vector<Vector3> normals);
   void setColors(std::vector<Color> colors);
 
-  std::vector<Vector3>* getVertices();
-  std::vector<int>* getTriangles(int submesh);
-  std::vector<Vector2>* getUv();
-  std::vector<Vector3>* getNormals();
-  std::vector<Color>* getColors();
+  std::vector<Vector3>& getVertices();
+  std::vector<int>& getTriangles(int submesh);
+  std::vector<Vector2>& getUv();
+  std::vector<Vector3>& getNormals();
+  std::vector<Color>& getColors();
 
   Bounds getBounds();
   int getSubmeshCount();

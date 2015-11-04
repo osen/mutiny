@@ -66,7 +66,7 @@ void CharacterController::checkCollision(MeshCollider* collider)
   Vector3 pos = getGameObject()->getTransform()->getPosition();
 
   Mesh* mesh = collider->getMesh();
-  std::vector<Vector3>* vertices = mesh->getVertices();
+  std::vector<Vector3>& vertices = mesh->getVertices();
 
   // We basically want to set the mesh to the origin, including its rotation.
   // If we rotate the mesh, then we need to make sure we rotate the characters bounds too
@@ -87,11 +87,11 @@ void CharacterController::checkCollision(MeshCollider* collider)
   Collision collision;
   //collision.relativeVelocity = frameMoveSpeed;
 
-  for(int v = 0; v < vertices->size(); v+=3)
+  for(int v = 0; v < vertices.size(); v+=3)
   {
-    Vector3 a = vertices->at(v);
-    Vector3 b = vertices->at(v+1);
-    Vector3 c = vertices->at(v+2);
+    Vector3 a = vertices.at(v);
+    Vector3 b = vertices.at(v+1);
+    Vector3 c = vertices.at(v+2);
 
     if(colliding(relPos, extents, a, b, c) == true)
     {
@@ -126,11 +126,11 @@ void CharacterController::checkCollision(MeshCollider* collider)
   stepExtents.z = stepExtents.z / 2.0f;
   stepExtents.y = stepExtents.y + 0.01f;
 
-  for(int v = 0; v < vertices->size(); v+=3)
+  for(int v = 0; v < vertices.size(); v+=3)
   {
-    Vector3 a = vertices->at(v);
-    Vector3 b = vertices->at(v+1);
-    Vector3 c = vertices->at(v+2);
+    Vector3 a = vertices.at(v);
+    Vector3 b = vertices.at(v+1);
+    Vector3 c = vertices.at(v+2);
 
     if(colliding(relPos, stepExtents, a, b, c) == true)
     {

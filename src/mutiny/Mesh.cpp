@@ -192,29 +192,29 @@ void Mesh::setNormals(std::vector<Vector3> normals)
   this->normals = normals;
 }
 
-std::vector<Vector3>* Mesh::getVertices()
+std::vector<Vector3>& Mesh::getVertices()
 {
-  return &vertices;
+  return vertices;
 }
 
-std::vector<int>* Mesh::getTriangles(int submesh)
+std::vector<int>& Mesh::getTriangles(int submesh)
 {
-  return &triangles.at(submesh);
+  return triangles.at(submesh);
 }
 
-std::vector<Vector2>* Mesh::getUv()
+std::vector<Vector2>& Mesh::getUv()
 {
-  return &uv;
+  return uv;
 }
 
-std::vector<Vector3>* Mesh::getNormals()
+std::vector<Vector3>& Mesh::getNormals()
 {
-  return &normals;
+  return normals;
 }
 
-std::vector<Color>* Mesh::getColors()
+std::vector<Color>& Mesh::getColors()
 {
-  return &colors;
+  return colors;
 }
 
 void Mesh::recalculateBounds()

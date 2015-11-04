@@ -227,7 +227,8 @@ void Graphics::drawMeshNow(Mesh* mesh, Matrix4x4 matrix, int materialIndex)
     glEnableVertexAttribArray(uvAttribId);
   }
 
-  glDrawArrays(GL_TRIANGLES, 0, mesh->getTriangles(materialIndex)->size());
+  std::vector<int>& triangles = mesh->getTriangles(materialIndex);
+  glDrawArrays(GL_TRIANGLES, 0, triangles.size());
 
   if(positionAttribId != -1)
   {
