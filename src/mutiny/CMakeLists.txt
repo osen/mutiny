@@ -7,6 +7,7 @@ add_library(mutiny STATIC
   buccaneer/AnimatedMeshRenderer.cpp
   buccaneer/AnimatedMesh.cpp
   buccaneer/Animation.cpp
+  Arc.cpp
   Time.cpp
   Mathf.cpp
   Texture.cpp

@@ -16,6 +16,7 @@
 #include "Graphics.h"
 #include "Transform.h"
 #include "Exception.h"
+#include "Arc.h"
 
 #include "internal/Util.h"
 #include "internal/CWrapper.h"
@@ -140,7 +141,7 @@ bool Application::isValidPrefix(std::string path, std::string basename)
 #ifdef _WIN32
   try
   {
-    std::shared_ptr<internal::Win32FindData> findData = internal::Win32FindData::create();
+    Arc<internal::Win32FindData> findData = internal::Win32FindData::create();
     std::shared_ptr<internal::FindHandle> findHandle = internal::FindHandle::FindFirstFile(path + "\\share\\*", findData);
 
     do
@@ -178,7 +179,6 @@ void Application::setupPaths()
 
   while(true)
   {
-
     if(isValidPrefix(dirname, basename.substr(1)) == true)
     {
       break;
@@ -192,9 +192,6 @@ void Application::setupPaths()
       throw Exception("Failed to find data directory");
     }
   }
-
-  std::shared_ptr<internal::Win32FindData> findData = internal::Win32FindData::create();
-  std::shared_ptr<internal::FindHandle> findHandle = internal::FindHandle::FindFirstFile(dirname + "\\*", findData);
 
   engineDataPath = dirname + "/share/mutiny";
   dataPath = dirname + "/share" + basename;

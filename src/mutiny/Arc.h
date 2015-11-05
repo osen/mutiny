@@ -46,15 +46,32 @@ public:
     deleter = NULL;
   }
 
+  Arc(T* data)
+  {
+    this->data = data;
+    deleter = NULL;
+  }
+
   Arc(const Arc& other)
   {
     data = other.data;
     deleter = other.deleter;
   }
 
-  Arc& Arc::operator=(const Arc& other) {
+  Arc& Arc::operator=(const Arc& other)
+  {
     reset(other.data, other.deleter);
     return *this;
+  }
+
+  T* Arc::operator->()
+  {
+    return data;
+  }
+
+  T& operator* ()
+  {
+    return *data;
   }
 
   virtual ~Arc()
@@ -67,12 +84,12 @@ public:
     T* _data = NULL;
     void(*_deleter)(T*) = NULL;
 
-    if (data != NULL)
+    if(data != NULL)
     {
       // Fetch the deleter function from another shared entry
-      for (size_t i = 0; i < all.size(); i++)
+      for(size_t i = 0; i < all.size(); i++)
       {
-        if (all.at(i)->getGeneric() == data)
+        if(all.at(i)->getGeneric() == data)
         {
           _data = data;
           _deleter = (void(*)(T*))all.at(i)->getGenericDeleter();
@@ -96,10 +113,10 @@ public:
 
   void reset(T* data, void (*deleter)(T*))
   {
-    if (this->data != NULL)
+    if(this->data != NULL)
     {
       // Check to make sure the data being reset with isnt already this data
-      if (this->data == data)
+      if(this->data == data)
       {
         this->deleter = deleter;
         return;
@@ -107,9 +124,9 @@ public:
 
       // Look through all the other entries to check if another entry has a reference
       // If so, just replace the data in this container
-      for (size_t i = 0; i < all.size(); i++)
+      for(size_t i = 0; i < all.size(); i++)
       {
-        if (all.at(i) != this && all.at(i)->getGeneric() == this->data)
+        if(all.at(i) != this && all.at(i)->getGeneric() == this->data)
         {
           this->data = data;
           this->deleter = deleter;
@@ -118,7 +135,7 @@ public:
         }
       }
 
-      if (this->deleter == NULL)
+      if(this->deleter == NULL)
       {
         delete this->data;
       }

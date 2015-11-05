@@ -40,10 +40,10 @@ GlBuffer::~GlBuffer()
 }
 
 #ifdef _WIN32
-std::shared_ptr<Win32FindData> Win32FindData::create()
+Arc<Win32FindData> Win32FindData::create()
 {
   static Win32FindData s;
-  std::shared_ptr<Win32FindData> rtn(new Win32FindData(s));
+  Arc<Win32FindData> rtn(new Win32FindData(s));
 
   return rtn;
 }
@@ -56,7 +56,7 @@ FindHandle::~FindHandle()
   }
 }
 
-std::shared_ptr<FindHandle> FindHandle::FindFirstFile(std::string path, std::shared_ptr<Win32FindData> findData)
+std::shared_ptr<FindHandle> FindHandle::FindFirstFile(std::string path, Arc<Win32FindData> findData)
 {
   static FindHandle s;
   std::shared_ptr<FindHandle> rtn(new FindHandle(s));
