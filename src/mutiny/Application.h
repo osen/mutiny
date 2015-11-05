@@ -64,6 +64,7 @@ private:
   static void loop();
   static void displaySplash();
   static void setupPaths();
+  static bool isValidPrefix(std::string path, std::string basename);
 
   static void reshape(int width, int height);
   static void display();

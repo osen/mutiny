@@ -15,8 +15,10 @@
 #include "Gui.h"
 #include "Graphics.h"
 #include "Transform.h"
+#include "Exception.h"
 
 #include "internal/Util.h"
+#include "internal/CWrapper.h"
 
 #include <GL/glew.h>
 #include <SDL/SDL.h>
@@ -133,6 +135,31 @@ void Application::setTitle(std::string title)
   SDL_WM_SetCaption(title.c_str(), NULL);
 }
 
+bool Application::isValidPrefix(std::string path, std::string basename)
+{
+#ifdef _WIN32
+  try
+  {
+    std::shared_ptr<internal::Win32FindData> findData = internal::Win32FindData::create();
+    std::shared_ptr<internal::FindHandle> findHandle = internal::FindHandle::FindFirstFile(path + "\\share\\*", findData);
+
+    do
+    {
+      if(std::string(findData->ffd.cFileName) == basename)
+      {
+        return true;
+      }
+    }
+    while(findHandle->FindNextFile() != false);
+  }
+  catch(std::exception& e) { }
+
+  return false;
+#else
+  return false;
+#endif
+}
+
 void Application::setupPaths()
 {
   std::string dirname;
@@ -144,12 +171,30 @@ void Application::setupPaths()
 #elif WINDOWS
   char strExePath [MAX_PATH];
 
-  GetModuleFileName (NULL, strExePath, MAX_PATH);
+  GetModuleFileName(NULL, strExePath, MAX_PATH);
   dirname = strExePath;
   basename = dirname.substr(dirname.find_last_of("\\"));
   basename = basename.substr(0, basename.length() - 4);
-  dirname = dirname.substr(0, dirname.find_last_of("\\"));
-  dirname = dirname.substr(0, dirname.find_last_of("\\"));
+
+  while(true)
+  {
+
+    if(isValidPrefix(dirname, basename.substr(1)) == true)
+    {
+      break;
+    }
+
+    std::string prev = dirname;
+    dirname = dirname.substr(0, dirname.find_last_of("\\"));
+
+    if(dirname == prev)
+    {
+      throw Exception("Failed to find data directory");
+    }
+  }
+
+  std::shared_ptr<internal::Win32FindData> findData = internal::Win32FindData::create();
+  std::shared_ptr<internal::FindHandle> findHandle = internal::FindHandle::FindFirstFile(dirname + "\\*", findData);
 
   engineDataPath = dirname + "/share/mutiny";
   dataPath = dirname + "/share" + basename;
