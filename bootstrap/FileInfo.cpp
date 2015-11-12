@@ -1,5 +1,6 @@
 #include "FileInfo.h"
 #include "Util.h"
+#include "cwrapper.h"
 
 #include <iostream>
 #include <fstream>
@@ -21,6 +22,9 @@ std::string FileInfo::getAbsolutePath()
 void FileInfo::init(std::string absolutePath)
 {
   this->absolutePath = absolutePath;
+
+  std::shared_ptr<Stat> stat = Stat::stat(absolutePath);
+  modified = stat->get_st_mtime();
 }
 
 std::string FileInfo::getSuffix(std::string absolutePath)
@@ -33,6 +37,11 @@ std::string FileInfo::getFolderPath(std::string absolutePath)
   return Util::trimRight(absolutePath, '/');
 }
 
+time_t FileInfo::getModified()
+{
+  return modified;
+}
+
 std::shared_ptr<SourceFileInfo> SourceFileInfo::create(std::string absolutePath)
 {
   static SourceFileInfo s;
@@ -42,9 +51,24 @@ std::shared_ptr<SourceFileInfo> SourceFileInfo::create(std::string absolutePath)
   std::cout << "Source: " << absolutePath << std::endl;
   rtn->processInclude(absolutePath);
 
+  time_t recentModification = rtn->getModified();
+
   for(int i = 0; i < rtn->dependencies.size(); i++)
   {
-    std::cout << "Dep: " << rtn->dependencies.at(i)->getAbsolutePath() << std::endl;
+    if(rtn->dependencies.at(i)->getModified() > recentModification)
+    {
+      recentModification = rtn->dependencies.at(i)->getModified();
+    }
+
+    //std::cout << "Dep: " << rtn->dependencies.at(i)->getAbsolutePath() << std::endl;
+    //std::cout << "  Mod: " << rtn->dependencies.at(i)->getModified() << std::endl;
+  }
+
+  if(recentModification > rtn->getModified())
+  {
+    std::cout << "Need update..." << std::endl;
+    Stat::utime(absolutePath, recentModification, recentModification);
+    rtn->modified = recentModification;
   }
 
   return rtn;

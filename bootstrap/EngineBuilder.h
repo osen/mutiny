@@ -23,6 +23,7 @@ private:
 
   void scanSource(std::string rootDir);
   bool needsBuilding();
+  void prepareDirectories();
 
   std::string srcDir;
 

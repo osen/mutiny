@@ -1,11 +1,21 @@
 #include "cwrapper.h"
 
+#include <utime.h>
+
 std::shared_ptr<Dirent> Dirent::create()
 {
   static Dirent s;
   std::shared_ptr<Dirent> rtn(new Dirent(s));
 
   return rtn;
+}
+
+void Dir::mkdir(std::string path)
+{
+  if(::mkdir(path.c_str(), 0700) == -1)
+  {
+    throw std::exception();
+  }
 }
 
 std::shared_ptr<Dir> Dir::opendir(std::string path)
@@ -106,5 +116,35 @@ File::~File()
   if(type == 1)
   {
     ::pclose(file);
+  }
+}
+
+std::shared_ptr<Stat> Stat::stat(std::string path)
+{
+  static Stat s;
+  std::shared_ptr<Stat> rtn(new Stat(s));
+
+  if(::stat(path.c_str(), &rtn->attrib) == -1)
+  {
+    throw std::exception();
+  }
+
+  return rtn;
+}
+
+time_t Stat::get_st_mtime()
+{
+  return attrib.st_mtime;
+}
+
+void Stat::utime(std::string path, time_t aTime, time_t mTime)
+{
+  struct utimbuf times = {0};
+  times.actime = aTime;
+  times.modtime = mTime;
+
+  if(::utime(path.c_str(), &times) == -1)
+  {
+    throw std::exception();
   }
 }

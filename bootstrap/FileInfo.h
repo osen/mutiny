@@ -13,9 +13,11 @@ public:
   static std::string getFolderPath(std::string absolutePath);
 
   std::string getAbsolutePath();
+  time_t getModified();
 
 protected:
   std::string absolutePath;
+  time_t modified;
 
   void init(std::string absolutePath);
 

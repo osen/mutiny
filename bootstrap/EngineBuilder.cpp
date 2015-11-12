@@ -16,8 +16,19 @@ std::shared_ptr<EngineBuilder> EngineBuilder::create(std::shared_ptr<Environment
   std::cout << "Mutiny Source Directory: " << rtn->srcDir << std::endl;
 
   rtn->scanSource(rtn->srcDir);
+  rtn->prepareDirectories();
 
   return rtn;
+}
+
+void EngineBuilder::prepareDirectories()
+{
+  try { Dir::mkdir("build"); } catch(std::exception& e) { }
+  try { Dir::mkdir("build/linux"); } catch(std::exception& e) { }
+  try { Dir::mkdir("build/linux/bin"); } catch(std::exception& e) { }
+  try { Dir::mkdir("build/linux/obj"); } catch(std::exception& e) { }
+  try { Dir::mkdir("build/linux/obj/mutiny"); } catch(std::exception& e) { }
+  try { Dir::mkdir("build/linux/obj/game"); } catch(std::exception& e) { }
 }
 
 void EngineBuilder::scanSource(std::string rootDir)
@@ -38,12 +49,7 @@ void EngineBuilder::scanSource(std::string rootDir)
         if(FileInfo::getSuffix(dirent->d_name()) == "cpp")
         {
           sourceUnits.push_back(SourceFileInfo::create(rootDir + "/" + dirent->d_name()));
-          //std::cout << "Source: " << dirent->d_name() << std::endl;
         }
-        //else if(FileInfo::getSuffix(dirent->d_name()) == "h")
-        //{
-        //  std::cout << "Header: " << dirent->d_name() << std::endl;
-        //}
       }
     }
 
