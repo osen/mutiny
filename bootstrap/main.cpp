@@ -19,7 +19,8 @@ int main(int argc, char* argv[])
   std::shared_ptr<Environment> environment = Environment::create(args);
 
   std::shared_ptr<EngineBuilder> engineBuilder = EngineBuilder::create(environment);
-  engineBuilder->buildIfNeeded();
+  engineBuilder->removeOrphanedObjects();
+  engineBuilder->buildOutOfDateObjects();
 
   return 0;
 }

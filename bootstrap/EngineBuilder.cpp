@@ -3,6 +3,7 @@
 #include "cwrapper.h"
 #include "FileInfo.h"
 #include "Util.h"
+#include "Compiler.h"
 
 #include <iostream>
 
@@ -19,22 +20,48 @@ std::shared_ptr<EngineBuilder> EngineBuilder::create(std::shared_ptr<Environment
   rtn->scanSource(rtn->srcDir);
   rtn->prepareDirectories();
 
-  for(int i = 0; i < rtn->sourceUnits.size(); i++)
+  return rtn;
+}
+
+void EngineBuilder::removeOrphanedObjects()
+{
+  // TODO:
+  // Go through each .o file in obj dir
+  // If no sourceUnit exists which matches it then remove it
+}
+
+void EngineBuilder::buildOutOfDateObjects()
+{
+  std::shared_ptr<Compiler> compiler = Compiler::create();
+
+  for(int i = 0; i < sourceUnits.size(); i++)
   {
     std::string objPath = "temp/linux/obj/mutiny/" +
-      rtn->sourceUnits.at(i)->getBaseName() +
+      sourceUnits.at(i)->getBaseName() +
       ".o";
 
-    std::cout << "Compiling: " << rtn->sourceUnits.at(i)->getAbsolutePath() << std::endl;
-    std::string result = Util::execute("g++ -std=c++11 -c " +
-      rtn->sourceUnits.at(i)->getAbsolutePath() +
-      " -o " +
-      objPath);
+    try
+    {
+      std::shared_ptr<FileInfo> objectInfo = FileInfo::create(objPath);
 
-    std::cout << result << std::endl;
+      if(objectInfo->getModified() > sourceUnits.at(i)->getModified())
+      {
+        std::cout << "Up to date: " << sourceUnits.at(i)->getFileName() << std::endl;
+        continue;
+      }
+    }
+    catch(std::exception& e) { }
+
+    std::cout << "Compiling: " << sourceUnits.at(i)->getFileName() << std::endl;
+    //std::string result = Util::execute("g++ -std=c++11 -c " +
+    //  sourceUnits.at(i)->getAbsolutePath() +
+    //  " -o " +
+    //  objPath);
+
+    compiler->compile(sourceUnits.at(i)->getAbsolutePath(), objPath);
+
+    //std::cout << result << std::endl;
   }
-
-  return rtn;
 }
 
 void EngineBuilder::prepareDirectories()
@@ -76,15 +103,3 @@ void EngineBuilder::scanSource(std::string rootDir)
   }  
 }
 
-void EngineBuilder::buildIfNeeded()
-{
-  if(needsBuilding() == false)
-  {
-    return;
-  }
-}
-
-bool EngineBuilder::needsBuilding()
-{
-  return false;
-}

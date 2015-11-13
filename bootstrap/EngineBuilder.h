@@ -13,8 +13,8 @@ class EngineBuilder
 {
 public:
   static std::shared_ptr<EngineBuilder> create(std::shared_ptr<Environment> environment);
-
-  void buildIfNeeded();
+  void removeOrphanedObjects();
+  void buildOutOfDateObjects();
 
 private:
   std::shared_ptr<Environment> environment;
@@ -22,7 +22,6 @@ private:
   std::vector<std::shared_ptr<HeaderFileInfo>> headers;
 
   void scanSource(std::string rootDir);
-  bool needsBuilding();
   void prepareDirectories();
 
   std::string srcDir;
