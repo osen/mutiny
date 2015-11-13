@@ -19,12 +19,24 @@ std::string FileInfo::getAbsolutePath()
   return absolutePath;
 }
 
+std::string FileInfo::getBaseName()
+{
+  return getBaseName(absolutePath);
+}
+
 void FileInfo::init(std::string absolutePath)
 {
   this->absolutePath = absolutePath;
 
   std::shared_ptr<Stat> stat = Stat::stat(absolutePath);
   modified = stat->get_st_mtime();
+}
+
+std::string FileInfo::getBaseName(std::string absolutePath)
+{
+  std::string filename = Util::cropRight(absolutePath, '/');
+
+  return Util::trimRight(filename, '.');
 }
 
 std::string FileInfo::getSuffix(std::string absolutePath)

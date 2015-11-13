@@ -2,6 +2,7 @@
 #define MUTINY_ENGINE_ARC_H
 
 #include <vector>
+#include <cstdlib>
 
 namespace mutiny
 {
@@ -58,13 +59,13 @@ public:
     deleter = other.deleter;
   }
 
-  Arc& Arc::operator=(const Arc& other)
+  Arc& operator=(const Arc& other)
   {
     reset(other.data, other.deleter);
     return *this;
   }
 
-  T* Arc::operator->()
+  T* operator->()
   {
     return data;
   }

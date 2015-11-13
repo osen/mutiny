@@ -11,8 +11,10 @@ public:
   static std::shared_ptr<FileInfo> create(std::string absolutePath);
   static std::string getSuffix(std::string absolutePath);
   static std::string getFolderPath(std::string absolutePath);
+  static std::string getBaseName(std::string absolutePath);
 
   std::string getAbsolutePath();
+  std::string getBaseName();
   time_t getModified();
 
 protected:
