@@ -9,10 +9,43 @@ std::shared_ptr<Compiler> Compiler::create()
   return rtn;
 }
 
+void Compiler::addIncludeDirectory(std::string directory)
+{
+  includeDirectories.push_back(directory);
+}
+
 void Compiler::compile(std::string sourceUnit, std::string output)
 {
-  std::string result = Util::execute("g++ -std=c++11 -c " +
-    sourceUnit +
-    " -o " +
-    output);
+  std::string includeFragment = "";
+
+  for(int i = 0; i < includeDirectories.size(); i++)
+  {
+    includeFragment += " -I" + includeDirectories.at(i);
+  }
+
+  std::string result = Util::execute("g++ -std=c++11 -c" +
+    includeFragment +
+    " " + sourceUnit +
+    " -o" +
+    " " + output);
+}
+
+void Compiler::addObjectDirectory(std::string directory)
+{
+  objectDirectories.push_back(directory);
+}
+
+void Compiler::link(std::string output)
+{
+  std::string objectsFragment = "";
+
+  for(int i = 0; i < objectDirectories.size(); i++)
+  {
+    objectsFragment += " " + objectDirectories.at(i) + "/*.o";
+  }
+
+  std::string result = Util::execute("g++" +
+    objectsFragment +
+    " -o" +
+    " " + output);
 }
