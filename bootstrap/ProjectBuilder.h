@@ -8,6 +8,7 @@
 class Environment;
 class SourceFileInfo;
 class HeaderFileInfo;
+class FileInfo;
 
 class ProjectBuilder
 {
@@ -21,6 +22,7 @@ private:
   std::shared_ptr<Environment> environment;
   std::vector<std::shared_ptr<SourceFileInfo>> sourceUnits;
   std::vector<std::shared_ptr<HeaderFileInfo>> headers;
+  std::vector<std::shared_ptr<FileInfo>> libs;
 
   void scanSource(std::string rootDir);
   void prepareDirectories();

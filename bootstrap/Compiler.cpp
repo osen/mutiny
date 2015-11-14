@@ -35,6 +35,11 @@ void Compiler::addObjectDirectory(std::string directory)
   objectDirectories.push_back(directory);
 }
 
+void Compiler::addLib(std::string path)
+{
+  libs.push_back(path);
+}
+
 void Compiler::link(std::string output)
 {
   std::string objectsFragment = "";
@@ -44,8 +49,17 @@ void Compiler::link(std::string output)
     objectsFragment += " " + objectDirectories.at(i) + "/*.o";
   }
 
+  std::string libsFragment = "";
+
+  for(int i = 0; i < libs.size(); i++)
+  {
+    libsFragment += " " + libs.at(i);
+  }
+
   std::string result = Util::execute("g++" +
     objectsFragment +
     " -o" +
-    " " + output);
+    " " + output +
+    libsFragment +
+    " -lGL -lGLEW -lSDL -lSDL_mixer");
 }

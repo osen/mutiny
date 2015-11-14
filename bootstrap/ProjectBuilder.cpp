@@ -36,6 +36,40 @@ void ProjectBuilder::generateOutOfDateOutput()
   compiler->addObjectDirectory("temp/linux/obj/mutiny");
   compiler->addObjectDirectory("temp/linux/obj/project");
 
+  for(int i = 0; i < libs.size(); i++)
+  {
+    compiler->addLib(libs.at(i)->getAbsolutePath());
+  }
+
+  bool needsRelink = false;
+
+  try
+  {
+    std::shared_ptr<FileInfo> binInfo = FileInfo::create("build/linux/bin/project");
+
+    for(int i = 0; i < sourceUnits.size(); i++)
+    {
+      if(sourceUnits.at(0)->getModified() > binInfo->getModified())
+      {
+        needsRelink = true;
+      }
+    }
+
+    for(int i = 0; i < libs.size(); i++)
+    {
+      if(libs.at(0)->getModified() > binInfo->getModified())
+      {
+        needsRelink = true;
+      }
+    }
+  }
+  catch(std::exception& e)
+  {
+    needsRelink = true;
+  }
+
+  if(needsRelink == false) return;
+
   std::cout << "Linking..." << std::endl;
   compiler->link("build/linux/bin/project");
 }
@@ -105,6 +139,10 @@ void ProjectBuilder::scanSource(std::string rootDir)
         if(FileInfo::getSuffix(dirent->d_name()) == "cpp")
         {
           sourceUnits.push_back(SourceFileInfo::create(rootDir + "/" + dirent->d_name()));
+        }
+        else if(FileInfo::getSuffix(dirent->d_name()) == "so")
+        {
+          libs.push_back(FileInfo::create(rootDir + "/" + dirent->d_name()));
         }
       }
     }
