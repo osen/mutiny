@@ -18,6 +18,14 @@ void Dir::mkdir(std::string path)
   }
 }
 
+void Dir::remove(std::string path)
+{
+  if(::remove(path.c_str()) == -1)
+  {
+    throw std::exception();
+  }
+}
+
 std::shared_ptr<Dir> Dir::opendir(std::string path)
 {
   static Dir s;

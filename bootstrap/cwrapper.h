@@ -44,6 +44,7 @@ class Dir
 public:
   static std::shared_ptr<Dir> opendir(std::string path);
   static void mkdir(std::string path);
+  static void remove(std::string path);
   ~Dir();
 
   std::shared_ptr<Dirent> readdir();

@@ -25,9 +25,44 @@ std::shared_ptr<ProjectBuilder> ProjectBuilder::create(std::shared_ptr<Environme
 
 void ProjectBuilder::removeOrphanedObjects()
 {
-  // TODO:
-  // Go through each .o file in obj dir
-  // If no sourceUnit exists which matches it then remove it
+  std::string objDir = "temp/linux/obj/project";
+
+  std::shared_ptr<Dir> dir = Dir::opendir(objDir);
+  std::shared_ptr<Dirent> dirent = dir->readdir();
+  std::vector<std::string> toDelete;
+
+  while(dirent.get() != NULL)
+  {
+    if(dirent->d_name().at(0) == '.')
+    {
+      dirent = dir->readdir();
+      continue;
+    }
+
+    bool found = false;
+
+    for(int i = 0; i < sourceUnits.size(); i++)
+    {
+      if(sourceUnits.at(i)->getBaseName() == FileInfo::getBaseName(objDir + "/" + dirent->d_name()))
+      {
+        found = true;
+        break;
+      }
+    }
+
+    if(found == false)
+    {
+      toDelete.push_back(objDir + "/" + dirent->d_name());
+    }
+
+    dirent = dir->readdir();
+  }
+
+  for(int i = 0; i < toDelete.size(); i++)
+  {
+    std::cout << "Deleting: " << toDelete.at(i) << std::endl;
+    Dir::remove(toDelete.at(i));
+  }
 }
 
 void ProjectBuilder::generateOutOfDateOutput()
