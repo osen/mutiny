@@ -65,6 +65,23 @@ void ProjectBuilder::removeOrphanedObjects()
   }
 }
 
+void ProjectBuilder::syncAssetDirectory(std::string directory)
+{
+  // Add "assets/" + directory
+  // for each source file / folder, if exists in dest directory check modified time
+  // If it doesnt exist or modified is older, copy it across
+  // If folder, do recursion.
+}
+
+void ProjectBuilder::removeOrphanedAssets(std::string directory)
+{
+  // Add "assets/" + directory
+  // for each source file / folder, if does not exist in dest directory add to delete list
+  // Process file delete list
+  // Recursion folder delete list
+  // Delete folder delete list
+}
+
 void ProjectBuilder::generateOutOfDateOutput()
 {
   std::shared_ptr<Compiler> compiler = Compiler::create();
@@ -107,6 +124,9 @@ void ProjectBuilder::generateOutOfDateOutput()
 
   std::cout << "Linking..." << std::endl;
   compiler->link("build/linux/bin/project");
+
+  removeOrphanedAssets("");
+  syncAssetDirectory("");
 }
 
 void ProjectBuilder::buildOutOfDateObjects()
