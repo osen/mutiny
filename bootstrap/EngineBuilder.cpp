@@ -67,7 +67,7 @@ void EngineBuilder::removeOrphanedObjects()
 
 void EngineBuilder::buildOutOfDateObjects()
 {
-  std::shared_ptr<Compiler> compiler = Compiler::create();
+  std::shared_ptr<Compiler> compiler = Compiler::create(environment);
 
   for(int i = 0; i < sourceUnits.size(); i++)
   {

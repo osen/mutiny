@@ -11,9 +11,17 @@ public:
   static std::shared_ptr<Environment> create(std::vector<std::string>& args);
   std::string getPrefix();
 
+  bool isMutinyAvailable();
+  std::string getOutputDirectory();
+  std::string getCompilerName();
+
 private:
   std::vector<std::string> args;
   std::string prefix;
+
+  bool mutinyAvailable;
+  std::string outputDirectory;
+  std::string compilerName;
 
 };
 

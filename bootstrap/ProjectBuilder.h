@@ -30,6 +30,8 @@ private:
   void removeOrphanedAssets(std::string directory);
 
   std::string srcDir;
+  std::string outputDirectory;
+  std::string outputFilename;
 
 };
 

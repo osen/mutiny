@@ -19,9 +19,12 @@ int main(int argc, char* argv[])
 
   std::shared_ptr<Environment> environment = Environment::create(args);
 
-  std::shared_ptr<EngineBuilder> engineBuilder = EngineBuilder::create(environment);
-  engineBuilder->removeOrphanedObjects();
-  engineBuilder->buildOutOfDateObjects();
+  if(environment->isMutinyAvailable() == true)
+  {
+    std::shared_ptr<EngineBuilder> engineBuilder = EngineBuilder::create(environment);
+    engineBuilder->removeOrphanedObjects();
+    engineBuilder->buildOutOfDateObjects();
+  }
 
   std::shared_ptr<ProjectBuilder> projectBuilder = ProjectBuilder::create(environment);
   projectBuilder->removeOrphanedObjects();

@@ -1,10 +1,20 @@
 #include "Compiler.h"
 #include "Util.h"
+#include "Environment.h"
 
-std::shared_ptr<Compiler> Compiler::create()
+#include <iostream>
+
+std::shared_ptr<Compiler> Compiler::create(std::shared_ptr<Environment> environment)
 {
   static Compiler s;
   std::shared_ptr<Compiler> rtn(new Compiler(s));
+  rtn->environment = environment;
+  rtn->name = "g++";
+
+  if(environment->getCompilerName() != "")
+  {
+    rtn->name = environment->getCompilerName();
+  }
 
   return rtn;
 }
@@ -23,11 +33,16 @@ void Compiler::compile(std::string sourceUnit, std::string output)
     includeFragment += " -I" + includeDirectories.at(i);
   }
 
-  std::string result = Util::execute("g++ -std=c++11 -c" +
+  std::string program = name;
+
+  std::string command = program + " -std=c++11 -c" +
     includeFragment +
     " " + sourceUnit +
     " -o" +
-    " " + output);
+    " " + output;
+
+  std::cout << command << std::endl;
+  std::string result = Util::execute(command);
 }
 
 void Compiler::addObjectDirectory(std::string directory)
@@ -56,10 +71,16 @@ void Compiler::link(std::string output)
     libsFragment += " " + libs.at(i);
   }
 
-  std::string result = Util::execute("g++" +
+  std::string program = name;
+
+  std::string command = program +
     objectsFragment +
     " -o" +
     " " + output +
     libsFragment +
-    " -lGL -lGLEW -lSDL -lSDL_mixer");
+    " -lGL -lGLEW -lSDL -lSDL_mixer";
+
+  std::cout << command << std::endl;
+
+  std::string result = Util::execute(command);
 }

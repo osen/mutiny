@@ -17,6 +17,20 @@ std::shared_ptr<ProjectBuilder> ProjectBuilder::create(std::shared_ptr<Environme
 
   std::cout << "Project Directory: " << rtn->srcDir << std::endl;
 
+  rtn->outputDirectory = "build/linux/bin";
+
+  if(environment->getOutputDirectory() != "")
+  {
+    rtn->outputDirectory = environment->getOutputDirectory();
+  }
+
+  rtn->outputFilename = "project";
+
+  if(FileInfo::getFileName(environment->getCompilerName()) == "em++")
+  {
+    rtn->outputFilename += ".html";
+  }
+
   rtn->scanSource(rtn->srcDir);
   rtn->prepareDirectories();
 
@@ -84,8 +98,13 @@ void ProjectBuilder::removeOrphanedAssets(std::string directory)
 
 void ProjectBuilder::generateOutOfDateOutput()
 {
-  std::shared_ptr<Compiler> compiler = Compiler::create();
-  compiler->addObjectDirectory("temp/linux/obj/mutiny");
+  std::shared_ptr<Compiler> compiler = Compiler::create(environment);
+
+  if(environment->isMutinyAvailable() == true)
+  {
+    compiler->addObjectDirectory("temp/linux/obj/mutiny");
+  }
+
   compiler->addObjectDirectory("temp/linux/obj/project");
 
   for(int i = 0; i < libs.size(); i++)
@@ -97,7 +116,7 @@ void ProjectBuilder::generateOutOfDateOutput()
 
   try
   {
-    std::shared_ptr<FileInfo> binInfo = FileInfo::create("build/linux/bin/project");
+    std::shared_ptr<FileInfo> binInfo = FileInfo::create(outputDirectory + "/" + outputFilename);
 
     for(int i = 0; i < sourceUnits.size(); i++)
     {
@@ -123,7 +142,7 @@ void ProjectBuilder::generateOutOfDateOutput()
   if(needsRelink == false) return;
 
   std::cout << "Linking..." << std::endl;
-  compiler->link("build/linux/bin/project");
+  compiler->link(outputDirectory + "/" + outputFilename);
 
   removeOrphanedAssets("");
   syncAssetDirectory("");
@@ -131,7 +150,7 @@ void ProjectBuilder::generateOutOfDateOutput()
 
 void ProjectBuilder::buildOutOfDateObjects()
 {
-  std::shared_ptr<Compiler> compiler = Compiler::create();
+  std::shared_ptr<Compiler> compiler = Compiler::create(environment);
   compiler->addIncludeDirectory(environment->getPrefix() + "/src");
 
   for(int i = 0; i < sourceUnits.size(); i++)
@@ -171,9 +190,16 @@ void ProjectBuilder::prepareDirectories()
   try { Dir::mkdir("temp/linux/obj"); } catch(std::exception& e) { }
   try { Dir::mkdir("temp/linux/obj/project"); } catch(std::exception& e) { }
 
-  try { Dir::mkdir("build"); } catch(std::exception& e) { }
-  try { Dir::mkdir("build/linux"); } catch(std::exception& e) { }
-  try { Dir::mkdir("build/linux/bin"); } catch(std::exception& e) { }
+  if(environment->getOutputDirectory() == "")
+  {
+    try { Dir::mkdir("build"); } catch(std::exception& e) { }
+    try { Dir::mkdir("build/linux"); } catch(std::exception& e) { }
+    try { Dir::mkdir("build/linux/bin"); } catch(std::exception& e) { }
+  }
+  else
+  {
+    try { Dir::mkdir(environment->getOutputDirectory()); } catch(std::exception& e) { }
+  }
 }
 
 void ProjectBuilder::scanSource(std::string rootDir)
