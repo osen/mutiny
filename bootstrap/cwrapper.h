@@ -1,8 +1,17 @@
 #ifndef CWRAPPER_H
 #define CWRAPPER_H
 
-#include <dirent.h>
+#include "features.h"
+
+#ifdef HAS_DIRENT
+  #include <dirent.h>
+#endif
+
 #include <sys/stat.h>
+
+#ifdef HAS_WINAPI
+  #include <windows.h>
+#endif
 
 #include <string>
 #include <memory>
@@ -24,6 +33,7 @@ private:
 
 };
 
+#ifdef HAS_DIRENT
 class Dir;
 class Dirent
 {
@@ -54,6 +64,7 @@ private:
   std::weak_ptr<Dir> self;
 
 };
+#endif
 
 class Stat
 {
@@ -64,7 +75,11 @@ public:
   time_t get_st_mtime();
 
 private:
+#ifdef HAS__POPEN
+  struct _stat attrib;
+#else
   struct stat attrib;
+#endif
 
 };
 

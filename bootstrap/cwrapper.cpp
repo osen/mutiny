@@ -1,7 +1,14 @@
 #include "cwrapper.h"
 
-#include <utime.h>
+#ifdef HAS_SYS_UTIME
+  #include <sys/utime.h>
+#endif
 
+#ifdef HAS_UTIME
+  #include <utime.h>
+#endif
+
+#ifdef HAS_DIRENT
 std::shared_ptr<Dirent> Dirent::create()
 {
   static Dirent s;
@@ -68,13 +75,18 @@ std::string Dirent::d_name()
 {
   return dp->d_name;
 }
+#endif
 
 std::shared_ptr<File> File::popen(std::string path)
 {
   static File s;
   std::shared_ptr<File> rtn(new File(s));
 
+#ifdef HAS__POPEN
+  rtn->file = ::_popen(path.c_str(), "r");
+#else
   rtn->file = ::popen(path.c_str(), "r");
+#endif
 
   if(rtn->file == NULL)
   {
@@ -112,7 +124,11 @@ int File::pclose()
     throw std::exception();
   }
 
+#ifdef HAS__POPEN
+  int result = ::_pclose(file);
+#else
   int result = ::pclose(file);
+#endif
   file = NULL;
   type = 0;
 
@@ -123,7 +139,11 @@ File::~File()
 {
   if(type == 1)
   {
+#ifdef HAS__POPEN
+    ::_pclose(file);
+#else
     ::pclose(file);
+#endif
   }
 }
 
@@ -132,7 +152,11 @@ std::shared_ptr<Stat> Stat::stat(std::string path)
   static Stat s;
   std::shared_ptr<Stat> rtn(new Stat(s));
 
+#ifdef HAS__POPEN
+  if(::_stat(path.c_str(), &rtn->attrib) == -1)
+#else
   if(::stat(path.c_str(), &rtn->attrib) == -1)
+#endif
   {
     throw std::exception();
   }
