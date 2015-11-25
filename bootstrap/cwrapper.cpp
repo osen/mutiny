@@ -57,6 +57,7 @@ std::shared_ptr<Dir> Dir::opendir(std::string path)
   if(rtn->dir == NULL)
 #endif
 #ifdef HAS_WINAPI
+  path = path + "\\*";
   rtn->hFind = FindFirstFile(path.c_str(), &rtn->ffd);
 
   if(rtn->hFind == INVALID_HANDLE_VALUE)
@@ -228,3 +229,27 @@ void Stat::utime(std::string path, time_t aTime, time_t mTime)
     throw std::exception();
   }
 }
+
+#ifdef HAS_WINAPI
+std::string Module::getModuleFileName(std::shared_ptr<Module> module)
+{
+  char buffer[MAX_PATH];
+  int result;
+
+  if(module.get() == NULL)
+  {
+    result = GetModuleFileName(NULL, buffer, sizeof(buffer));
+  }
+  else
+  {
+    result = GetModuleFileName(module->hModule, buffer, sizeof(buffer));
+  }
+
+  if(result == 0)
+  {
+    throw std::exception();
+  }
+
+  return buffer;
+}
+#endif

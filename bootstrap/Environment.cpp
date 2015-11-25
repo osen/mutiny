@@ -1,6 +1,7 @@
 #include "Environment.h"
 #include "Util.h"
 #include "cwrapper.h"
+#include "features.h"
 
 #include <iostream>
 
@@ -10,9 +11,15 @@ std::shared_ptr<Environment> Environment::create(std::vector<std::string>& args)
   std::shared_ptr<Environment> rtn(new Environment(s));
   rtn->args = args;
 
+#ifdef HAS_WINAPI
+  std::string absolutePath = Module::getModuleFileName(std::shared_ptr<Module>());
+  std::string absoluteBinPath = Util::trimRight(absolutePath, '\\');
+  rtn->prefix = Util::trimRight(absolutePath, '\\');
+#else
   std::string absolutePath = Util::stripEol(Util::execute("which \"" + args.at(0) + "\""));
   std::string absoluteBinPath = Util::stripEol(Util::execute("dirname \"" + absolutePath + "\""));
   rtn->prefix = Util::stripEol(Util::execute("dirname \"" + absoluteBinPath + "\""));
+#endif
 
   std::cout << "Mutiny Prefix: " << rtn->prefix << std::endl;
 

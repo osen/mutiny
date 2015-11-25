@@ -93,5 +93,17 @@ private:
 
 };
 
+#ifdef HAS_WINAPI
+class Module
+{
+public:
+  static std::string getModuleFileName(std::shared_ptr<Module> module);
+
+private:
+  HMODULE hModule;
+
+};
+#endif
+
 #endif
 
