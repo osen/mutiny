@@ -6,9 +6,13 @@
   #define HAS_SYS_UTIME
   #define HAS__POPEN
   #define HAS_DIRECT
+  #define DIR_CHAR '\\'
+  #define DEFAULT_CXX "cl"
 #else
   #define HAS_DIRENT
   #define HAS_UTIME
+  #define DIR_CHAR '/'
+  #define DEFAULT_CXX "g++"
 #endif
 
 #endif

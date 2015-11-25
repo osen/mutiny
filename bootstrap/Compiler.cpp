@@ -2,6 +2,7 @@
 #include "Util.h"
 #include "Environment.h"
 #include "FileInfo.h"
+#include "features.h"
 
 #include <iostream>
 
@@ -10,7 +11,7 @@ std::shared_ptr<Compiler> Compiler::create(std::shared_ptr<Environment> environm
   static Compiler s;
   std::shared_ptr<Compiler> rtn(new Compiler(s));
   rtn->environment = environment;
-  rtn->name = "g++";
+  rtn->name = DEFAULT_CXX;
 
   if(environment->getCompilerName() != "")
   {
@@ -20,6 +21,11 @@ std::shared_ptr<Compiler> Compiler::create(std::shared_ptr<Environment> environm
   return rtn;
 }
 
+std::string Compiler::getName()
+{
+  return name;
+}
+
 void Compiler::addIncludeDirectory(std::string directory)
 {
   includeDirectories.push_back(directory);
@@ -27,20 +33,39 @@ void Compiler::addIncludeDirectory(std::string directory)
 
 void Compiler::compile(std::string sourceUnit, std::string output)
 {
+  std::string program = name;
   std::string includeFragment = "";
 
   for(int i = 0; i < includeDirectories.size(); i++)
   {
-    includeFragment += " -I" + includeDirectories.at(i);
+    if(program == "cl")
+    {
+      includeFragment += " /I" + includeDirectories.at(i);
+    }
+    else
+    {
+      includeFragment += " -I" + includeDirectories.at(i);
+    }
   }
 
-  std::string program = name;
+  std::string command;
 
-  std::string command = program + " -std=c++11 -c" +
-    includeFragment +
-    " " + sourceUnit +
-    " -o" +
-    " " + output;
+  if(program == "cl")
+  {
+    command = "call \"C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\vcvarsall.bat\" && " + program +
+      "/EHsc /c /DWINDOWS" +
+      includeFragment +
+      " " + sourceUnit +
+      " /Fo" + output;
+  }
+  else
+  {
+    command = program + " -std=c++11 -c" +
+      includeFragment +
+      " " + sourceUnit +
+      " -o" +
+      " " + output;
+  }
 
   std::cout << command << std::endl;
   std::string result = Util::execute(command);

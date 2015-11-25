@@ -16,6 +16,7 @@ public:
   void addObjectDirectory(std::string directory);
   void addLib(std::string path);
   void link(std::string output);
+  std::string getName();
 
 private:
   std::shared_ptr<Environment> environment;

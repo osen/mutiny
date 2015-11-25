@@ -11,6 +11,7 @@ public:
   static std::string cropRight(std::string input, char splitter);
   static std::string trimRight(std::string input, char splitter);
   static std::string trimLeft(std::string input, char splitter);
+  static std::string fixPath(std::string input);
 
 };
 

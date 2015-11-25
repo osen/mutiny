@@ -1,6 +1,7 @@
 #include "FileInfo.h"
 #include "Util.h"
 #include "cwrapper.h"
+#include "features.h"
 
 #include <iostream>
 #include <fstream>
@@ -39,12 +40,12 @@ void FileInfo::init(std::string absolutePath)
 
 std::string FileInfo::getFileName(std::string absolutePath)
 {
-  return Util::cropRight(absolutePath, '/');
+  return Util::cropRight(absolutePath, DIR_CHAR);
 }
 
 std::string FileInfo::getBaseName(std::string absolutePath)
 {
-  std::string filename = Util::cropRight(absolutePath, '/');
+  std::string filename = Util::cropRight(absolutePath, DIR_CHAR);
 
   return Util::trimRight(filename, '.');
 }
@@ -56,7 +57,7 @@ std::string FileInfo::getSuffix(std::string absolutePath)
 
 std::string FileInfo::getFolderPath(std::string absolutePath)
 {
-  return Util::trimRight(absolutePath, '/');
+  return Util::trimRight(absolutePath, DIR_CHAR);
 }
 
 time_t FileInfo::getModified()
@@ -153,7 +154,7 @@ void SourceFileInfo::processInclude(std::string absolutePath)
         {
           dep = Util::trimLeft(dep, '"');
           dep = Util::trimRight(dep, '"');
-          dep = getFolderPath(absolutePath) + "/" + dep;
+          dep = Util::fixPath(getFolderPath(absolutePath) + DIR_CHAR + dep);
           processInclude(dep);
         }
       }

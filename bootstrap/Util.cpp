@@ -1,8 +1,22 @@
 #include "Util.h"
 #include "cwrapper.h"
+#include "features.h"
 
 #include <memory>
 #include <iostream>
+
+std::string Util::fixPath(std::string input)
+{
+  for(int i = 0; i < input.length(); i++)
+  {
+    if(input.at(i) == '/' || input.at(i) == '\\')
+    {
+      input.at(i) = DIR_CHAR;
+    }
+  }
+
+  return input;
+}
 
 std::string Util::execute(std::string command)
 {

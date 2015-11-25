@@ -13,7 +13,7 @@ std::shared_ptr<EngineBuilder> EngineBuilder::create(std::shared_ptr<Environment
   std::shared_ptr<EngineBuilder> rtn(new EngineBuilder(s));
 
   rtn->environment = environment;
-  rtn->srcDir = environment->getPrefix() + "/src/mutiny";
+  rtn->srcDir = environment->getPrefix() + Util::fixPath("/src/mutiny");
 
   std::cout << "Mutiny Source Directory: " << rtn->srcDir << std::endl;
 
@@ -25,7 +25,7 @@ std::shared_ptr<EngineBuilder> EngineBuilder::create(std::shared_ptr<Environment
 
 void EngineBuilder::removeOrphanedObjects()
 {
-  std::string objDir = "temp/linux/obj/mutiny";
+  std::string objDir = Util::fixPath("temp/linux/obj/mutiny");
 
   std::shared_ptr<Dir> dir = Dir::opendir(objDir);
   std::shared_ptr<Dirent> dirent = dir->readdir();
@@ -43,7 +43,7 @@ void EngineBuilder::removeOrphanedObjects()
 
     for(int i = 0; i < sourceUnits.size(); i++)
     {
-      if(sourceUnits.at(i)->getBaseName() == FileInfo::getBaseName(objDir + "/" + dirent->d_name()))
+      if(sourceUnits.at(i)->getBaseName() == FileInfo::getBaseName(objDir + DIR_CHAR + dirent->d_name()))
       {
         found = true;
         break;
@@ -52,7 +52,7 @@ void EngineBuilder::removeOrphanedObjects()
 
     if(found == false)
     {
-      toDelete.push_back(objDir + "/" + dirent->d_name());
+      toDelete.push_back(objDir + DIR_CHAR + dirent->d_name());
     }
 
     dirent = dir->readdir();
@@ -69,9 +69,14 @@ void EngineBuilder::buildOutOfDateObjects()
 {
   std::shared_ptr<Compiler> compiler = Compiler::create(environment);
 
+  if(compiler->getName() == "cl")
+  {
+    compiler->addIncludeDirectory(Util::fixPath(environment->getPrefix() + "/import/include"));
+  }
+
   for(int i = 0; i < sourceUnits.size(); i++)
   {
-    std::string objPath = "temp/linux/obj/mutiny/" +
+    std::string objPath = Util::fixPath("temp/linux/obj/mutiny/") +
       sourceUnits.at(i)->getBaseName() +
       ".o";
 
@@ -101,10 +106,10 @@ void EngineBuilder::buildOutOfDateObjects()
 
 void EngineBuilder::prepareDirectories()
 {
-  try { Dir::mkdir("temp"); } catch(std::exception& e) { }
-  try { Dir::mkdir("temp/linux"); } catch(std::exception& e) { }
-  try { Dir::mkdir("temp/linux/obj"); } catch(std::exception& e) { }
-  try { Dir::mkdir("temp/linux/obj/mutiny"); } catch(std::exception& e) { }
+  try { Dir::mkdir(Util::fixPath("temp")); } catch(std::exception& e) { }
+  try { Dir::mkdir(Util::fixPath("temp/linux")); } catch(std::exception& e) { }
+  try { Dir::mkdir(Util::fixPath("temp/linux/obj")); } catch(std::exception& e) { }
+  try { Dir::mkdir(Util::fixPath("temp/linux/obj/mutiny")); } catch(std::exception& e) { }
 }
 
 void EngineBuilder::scanSource(std::string rootDir)
@@ -118,13 +123,13 @@ void EngineBuilder::scanSource(std::string rootDir)
     {
       try
       {
-        scanSource(rootDir + "/" + dirent->d_name());
+        scanSource(rootDir + DIR_CHAR + dirent->d_name());
       }
       catch(std::exception& e)
       {
         if(FileInfo::getSuffix(dirent->d_name()) == "cpp")
         {
-          sourceUnits.push_back(SourceFileInfo::create(rootDir + "/" + dirent->d_name()));
+          sourceUnits.push_back(SourceFileInfo::create(rootDir + DIR_CHAR + dirent->d_name()));
         }
       }
     }
