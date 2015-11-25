@@ -81,6 +81,6 @@ std::string Util::cropRight(std::string input, char splitter)
     }
   }
 
-  return "";
+  return input;
 }
 
