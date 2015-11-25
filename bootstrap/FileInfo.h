@@ -18,6 +18,7 @@ public:
   std::string getBaseName();
   time_t getModified();
   std::string getFileName();
+  void updateModified();
 
 protected:
   std::string absolutePath;

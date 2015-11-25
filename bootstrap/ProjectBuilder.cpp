@@ -128,7 +128,7 @@ void ProjectBuilder::generateOutOfDateOutput()
 
     for(int i = 0; i < sourceUnits.size(); i++)
     {
-      if(sourceUnits.at(0)->getModified() > binInfo->getModified())
+      if(sourceUnits.at(i)->getModified() > binInfo->getModified())
       {
         needsRelink = true;
       }
@@ -149,7 +149,7 @@ void ProjectBuilder::generateOutOfDateOutput()
 
   if(needsRelink == false) return;
 
-  std::cout << "Linking..." << std::endl;
+  //std::cout << "Linking..." << std::endl;
   compiler->link(outputDirectory + DIR_CHAR + outputFilename);
 
   removeOrphanedAssets("");
@@ -178,13 +178,13 @@ void ProjectBuilder::buildOutOfDateObjects()
 
       if(objectInfo->getModified() > sourceUnits.at(i)->getModified())
       {
-        std::cout << "Up to date: " << sourceUnits.at(i)->getFileName() << std::endl;
+        //std::cout << "Up to date: " << sourceUnits.at(i)->getFileName() << std::endl;
         continue;
       }
     }
     catch(std::exception& e) { }
 
-    std::cout << "Compiling: " << sourceUnits.at(i)->getFileName() << std::endl;
+    //std::cout << "Compiling: " << sourceUnits.at(i)->getFileName() << std::endl;
     //std::string result = Util::execute("g++ -std=c++11 -c " +
     //  sourceUnits.at(i)->getAbsolutePath() +
     //  " -o " +

@@ -18,6 +18,11 @@ std::shared_ptr<Compiler> Compiler::create(std::shared_ptr<Environment> environm
     rtn->name = environment->getCompilerName();
   }
 
+  if(rtn->name == "cl")
+  {
+    Util::execute("call \"C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\vcvarsall.bat\"");
+  }
+
   return rtn;
 }
 
@@ -77,8 +82,9 @@ void Compiler::compile(std::string sourceUnit, std::string output)
 
   if(program == "cl")
   {
-    command = "call \"C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\vcvarsall.bat\" && " + program +
-      "/EHsc /c /DWINDOWS" +
+    //command = "call \"C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\vcvarsall.bat\" && " + program +
+    command = program +
+      " /EHsc /c /DWINDOWS" +
       includeFragment +
       " " + sourceUnit +
       " /MD" +

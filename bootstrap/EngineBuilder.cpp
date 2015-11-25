@@ -86,13 +86,13 @@ void EngineBuilder::buildOutOfDateObjects()
 
       if(objectInfo->getModified() > sourceUnits.at(i)->getModified())
       {
-        std::cout << "Up to date: " << sourceUnits.at(i)->getFileName() << std::endl;
+        //std::cout << "Up to date: " << sourceUnits.at(i)->getFileName() << std::endl;
         continue;
       }
     }
     catch(std::exception& e) { }
 
-    std::cout << "Compiling: " << sourceUnits.at(i)->getFileName() << std::endl;
+    //std::cout << "Compiling: " << sourceUnits.at(i)->getFileName() << std::endl;
     //std::string result = Util::execute("g++ -std=c++11 -c " +
     //  sourceUnits.at(i)->getAbsolutePath() +
     //  " -o " +

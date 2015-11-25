@@ -30,6 +30,12 @@ std::string FileInfo::getBaseName()
   return getBaseName(absolutePath);
 }
 
+void FileInfo::updateModified()
+{
+  std::shared_ptr<Stat> stat = Stat::stat(absolutePath);
+  modified = stat->get_st_mtime();
+}
+
 void FileInfo::init(std::string absolutePath)
 {
   this->absolutePath = absolutePath;
@@ -71,7 +77,7 @@ std::shared_ptr<SourceFileInfo> SourceFileInfo::create(std::string absolutePath)
   std::shared_ptr<SourceFileInfo> rtn(new SourceFileInfo(s));
   rtn->FileInfo::init(absolutePath);
 
-  std::cout << "Source: " << absolutePath << std::endl;
+  //std::cout << "Source: " << absolutePath << std::endl;
   rtn->processInclude(absolutePath);
 
   time_t recentModification = rtn->getModified();
@@ -89,7 +95,7 @@ std::shared_ptr<SourceFileInfo> SourceFileInfo::create(std::string absolutePath)
 
   if(recentModification > rtn->getModified())
   {
-    std::cout << "Need update..." << std::endl;
+    //std::cout << "Need update..." << std::endl;
     Stat::utime(absolutePath, recentModification, recentModification);
     rtn->modified = recentModification;
   }
