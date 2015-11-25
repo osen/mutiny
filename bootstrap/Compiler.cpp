@@ -31,6 +31,31 @@ void Compiler::addIncludeDirectory(std::string directory)
   includeDirectories.push_back(directory);
 }
 
+std::string Compiler::getObjectSuffix()
+{
+  if(name == "cl")
+  {
+    return "obj";
+  }
+
+  return "o";
+}
+
+std::string Compiler::getExecutableSuffix()
+{
+  if(FileInfo::getFileName(name) == "em++")
+  {
+    return "html";
+  }
+
+  if(name == "cl")
+  {
+    return "exe";
+  }
+
+  return "";
+}
+
 void Compiler::compile(std::string sourceUnit, std::string output)
 {
   std::string program = name;
@@ -56,6 +81,7 @@ void Compiler::compile(std::string sourceUnit, std::string output)
       "/EHsc /c /DWINDOWS" +
       includeFragment +
       " " + sourceUnit +
+      " /MD" +
       " /Fo" + output;
   }
   else
@@ -76,6 +102,11 @@ void Compiler::addObjectDirectory(std::string directory)
   objectDirectories.push_back(directory);
 }
 
+void Compiler::addLibDirectory(std::string directory)
+{
+  libDirectories.push_back(directory);
+}
+
 void Compiler::addLib(std::string path)
 {
   libs.push_back(path);
@@ -87,10 +118,22 @@ void Compiler::link(std::string output)
 
   for(int i = 0; i < objectDirectories.size(); i++)
   {
-    objectsFragment += " " + objectDirectories.at(i) + "/*.o";
+    objectsFragment += " " + objectDirectories.at(i) + Util::fixPath("/*.") + getObjectSuffix();
   }
 
   std::string libsFragment = "";
+
+  for(int i = 0; i < libDirectories.size(); i++)
+  {
+    if(name == "cl")
+    {
+      libsFragment += " /LIBPATH:" + libDirectories.at(i);
+    }
+    else
+    {
+      libsFragment += " -L" + libDirectories.at(i);
+    }
+  }
 
   for(int i = 0; i < libs.size(); i++)
   {
@@ -99,20 +142,38 @@ void Compiler::link(std::string output)
 
   std::string program = name;
 
-  libsFragment += " -lGL -lGLEW -lSDL -lSDL_mixer";
-
   if(FileInfo::getFileName(name) == "em++")
   {
     libsFragment = "";
   }
+  else if(name == "cl")
+  {
+    libsFragment += " SDL.lib SDLmain.lib SDL_mixer.lib glew32.lib opengl32.lib";
+  }
+  else
+  {
+    libsFragment += " -lGL -lGLEW -lSDL -lSDL_mixer";
+  }
 
-  std::string command = program +
-    objectsFragment +
-    " -o" +
-    " " + output +
-    libsFragment;
+  std::string command;
+
+  if(program == "cl")
+  {
+    command = "link" +
+      objectsFragment +
+      " /out:" + output +
+      " /subsystem:console" +
+      libsFragment;
+  }
+  else
+  {
+    command = program +
+      objectsFragment +
+      " -o" +
+      " " + output +
+      libsFragment;
+  }
 
   std::cout << command << std::endl;
-
   std::string result = Util::execute(command);
 }

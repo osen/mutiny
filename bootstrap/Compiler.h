@@ -15,12 +15,16 @@ public:
   void addIncludeDirectory(std::string directory);
   void addObjectDirectory(std::string directory);
   void addLib(std::string path);
+  void addLibDirectory(std::string directory);
   void link(std::string output);
   std::string getName();
+  std::string getObjectSuffix();
+  std::string getExecutableSuffix();
 
 private:
   std::shared_ptr<Environment> environment;
   std::vector<std::string> includeDirectories;
+  std::vector<std::string> libDirectories;
   std::vector<std::string> objectDirectories;
   std::vector<std::string> libs;
   std::string name;

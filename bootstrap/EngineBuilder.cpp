@@ -78,7 +78,7 @@ void EngineBuilder::buildOutOfDateObjects()
   {
     std::string objPath = Util::fixPath("temp/linux/obj/mutiny/") +
       sourceUnits.at(i)->getBaseName() +
-      ".o";
+      "." + compiler->getObjectSuffix();
 
     try
     {

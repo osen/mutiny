@@ -27,9 +27,11 @@ std::shared_ptr<ProjectBuilder> ProjectBuilder::create(std::shared_ptr<Environme
 
   rtn->outputFilename = "project";
 
-  if(FileInfo::getFileName(environment->getCompilerName()) == "em++")
+  std::shared_ptr<Compiler> compiler = Compiler::create(environment);
+
+  if(compiler->getExecutableSuffix() != "")
   {
-    rtn->outputFilename += ".html";
+    rtn->outputFilename += "." + compiler->getExecutableSuffix();
   }
 
   rtn->scanSource(rtn->srcDir);
@@ -106,6 +108,11 @@ void ProjectBuilder::generateOutOfDateOutput()
     compiler->addObjectDirectory(Util::fixPath("temp/linux/obj/mutiny"));
   }
 
+  if(compiler->getName() == "cl")
+  {
+    compiler->addLibDirectory(environment->getPrefix() + Util::fixPath("/import/lib"));
+  }
+
   compiler->addObjectDirectory(Util::fixPath("temp/linux/obj/project"));
 
   for(int i = 0; i < libs.size(); i++)
@@ -163,7 +170,7 @@ void ProjectBuilder::buildOutOfDateObjects()
   {
     std::string objPath = Util::fixPath("temp/linux/obj/project/" +
       sourceUnits.at(i)->getBaseName() +
-      ".o");
+      "." + compiler->getObjectSuffix());
 
     try
     {
