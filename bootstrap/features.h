@@ -5,6 +5,7 @@
   #define HAS_WINAPI
   #define HAS_SYS_UTIME
   #define HAS__POPEN
+  #define HAS_DIRECT
 #else
   #define HAS_DIRENT
   #define HAS_UTIME

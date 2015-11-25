@@ -4,11 +4,14 @@
   #include <sys/utime.h>
 #endif
 
+#ifdef HAS_DIRECT
+  #include <direct.h>
+#endif
+
 #ifdef HAS_UTIME
   #include <utime.h>
 #endif
 
-#ifdef HAS_DIRENT
 std::shared_ptr<Dirent> Dirent::create()
 {
   static Dirent s;
@@ -19,7 +22,12 @@ std::shared_ptr<Dirent> Dirent::create()
 
 void Dir::mkdir(std::string path)
 {
+#ifdef HAS_DIRECT
+  if(::_mkdir(path.c_str()) == -1)
+#endif
+#ifdef HAS_DIRENT
   if(::mkdir(path.c_str(), 0700) == -1)
+#endif
   {
     throw std::exception();
   }
@@ -36,11 +44,23 @@ void Dir::remove(std::string path)
 std::shared_ptr<Dir> Dir::opendir(std::string path)
 {
   static Dir s;
+#ifdef HAS_WINAPI
+  s.hFind = INVALID_HANDLE_VALUE;
+#endif
+
   std::shared_ptr<Dir> rtn(new Dir(s));
   rtn->self = rtn;
+
+#ifdef HAS_DIRENT
   rtn->dir = ::opendir(path.c_str());
 
   if(rtn->dir == NULL)
+#endif
+#ifdef HAS_WINAPI
+  rtn->hFind = FindFirstFile(path.c_str(), &rtn->ffd);
+
+  if(rtn->hFind == INVALID_HANDLE_VALUE)
+#endif
   {
     throw std::exception();
   }
@@ -50,19 +70,43 @@ std::shared_ptr<Dir> Dir::opendir(std::string path)
 
 Dir::~Dir()
 {
+#ifdef HAS_DIRENT
   if(dir != NULL)
   {
     ::closedir(dir);
   }
+#endif
+#ifdef HAS_WINAPI
+  if(hFind != INVALID_HANDLE_VALUE)
+  {
+    FindClose(hFind);
+  }
+#endif
 }
+
 
 std::shared_ptr<Dirent> Dir::readdir()
 {
   std::shared_ptr<Dirent> rtn = Dirent::create();
+#ifdef HAS_DIRENT
   rtn->dp = ::readdir(dir);
 
   if(rtn->dp == NULL)
   {
+#endif
+#ifdef HAS_WINAPI
+  if(end == false)
+  {
+    rtn->name = ffd.cFileName;
+
+    if(FindNextFile(hFind, &ffd) == 0)
+    {
+      end = true;
+    }
+  }
+  else
+  {
+#endif
     return std::shared_ptr<Dirent>();
   }
 
@@ -73,9 +117,13 @@ std::shared_ptr<Dirent> Dir::readdir()
 
 std::string Dirent::d_name()
 {
+#ifdef HAS_DIRENT
   return dp->d_name;
-}
 #endif
+#ifdef HAS_WINAPI
+  return name;
+#endif
+}
 
 std::shared_ptr<File> File::popen(std::string path)
 {

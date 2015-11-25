@@ -33,7 +33,6 @@ private:
 
 };
 
-#ifdef HAS_DIRENT
 class Dir;
 class Dirent
 {
@@ -44,7 +43,12 @@ public:
   std::string d_name();
 
 private:
+#ifdef HAS_DIRENT
   struct dirent* dp;
+#endif
+#ifdef HAS_WINAPI
+  std::string name;
+#endif
   std::shared_ptr<Dir> parent;
 
 };
@@ -60,11 +64,17 @@ public:
   std::shared_ptr<Dirent> readdir();
 
 private:
+#ifdef HAS_DIRENT
   DIR* dir;
+#endif
+#ifdef HAS_WINAPI
+  HANDLE hFind;
+  WIN32_FIND_DATA ffd;
+  bool end;
+#endif
   std::weak_ptr<Dir> self;
 
 };
-#endif
 
 class Stat
 {
