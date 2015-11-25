@@ -71,7 +71,7 @@ void EngineBuilder::buildOutOfDateObjects()
 
   if(compiler->getName() == "cl")
   {
-    compiler->addIncludeDirectory(Util::fixPath(environment->getPrefix() + "/import/include"));
+    compiler->addIncludeDirectory(environment->getPrefix() + Util::fixPath("/import/include"));
   }
 
   for(int i = 0; i < sourceUnits.size(); i++)

@@ -4,6 +4,7 @@
 #include "FileInfo.h"
 #include "Util.h"
 #include "Compiler.h"
+#include "features.h"
 
 #include <iostream>
 
@@ -17,7 +18,7 @@ std::shared_ptr<ProjectBuilder> ProjectBuilder::create(std::shared_ptr<Environme
 
   std::cout << "Project Directory: " << rtn->srcDir << std::endl;
 
-  rtn->outputDirectory = "build/linux/bin";
+  rtn->outputDirectory = Util::fixPath("build/linux/bin");
 
   if(environment->getOutputDirectory() != "")
   {
@@ -39,7 +40,7 @@ std::shared_ptr<ProjectBuilder> ProjectBuilder::create(std::shared_ptr<Environme
 
 void ProjectBuilder::removeOrphanedObjects()
 {
-  std::string objDir = "temp/linux/obj/project";
+  std::string objDir = Util::fixPath("temp/linux/obj/project");
 
   std::shared_ptr<Dir> dir = Dir::opendir(objDir);
   std::shared_ptr<Dirent> dirent = dir->readdir();
@@ -57,7 +58,7 @@ void ProjectBuilder::removeOrphanedObjects()
 
     for(int i = 0; i < sourceUnits.size(); i++)
     {
-      if(sourceUnits.at(i)->getBaseName() == FileInfo::getBaseName(objDir + "/" + dirent->d_name()))
+      if(sourceUnits.at(i)->getBaseName() == FileInfo::getBaseName(objDir + DIR_CHAR + dirent->d_name()))
       {
         found = true;
         break;
@@ -66,7 +67,7 @@ void ProjectBuilder::removeOrphanedObjects()
 
     if(found == false)
     {
-      toDelete.push_back(objDir + "/" + dirent->d_name());
+      toDelete.push_back(objDir + DIR_CHAR + dirent->d_name());
     }
 
     dirent = dir->readdir();
@@ -102,10 +103,10 @@ void ProjectBuilder::generateOutOfDateOutput()
 
   if(environment->isMutinyAvailable() == true)
   {
-    compiler->addObjectDirectory("temp/linux/obj/mutiny");
+    compiler->addObjectDirectory(Util::fixPath("temp/linux/obj/mutiny"));
   }
 
-  compiler->addObjectDirectory("temp/linux/obj/project");
+  compiler->addObjectDirectory(Util::fixPath("temp/linux/obj/project"));
 
   for(int i = 0; i < libs.size(); i++)
   {
@@ -116,7 +117,7 @@ void ProjectBuilder::generateOutOfDateOutput()
 
   try
   {
-    std::shared_ptr<FileInfo> binInfo = FileInfo::create(outputDirectory + "/" + outputFilename);
+    std::shared_ptr<FileInfo> binInfo = FileInfo::create(outputDirectory + DIR_CHAR + outputFilename);
 
     for(int i = 0; i < sourceUnits.size(); i++)
     {
@@ -142,7 +143,7 @@ void ProjectBuilder::generateOutOfDateOutput()
   if(needsRelink == false) return;
 
   std::cout << "Linking..." << std::endl;
-  compiler->link(outputDirectory + "/" + outputFilename);
+  compiler->link(outputDirectory + DIR_CHAR + outputFilename);
 
   removeOrphanedAssets("");
   syncAssetDirectory("");
@@ -151,13 +152,18 @@ void ProjectBuilder::generateOutOfDateOutput()
 void ProjectBuilder::buildOutOfDateObjects()
 {
   std::shared_ptr<Compiler> compiler = Compiler::create(environment);
-  compiler->addIncludeDirectory(environment->getPrefix() + "/src");
+  compiler->addIncludeDirectory(environment->getPrefix() + Util::fixPath("/src"));
+
+  if(compiler->getName() == "cl")
+  {
+    compiler->addIncludeDirectory(environment->getPrefix() + Util::fixPath("/import/include"));
+  }
 
   for(int i = 0; i < sourceUnits.size(); i++)
   {
-    std::string objPath = "temp/linux/obj/project/" +
+    std::string objPath = Util::fixPath("temp/linux/obj/project/" +
       sourceUnits.at(i)->getBaseName() +
-      ".o";
+      ".o");
 
     try
     {
@@ -185,16 +191,16 @@ void ProjectBuilder::buildOutOfDateObjects()
 
 void ProjectBuilder::prepareDirectories()
 {
-  try { Dir::mkdir("temp"); } catch(std::exception& e) { }
-  try { Dir::mkdir("temp/linux"); } catch(std::exception& e) { }
-  try { Dir::mkdir("temp/linux/obj"); } catch(std::exception& e) { }
-  try { Dir::mkdir("temp/linux/obj/project"); } catch(std::exception& e) { }
+  try { Dir::mkdir(Util::fixPath("temp")); } catch(std::exception& e) { }
+  try { Dir::mkdir(Util::fixPath("temp/linux")); } catch(std::exception& e) { }
+  try { Dir::mkdir(Util::fixPath("temp/linux/obj")); } catch(std::exception& e) { }
+  try { Dir::mkdir(Util::fixPath("temp/linux/obj/project")); } catch(std::exception& e) { }
 
   if(environment->getOutputDirectory() == "")
   {
-    try { Dir::mkdir("build"); } catch(std::exception& e) { }
-    try { Dir::mkdir("build/linux"); } catch(std::exception& e) { }
-    try { Dir::mkdir("build/linux/bin"); } catch(std::exception& e) { }
+    try { Dir::mkdir(Util::fixPath("build")); } catch(std::exception& e) { }
+    try { Dir::mkdir(Util::fixPath("build/linux")); } catch(std::exception& e) { }
+    try { Dir::mkdir(Util::fixPath("build/linux/bin")); } catch(std::exception& e) { }
   }
   else
   {
@@ -213,17 +219,17 @@ void ProjectBuilder::scanSource(std::string rootDir)
     {
       try
       {
-        scanSource(rootDir + "/" + dirent->d_name());
+        scanSource(rootDir + DIR_CHAR + dirent->d_name());
       }
       catch(std::exception& e)
       {
         if(FileInfo::getSuffix(dirent->d_name()) == "cpp")
         {
-          sourceUnits.push_back(SourceFileInfo::create(rootDir + "/" + dirent->d_name()));
+          sourceUnits.push_back(SourceFileInfo::create(rootDir + DIR_CHAR + dirent->d_name()));
         }
         else if(FileInfo::getSuffix(dirent->d_name()) == "so")
         {
-          libs.push_back(FileInfo::create(rootDir + "/" + dirent->d_name()));
+          libs.push_back(FileInfo::create(rootDir + DIR_CHAR + dirent->d_name()));
         }
       }
     }
