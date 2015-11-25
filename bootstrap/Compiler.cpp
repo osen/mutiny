@@ -1,6 +1,7 @@
 #include "Compiler.h"
 #include "Util.h"
 #include "Environment.h"
+#include "FileInfo.h"
 
 #include <iostream>
 
@@ -73,12 +74,18 @@ void Compiler::link(std::string output)
 
   std::string program = name;
 
+  libsFragment += " -lGL -lGLEW -lSDL -lSDL_mixer";
+
+  if(FileInfo::getFileName(name) == "em++")
+  {
+    libsFragment = "";
+  }
+
   std::string command = program +
     objectsFragment +
     " -o" +
     " " + output +
-    libsFragment +
-    " -lGL -lGLEW -lSDL -lSDL_mixer";
+    libsFragment;
 
   std::cout << command << std::endl;
 
