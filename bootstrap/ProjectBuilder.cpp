@@ -84,10 +84,54 @@ void ProjectBuilder::removeOrphanedObjects()
 
 void ProjectBuilder::syncAssetDirectory()
 {
-  // Add "assets/" + directory
-  // for each source file / folder, if exists in dest directory check modified time
-  // If it doesnt exist or modified is older, copy it across
-  // If folder, do recursion.
+  std::vector<std::shared_ptr<FileInfo>> assetDirectories;
+  std::vector<std::shared_ptr<FileInfo>> buildAssetDirectories;
+  std::vector<std::string> directoryDeleteList;
+
+  std::string assetDirectory = Util::fixPath("assets");
+  std::string buildAssetDirectory = Util::fixPath("build/linux/share/project");
+
+  FileInfo::scanDirectory(assetDirectory, false, assetDirectories);
+  FileInfo::scanDirectory(buildAssetDirectory, false, buildAssetDirectories);
+  FileInfo::scanDirectory(assetDirectory, true, assetDirectories);
+  FileInfo::scanDirectory(buildAssetDirectory, true, buildAssetDirectories);
+
+  assetDirectory += DIR_CHAR;
+  buildAssetDirectory += DIR_CHAR;
+
+  for(int i = assetDirectories.size() - 1; i >= 0; i--)
+  {
+    bool found = false;
+
+    for(int j = 0; j < buildAssetDirectories.size(); j++)
+    {
+      if(assetDirectories.at(i)->getAbsolutePath().substr(assetDirectory.length()) ==
+         buildAssetDirectories.at(j)->getAbsolutePath().substr(buildAssetDirectory.length()))
+      {
+        if(assetDirectories.at(i)->getModified() <= buildAssetDirectories.at(j)->getModified())
+        {
+          found = true;
+        }
+
+        break;
+      }
+    }
+
+    if(found == false)
+    {
+      try
+      {
+        std::shared_ptr<Dir> dirTest = Dir::opendir(assetDirectories.at(i)->getAbsolutePath());
+        Dir::mkdir(buildAssetDirectory + assetDirectories.at(i)->
+          getAbsolutePath().substr(assetDirectory.length()));
+      }
+      catch(std::exception& e)
+      {
+        Util::copyFile(assetDirectories.at(i)->getAbsolutePath(),
+          buildAssetDirectory + assetDirectories.at(i)->getAbsolutePath().substr(assetDirectory.length()));
+      }
+    }
+  }
 }
 
 void ProjectBuilder::removeOrphanedAssets()
@@ -96,8 +140,8 @@ void ProjectBuilder::removeOrphanedAssets()
   std::vector<std::shared_ptr<FileInfo>> buildAssetDirectories;
   std::vector<std::string> directoryDeleteList;
 
-  std::string assetDirectory = "assets";
-  std::string buildAssetDirectory = "build/linux/share/project";
+  std::string assetDirectory = Util::fixPath("assets");
+  std::string buildAssetDirectory = Util::fixPath("build/linux/share/project");
 
   FileInfo::scanDirectory(assetDirectory, false, assetDirectories);
   FileInfo::scanDirectory(buildAssetDirectory, false, buildAssetDirectories);
@@ -130,16 +174,7 @@ void ProjectBuilder::removeOrphanedAssets()
   for(int i = 0; i < directoryDeleteList.size(); i++)
   {
     Dir::remove(directoryDeleteList.at(i));
-    //std::cout << "Dir::remove(" << directoryDeleteList.at(i) << ");" << std::endl;
   }
-
-  //std::vector<std::shared_ptr<FileInfo>> assetFiles;
-
-  // Add "assets/" + directory
-  // for each source file / folder, if does not exist in dest directory add to delete list
-  // Process file delete list
-  // Recursion folder delete list
-  // Delete folder delete list
 }
 
 void ProjectBuilder::generateOutOfDateOutput()
