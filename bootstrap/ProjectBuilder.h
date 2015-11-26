@@ -26,8 +26,8 @@ private:
 
   void scanSource(std::string rootDir);
   void prepareDirectories();
-  void syncAssetDirectory(std::string directory);
-  void removeOrphanedAssets(std::string directory);
+  void syncAssetDirectory();
+  void removeOrphanedAssets();
 
   std::string srcDir;
   std::string outputDirectory;

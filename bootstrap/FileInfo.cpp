@@ -6,6 +6,38 @@
 #include <iostream>
 #include <fstream>
 
+
+void FileInfo::scanDirectory(std::string path, bool directories, std::vector<std::shared_ptr<FileInfo>>& output)
+{
+  std::shared_ptr<Dir> dir = Dir::opendir(path);
+  std::shared_ptr<Dirent> dirent = dir->readdir();
+
+  while(dirent.get() != NULL)
+  {
+    if(dirent->d_name().at(0) != '.')
+    {
+      try
+      {
+        scanDirectory(path + DIR_CHAR + dirent->d_name(), directories, output);
+
+        if(directories == true)
+        {
+          output.push_back(FileInfo::create(path + DIR_CHAR + dirent->d_name()));
+        }
+      }
+      catch(std::exception& e)
+      {
+        if(directories == false)
+        {
+          output.push_back(FileInfo::create(path + DIR_CHAR + dirent->d_name()));
+        }
+      }
+    }
+
+    dirent = dir->readdir();
+  }
+}
+
 std::shared_ptr<FileInfo> FileInfo::create(std::string absolutePath)
 {
   static FileInfo s;

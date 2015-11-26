@@ -13,6 +13,7 @@ public:
   static std::string getFolderPath(std::string absolutePath);
   static std::string getBaseName(std::string absolutePath);
   static std::string getFileName(std::string absolutePath);
+  static void scanDirectory(std::string path, bool directories, std::vector<std::shared_ptr<FileInfo>>& output);
 
   std::string getAbsolutePath();
   std::string getBaseName();

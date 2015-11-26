@@ -82,7 +82,7 @@ void ProjectBuilder::removeOrphanedObjects()
   }
 }
 
-void ProjectBuilder::syncAssetDirectory(std::string directory)
+void ProjectBuilder::syncAssetDirectory()
 {
   // Add "assets/" + directory
   // for each source file / folder, if exists in dest directory check modified time
@@ -90,8 +90,51 @@ void ProjectBuilder::syncAssetDirectory(std::string directory)
   // If folder, do recursion.
 }
 
-void ProjectBuilder::removeOrphanedAssets(std::string directory)
+void ProjectBuilder::removeOrphanedAssets()
 {
+  std::vector<std::shared_ptr<FileInfo>> assetDirectories;
+  std::vector<std::shared_ptr<FileInfo>> buildAssetDirectories;
+  std::vector<std::string> directoryDeleteList;
+
+  std::string assetDirectory = "assets";
+  std::string buildAssetDirectory = "build/linux/share/project";
+
+  FileInfo::scanDirectory(assetDirectory, false, assetDirectories);
+  FileInfo::scanDirectory(buildAssetDirectory, false, buildAssetDirectories);
+  FileInfo::scanDirectory(assetDirectory, true, assetDirectories);
+  FileInfo::scanDirectory(buildAssetDirectory, true, buildAssetDirectories);
+
+  assetDirectory += DIR_CHAR;
+  buildAssetDirectory += DIR_CHAR;
+
+  for(int i = 0; i < buildAssetDirectories.size(); i++)
+  {
+    bool found = false;
+
+    for(int j = 0; j < assetDirectories.size(); j++)
+    {
+      if(buildAssetDirectories.at(i)->getAbsolutePath().substr(buildAssetDirectory.length()) ==
+         assetDirectories.at(j)->getAbsolutePath().substr(assetDirectory.length()))
+      {
+        found = true;
+        break;
+      }
+    }
+
+    if(found == false)
+    {
+      directoryDeleteList.push_back(buildAssetDirectories.at(i)->getAbsolutePath());
+    }
+  }
+
+  for(int i = 0; i < directoryDeleteList.size(); i++)
+  {
+    Dir::remove(directoryDeleteList.at(i));
+    //std::cout << "Dir::remove(" << directoryDeleteList.at(i) << ");" << std::endl;
+  }
+
+  //std::vector<std::shared_ptr<FileInfo>> assetFiles;
+
   // Add "assets/" + directory
   // for each source file / folder, if does not exist in dest directory add to delete list
   // Process file delete list
@@ -147,13 +190,13 @@ void ProjectBuilder::generateOutOfDateOutput()
     needsRelink = true;
   }
 
+  removeOrphanedAssets();
+  syncAssetDirectory();
+
   if(needsRelink == false) return;
 
   //std::cout << "Linking..." << std::endl;
   compiler->link(outputDirectory + DIR_CHAR + outputFilename);
-
-  removeOrphanedAssets("");
-  syncAssetDirectory("");
 }
 
 void ProjectBuilder::buildOutOfDateObjects()
@@ -208,6 +251,8 @@ void ProjectBuilder::prepareDirectories()
     try { Dir::mkdir(Util::fixPath("build")); } catch(std::exception& e) { }
     try { Dir::mkdir(Util::fixPath("build/linux")); } catch(std::exception& e) { }
     try { Dir::mkdir(Util::fixPath("build/linux/bin")); } catch(std::exception& e) { }
+    try { Dir::mkdir(Util::fixPath("build/linux/share")); } catch(std::exception& e) { }
+    try { Dir::mkdir(Util::fixPath("build/linux/share/project")); } catch(std::exception& e) { }
   }
   else
   {
@@ -242,6 +287,6 @@ void ProjectBuilder::scanSource(std::string rootDir)
     }
 
     dirent = dir->readdir();
-  }  
+  }
 }
 
