@@ -82,8 +82,8 @@ void Compiler::compile(std::string sourceUnit, std::string output)
 
   if(program == "cl")
   {
-    //command = "call \"C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\vcvarsall.bat\" && " + program +
-    command = program +
+    command = "call \"C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\vcvarsall.bat\" && " + program +
+    //command = program +
       " /EHsc /c /DWINDOWS" +
       includeFragment +
       " " + sourceUnit +
@@ -165,7 +165,8 @@ void Compiler::link(std::string output)
 
   if(program == "cl")
   {
-    command = "link" +
+    command = "call \"C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\vcvarsall.bat\" && link" +
+    //command = "link" +
       objectsFragment +
       " /out:" + output +
       " /subsystem:console" +

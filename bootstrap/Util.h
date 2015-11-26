@@ -12,6 +12,7 @@ public:
   static std::string trimRight(std::string input, char splitter);
   static std::string trimLeft(std::string input, char splitter);
   static std::string fixPath(std::string input);
+  static void copyFile(std::string sourcePath, std::string destinationPath);
 
 };
 

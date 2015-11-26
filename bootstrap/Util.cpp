@@ -4,6 +4,7 @@
 
 #include <memory>
 #include <iostream>
+#include <fstream>
 
 std::string Util::fixPath(std::string input)
 {
@@ -98,3 +99,10 @@ std::string Util::cropRight(std::string input, char splitter)
   return input;
 }
 
+void Util::copyFile(std::string sourcePath, std::string destinationPath)
+{
+  std::ifstream source(sourcePath.c_str(), std::ios::binary);
+  std::ofstream dest(destinationPath.c_str(), std::ios::binary);
+
+  dest << source.rdbuf();
+}
