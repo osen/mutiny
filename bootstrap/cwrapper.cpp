@@ -37,6 +37,9 @@ void Dir::remove(std::string path)
 {
   if(::remove(path.c_str()) == -1)
   {
+#ifdef HAS_WINAPI
+    if(RemoveDirectory(path.c_str()) == 0)
+#endif
     throw std::exception();
   }
 }

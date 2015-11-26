@@ -173,6 +173,7 @@ void ProjectBuilder::removeOrphanedAssets()
 
   for(int i = 0; i < directoryDeleteList.size(); i++)
   {
+    //std::cout << "Dir::remove(" << directoryDeleteList.at(i) << ");" << std::endl;
     Dir::remove(directoryDeleteList.at(i));
   }
 }
