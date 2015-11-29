@@ -110,7 +110,15 @@ std::shared_ptr<SourceFileInfo> SourceFileInfo::create(std::string absolutePath)
   rtn->FileInfo::init(absolutePath);
 
   //std::cout << "Source: " << absolutePath << std::endl;
-  rtn->processInclude(absolutePath);
+
+  try
+  {
+    rtn->processInclude(absolutePath);
+  }
+  catch(std::exception& e)
+  {
+    //std::cout << "Warning: Failed to process source: " << absolutePath << std::endl;
+  }
 
   time_t recentModification = rtn->getModified();
 
@@ -158,6 +166,7 @@ void SourceFileInfo::processInclude(std::string absolutePath)
 
   if(file.is_open() == false)
   {
+    std::cout << "Warning: Failed to open: " << absolutePath << std::endl;
     throw std::exception();
   }
 
@@ -193,7 +202,12 @@ void SourceFileInfo::processInclude(std::string absolutePath)
           dep = Util::trimLeft(dep, '"');
           dep = Util::trimRight(dep, '"');
           dep = Util::fixPath(getFolderPath(absolutePath) + DIR_CHAR + dep);
-          processInclude(dep);
+
+          try{
+          processInclude(dep);} catch(std::exception& e)
+          {
+            //std::cout << "Warning: Failed to process: " << dep << std::endl;
+          }
         }
       }
     }

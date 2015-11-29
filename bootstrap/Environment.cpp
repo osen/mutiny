@@ -22,7 +22,7 @@ std::shared_ptr<Environment> Environment::create(std::vector<std::string>& args)
   rtn->prefix = Util::stripEol(Util::execute("dirname \"" + absoluteBinPath + "\""));
 #endif
 
-  std::cout << "Mutiny Prefix: " << rtn->prefix << std::endl;
+  //std::cout << "Mutiny Prefix: " << rtn->prefix << std::endl;
 
   try
   {

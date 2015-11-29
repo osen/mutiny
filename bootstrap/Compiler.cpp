@@ -148,17 +148,20 @@ void Compiler::link(std::string output)
 
   std::string program = name;
 
-  if(FileInfo::getFileName(name) == "em++")
+  if(environment->isMutinyAvailable() == true)
   {
-    libsFragment = "";
-  }
-  else if(name == "cl")
-  {
-    libsFragment += " SDL.lib SDLmain.lib SDL_mixer.lib glew32.lib opengl32.lib";
-  }
-  else
-  {
-    libsFragment += " -lGL -lGLEW -lSDL -lSDL_mixer";
+    if(FileInfo::getFileName(name) == "em++")
+    {
+
+    }
+    else if(name == "cl")
+    {
+      libsFragment += " SDL.lib SDLmain.lib SDL_mixer.lib glew32.lib opengl32.lib";
+    }
+    else
+    {
+      libsFragment += " -lGL -lGLEW -lSDL -lSDL_mixer";
+    }
   }
 
   std::string command;
