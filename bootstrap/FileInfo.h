@@ -34,9 +34,13 @@ class SourceFileInfo : public FileInfo
 public:
   static std::shared_ptr<SourceFileInfo> create(std::string absolutePath);
 
+  static std::shared_ptr<SourceFileInfo> create(std::string absolutePath,
+    std::vector<std::string> additionalIncludeDirectories);
+
 private:
   void processInclude(std::string absolutePath);
   std::vector<std::shared_ptr<FileInfo>> dependencies;
+  std::vector<std::string> additionalIncludeDirectories;
 
 };
 

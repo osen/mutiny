@@ -105,20 +105,27 @@ time_t FileInfo::getModified()
 
 std::shared_ptr<SourceFileInfo> SourceFileInfo::create(std::string absolutePath)
 {
+  return SourceFileInfo::create(absolutePath, std::vector<std::string>());
+}
+
+std::shared_ptr<SourceFileInfo> SourceFileInfo::create(std::string absolutePath,
+  std::vector<std::string> additionalIncludeDirectories)
+{
   static SourceFileInfo s;
   std::shared_ptr<SourceFileInfo> rtn(new SourceFileInfo(s));
+  rtn->additionalIncludeDirectories = additionalIncludeDirectories;
   rtn->FileInfo::init(absolutePath);
 
   //std::cout << "Source: " << absolutePath << std::endl;
 
-  try
-  {
+  //try
+  //{
     rtn->processInclude(absolutePath);
-  }
-  catch(std::exception& e)
-  {
-    //std::cout << "Warning: Failed to process source: " << absolutePath << std::endl;
-  }
+  //}
+  //catch(std::exception& e)
+  //{
+  //  std::cout << "Warning: Failed to process source: " << absolutePath << std::endl;
+  //}
 
   time_t recentModification = rtn->getModified();
 
@@ -203,10 +210,25 @@ void SourceFileInfo::processInclude(std::string absolutePath)
           dep = Util::trimRight(dep, '"');
           dep = Util::fixPath(getFolderPath(absolutePath) + DIR_CHAR + dep);
 
-          try{
-          processInclude(dep);} catch(std::exception& e)
+          try
           {
-            //std::cout << "Warning: Failed to process: " << dep << std::endl;
+            processInclude(dep);
+          }
+          catch(std::exception& e){}
+        }
+        else if(dep.at(0) == '<')
+        {
+          dep = Util::trimLeft(dep, '<');
+          dep = Util::trimRight(dep, '>');
+          dep = Util::fixPath(getFolderPath(absolutePath) + DIR_CHAR + dep);
+
+          for(int i = 0; i < additionalIncludeDirectories.size(); i++)
+          {
+            try
+            {
+              processInclude(additionalIncludeDirectories.at(i) + DIR_CHAR + dep);
+            }
+            catch(std::exception& e){}
           }
         }
       }

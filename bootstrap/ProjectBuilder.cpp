@@ -34,6 +34,7 @@ std::shared_ptr<ProjectBuilder> ProjectBuilder::create(std::shared_ptr<Environme
     rtn->outputFilename += "." + compiler->getExecutableSuffix();
   }
 
+  rtn->scanForIncludeDirectories(rtn->srcDir);
   rtn->scanSource(rtn->srcDir);
   rtn->prepareDirectories();
 
@@ -315,7 +316,7 @@ void ProjectBuilder::scanSource(std::string rootDir)
            FileInfo::getSuffix(dirent->d_name()) == "c")
         {
           //std::cout << "Adding: " << rootDir << DIR_CHAR << dirent->d_name() << std::endl;
-          sourceUnits.push_back(SourceFileInfo::create(rootDir + DIR_CHAR + dirent->d_name()));
+          sourceUnits.push_back(SourceFileInfo::create(rootDir + DIR_CHAR + dirent->d_name(), includeDirectories));
         }
         else if(FileInfo::getSuffix(dirent->d_name()) == "so" ||
                 FileInfo::getSuffix(dirent->d_name()) == "lib")
@@ -329,3 +330,30 @@ void ProjectBuilder::scanSource(std::string rootDir)
   }
 }
 
+void ProjectBuilder::scanForIncludeDirectories(std::string rootDir)
+{
+  std::shared_ptr<Dir> dir = Dir::opendir(rootDir);
+  std::shared_ptr<Dirent> dirent = dir->readdir();
+
+  while(dirent.get() != NULL)
+  {
+    if(dirent->d_name().at(0) == '.')
+    {
+      dirent = dir->readdir();
+      continue;
+    }
+
+    try
+    {
+      scanForIncludeDirectories(rootDir + DIR_CHAR + dirent->d_name());
+
+      if(dirent->d_name() == "include")
+      {
+        includeDirectories.push_back(rootDir + DIR_CHAR + dirent->d_name());
+      }
+    }
+    catch(std::exception& e){}
+
+    dirent = dir->readdir();
+  }
+}
