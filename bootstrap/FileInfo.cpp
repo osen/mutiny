@@ -220,12 +220,12 @@ void SourceFileInfo::processInclude(std::string absolutePath)
         {
           dep = Util::trimLeft(dep, '<');
           dep = Util::trimRight(dep, '>');
-          dep = Util::fixPath(getFolderPath(absolutePath) + DIR_CHAR + dep);
 
           for(int i = 0; i < additionalIncludeDirectories.size(); i++)
           {
             try
             {
+              //std::cout << "Additional: " << additionalIncludeDirectories.at(i) << DIR_CHAR << dep << std::endl;
               processInclude(additionalIncludeDirectories.at(i) + DIR_CHAR + dep);
             }
             catch(std::exception& e){}

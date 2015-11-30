@@ -246,6 +246,11 @@ void ProjectBuilder::buildOutOfDateObjects()
     compiler->addIncludeDirectory(environment->getPrefix() + Util::fixPath("/import/include"));
   }
 
+  for(int i = 0; i < includeDirectories.size(); i++)
+  {
+    compiler->addIncludeDirectory(includeDirectories.at(i));
+  }
+
   for(int i = 0; i < sourceUnits.size(); i++)
   {
     std::string objPath = Util::fixPath("temp/linux/obj/project/" +
