@@ -1,6 +1,8 @@
 #ifndef ENGINEBUILDER_H
 #define ENGINEBUILDER_H
 
+#include "arc.h"
+
 #include <memory>
 #include <vector>
 #include <string>
@@ -12,7 +14,7 @@ class HeaderFileInfo;
 class EngineBuilder
 {
 public:
-  static std::shared_ptr<EngineBuilder> create(std::shared_ptr<Environment> environment);
+  static arc<EngineBuilder> create(std::shared_ptr<Environment> environment);
   void removeOrphanedObjects();
   void buildOutOfDateObjects();
 

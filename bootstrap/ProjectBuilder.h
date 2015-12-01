@@ -1,6 +1,8 @@
 #ifndef PROJECTBUILDER_H
 #define PROJECTBUILDER_H
 
+#include "arc.h"
+
 #include <memory>
 #include <vector>
 #include <string>
@@ -13,7 +15,7 @@ class FileInfo;
 class ProjectBuilder
 {
 public:
-  static std::shared_ptr<ProjectBuilder> create(std::shared_ptr<Environment> environment);
+  static arc<ProjectBuilder> create(std::shared_ptr<Environment> environment);
   void removeOrphanedObjects();
   void buildOutOfDateObjects();
   void generateOutOfDateOutput();

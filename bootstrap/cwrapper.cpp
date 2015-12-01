@@ -47,11 +47,10 @@ void Dir::remove(std::string path)
 std::shared_ptr<Dir> Dir::opendir(std::string path)
 {
   static Dir s;
-#ifdef HAS_WINAPI
-  s.hFind = INVALID_HANDLE_VALUE;
-#endif
-
   std::shared_ptr<Dir> rtn(new Dir(s));
+#ifdef HAS_WINAPI
+  rtn->hFind = INVALID_HANDLE_VALUE;
+#endif
   rtn->self = rtn;
 
 #ifdef HAS_DIRENT

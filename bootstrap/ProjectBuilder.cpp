@@ -8,10 +8,9 @@
 
 #include <iostream>
 
-std::shared_ptr<ProjectBuilder> ProjectBuilder::create(std::shared_ptr<Environment> environment)
+arc<ProjectBuilder> ProjectBuilder::create(std::shared_ptr<Environment> environment)
 {
-  static ProjectBuilder s;
-  std::shared_ptr<ProjectBuilder> rtn(new ProjectBuilder(s));
+  arc<ProjectBuilder> rtn = arc<ProjectBuilder>::alloc();
 
   rtn->environment = environment;
   rtn->srcDir = "assets";

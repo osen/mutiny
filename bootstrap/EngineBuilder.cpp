@@ -7,10 +7,9 @@
 
 #include <iostream>
 
-std::shared_ptr<EngineBuilder> EngineBuilder::create(std::shared_ptr<Environment> environment)
+arc<EngineBuilder> EngineBuilder::create(std::shared_ptr<Environment> environment)
 {
-  static EngineBuilder s;
-  std::shared_ptr<EngineBuilder> rtn(new EngineBuilder(s));
+  arc<EngineBuilder> rtn = arc<EngineBuilder>::alloc();
 
   rtn->environment = environment;
   rtn->srcDir = environment->getPrefix() + Util::fixPath("/src/mutiny");
