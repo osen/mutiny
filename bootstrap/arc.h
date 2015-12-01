@@ -117,7 +117,7 @@ public:
     }
   }
 
-//private:
+private:
   std::shared_ptr<T> shared;
   std::weak_ptr<T> weak;
 

@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
     args.push_back(argv[i]);
   }
 
-  std::shared_ptr<Environment> environment = Environment::create(args);
+  arc<Environment> environment = Environment::create(args);
 
   if(environment->isMutinyAvailable() == true)
   {

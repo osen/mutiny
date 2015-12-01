@@ -6,10 +6,9 @@
 
 #include <iostream>
 
-std::shared_ptr<Environment> Environment::create(std::vector<std::string>& args)
+arc<Environment> Environment::create(std::vector<std::string>& args)
 {
-  static Environment s;
-  std::shared_ptr<Environment> rtn(new Environment(s));
+  arc<Environment> rtn = arc<Environment>::alloc();
   rtn->args = args;
 
 #ifdef HAS_WINAPI

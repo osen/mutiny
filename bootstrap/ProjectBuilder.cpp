@@ -8,7 +8,7 @@
 
 #include <iostream>
 
-arc<ProjectBuilder> ProjectBuilder::create(std::shared_ptr<Environment> environment)
+arc<ProjectBuilder> ProjectBuilder::create(arc<Environment> environment)
 {
   arc<ProjectBuilder> rtn = arc<ProjectBuilder>::alloc();
 

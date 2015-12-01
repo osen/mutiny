@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-arc<EngineBuilder> EngineBuilder::create(std::shared_ptr<Environment> environment)
+arc<EngineBuilder> EngineBuilder::create(arc<Environment> environment)
 {
   arc<EngineBuilder> rtn = arc<EngineBuilder>::alloc();
 

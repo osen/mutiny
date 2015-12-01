@@ -14,12 +14,12 @@ class HeaderFileInfo;
 class EngineBuilder
 {
 public:
-  static arc<EngineBuilder> create(std::shared_ptr<Environment> environment);
+  static arc<EngineBuilder> create(arc<Environment> environment);
   void removeOrphanedObjects();
   void buildOutOfDateObjects();
 
 private:
-  std::shared_ptr<Environment> environment;
+  arc<Environment> environment;
   std::vector<std::shared_ptr<SourceFileInfo>> sourceUnits;
   std::vector<std::shared_ptr<HeaderFileInfo>> headers;
 

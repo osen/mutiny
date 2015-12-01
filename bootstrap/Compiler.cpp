@@ -6,7 +6,7 @@
 
 #include <iostream>
 
-std::shared_ptr<Compiler> Compiler::create(std::shared_ptr<Environment> environment)
+std::shared_ptr<Compiler> Compiler::create(arc<Environment> environment)
 {
   static Compiler s;
   std::shared_ptr<Compiler> rtn(new Compiler(s));

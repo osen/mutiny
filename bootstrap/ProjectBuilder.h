@@ -15,13 +15,13 @@ class FileInfo;
 class ProjectBuilder
 {
 public:
-  static arc<ProjectBuilder> create(std::shared_ptr<Environment> environment);
+  static arc<ProjectBuilder> create(arc<Environment> environment);
   void removeOrphanedObjects();
   void buildOutOfDateObjects();
   void generateOutOfDateOutput();
 
 private:
-  std::shared_ptr<Environment> environment;
+  arc<Environment> environment;
   std::vector<std::shared_ptr<SourceFileInfo>> sourceUnits;
   //std::vector<std::shared_ptr<HeaderFileInfo>> headers;
   std::vector<std::shared_ptr<FileInfo>> libs;
