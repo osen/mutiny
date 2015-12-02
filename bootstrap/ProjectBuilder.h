@@ -22,9 +22,9 @@ public:
 
 private:
   arc<Environment> environment;
-  std::vector<std::shared_ptr<SourceFileInfo>> sourceUnits;
-  //std::vector<std::shared_ptr<HeaderFileInfo>> headers;
-  std::vector<std::shared_ptr<FileInfo>> libs;
+  std::vector<arc<SourceFileInfo> > sourceUnits;
+  //std::vector<arc<HeaderFileInfo> > headers;
+  std::vector<arc<FileInfo> > libs;
   std::vector<std::string> includeDirectories;
 
   void scanSource(std::string rootDir);

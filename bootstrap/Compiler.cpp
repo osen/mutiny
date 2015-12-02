@@ -6,10 +6,9 @@
 
 #include <iostream>
 
-std::shared_ptr<Compiler> Compiler::create(arc<Environment> environment)
+arc<Compiler> Compiler::create(arc<Environment> environment)
 {
-  static Compiler s;
-  std::shared_ptr<Compiler> rtn(new Compiler(s));
+  arc<Compiler> rtn = arc<Compiler>::alloc();
   rtn->environment = environment;
   rtn->name = DEFAULT_CXX;
 

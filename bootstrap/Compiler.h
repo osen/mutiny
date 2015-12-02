@@ -12,7 +12,7 @@ class Environment;
 class Compiler
 {
 public:
-  static std::shared_ptr<Compiler> create(arc<Environment> environment);
+  static arc<Compiler> create(arc<Environment> environment);
   void compile(std::string sourceUnit, std::string output);
   void addIncludeDirectory(std::string directory);
   void addObjectDirectory(std::string directory);

@@ -26,8 +26,8 @@ void EngineBuilder::removeOrphanedObjects()
 {
   std::string objDir = Util::fixPath("temp/linux/obj/mutiny");
 
-  std::shared_ptr<Dir> dir = Dir::opendir(objDir);
-  std::shared_ptr<Dirent> dirent = dir->readdir();
+  arc<Dir> dir = Dir::opendir(objDir);
+  arc<Dirent> dirent = dir->readdir();
   std::vector<std::string> toDelete;
 
   while(dirent.get() != NULL)
@@ -66,7 +66,7 @@ void EngineBuilder::removeOrphanedObjects()
 
 void EngineBuilder::buildOutOfDateObjects()
 {
-  std::shared_ptr<Compiler> compiler = Compiler::create(environment);
+  arc<Compiler> compiler = Compiler::create(environment);
 
   if(compiler->getName() == "cl")
   {
@@ -81,7 +81,7 @@ void EngineBuilder::buildOutOfDateObjects()
 
     try
     {
-      std::shared_ptr<FileInfo> objectInfo = FileInfo::create(objPath);
+      arc<FileInfo> objectInfo = FileInfo::create(objPath);
 
       if(objectInfo->getModified() > sourceUnits.at(i)->getModified())
       {
@@ -113,8 +113,8 @@ void EngineBuilder::prepareDirectories()
 
 void EngineBuilder::scanSource(std::string rootDir)
 {
-  std::shared_ptr<Dir> dir = Dir::opendir(rootDir);
-  std::shared_ptr<Dirent> dirent = dir->readdir();
+  arc<Dir> dir = Dir::opendir(rootDir);
+  arc<Dirent> dirent = dir->readdir();
 
   while(dirent.get() != NULL)
   {

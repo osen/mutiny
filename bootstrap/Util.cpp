@@ -1,6 +1,7 @@
 #include "Util.h"
 #include "cwrapper.h"
 #include "features.h"
+#include "arc.h"
 
 #include <memory>
 #include <iostream>
@@ -21,7 +22,7 @@ std::string Util::fixPath(std::string input)
 
 std::string Util::execute(std::string command)
 {
-  std::shared_ptr<File> proc = File::popen(command + " 2>&1");
+  arc<File> proc = File::popen(command + " 2>&1");
   std::string line;
   std::string rtn;
 

@@ -12,10 +12,9 @@
   #include <utime.h>
 #endif
 
-std::shared_ptr<Dirent> Dirent::create()
+arc<Dirent> Dirent::create()
 {
-  static Dirent s;
-  std::shared_ptr<Dirent> rtn(new Dirent(s));
+  arc<Dirent> rtn = arc<Dirent>::alloc();
 
   return rtn;
 }
@@ -44,14 +43,13 @@ void Dir::remove(std::string path)
   }
 }
 
-std::shared_ptr<Dir> Dir::opendir(std::string path)
+arc<Dir> Dir::opendir(std::string path)
 {
-  static Dir s;
-  std::shared_ptr<Dir> rtn(new Dir(s));
+  arc<Dir> rtn = arc<Dir>::alloc();
 #ifdef HAS_WINAPI
   rtn->hFind = INVALID_HANDLE_VALUE;
 #endif
-  rtn->self = rtn;
+  rtn->self = rtn.makeWeak();
 
 #ifdef HAS_DIRENT
   rtn->dir = ::opendir(path.c_str());
@@ -88,9 +86,9 @@ Dir::~Dir()
 }
 
 
-std::shared_ptr<Dirent> Dir::readdir()
+arc<Dirent> Dir::readdir()
 {
-  std::shared_ptr<Dirent> rtn = Dirent::create();
+  arc<Dirent> rtn = Dirent::create();
 #ifdef HAS_DIRENT
   rtn->dp = ::readdir(dir);
 
@@ -110,10 +108,10 @@ std::shared_ptr<Dirent> Dir::readdir()
   else
   {
 #endif
-    return std::shared_ptr<Dirent>();
+    return arc<Dirent>();
   }
 
-  rtn->parent = self.lock();
+  rtn->parent = self.makeStrong();
 
   return rtn;
 }
@@ -128,10 +126,9 @@ std::string Dirent::d_name()
 #endif
 }
 
-std::shared_ptr<File> File::popen(std::string path)
+arc<File> File::popen(std::string path)
 {
-  static File s;
-  std::shared_ptr<File> rtn(new File(s));
+  arc<File> rtn = arc<File>::alloc();
 
 #ifdef HAS__POPEN
   rtn->file = ::_popen(path.c_str(), "r");
@@ -198,10 +195,9 @@ File::~File()
   }
 }
 
-std::shared_ptr<Stat> Stat::stat(std::string path)
+arc<Stat> Stat::stat(std::string path)
 {
-  static Stat s;
-  std::shared_ptr<Stat> rtn(new Stat(s));
+  arc<Stat> rtn = arc<Stat>::alloc();
 
 #ifdef HAS__POPEN
   if(::_stat(path.c_str(), &rtn->attrib) == -1)
@@ -233,7 +229,7 @@ void Stat::utime(std::string path, time_t aTime, time_t mTime)
 }
 
 #ifdef HAS_WINAPI
-std::string Module::getModuleFileName(std::shared_ptr<Module> module)
+std::string Module::getModuleFileName(arc<Module> module)
 {
   char buffer[MAX_PATH];
   int result;

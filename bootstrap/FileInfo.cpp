@@ -7,10 +7,10 @@
 #include <fstream>
 
 
-void FileInfo::scanDirectory(std::string path, bool directories, std::vector<std::shared_ptr<FileInfo>>& output)
+void FileInfo::scanDirectory(std::string path, bool directories, std::vector<arc<FileInfo> >& output)
 {
-  std::shared_ptr<Dir> dir = Dir::opendir(path);
-  std::shared_ptr<Dirent> dirent = dir->readdir();
+  arc<Dir> dir = Dir::opendir(path);
+  arc<Dirent> dirent = dir->readdir();
 
   while(dirent.get() != NULL)
   {
@@ -38,10 +38,9 @@ void FileInfo::scanDirectory(std::string path, bool directories, std::vector<std
   }
 }
 
-std::shared_ptr<FileInfo> FileInfo::create(std::string absolutePath)
+arc<FileInfo> FileInfo::create(std::string absolutePath)
 {
-  static FileInfo s;
-  std::shared_ptr<FileInfo> rtn(new FileInfo(s));
+  arc<FileInfo> rtn = arc<FileInfo>::alloc();
   rtn->FileInfo::init(absolutePath);
 
   return rtn;
@@ -64,7 +63,7 @@ std::string FileInfo::getBaseName()
 
 void FileInfo::updateModified()
 {
-  std::shared_ptr<Stat> stat = Stat::stat(absolutePath);
+  arc<Stat> stat = Stat::stat(absolutePath);
   modified = stat->get_st_mtime();
 }
 
@@ -72,7 +71,7 @@ void FileInfo::init(std::string absolutePath)
 {
   this->absolutePath = absolutePath;
 
-  std::shared_ptr<Stat> stat = Stat::stat(absolutePath);
+  arc<Stat> stat = Stat::stat(absolutePath);
   modified = stat->get_st_mtime();
 }
 
@@ -103,16 +102,15 @@ time_t FileInfo::getModified()
   return modified;
 }
 
-std::shared_ptr<SourceFileInfo> SourceFileInfo::create(std::string absolutePath)
+arc<SourceFileInfo> SourceFileInfo::create(std::string absolutePath)
 {
   return SourceFileInfo::create(absolutePath, std::vector<std::string>());
 }
 
-std::shared_ptr<SourceFileInfo> SourceFileInfo::create(std::string absolutePath,
+arc<SourceFileInfo> SourceFileInfo::create(std::string absolutePath,
   std::vector<std::string> additionalIncludeDirectories)
 {
-  static SourceFileInfo s;
-  std::shared_ptr<SourceFileInfo> rtn(new SourceFileInfo(s));
+  arc<SourceFileInfo> rtn = arc<SourceFileInfo>::alloc();
   rtn->additionalIncludeDirectories = additionalIncludeDirectories;
   rtn->FileInfo::init(absolutePath);
 

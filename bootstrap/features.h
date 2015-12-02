@@ -15,4 +15,12 @@
   #define DEFAULT_CXX "g++"
 #endif
 
+#ifdef __GNUC__
+  #define HAS_TR1_NAMESPACE
+#elif _MSC_VER
+
+#else
+
+#endif
+
 #endif

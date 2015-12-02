@@ -26,7 +26,7 @@ arc<ProjectBuilder> ProjectBuilder::create(arc<Environment> environment)
 
   rtn->outputFilename = "project";
 
-  std::shared_ptr<Compiler> compiler = Compiler::create(environment);
+  arc<Compiler> compiler = Compiler::create(environment);
 
   if(compiler->getExecutableSuffix() != "")
   {
@@ -44,8 +44,8 @@ void ProjectBuilder::removeOrphanedObjects()
 {
   std::string objDir = Util::fixPath("temp/linux/obj/project");
 
-  std::shared_ptr<Dir> dir = Dir::opendir(objDir);
-  std::shared_ptr<Dirent> dirent = dir->readdir();
+  arc<Dir> dir = Dir::opendir(objDir);
+  arc<Dirent> dirent = dir->readdir();
   std::vector<std::string> toDelete;
 
   while(dirent.get() != NULL)
@@ -84,8 +84,8 @@ void ProjectBuilder::removeOrphanedObjects()
 
 void ProjectBuilder::syncAssetDirectory()
 {
-  std::vector<std::shared_ptr<FileInfo>> assetDirectories;
-  std::vector<std::shared_ptr<FileInfo>> buildAssetDirectories;
+  std::vector<arc<FileInfo> > assetDirectories;
+  std::vector<arc<FileInfo> > buildAssetDirectories;
   std::vector<std::string> directoryDeleteList;
 
   std::string assetDirectory = Util::fixPath("assets");
@@ -121,7 +121,7 @@ void ProjectBuilder::syncAssetDirectory()
     {
       try
       {
-        std::shared_ptr<Dir> dirTest = Dir::opendir(assetDirectories.at(i)->getAbsolutePath());
+        arc<Dir> dirTest = Dir::opendir(assetDirectories.at(i)->getAbsolutePath());
         Dir::mkdir(buildAssetDirectory + assetDirectories.at(i)->
           getAbsolutePath().substr(assetDirectory.length()));
       }
@@ -136,8 +136,8 @@ void ProjectBuilder::syncAssetDirectory()
 
 void ProjectBuilder::removeOrphanedAssets()
 {
-  std::vector<std::shared_ptr<FileInfo>> assetDirectories;
-  std::vector<std::shared_ptr<FileInfo>> buildAssetDirectories;
+  std::vector<arc<FileInfo> > assetDirectories;
+  std::vector<arc<FileInfo> > buildAssetDirectories;
   std::vector<std::string> directoryDeleteList;
 
   std::string assetDirectory = Util::fixPath("assets");
@@ -180,7 +180,7 @@ void ProjectBuilder::removeOrphanedAssets()
 
 void ProjectBuilder::generateOutOfDateOutput()
 {
-  std::shared_ptr<Compiler> compiler = Compiler::create(environment);
+  arc<Compiler> compiler = Compiler::create(environment);
 
   if(environment->isMutinyAvailable() == true)
   {
@@ -203,7 +203,7 @@ void ProjectBuilder::generateOutOfDateOutput()
 
   try
   {
-    std::shared_ptr<FileInfo> binInfo = FileInfo::create(outputDirectory + DIR_CHAR + outputFilename);
+    arc<FileInfo> binInfo = FileInfo::create(outputDirectory + DIR_CHAR + outputFilename);
 
     for(int i = 0; i < sourceUnits.size(); i++)
     {
@@ -237,7 +237,7 @@ void ProjectBuilder::generateOutOfDateOutput()
 
 void ProjectBuilder::buildOutOfDateObjects()
 {
-  std::shared_ptr<Compiler> compiler = Compiler::create(environment);
+  arc<Compiler> compiler = Compiler::create(environment);
   compiler->addIncludeDirectory(environment->getPrefix() + Util::fixPath("/src"));
 
   if(compiler->getName() == "cl")
@@ -258,7 +258,7 @@ void ProjectBuilder::buildOutOfDateObjects()
 
     try
     {
-      std::shared_ptr<FileInfo> objectInfo = FileInfo::create(objPath);
+      arc<FileInfo> objectInfo = FileInfo::create(objPath);
 
       if(objectInfo->getModified() > sourceUnits.at(i)->getModified())
       {
@@ -303,8 +303,8 @@ void ProjectBuilder::prepareDirectories()
 
 void ProjectBuilder::scanSource(std::string rootDir)
 {
-  std::shared_ptr<Dir> dir = Dir::opendir(rootDir);
-  std::shared_ptr<Dirent> dirent = dir->readdir();
+  arc<Dir> dir = Dir::opendir(rootDir);
+  arc<Dirent> dirent = dir->readdir();
 
   while(dirent.get() != NULL)
   {
@@ -336,8 +336,8 @@ void ProjectBuilder::scanSource(std::string rootDir)
 
 void ProjectBuilder::scanForIncludeDirectories(std::string rootDir)
 {
-  std::shared_ptr<Dir> dir = Dir::opendir(rootDir);
-  std::shared_ptr<Dirent> dirent = dir->readdir();
+  arc<Dir> dir = Dir::opendir(rootDir);
+  arc<Dirent> dirent = dir->readdir();
 
   while(dirent.get() != NULL)
   {

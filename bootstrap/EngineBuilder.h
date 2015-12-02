@@ -20,8 +20,8 @@ public:
 
 private:
   arc<Environment> environment;
-  std::vector<std::shared_ptr<SourceFileInfo>> sourceUnits;
-  std::vector<std::shared_ptr<HeaderFileInfo>> headers;
+  std::vector<arc<SourceFileInfo> > sourceUnits;
+  std::vector<arc<HeaderFileInfo> > headers;
 
   void scanSource(std::string rootDir);
   void prepareDirectories();

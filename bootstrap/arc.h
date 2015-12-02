@@ -1,7 +1,13 @@
 #ifndef ARC_H
 #define ARC_H
 
+#include "features.h"
+
 #include <memory>
+
+#ifdef HAS_TR1_NAMESPACE
+  #include <tr1/memory>
+#endif
 
 template <class T>
 class arc
@@ -37,8 +43,13 @@ public:
   {
     arc<R> rtn;
 
+#ifdef HAS_TR1_NAMESPACE
+    rtn.shared = std::tr1::dynamic_pointer_cast<R>(shared);
+    rtn.weak = std::tr1::dynamic_pointer_cast<R>(weak.lock());
+#else
     rtn.shared = std::dynamic_pointer_cast<R>(shared);
     rtn.weak = std::dynamic_pointer_cast<R>(weak.lock());
+#endif
 
     return rtn;
   }
@@ -117,9 +128,15 @@ public:
     }
   }
 
-private:
+// TODO: Solve dynamic cast of private
+//private:
+#ifdef HAS_TR1_NAMESPACE
+  std::tr1::shared_ptr<T> shared;
+  std::tr1::weak_ptr<T> weak;
+#else
   std::shared_ptr<T> shared;
   std::weak_ptr<T> weak;
+#endif
 
 };
 
