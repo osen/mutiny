@@ -4,6 +4,7 @@
 #include "features.h"
 
 #include <memory>
+#include <cstdlib>
 
 #ifdef HAS_TR1_NAMESPACE
   #include <tr1/memory>
