@@ -17,7 +17,8 @@ arc<ProjectBuilder> ProjectBuilder::create(arc<Environment> environment)
 
   std::cout << "Project Directory: " << rtn->srcDir << std::endl;
 
-  rtn->outputDirectory = Util::fixPath("build/linux/bin");
+  rtn->outputDirectory = Util::fixPath("build/") +
+    PLATFORM_NAME;
 
   if(environment->getOutputDirectory() != "")
   {
@@ -42,7 +43,7 @@ arc<ProjectBuilder> ProjectBuilder::create(arc<Environment> environment)
 
 void ProjectBuilder::removeOrphanedObjects()
 {
-  std::string objDir = Util::fixPath("temp/linux/obj/project");
+  std::string objDir = Util::fixPath("temp/"+std::string(PLATFORM_NAME)+"/obj/" + outputFilename);
 
   arc<Dir> dir = Dir::opendir(objDir);
   arc<Dirent> dirent = dir->readdir();
@@ -94,7 +95,7 @@ void ProjectBuilder::syncAssetDirectory()
   std::vector<std::string> directoryDeleteList;
 
   std::string assetDirectory = Util::fixPath("assets");
-  std::string buildAssetDirectory = Util::fixPath("build/linux/share/project");
+  std::string buildAssetDirectory = Util::fixPath("build/"+std::string(PLATFORM_NAME)+"/share/" + outputFilename);
 
   FileInfo::scanDirectory(assetDirectory, false, assetDirectories);
   FileInfo::scanDirectory(buildAssetDirectory, false, buildAssetDirectories);
@@ -146,7 +147,7 @@ void ProjectBuilder::removeOrphanedAssets()
   std::vector<std::string> directoryDeleteList;
 
   std::string assetDirectory = Util::fixPath("assets");
-  std::string buildAssetDirectory = Util::fixPath("build/linux/share/project");
+  std::string buildAssetDirectory = Util::fixPath("build/"+std::string(PLATFORM_NAME)+"/share/" + outputFilename);
 
   FileInfo::scanDirectory(assetDirectory, false, assetDirectories);
   FileInfo::scanDirectory(buildAssetDirectory, false, buildAssetDirectories);
@@ -189,7 +190,7 @@ void ProjectBuilder::generateOutOfDateOutput()
 
   if(environment->isMutinyAvailable() == true)
   {
-    compiler->addObjectDirectory(Util::fixPath("temp/linux/obj/mutiny"));
+    compiler->addObjectDirectory(Util::fixPath("temp/"+std::string(PLATFORM_NAME)+"/obj/mutiny"));
   }
 
   if(compiler->getName() == "cl")
@@ -197,7 +198,7 @@ void ProjectBuilder::generateOutOfDateOutput()
     compiler->addLibDirectory(environment->getPrefix() + Util::fixPath("/import/lib"));
   }
 
-  compiler->addObjectDirectory(Util::fixPath("temp/linux/obj/project"));
+  compiler->addObjectDirectory(Util::fixPath("temp/"+std::string(PLATFORM_NAME)+"/obj/" + outputFilename));
 
   for(int i = 0; i < libs.size(); i++)
   {
@@ -208,7 +209,7 @@ void ProjectBuilder::generateOutOfDateOutput()
 
   try
   {
-    arc<FileInfo> binInfo = FileInfo::create(outputDirectory + DIR_CHAR + outputFilename);
+    arc<FileInfo> binInfo = FileInfo::create(outputDirectory + Util::fixPath("/bin/") + outputFilename);
 
     for(int i = 0; i < sourceUnits.size(); i++)
     {
@@ -237,7 +238,7 @@ void ProjectBuilder::generateOutOfDateOutput()
   if(needsRelink == false) return;
 
   //std::cout << "Linking..." << std::endl;
-  compiler->link(outputDirectory + DIR_CHAR + outputFilename);
+  compiler->link(outputDirectory + Util::fixPath("/bin/") + outputFilename);
 }
 
 void ProjectBuilder::buildOutOfDateObjects()
@@ -257,7 +258,7 @@ void ProjectBuilder::buildOutOfDateObjects()
 
   for(int i = 0; i < sourceUnits.size(); i++)
   {
-    std::string objPath = Util::fixPath("temp/linux/obj/project/" +
+    std::string objPath = Util::fixPath("temp/"+std::string(PLATFORM_NAME)+"/obj/"+outputFilename+"/" +
       sourceUnits.at(i)->getBaseName() +
       "." + compiler->getObjectSuffix());
 
@@ -287,23 +288,10 @@ void ProjectBuilder::buildOutOfDateObjects()
 
 void ProjectBuilder::prepareDirectories()
 {
-  try { Dir::mkdir(Util::fixPath("temp")); } catch(std::exception& e) { }
-  try { Dir::mkdir(Util::fixPath("temp/linux")); } catch(std::exception& e) { }
-  try { Dir::mkdir(Util::fixPath("temp/linux/obj")); } catch(std::exception& e) { }
-  try { Dir::mkdir(Util::fixPath("temp/linux/obj/project")); } catch(std::exception& e) { }
+  try { Dir::mkdir_r(Util::fixPath("temp/"+std::string(PLATFORM_NAME)+"/obj/" + outputFilename)); } catch(std::exception& e) { }
 
-  if(environment->getOutputDirectory() == "")
-  {
-    try { Dir::mkdir(Util::fixPath("build")); } catch(std::exception& e) { }
-    try { Dir::mkdir(Util::fixPath("build/linux")); } catch(std::exception& e) { }
-    try { Dir::mkdir(Util::fixPath("build/linux/bin")); } catch(std::exception& e) { }
-    try { Dir::mkdir(Util::fixPath("build/linux/share")); } catch(std::exception& e) { }
-    try { Dir::mkdir(Util::fixPath("build/linux/share/project")); } catch(std::exception& e) { }
-  }
-  else
-  {
-    try { Dir::mkdir(environment->getOutputDirectory()); } catch(std::exception& e) { }
-  }
+  try { Dir::mkdir_r(Util::fixPath(outputDirectory + "/share/" + outputFilename)); } catch(std::exception& e) { }
+  try { Dir::mkdir_r(Util::fixPath(outputDirectory + "/bin")); } catch(std::exception& e) { }
 }
 
 void ProjectBuilder::scanSource(std::string rootDir)

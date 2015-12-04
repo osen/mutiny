@@ -8,11 +8,18 @@
   #define HAS_DIRECT
   #define DIR_CHAR '\\'
   #define DEFAULT_CXX "cl"
+  #define PLATFORM_NAME "windows"
 #else
   #define HAS_DIRENT
   #define HAS_UTIME
   #define DIR_CHAR '/'
   #define DEFAULT_CXX "g++"
+
+  #ifdef __OpenBSD__
+    #define PLATFORM_NAME "openbsd"
+  #else
+    #define PLATFORM_NAME "other"
+  #endif
 #endif
 
 #ifdef __GNUC__

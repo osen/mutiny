@@ -59,6 +59,7 @@ class Dir
 public:
   static arc<Dir> opendir(std::string path);
   static void mkdir(std::string path);
+  static void mkdir_r(std::string path);
   static void remove(std::string path);
   static std::string getcwd();
   ~Dir();

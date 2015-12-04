@@ -1,4 +1,5 @@
 #include "cwrapper.h"
+#include "Util.h"
 
 #ifdef HAS_SYS_UTIME
   #include <sys/utime.h>
@@ -11,6 +12,10 @@
 #ifdef HAS_UTIME
   #include <utime.h>
 #endif
+
+#include <iostream>
+#include <string>
+#include <vector>
 
 arc<Dirent> Dirent::create()
 {
@@ -35,6 +40,36 @@ std::string Dir::getcwd()
   }
 
   return rtn;
+}
+
+void Dir::mkdir_r(std::string path)
+{
+  std::vector<std::string> parts;
+
+  while(true)
+  {
+    std::string part = Util::cropRight(path, DIR_CHAR);
+    parts.push_back(part);
+    std::string origPath = path;
+    path = Util::trimRight(path, DIR_CHAR);
+
+    if(path == "" || path == origPath)
+    {
+      break;
+    }
+  }
+
+  std::string tpath = "";
+  std::string sep;
+
+  for(int i = parts.size() - 1; i >= 0; i--)
+  {
+    tpath += sep + parts.at(i);
+    sep = DIR_CHAR;
+    try{ mkdir(tpath); } catch(std::exception& e) {}
+  }
+
+  Dir::opendir(path);
 }
 
 void Dir::mkdir(std::string path)
