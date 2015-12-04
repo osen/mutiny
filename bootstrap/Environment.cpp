@@ -49,6 +49,10 @@ arc<Environment> Environment::create(std::vector<std::string>& args)
       i++;
       rtn->compilerName = args.at(i);
     }
+    else if(args.at(i) == "-s")
+    {
+      rtn->mutinyAvailable = false;
+    }
   }
 
   return rtn;

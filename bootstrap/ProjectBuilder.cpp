@@ -24,7 +24,7 @@ arc<ProjectBuilder> ProjectBuilder::create(arc<Environment> environment)
     rtn->outputDirectory = environment->getOutputDirectory();
   }
 
-  rtn->outputFilename = "project";
+  rtn->obtainOutputFilename();
 
   arc<Compiler> compiler = Compiler::create(environment);
 
@@ -80,6 +80,11 @@ void ProjectBuilder::removeOrphanedObjects()
     std::cout << "Deleting: " << toDelete.at(i) << std::endl;
     Dir::remove(toDelete.at(i));
   }
+}
+
+void ProjectBuilder::obtainOutputFilename()
+{
+  outputFilename = FileInfo::getFileName(Dir::getcwd());
 }
 
 void ProjectBuilder::syncAssetDirectory()

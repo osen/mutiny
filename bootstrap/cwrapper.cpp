@@ -19,6 +19,24 @@ arc<Dirent> Dirent::create()
   return rtn;
 }
 
+std::string Dir::getcwd()
+{
+#ifdef HAS_WINAPI
+  char rtn[MAX_PATH];
+
+  if(GetCurrentDirectory(MAX_PATH, buf) == 0)
+#else
+  char rtn[PATH_MAX];
+
+  if(::getcwd(rtn, PATH_MAX) == NULL)
+#endif
+  {
+    return "";
+  }
+
+  return rtn;
+}
+
 void Dir::mkdir(std::string path)
 {
 #ifdef HAS_DIRECT

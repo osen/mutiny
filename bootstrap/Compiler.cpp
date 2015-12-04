@@ -91,7 +91,7 @@ void Compiler::compile(std::string sourceUnit, std::string output)
   }
   else
   {
-    command = program + " -std=c++11 -c" +
+    command = program + " -c" +
       includeFragment +
       " " + sourceUnit +
       " -o" +

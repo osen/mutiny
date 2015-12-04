@@ -32,6 +32,7 @@ private:
   void prepareDirectories();
   void syncAssetDirectory();
   void removeOrphanedAssets();
+  void obtainOutputFilename();
 
   std::string srcDir;
   std::string outputDirectory;
