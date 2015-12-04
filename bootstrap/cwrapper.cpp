@@ -13,6 +13,12 @@
   #include <utime.h>
 #endif
 
+#ifdef HAS_WINAPI
+
+#else
+  #include <unistd.h>
+#endif
+
 #include <iostream>
 #include <string>
 #include <vector>

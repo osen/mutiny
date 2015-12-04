@@ -17,6 +17,8 @@
 
   #ifdef __OpenBSD__
     #define PLATFORM_NAME "openbsd"
+  #elif __linux__
+    #define PLATFORM_NAME "linux"
   #else
     #define PLATFORM_NAME "other"
   #endif
