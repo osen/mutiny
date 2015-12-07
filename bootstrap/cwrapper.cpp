@@ -35,7 +35,7 @@ std::string Dir::getcwd()
 #ifdef HAS_WINAPI
   char rtn[MAX_PATH];
 
-  if(GetCurrentDirectory(MAX_PATH, buf) == 0)
+  if(GetCurrentDirectory(MAX_PATH, rtn) == 0)
 #else
   char rtn[PATH_MAX];
 

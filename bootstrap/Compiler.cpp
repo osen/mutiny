@@ -64,6 +64,7 @@ void Compiler::compile(std::string sourceUnit, std::string output)
 {
   std::string program = name;
   std::string includeFragment = "";
+  std::string defineFragment = "";
 
   for(int i = 0; i < includeDirectories.size(); i++)
   {
@@ -77,6 +78,20 @@ void Compiler::compile(std::string sourceUnit, std::string output)
     }
   }
 
+  std::vector<std::string> defines = environment->getDefines();
+
+  for(int i = 0; i < defines.size(); i++)
+  {
+    if(program == "cl")
+    {
+      defineFragment += " /D" + defines.at(i);
+    }
+    else
+    {
+      defineFragment += " -D" + defines.at(i);
+    }
+  }
+
   std::string command;
 
   if(program == "cl")
@@ -85,6 +100,7 @@ void Compiler::compile(std::string sourceUnit, std::string output)
     //command = program +
       " /EHsc /c /DWINDOWS" +
       includeFragment +
+      defineFragment +
       " " + sourceUnit +
       " /MD" +
       " /Fo" + output;
@@ -93,6 +109,7 @@ void Compiler::compile(std::string sourceUnit, std::string output)
   {
     command = program + " -c" +
       includeFragment +
+      defineFragment +
       " " + sourceUnit +
       " -o" +
       " " + output;

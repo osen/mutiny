@@ -53,9 +53,19 @@ arc<Environment> Environment::create(std::vector<std::string>& args)
     {
       rtn->mutinyAvailable = false;
     }
+    else if(args.at(i) == "-d")
+    {
+      i++;
+      rtn->defines.push_back(args.at(i));
+    }
   }
 
   return rtn;
+}
+
+std::vector<std::string> Environment::getDefines()
+{
+  return defines;
 }
 
 std::string Environment::getCompilerName()
