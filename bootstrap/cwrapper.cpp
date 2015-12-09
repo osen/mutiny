@@ -65,17 +65,20 @@ void Dir::mkdir_r(std::string path)
     }
   }
 
-  std::string tpath = "";
+  std::string tpath;
   std::string sep;
 
   for(int i = parts.size() - 1; i >= 0; i--)
   {
     tpath += sep + parts.at(i);
     sep = DIR_CHAR;
-    try{ mkdir(tpath); } catch(std::exception& e) {}
+
+    if(Dir::isdir(tpath) == true) continue;
+
+    mkdir(tpath);
   }
 
-  Dir::opendir(path);
+  //Dir::opendir(path);
 }
 
 void Dir::mkdir(std::string path)
