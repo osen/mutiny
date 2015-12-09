@@ -133,8 +133,12 @@ void ProjectBuilder::syncAssetDirectory()
     {
       if(Dir::isdir(assetDirectories.at(i)->getAbsolutePath()) == true)
       {
-        Dir::mkdir(buildAssetDirectory + assetDirectories.at(i)->
-          getAbsolutePath().substr(assetDirectory.length()));
+        if(Dir::isdir(buildAssetDirectory + assetDirectories.at(i)->
+             getAbsolutePath().substr(assetDirectory.length())) == false)
+        {
+          Dir::mkdir(buildAssetDirectory + assetDirectories.at(i)->
+            getAbsolutePath().substr(assetDirectory.length()));
+        }
       }
       else
       {
@@ -358,7 +362,17 @@ void ProjectBuilder::scanSource(std::string rootDir)
 
 void ProjectBuilder::scanForIncludeDirectories(std::string rootDir)
 {
-  arc<Dir> dir = Dir::opendir(rootDir);
+  arc<Dir> dir;
+
+  try
+  {
+    dir = Dir::opendir(rootDir);
+  }
+  catch(std::exception& e)
+  {
+    return;
+  }
+
   arc<Dirent> dirent = dir->readdir();
 
   while(dirent.get() != NULL)
@@ -369,7 +383,7 @@ void ProjectBuilder::scanForIncludeDirectories(std::string rootDir)
       continue;
     }
 
-    try
+    if(Dir::isdir(rootDir + DIR_CHAR + dirent->d_name()) == true)
     {
       scanForIncludeDirectories(rootDir + DIR_CHAR + dirent->d_name());
 
@@ -378,7 +392,6 @@ void ProjectBuilder::scanForIncludeDirectories(std::string rootDir)
         includeDirectories.push_back(rootDir + DIR_CHAR + dirent->d_name());
       }
     }
-    catch(std::exception& e){}
 
     dirent = dir->readdir();
   }

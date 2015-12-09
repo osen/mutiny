@@ -9,5 +9,5 @@ PREFIX=`pwd`
 cd "$CURRENT_PATH"
 mkdir -p "$PREFIX/bin"
 
-g++ "$ABSOLUTE_BOOTSTRAP_PATH/"*.cpp -o "$PREFIX/bin/mutt"
+g++ -g "$ABSOLUTE_BOOTSTRAP_PATH/"*.cpp -o "$PREFIX/bin/mutt"
 
