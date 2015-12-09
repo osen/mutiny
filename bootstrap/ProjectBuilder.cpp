@@ -196,15 +196,18 @@ void ProjectBuilder::generateOutOfDateOutput()
 
   if(environment->isMutinyAvailable() == true)
   {
-    compiler->addObjectDirectory(Util::fixPath("temp/"+std::string(PLATFORM_NAME)+"/obj/mutiny"));
+    compiler->addObjectDirectory(Util::fixPath(
+      "temp/"+std::string(PLATFORM_NAME)+"/obj/mutiny"));
   }
 
   if(compiler->getName() == "cl")
   {
-    compiler->addLibDirectory(environment->getPrefix() + Util::fixPath("/import/lib"));
+    compiler->addLibDirectory(environment->getPrefix() +
+      Util::fixPath("/import/lib"));
   }
 
-  compiler->addObjectDirectory(Util::fixPath("temp/"+std::string(PLATFORM_NAME)+"/obj/" + outputFilename));
+  compiler->addObjectDirectory(Util::fixPath(
+    "temp/"+std::string(PLATFORM_NAME)+"/obj/" + outputFilename));
 
   for(int i = 0; i < libs.size(); i++)
   {
@@ -212,16 +215,39 @@ void ProjectBuilder::generateOutOfDateOutput()
   }
 
   bool needsRelink = false;
+  arc<FileInfo> binInfo;
 
   try
   {
-    arc<FileInfo> binInfo = FileInfo::create(outputDirectory + Util::fixPath("/bin/") + outputFilename);
+    binInfo = FileInfo::create(outputDirectory +
+      Util::fixPath("/bin/") + outputFilename);
+  }
+  catch(std::exception& e)
+  {
+    needsRelink = true;
+  }
 
-    for(int i = 0; i < sourceUnits.size(); i++)
+  if(binInfo.get() != NULL)
+  {
+    std::vector<arc<FileInfo> > objects;
+
+    if(environment->isMutinyAvailable() == true)
     {
-      if(sourceUnits.at(i)->getModified() > binInfo->getModified())
+      FileInfo::scanDirectory(Util::fixPath(
+        "temp/" + std::string(PLATFORM_NAME) + "/obj/mutiny"),
+        false, objects);
+    }
+
+    FileInfo::scanDirectory(Util::fixPath(
+      "temp/" + std::string(PLATFORM_NAME) + "/obj/" + outputFilename),
+      false, objects);
+
+    for(int i = 0; i < objects.size(); i++)
+    {
+      if(objects.at(i)->getModified() > binInfo->getModified())
       {
         needsRelink = true;
+        break;
       }
     }
 
@@ -230,12 +256,9 @@ void ProjectBuilder::generateOutOfDateOutput()
       if(libs.at(0)->getModified() > binInfo->getModified())
       {
         needsRelink = true;
+        break;
       }
     }
-  }
-  catch(std::exception& e)
-  {
-    needsRelink = true;
   }
 
   removeOrphanedAssets();
