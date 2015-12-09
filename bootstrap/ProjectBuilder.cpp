@@ -61,7 +61,8 @@ void ProjectBuilder::removeOrphanedObjects()
 
     for(int i = 0; i < sourceUnits.size(); i++)
     {
-      if(sourceUnits.at(i)->getBaseName() == FileInfo::getBaseName(objDir + DIR_CHAR + dirent->d_name()))
+      if(sourceUnits.at(i)->getBaseName() ==
+         FileInfo::getBaseName(objDir + DIR_CHAR + dirent->d_name()))
       {
         found = true;
         break;
@@ -95,7 +96,9 @@ void ProjectBuilder::syncAssetDirectory()
   std::vector<std::string> directoryDeleteList;
 
   std::string assetDirectory = Util::fixPath("assets");
-  std::string buildAssetDirectory = Util::fixPath("build/"+std::string(PLATFORM_NAME)+"/share/" + outputFilename);
+
+  std::string buildAssetDirectory = Util::fixPath("build/" +
+    std::string(PLATFORM_NAME)+"/share/" + outputFilename);
 
   FileInfo::scanDirectory(assetDirectory, false, assetDirectories);
   FileInfo::scanDirectory(buildAssetDirectory, false, buildAssetDirectories);
@@ -111,10 +114,13 @@ void ProjectBuilder::syncAssetDirectory()
 
     for(int j = 0; j < buildAssetDirectories.size(); j++)
     {
-      if(assetDirectories.at(i)->getAbsolutePath().substr(assetDirectory.length()) ==
-         buildAssetDirectories.at(j)->getAbsolutePath().substr(buildAssetDirectory.length()))
+      if(assetDirectories.at(i)->getAbsolutePath().
+           substr(assetDirectory.length()) ==
+         buildAssetDirectories.at(j)->getAbsolutePath().
+           substr(buildAssetDirectory.length()))
       {
-        if(assetDirectories.at(i)->getModified() <= buildAssetDirectories.at(j)->getModified())
+        if(assetDirectories.at(i)->getModified() <=
+           buildAssetDirectories.at(j)->getModified())
         {
           found = true;
         }
@@ -125,16 +131,16 @@ void ProjectBuilder::syncAssetDirectory()
 
     if(found == false)
     {
-      try
+      if(Dir::isdir(assetDirectories.at(i)->getAbsolutePath()) == true)
       {
-        arc<Dir> dirTest = Dir::opendir(assetDirectories.at(i)->getAbsolutePath());
         Dir::mkdir(buildAssetDirectory + assetDirectories.at(i)->
           getAbsolutePath().substr(assetDirectory.length()));
       }
-      catch(std::exception& e)
+      else
       {
         Util::copyFile(assetDirectories.at(i)->getAbsolutePath(),
-          buildAssetDirectory + assetDirectories.at(i)->getAbsolutePath().substr(assetDirectory.length()));
+          buildAssetDirectory + assetDirectories.at(i)->
+          getAbsolutePath().substr(assetDirectory.length()));
       }
     }
   }

@@ -62,6 +62,7 @@ public:
   static void mkdir_r(std::string path);
   static void remove(std::string path);
   static std::string getcwd();
+  static bool isdir(std::string path);
   ~Dir();
 
   arc<Dirent> readdir();

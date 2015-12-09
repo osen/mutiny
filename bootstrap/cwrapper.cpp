@@ -102,6 +102,32 @@ void Dir::remove(std::string path)
   }
 }
 
+bool Dir::isdir(std::string path)
+{
+  arc<Dir> rtn = arc<Dir>::alloc();
+#ifdef HAS_WINAPI
+  rtn->hFind = INVALID_HANDLE_VALUE;
+#endif
+  rtn->self = rtn.makeWeak();
+
+#ifdef HAS_DIRENT
+  rtn->dir = ::opendir(path.c_str());
+
+  if(rtn->dir == NULL)
+#endif
+#ifdef HAS_WINAPI
+  path = path + "\\*";
+  rtn->hFind = FindFirstFile(path.c_str(), &rtn->ffd);
+
+  if(rtn->hFind == INVALID_HANDLE_VALUE)
+#endif
+  {
+    return false;
+  }
+
+  return true;
+}
+
 arc<Dir> Dir::opendir(std::string path)
 {
   arc<Dir> rtn = arc<Dir>::alloc();
