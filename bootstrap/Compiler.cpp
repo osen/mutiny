@@ -52,10 +52,9 @@ std::string Compiler::getExecutableSuffix()
     return "html";
   }
 
-  if(name == "cl")
-  {
-    return "exe";
-  }
+#ifdef EXECUTABLE_SUFFIX
+  return EXECUTABLE_SUFFIX;
+#endif
 
   return "";
 }

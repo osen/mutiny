@@ -9,6 +9,7 @@
   #define DIR_CHAR '\\'
   #define DEFAULT_CXX "cl"
   #define PLATFORM_NAME "windows"
+  #define EXECUTABLE_SUFFIX "exe"
 #else
   #define HAS_DIRENT
   #define HAS_UTIME

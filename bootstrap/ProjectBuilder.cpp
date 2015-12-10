@@ -349,6 +349,7 @@ void ProjectBuilder::scanSource(std::string rootDir)
           sourceUnits.push_back(SourceFileInfo::create(rootDir + DIR_CHAR + dirent->d_name(), includeDirectories));
         }
         else if(FileInfo::getSuffix(dirent->d_name()) == "so" ||
+                FileInfo::getSuffix(dirent->d_name()) == "a" ||
                 FileInfo::getSuffix(dirent->d_name()) == "lib")
         {
           libs.push_back(FileInfo::create(rootDir + DIR_CHAR + dirent->d_name()));
