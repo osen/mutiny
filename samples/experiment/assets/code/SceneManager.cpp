@@ -32,7 +32,7 @@ void SceneManager::onGui()
   }
   else
   {
-    Gui::drawTexture(Rect(-40, 0, watermark->getWidth(), watermark->getHeight()), watermark);
+    Gui::drawTexture(Rect(0, Screen::getHeight() - watermark->getHeight() / 2.0f - 25, watermark->getWidth() / 2.0f, watermark->getHeight() / 2.0f), watermark);
   }
 }
 

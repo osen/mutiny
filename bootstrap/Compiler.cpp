@@ -77,6 +77,17 @@ void Compiler::compile(std::string sourceUnit, std::string output)
       debugFragment += " -g";
     }
   }
+  else
+  {
+    if(program == "cl")
+    {
+      debugFragment += " /Ox";
+    }
+    else
+    {
+      debugFragment += " -O3";
+    }
+  }
 
   for(int i = 0; i < includeDirectories.size(); i++)
   {
