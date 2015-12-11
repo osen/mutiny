@@ -1,7 +1,12 @@
 #ifndef MUTINY_ENGINE_APPLICATION_H
 #define MUTINY_ENGINE_APPLICATION_H
 
-#include <SDL/SDL.h>
+#include "internal/platform.h"
+#include "arc.h"
+
+#ifdef USE_SDL
+  #include <SDL/SDL.h>
+#endif
 
 #include <memory>
 #include <vector>
@@ -49,13 +54,15 @@ public:
   static void setTitle(std::string title);
 
 private:
+#ifdef USE_SDL
   static SDL_Surface* screen;
+#endif
   static bool running;
   static std::string loadedLevelName;
   static std::string levelChange;
   static std::string dataPath;
   static std::string engineDataPath;
-  static std::vector<std::shared_ptr<GameObject> > gameObjects;
+  static std::vector<arc<GameObject> > gameObjects;
 
   static int argc;
   static std::vector<std::string> argv;
@@ -71,8 +78,8 @@ private:
   static void idle();
   static void motion(int x, int y);
   static void mouse(int button, int state, int x, int y);
-  static void keyboard(int key, int x, int y);
-  static void keyboardUp(int key, int x, int y);
+  static void keyboard(unsigned char key, int x, int y);
+  static void keyboardUp(unsigned char key, int x, int y);
 
 };
 

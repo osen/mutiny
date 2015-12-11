@@ -3,6 +3,7 @@
 #include "CharacterInfo.h"
 #include "Vector2.h"
 #include "Debug.h"
+#include "arc.h"
 
 #include <string>
 #include <fstream>
@@ -16,7 +17,9 @@ namespace engine
 
 Font* Font::load(std::string path)
 {
-  std::unique_ptr<Font> font(new Font());
+  // TODO:
+  //arc<Font> font = arc<Font>::alloc();
+  Font* font = new Font();
 
   //Debug::log("Loading font from '" + path + "'");
   font->texture.reset(Texture2d::load(path));
@@ -52,7 +55,7 @@ Font* Font::load(std::string path)
     }
   }
 
-  return font.release();
+  return font;
 }
 
 bool Font::getCharacterInfo(char character, CharacterInfo* characterInfo)

@@ -53,6 +53,10 @@ arc<Environment> Environment::create(std::vector<std::string>& args)
     {
       rtn->mutinyAvailable = false;
     }
+    else if(args.at(i) == "-g")
+    {
+      rtn->debug = true;
+    }
     else if(args.at(i) == "-d")
     {
       i++;
@@ -81,6 +85,11 @@ std::string Environment::getOutputDirectory()
 bool Environment::isMutinyAvailable()
 {
   return mutinyAvailable;
+}
+
+bool Environment::isDebug()
+{
+  return debug;
 }
 
 std::string Environment::getPrefix()

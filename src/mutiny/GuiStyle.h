@@ -2,6 +2,7 @@
 #define MUTINY_ENGINE_GUI_STYLE_H
 
 #include "RectOffset.h"
+#include "arc.h"
 
 #include <memory>
 
@@ -29,9 +30,9 @@ public:
   int getAlignment();
 
 private:
-  std::shared_ptr<GuiStyleState> normal;
-  std::shared_ptr<GuiStyleState> hover;
-  std::shared_ptr<GuiStyleState> active;
+  arc<GuiStyleState> normal;
+  arc<GuiStyleState> hover;
+  arc<GuiStyleState> active;
   Font* font;
   RectOffset border;
   int alignment;

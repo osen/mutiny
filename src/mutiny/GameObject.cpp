@@ -52,7 +52,7 @@ GameObject::GameObject(std::string name)
 {
   setName(name);
   addComponent<Transform>();
-  Application::gameObjects.push_back(std::shared_ptr<GameObject>(this));
+  Application::gameObjects.push_back(arc<GameObject>(this));
   activeSelf = true;
   layer = 1 << 0;
 }
@@ -60,7 +60,7 @@ GameObject::GameObject(std::string name)
 GameObject::GameObject()
 {
   addComponent<Transform>();
-  Application::gameObjects.push_back(std::shared_ptr<GameObject>(this));
+  Application::gameObjects.push_back(arc<GameObject>(this));
   activeSelf = true;
   layer = 1 << 0;
 }
@@ -70,18 +70,18 @@ GameObject::GameObject(int dummy)
 
 }
 
-std::shared_ptr<GameObject> GameObject::create(std::string name)
+arc<GameObject> GameObject::create(std::string name)
 {
-  std::shared_ptr<GameObject> rtn = create();
+  arc<GameObject> rtn = create();
   rtn->name = name;
 
   return rtn;
 }
 
-std::shared_ptr<GameObject> GameObject::create()
+arc<GameObject> GameObject::create()
 {
   static GameObject s(8);
-  std::shared_ptr<GameObject> rtn(new GameObject(s));
+  arc<GameObject> rtn(new GameObject(s));
 
   rtn->addComponent<Transform>();
   Application::gameObjects.push_back(rtn);

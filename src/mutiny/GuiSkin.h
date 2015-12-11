@@ -2,6 +2,7 @@
 #define MUTINY_ENGINE_GUI_SKIN_H
 
 #include "Object.h"
+#include "arc.h"
 
 #include <memory>
 
@@ -28,8 +29,8 @@ public:
 private:
   static GuiSkin* _default;
 
-  std::shared_ptr<GuiStyle> button;
-  std::shared_ptr<GuiStyle> box;
+  arc<GuiStyle> button;
+  arc<GuiStyle> box;
 
 };
 

@@ -99,7 +99,8 @@ void WaterScreen::onUpdate()
 
   if(playerGo->getTransform()->getPosition().y <= 0)
   {
-    if(Input::getKey(KeyCode::RIGHT) == true)
+    if(Input::getKey(KeyCode::RIGHT) == true ||
+       Input::getKey(KeyCode::D) == true)
     {
       playerMr->setAnimation(runAnimation);
       playerMr->setFps(10);
@@ -108,7 +109,8 @@ void WaterScreen::onUpdate()
 
       setToIdle = false;
     }
-    else if(Input::getKey(KeyCode::LEFT) == true)
+    else if(Input::getKey(KeyCode::LEFT) == true ||
+            Input::getKey(KeyCode::A) == true)
     {
       playerMr->setAnimation(runAnimation);
       playerMr->setFps(10);
@@ -117,7 +119,8 @@ void WaterScreen::onUpdate()
 
       setToIdle = false;
     }
-    else if(Input::getKey(KeyCode::DOWN) == true)
+    else if(Input::getKey(KeyCode::DOWN) == true ||
+            Input::getKey(KeyCode::S) == true)
     {
       playerMr->setAnimation(runAnimation);
       playerMr->setFps(10);
@@ -126,7 +129,8 @@ void WaterScreen::onUpdate()
       setToIdle = false;
     }
 
-    if(Input::getKey(KeyCode::UP) == true)
+    if(Input::getKey(KeyCode::UP) == true ||
+       Input::getKey(KeyCode::W) == true)
     {
       //accel = 2.0f;
       //accel = 1.0f;
@@ -155,12 +159,14 @@ void WaterScreen::onUpdate()
 
     playerGo->getTransform()->translate(Vector3(0, accel * 20.0f * Time::getDeltaTime(), 0));
 
-    if(Input::getKey(KeyCode::RIGHT) == true)
+    if(Input::getKey(KeyCode::RIGHT) == true ||
+       Input::getKey(KeyCode::D) == true)
     {
       playerGo->getTransform()->translate(Vector3(-10, 0, 0) * Time::getDeltaTime());
       playerGo->getTransform()->setRotation(Vector3(0, -90, 0));
     }
-    else if(Input::getKey(KeyCode::LEFT) == true)
+    else if(Input::getKey(KeyCode::LEFT) == true ||
+            Input::getKey(KeyCode::A) == true)
     {
       playerGo->getTransform()->translate(Vector3(10, 0, 0) * Time::getDeltaTime());
       playerGo->getTransform()->setRotation(Vector3(0, 90, 0));

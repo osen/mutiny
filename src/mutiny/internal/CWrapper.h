@@ -2,7 +2,7 @@
 #define MUTINY_ENGINE_INTERNAL_CWRAPPER_H
 
 #include "lodepng.h"
-#include "../Arc.h"
+#include "../arc.h"
 
 #include <GL/glew.h>
 
@@ -24,7 +24,7 @@ namespace internal
 
 struct PngData
 {
-  static std::shared_ptr<PngData> create();
+  static arc<PngData> create();
   ~PngData();
 
   unsigned char* image;
@@ -34,7 +34,7 @@ struct PngData
 
 struct GlBuffer
 {
-  static std::shared_ptr<GlBuffer> create();
+  static arc<GlBuffer> create();
   ~GlBuffer();
 
   GLuint id;
@@ -43,7 +43,7 @@ struct GlBuffer
 #ifdef _WIN32
 struct Win32FindData
 {
-  static Arc<Win32FindData> create();
+  static arc<Win32FindData> create();
 
   WIN32_FIND_DATA ffd;
   
@@ -51,11 +51,11 @@ struct Win32FindData
 
 struct FindHandle
 {
-  static std::shared_ptr<FindHandle> FindFirstFile(std::string path, Arc<Win32FindData> findData);
+  static arc<FindHandle> FindFirstFile(std::string path, arc<Win32FindData> findData);
   ~FindHandle();
   bool FindNextFile();
 
-  Arc<Win32FindData> findData;
+  arc<Win32FindData> findData;
   HANDLE hFind;
   
 };

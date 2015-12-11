@@ -2,6 +2,7 @@
 #define MUTINY_ENGINE_PARTICLERENDERER_H
 
 #include "Component.h"
+#include "arc.h"
 
 #include <GL/glew.h>
 
@@ -27,8 +28,8 @@ public:
   Material* getMaterial();
 
 private:
-  GLuint positionBufferId; std::shared_ptr<void> _positionBufferId;
-  GLuint uvBufferId; std::shared_ptr<void> _uvBufferId;
+  GLuint positionBufferId; arc<GLuint> _positionBufferId;
+  GLuint uvBufferId; arc<GLuint> _uvBufferId;
 
   Material* material;
 

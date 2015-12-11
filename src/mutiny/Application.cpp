@@ -16,20 +16,28 @@
 #include "Graphics.h"
 #include "Transform.h"
 #include "Exception.h"
-#include "Arc.h"
+#include "arc.h"
+#include "internal/platform.h"
 
 #include "internal/Util.h"
 #include "internal/CWrapper.h"
 
 #include <GL/glew.h>
-#include <SDL/SDL.h>
-#include <SDL/SDL_mixer.h>
+
+#ifdef USE_SDL
+  #include <SDL/SDL.h>
+  #include <SDL/SDL_mixer.h>
+#endif
+
+#ifdef USE_GLUT
+  #include <GL/freeglut.h>
+#endif
 
 #ifdef EMSCRIPTEN
 #include <emscripten.h>
 #endif
 
-#ifdef WINDOWS
+#ifdef USE_WINAPI
 #include <windows.h>
 #else
 #include <unistd.h>
@@ -46,8 +54,10 @@ namespace mutiny
 namespace engine
 {
 
-std::vector<std::shared_ptr<GameObject> > Application::gameObjects;
+std::vector<arc<GameObject> > Application::gameObjects;
+#ifdef USE_SDL
 SDL_Surface* Application::screen;
+#endif
 bool Application::running;
 std::string Application::loadedLevelName;
 std::string Application::levelChange;
@@ -69,16 +79,15 @@ void Application::init(int argc, char* argv[])
   srand(time(NULL));
   setupPaths();
 
+#ifdef USE_SDL
   if(SDL_Init(SDL_INIT_EVERYTHING) == -1)
   {
     std::cout << "Error: Failed to initialize" << std::endl;
     throw std::exception();
   }
 
-  //screen.reset(SDL_SetVideoMode(800, 600, 32, SDL_OPENGL | SDL_RESIZABLE), std::bind(SDL_Quit));
   screen = SDL_SetVideoMode(800, 600, 32, SDL_OPENGL | SDL_RESIZABLE);
 
-  //if(screen.get() == NULL)
   if(screen == NULL)
   {
     std::cout << "Error: Failed to create rendering context" << std::endl;
@@ -86,6 +95,22 @@ void Application::init(int argc, char* argv[])
   }
 
   setTitle("Mutiny Engine");
+#endif
+
+#ifdef USE_GLUT
+  glutInit(&argc, argv);
+  glutInitWindowSize(800, 600);
+  glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
+  glutCreateWindow("Mutiny Engine");
+  glutIdleFunc(idle);
+  glutDisplayFunc(display);
+  glutReshapeFunc(reshape);
+  glutMouseFunc(mouse);
+  glutMotionFunc(motion);
+  glutPassiveMotionFunc(motion);
+  glutKeyboardFunc(keyboard);
+  glutKeyboardUpFunc(keyboardUp);
+#endif
 
   glewInit();
   //if(glewInit() != 0)
@@ -100,11 +125,13 @@ void Application::init(int argc, char* argv[])
   glEnable(GL_CULL_FACE);
   glCullFace(GL_FRONT);
 
+#ifdef USE_SDL
   if(Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024) == -1)
   {
     std::cout << "Audio failed to initialize" << std::endl;
     throw std::exception();
   }
+#endif
 
   Material::defaultMaterial = Resources::load<Material>("shaders/Internal-DefaultDiffuseTexture");
   //if(Material::defaultMaterial == NULL) { throw Exception("Failed to load 'shaders/Internal-DefaultDiffuseTexture'"); }
@@ -127,22 +154,22 @@ void Application::init(int argc, char* argv[])
   Camera::_main = NULL;
   Gui::skin = NULL;
   Graphics::renderTarget = NULL;
-
-  //displaySplash();
 }
 
 void Application::setTitle(std::string title)
 {
+#ifdef USE_SDL
   SDL_WM_SetCaption(title.c_str(), NULL);
+#endif
 }
 
 bool Application::isValidPrefix(std::string path, std::string basename)
 {
-#ifdef _WIN32
+#ifdef USE_WINAPI
   try
   {
-    Arc<internal::Win32FindData> findData = internal::Win32FindData::create();
-    std::shared_ptr<internal::FindHandle> findHandle = internal::FindHandle::FindFirstFile(path + "\\share\\*", findData);
+    arc<internal::Win32FindData> findData = internal::Win32FindData::create();
+    arc<internal::FindHandle> findHandle = internal::FindHandle::FindFirstFile(path + "\\share\\*", findData);
 
     do
     {
@@ -169,7 +196,7 @@ void Application::setupPaths()
 #ifdef EMSCRIPTEN
   engineDataPath = "share/mutiny";
   dataPath = "share/_data";
-#elif WINDOWS
+#elif USE_WINAPI
   char strExePath [MAX_PATH];
 
   GetModuleFileName(NULL, strExePath, MAX_PATH);
@@ -253,7 +280,9 @@ void Application::destroy()
   Resources::paths.clear();
   Resources::objects.clear();
 
+#ifdef USE_SDL
   SDL_Quit();
+#endif
 }
 
 void Application::displaySplash()
@@ -274,15 +303,21 @@ void Application::run()
 
   running = true;
 
-#ifdef EMSCRIPTEN
+#ifdef USE_SDL
+  #ifdef EMSCRIPTEN
   //loop();
   //emscripten_set_main_loop(loop, 60, true);
   emscripten_set_main_loop(loop, 0, true);
-#else
+  #else
   while(running == true)
   {
     loop();
   }
+
+  #endif
+#else
+  glutMainLoop();
+#endif
 
   running = false;
 
@@ -290,11 +325,11 @@ void Application::run()
   {
     gameObjects.at(i)->destroy();
   }
-#endif
 }
 
 void Application::loop()
 {
+#ifdef USE_SDL
   SDL_Event event = { 0 };
 
 #ifdef EMSCRIPTEN
@@ -366,7 +401,7 @@ void Application::loop()
 #endif
     else if(event.type == SDL_MOUSEBUTTONUP)
     {
-	  mouse(event.button.button, SDL_MOUSEBUTTONUP, Input::mousePosition.x,
+      mouse(event.button.button, SDL_MOUSEBUTTONUP, Input::mousePosition.x,
         Input::mousePosition.y);
     }
     else if(event.type == SDL_KEYDOWN)
@@ -378,21 +413,10 @@ void Application::loop()
       keyboardUp(event.key.keysym.sym, Input::mousePosition.x, Input::mousePosition.y);
     }
   }
+#endif
 
   idle();
   display();
-
-  Input::downKeys.clear();
-  Input::upKeys.clear();
-  Input::downMouseButtons.clear();
-  Input::upMouseButtons.clear();
-
-  if(levelChange != "")
-  {
-    loadedLevelName = levelChange;
-    levelChange = "";
-    loadLevel();
-  }
 }
 
 void Application::quit()
@@ -402,7 +426,7 @@ void Application::quit()
 
 void Application::loadLevel()
 {
-  std::vector<std::shared_ptr<GameObject> > destroyedGos;
+  std::vector<arc<GameObject> > destroyedGos;
   for(int i = 0; i < gameObjects.size(); i++)
   {
     if(gameObjects.at(i)->destroyOnLoad == true)
@@ -526,7 +550,9 @@ void Application::reshape(int width, int height)
 {
   Screen::width = width;
   Screen::height = height;
+#ifdef USE_SDL
   screen = SDL_SetVideoMode(Screen::width, Screen::height, 32, SDL_OPENGL | SDL_RESIZABLE);
+#endif
 }
 
 void Application::display()
@@ -581,17 +607,29 @@ void Application::display()
     gameObjects.at(i)->gui();
   }
 
+#ifdef USE_SDL
   SDL_GL_SwapBuffers();
+#else
+  glutSwapBuffers();
+#endif
 }
 
 void Application::idle()
 {
+#ifdef USE_GLUT
+  static float lastTime = glutGet(GLUT_ELAPSED_TIME);
+  float time = glutGet(GLUT_ELAPSED_TIME);
+  float diff = time - lastTime;
+  Time::deltaTime = diff / 1000.0f;
+  lastTime = time;
+#endif
+
   for(int i = 0; i < gameObjects.size(); i++)
   {
     gameObjects.at(i)->update();
   }
 
-  std::vector<std::shared_ptr<GameObject> > destroyedGos;
+  std::vector<arc<GameObject> > destroyedGos;
   for(int i = 0; i < gameObjects.size(); i++)
   {
     if(gameObjects.at(i)->destroyed == true)
@@ -603,6 +641,22 @@ void Application::idle()
     }
   }
   destroyedGos.clear();
+
+  if(levelChange != "")
+  {
+    loadedLevelName = levelChange;
+    levelChange = "";
+    loadLevel();
+  }
+
+  Input::downKeys.clear();
+  Input::upKeys.clear();
+  Input::downMouseButtons.clear();
+  Input::upMouseButtons.clear();
+
+#ifdef USE_GLUT
+  glutPostRedisplay();
+#endif
 }
 
 void Application::motion(int x, int y)
@@ -613,7 +667,12 @@ void Application::motion(int x, int y)
 
 void Application::mouse(int button, int state, int x, int y)
 {
+#ifdef USE_SDL
   if(state == SDL_MOUSEBUTTONDOWN)
+#endif
+#ifdef USE_GLUT
+  if(state == GLUT_DOWN)
+#endif
   {
     for(int i = 0; i < Input::mouseButtons.size(); i++)
     {
@@ -644,7 +703,7 @@ void Application::mouse(int button, int state, int x, int y)
   }
 }
 
-void Application::keyboard(int key, int x, int y)
+void Application::keyboard(unsigned char key, int x, int y)
 {
   //std::cout << key << std::endl;
   for(int i = 0; i < Input::keys.size(); i++)
@@ -659,7 +718,7 @@ void Application::keyboard(int key, int x, int y)
   Input::downKeys.push_back(key);
 }
 
-void Application::keyboardUp(int key, int x, int y)
+void Application::keyboardUp(unsigned char key, int x, int y)
 {
   for(int i = 0; i < Input::keys.size(); i++)
   {

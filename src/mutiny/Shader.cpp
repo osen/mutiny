@@ -75,7 +75,8 @@ Shader::Shader(std::string vertContents, std::string fragContents)
   //_vertexArrayId.reset(&vertexArrayId, std::bind(deleteVertexArray, vertexArrayId));
 
   vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
-  _vertexShaderId.reset(&vertexShaderId, std::bind(glDeleteShader, vertexShaderId));
+  // TODO:
+  //_vertexShaderId.reset(&vertexShaderId, std::bind(glDeleteShader, vertexShaderId));
   vertSrc = vertContents.c_str();
   glShaderSource(vertexShaderId, 1, &vertSrc, NULL);
   glCompileShader(vertexShaderId);
@@ -98,7 +99,8 @@ Shader::Shader(std::string vertContents, std::string fragContents)
   }
 
   fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
-  _fragmentShaderId.reset(&fragmentShaderId, std::bind(glDeleteShader, fragmentShaderId));
+  // TODO:
+  //_fragmentShaderId.reset(&fragmentShaderId, std::bind(glDeleteShader, fragmentShaderId));
   fragSrc = fragContents.c_str();
   glShaderSource(fragmentShaderId, 1, &fragSrc, NULL);
   glCompileShader(fragmentShaderId);
@@ -121,7 +123,8 @@ Shader::Shader(std::string vertContents, std::string fragContents)
   }
 
   programId = glCreateProgram();
-  _programId.reset(&programId, std::bind(glDeleteProgram, programId));
+  // TODO:
+  //_programId.reset(&programId, std::bind(glDeleteProgram, programId));
   glAttachShader(programId, vertexShaderId);
   glAttachShader(programId, fragmentShaderId);
   glLinkProgram(programId);

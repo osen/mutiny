@@ -2,8 +2,11 @@
 #define MUTINY_ENGINE_AUDIOCLIP_H
 
 #include "Object.h"
+#include "internal/platform.h"
 
-#include <SDL/SDL_mixer.h>
+#ifdef USE_SDL
+  #include <SDL/SDL_mixer.h>
+#endif
 
 #include <memory>
 
@@ -24,7 +27,9 @@ class AudioClip : public Object
 private:
   static AudioClip* load(std::string path);
 
-  std::shared_ptr<Mix_Chunk> data;
+#ifdef USE_SDL
+  arc<Mix_Chunk> data;
+#endif
 
 };
 

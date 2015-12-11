@@ -17,11 +17,11 @@ public:
   virtual void onPostRender();
 
 private:
-  std::shared_ptr<RenderTexture> originalPass;
-  std::shared_ptr<RenderTexture> blurPass1;
-  std::shared_ptr<RenderTexture> blurPass2;
-  std::shared_ptr<RenderTexture> lightKeyPass;
-  std::shared_ptr<RenderTexture> mergePass;
+  arc<RenderTexture> originalPass;
+  arc<RenderTexture> blurPass1;
+  arc<RenderTexture> blurPass2;
+  arc<RenderTexture> lightKeyPass;
+  arc<RenderTexture> mergePass;
   Material* texturedMaterial;
   Material* lightKeyMaterial;
   Material* mergeMaterial;

@@ -62,8 +62,21 @@ std::string Compiler::getExecutableSuffix()
 void Compiler::compile(std::string sourceUnit, std::string output)
 {
   std::string program = name;
-  std::string includeFragment = "";
-  std::string defineFragment = "";
+  std::string includeFragment;
+  std::string defineFragment;
+  std::string debugFragment;
+
+  if(environment->isDebug() == true)
+  {
+    if(program == "cl")
+    {
+      debugFragment += " /DDEBUG";
+    }
+    else
+    {
+      debugFragment += " -g";
+    }
+  }
 
   for(int i = 0; i < includeDirectories.size(); i++)
   {
@@ -98,6 +111,7 @@ void Compiler::compile(std::string sourceUnit, std::string output)
     command = "call \"C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\vcvarsall.bat\" && " + program +
     //command = program +
       " /EHsc /c /DWINDOWS" +
+      debugFragment +
       includeFragment +
       defineFragment +
       " " + sourceUnit +
@@ -107,6 +121,7 @@ void Compiler::compile(std::string sourceUnit, std::string output)
   else
   {
     command = program + " -c" +
+      debugFragment +
       includeFragment +
       defineFragment +
       " " + sourceUnit +
@@ -135,6 +150,21 @@ void Compiler::addLib(std::string path)
 
 void Compiler::link(std::string output)
 {
+  std::string program = name;
+  std::string debugFragment;
+
+  if(environment->isDebug() == true)
+  {
+    if(program == "cl")
+    {
+      debugFragment += " /DDEBUG";
+    }
+    else
+    {
+      debugFragment += " -g";
+    }
+  }
+
   std::string objectsFragment = "";
 
   for(int i = 0; i < objectDirectories.size(); i++)
@@ -161,8 +191,6 @@ void Compiler::link(std::string output)
     libsFragment += " " + libs.at(i);
   }
 
-  std::string program = name;
-
   if(environment->isMutinyAvailable() == true)
   {
     if(FileInfo::getFileName(name) == "em++")
@@ -172,6 +200,10 @@ void Compiler::link(std::string output)
     else if(name == "cl")
     {
       libsFragment += " SDL.lib SDLmain.lib SDL_mixer.lib glew32.lib opengl32.lib";
+    }
+    else if(std::string(PLATFORM_NAME) == "windows")
+    {
+      libsFragment += " -lglew32 -lfreeglut_static -lopengl32 -lgdi32 -lwinmm";
     }
     else
     {
@@ -185,6 +217,7 @@ void Compiler::link(std::string output)
   {
     command = "call \"C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\vcvarsall.bat\" && link" +
     //command = "link" +
+      debugFragment +
       objectsFragment +
       " /out:" + output +
       " /subsystem:console" +
@@ -193,6 +226,7 @@ void Compiler::link(std::string output)
   else
   {
     command = program +
+      debugFragment +
       objectsFragment +
       " -o" +
       " " + output +

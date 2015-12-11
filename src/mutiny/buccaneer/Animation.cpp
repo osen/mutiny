@@ -2,6 +2,7 @@
 
 #include "../Exception.h"
 #include "../internal/Util.h"
+#include "../arc.h"
 
 #include <fstream>
 #include <memory>
@@ -32,9 +33,11 @@ Animation* Animation::load(std::string path)
   std::string line;
   std::ifstream file;
   std::vector<std::string> splitLine;
-  std::unique_ptr<Animation> animation;
 
-  animation.reset(new Animation());
+  // TODO
+  //arc<Animation> animation = arc<Animation>::alloc();
+  Animation* animation = new Animation();
+
   file.open(path.c_str());
 
   if(file.is_open() == false)
@@ -71,7 +74,7 @@ Animation* Animation::load(std::string path)
     }
   }
 
-  return animation.release();
+  return animation;
 }
 
 void Animation::save(std::string path)

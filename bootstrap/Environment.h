@@ -14,6 +14,7 @@ public:
   std::string getPrefix();
 
   bool isMutinyAvailable();
+  bool isDebug();
   std::string getOutputDirectory();
   std::string getCompilerName();
   std::vector<std::string> getDefines();
@@ -26,6 +27,7 @@ private:
   std::string outputDirectory;
   std::string compilerName;
   std::vector<std::string> defines;
+  bool debug;
 
 };
 

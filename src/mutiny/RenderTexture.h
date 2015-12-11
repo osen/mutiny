@@ -28,10 +28,10 @@ private:
   static RenderTexture* active;
 
   GLuint nativeFrameBuffer;
-  std::shared_ptr<void> _nativeFrameBuffer;
+  arc<GLuint> _nativeFrameBuffer;
 
   GLuint nativeRenderBuffer;
-  std::shared_ptr<void> _nativeRenderBuffer;
+  arc<GLuint> _nativeRenderBuffer;
 
 };
 

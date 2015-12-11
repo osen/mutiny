@@ -27,9 +27,11 @@ void ParticleRenderer::awake()
   material = NULL;
 
   glGenBuffers(1, &positionBufferId);
-  _positionBufferId.reset(&positionBufferId, std::bind(glDeleteBuffers, 1, &positionBufferId));
+  // TODO:
+  //_positionBufferId.reset(&positionBufferId, std::bind(glDeleteBuffers, 1, &positionBufferId));
   glGenBuffers(1, &uvBufferId);
-  _uvBufferId.reset(&uvBufferId, std::bind(glDeleteBuffers, 1, &uvBufferId));
+  // TODO:
+  //_uvBufferId.reset(&uvBufferId, std::bind(glDeleteBuffers, 1, &uvBufferId));
 
   std::vector<float> values;
   std::vector<Vector3> vertices;

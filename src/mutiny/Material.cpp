@@ -69,25 +69,21 @@ Material* Material::load(std::string path)
 
 Material::Material(std::string vertContents, std::string fragContents)
 {
-  shader.reset(new Shader(vertContents, fragContents));
+  shader = NULL;
+  managedShader.reset(new Shader(vertContents, fragContents));
   indexesDirty = true;
 }
 
 Material::Material(Material* material)
 {
-  shader.reset(material->shader.get(), std::bind(dummyDeleter));
+  shader = material->getShader();
   indexesDirty = true;
 }
 
 Material::Material(Shader* shader)
 {
-  this->shader.reset(shader, std::bind(dummyDeleter));
+  this->shader = shader;
   indexesDirty = true;
-}
-
-void Material::dummyDeleter()
-{
-
 }
 
 Texture* Material::getTexture(std::string propertyName)
@@ -189,7 +185,7 @@ void Material::refreshIndexes()
 {
   for(int i = 0; i < matrixNames.size(); i++)
   {
-    GLuint uniformId = glGetUniformLocation(shader->programId, matrixNames.at(i).c_str());
+    GLuint uniformId = glGetUniformLocation(getShader()->programId, matrixNames.at(i).c_str());
 
     if(uniformId == -1)
     {
@@ -202,7 +198,7 @@ void Material::refreshIndexes()
 
   for(int i = 0; i < vector2Names.size(); i++)
   {
-    GLuint uniformId = glGetUniformLocation(shader->programId, vector2Names.at(i).c_str());
+    GLuint uniformId = glGetUniformLocation(getShader()->programId, vector2Names.at(i).c_str());
 
     if(uniformId == -1)
     {
@@ -215,7 +211,7 @@ void Material::refreshIndexes()
 
   for(int i = 0; i < floatNames.size(); i++)
   {
-    GLuint uniformId = glGetUniformLocation(shader->programId, floatNames.at(i).c_str());
+    GLuint uniformId = glGetUniformLocation(getShader()->programId, floatNames.at(i).c_str());
 
     if(uniformId == -1)
     {
@@ -228,7 +224,7 @@ void Material::refreshIndexes()
 
   for(int i = 0; i < textureNames.size(); i++)
   {
-    GLint uniformId = glGetUniformLocation(shader->programId, textureNames.at(i).c_str());
+    GLint uniformId = glGetUniformLocation(getShader()->programId, textureNames.at(i).c_str());
 
     if(uniformId == -1)
     {
@@ -252,12 +248,19 @@ void Material::setMainTexture(Texture* texture)
 
 Shader* Material::getShader()
 {
-  return shader.get();
+  Shader* rtn = shader;
+
+  if(rtn == NULL)
+  {
+    rtn = managedShader.get();
+  }
+
+  return rtn;
 }
 
 void Material::setShader(Shader* shader)
 {
-  this->shader.reset(shader, std::bind(dummyDeleter));
+  this->shader = shader;
   indexesDirty = true;
 }
 
@@ -269,7 +272,7 @@ int Material::getPassCount()
 void Material::setPass(int pass)
 {
   Material::current = this;
-  glUseProgram(shader->programId);
+  glUseProgram(getShader()->programId);
 
   if(indexesDirty == true)
   {

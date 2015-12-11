@@ -2,6 +2,7 @@
 #define MUTINY_ENGINE_ANIMATEDMESHRENDERER_H
 
 #include "../Behaviour.h"
+#include "../arc.h"
 
 #include <vector>
 #include <memory>
@@ -35,7 +36,7 @@ public:
   void setInterpolateEnd(bool interpolateEnd);
 
 private:
-  std::vector<std::unique_ptr<Material> > materials;
+  std::vector<arc<Material> > materials;
   AnimatedMesh* mesh;
   Animation* animation;
   GameObject* rootGo;

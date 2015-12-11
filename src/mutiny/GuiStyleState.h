@@ -1,6 +1,8 @@
 #ifndef MUTINY_ENGINE_GUISTYLESTATE_H
 #define MUTINY_ENGINE_GUISTYLESTATE_H
 
+#include "arc.h"
+
 #include <memory>
 
 namespace mutiny
@@ -19,9 +21,8 @@ public:
   Texture2d* getBackground();
 
 private:
-  std::shared_ptr<Texture2d> background;
-
-  static void dummyDeleter();
+  arc<Texture2d> defaultBackground;
+  Texture2d* background;
 
 };
 

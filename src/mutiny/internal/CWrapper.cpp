@@ -10,10 +10,9 @@ namespace engine
 namespace internal
 {
 
-std::shared_ptr<PngData> PngData::create()
+arc<PngData> PngData::create()
 {
-  static PngData s;
-  std::shared_ptr<PngData> rtn(new PngData(s));
+  arc<PngData> rtn = arc<PngData>::alloc();
 
   return rtn;
 }
@@ -23,10 +22,9 @@ PngData::~PngData()
   free(image);
 }
 
-std::shared_ptr<GlBuffer> GlBuffer::create()
+arc<GlBuffer> GlBuffer::create()
 {
-  static GlBuffer s;
-  std::shared_ptr<GlBuffer> rtn(new GlBuffer(s));
+  arc<GlBuffer> rtn = arc<GlBuffer>::alloc();
 
   return rtn;
 }
@@ -40,10 +38,9 @@ GlBuffer::~GlBuffer()
 }
 
 #ifdef _WIN32
-Arc<Win32FindData> Win32FindData::create()
+arc<Win32FindData> Win32FindData::create()
 {
-  static Win32FindData s;
-  Arc<Win32FindData> rtn(new Win32FindData(s));
+  arc<Win32FindData> rtn = arc<Win32FindData>::alloc();
 
   return rtn;
 }
@@ -56,10 +53,9 @@ FindHandle::~FindHandle()
   }
 }
 
-std::shared_ptr<FindHandle> FindHandle::FindFirstFile(std::string path, Arc<Win32FindData> findData)
+arc<FindHandle> FindHandle::FindFirstFile(std::string path, arc<Win32FindData> findData)
 {
-  static FindHandle s;
-  std::shared_ptr<FindHandle> rtn(new FindHandle(s));
+  arc<FindHandle> rtn = arc<FindHandle>::alloc();
   rtn->hFind = INVALID_HANDLE_VALUE;
   rtn->findData = findData;
   rtn->hFind = ::FindFirstFile(path.c_str(), &rtn->findData->ffd);

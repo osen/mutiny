@@ -127,7 +127,7 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
     values.push_back(vertices.at(triangles.at(i)).z);
   }
 
-  std::shared_ptr<internal::GlBuffer> positionBufferId = internal::GlBuffer::create();
+  arc<internal::GlBuffer> positionBufferId = internal::GlBuffer::create();
   glGenBuffers(1, &positionBufferId->id);
   positionBufferIds.push_back(positionBufferId);
 
@@ -149,7 +149,7 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
       values.push_back(normals.at(triangles.at(i)).z);
     }
 
-    std::shared_ptr<internal::GlBuffer> normalBufferId = internal::GlBuffer::create();
+    arc<internal::GlBuffer> normalBufferId = internal::GlBuffer::create();
     glGenBuffers(1, &normalBufferId->id);
     normalBufferIds.push_back(normalBufferId);
     glBindBuffer(GL_ARRAY_BUFFER, normalBufferId->id);
@@ -170,7 +170,7 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
       values.push_back(uv.at(triangles.at(i)).y);
     }
 
-    std::shared_ptr<internal::GlBuffer> uvBufferId = internal::GlBuffer::create();
+    arc<internal::GlBuffer> uvBufferId = internal::GlBuffer::create();
     glGenBuffers(1, &uvBufferId->id);
     uvBufferIds.push_back(uvBufferId);
     glBindBuffer(GL_ARRAY_BUFFER, uvBufferId->id);

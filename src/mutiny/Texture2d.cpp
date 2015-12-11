@@ -59,7 +59,8 @@ void Texture2d::apply()
   if(nativeTexture == -1)
   {
     glGenTextures(1, &nativeTexture);
-    _nativeTexture.reset(&nativeTexture, std::bind(deleteTexture, nativeTexture));
+    // TODO:
+    //_nativeTexture.reset(&nativeTexture, std::bind(deleteTexture, nativeTexture));
   }
 
   if(pixels.size() < 1)
@@ -81,10 +82,19 @@ void Texture2d::apply()
   glBindTexture(GL_TEXTURE_2D, nativeTexture);
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &imageBytes[0]);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+  if(glGenerateMipmap != NULL)
+  {
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+    glGenerateMipmap(GL_TEXTURE_2D);
+  }
+  else
+  {
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  }
+
   //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-  glGenerateMipmap(GL_TEXTURE_2D);
   glBindTexture(GL_TEXTURE_2D, 0);
 }
 
@@ -103,7 +113,7 @@ int poweroftwo(int input)
 
 Texture2d* Texture2d::load(std::string path)
 {
-  std::shared_ptr<internal::PngData> image = internal::PngData::create();
+  arc<internal::PngData> image = internal::PngData::create();
   path = path + ".png";
 
   if(lodepng_decode32_file(&image->image, &image->width, &image->height, path.c_str()) != 0)
@@ -116,7 +126,8 @@ Texture2d* Texture2d::load(std::string path)
   if(texture->nativeTexture == -1)
   {
     glGenTextures(1, &texture->nativeTexture);
-    texture->_nativeTexture.reset(&texture->nativeTexture, std::bind(deleteTexture, texture->nativeTexture));
+    // TODO:
+    //texture->_nativeTexture.reset(&texture->nativeTexture, std::bind(deleteTexture, texture->nativeTexture));
   }
 
   int sampleWidth = image->width;
@@ -152,7 +163,7 @@ Texture2d* Texture2d::load(std::string path)
   //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
   //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
   //glTexParameteri(GL_TEXTURE_2D, GL_GENERATE_MIPMAP, GL_TRUE);
-  glGenerateMipmap(GL_TEXTURE_2D);
+  //glGenerateMipmap(GL_TEXTURE_2D);
   glBindTexture(GL_TEXTURE_2D, 0);
 
   return texture;

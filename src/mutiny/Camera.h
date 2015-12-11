@@ -4,6 +4,7 @@
 #include "Behaviour.h"
 #include "Matrix4x4.h"
 #include "Color.h"
+#include "arc.h"
 
 #include <memory>
 #include <vector>
@@ -49,7 +50,7 @@ private:
   float orthographicSize;
   float nearClipPlane;
   float farClipPlane;
-  std::shared_ptr<Matrix4x4> projectionMatrix;
+  arc<Matrix4x4> projectionMatrix;
   RenderTexture* targetTexture;
   int cullMask;
 

@@ -14,7 +14,7 @@ public:
   virtual void onGui();
 
 private:
-  std::shared_ptr<Texture2d> background;
+  arc<Texture2d> background;
   Texture2d* splashLogo;
   float timeout;
 

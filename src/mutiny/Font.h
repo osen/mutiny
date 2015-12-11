@@ -3,6 +3,7 @@
 
 #include "Object.h"
 #include "CharacterInfo.h"
+#include "arc.h"
 
 #include <memory>
 #include <vector>
@@ -29,7 +30,7 @@ public:
 private:
   static Font* load(std::string path);
 
-  std::shared_ptr<Texture2d> texture;
+  arc<Texture2d> texture;
   std::vector<CharacterInfo> characterInfo;
 
 };

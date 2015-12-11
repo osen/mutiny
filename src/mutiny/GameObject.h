@@ -3,12 +3,13 @@
 
 #include "Component.h"
 #include "Application.h"
+#include "arc.h"
 
 #include <memory>
-
 #include <string>
 #include <vector>
 #include <iostream>
+#include <cstdlib>
 
 namespace mutiny
 {
@@ -54,8 +55,8 @@ public:
   }
 
   static void findGameObjectsWithTag(std::string tag, std::vector<GameObject*>* gameObjects);
-  static std::shared_ptr<GameObject> create();
-  static std::shared_ptr<GameObject> create(std::string name);
+  static arc<GameObject> create();
+  static arc<GameObject> create(std::string name);
 
   GameObject();
   GameObject(std::string name);
@@ -71,15 +72,38 @@ public:
   void setTag(std::string tag);
   std::string getTag();
 
+  template<class T>
+  arc<Component> castToComponent()
+  {
+    arc<GameObject> g;
+    arc<Object> c = g.cast<Object>();
+    return arc<Component>();
+  }
+
   template<class T> T* addComponent()
   {
-    T* t = new T();
+    T* tm = (T*)calloc(1, sizeof(*tm));
 
-    components.push_back(std::shared_ptr<Component>(t));
-    t->gameObject = this;
-    t->awake();
+    if(tm == NULL)
+    {
+      throw std::exception();
+    }
 
-    return t;
+    T* t = new(tm) T();
+
+    if(t == NULL)
+    {
+      free(tm);
+      throw std::exception();
+    }
+
+    arc<Component> c = arc<Component>::placement_alloc(t);
+
+    components.push_back(c);
+    c->gameObject = this;
+    c->awake();
+
+    return (T*)c.get();
   }
 
   template<class T> T* getComponent()
@@ -98,7 +122,7 @@ public:
   }
 
 private:
-  std::vector<std::shared_ptr<Component> > components;
+  std::vector<arc<Component> > components;
   bool activeSelf;
   int layer;
   std::string tag;

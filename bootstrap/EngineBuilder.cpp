@@ -4,6 +4,7 @@
 #include "FileInfo.h"
 #include "Util.h"
 #include "Compiler.h"
+#include "features.h"
 
 #include <iostream>
 
@@ -24,7 +25,7 @@ arc<EngineBuilder> EngineBuilder::create(arc<Environment> environment)
 
 void EngineBuilder::removeOrphanedObjects()
 {
-  std::string objDir = Util::fixPath("temp/linux/obj/mutiny");
+  std::string objDir = Util::fixPath("temp/" + std::string(PLATFORM_NAME) + "/obj/mutiny");
 
   arc<Dir> dir = Dir::opendir(objDir);
   arc<Dirent> dirent = dir->readdir();
@@ -68,14 +69,16 @@ void EngineBuilder::buildOutOfDateObjects()
 {
   arc<Compiler> compiler = Compiler::create(environment);
 
-  if(compiler->getName() == "cl")
+  if(PLATFORM_NAME == std::string("windows"))
   {
-    compiler->addIncludeDirectory(environment->getPrefix() + Util::fixPath("/import/include"));
+    compiler->addIncludeDirectory(environment->getPrefix() +
+      Util::fixPath("/import/include"));
   }
 
   for(int i = 0; i < sourceUnits.size(); i++)
   {
-    std::string objPath = Util::fixPath("temp/linux/obj/mutiny/") +
+    std::string objPath = Util::fixPath("temp/" + 
+      std::string(PLATFORM_NAME) + "/obj/mutiny/") +
       sourceUnits.at(i)->getBaseName() +
       "." + compiler->getObjectSuffix();
 
@@ -105,10 +108,8 @@ void EngineBuilder::buildOutOfDateObjects()
 
 void EngineBuilder::prepareDirectories()
 {
-  try { Dir::mkdir(Util::fixPath("temp")); } catch(std::exception& e) { }
-  try { Dir::mkdir(Util::fixPath("temp/linux")); } catch(std::exception& e) { }
-  try { Dir::mkdir(Util::fixPath("temp/linux/obj")); } catch(std::exception& e) { }
-  try { Dir::mkdir(Util::fixPath("temp/linux/obj/mutiny")); } catch(std::exception& e) { }
+  Dir::mkdir_r(Util::fixPath("temp/" + std::string(PLATFORM_NAME)
+    + "/obj/mutiny"));
 }
 
 void EngineBuilder::scanSource(std::string rootDir)

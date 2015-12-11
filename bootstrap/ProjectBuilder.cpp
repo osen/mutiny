@@ -204,7 +204,7 @@ void ProjectBuilder::generateOutOfDateOutput()
       "temp/"+std::string(PLATFORM_NAME)+"/obj/mutiny"));
   }
 
-  if(compiler->getName() == "cl")
+  if(PLATFORM_NAME == std::string("windows"))
   {
     compiler->addLibDirectory(environment->getPrefix() +
       Util::fixPath("/import/lib"));
@@ -279,9 +279,10 @@ void ProjectBuilder::buildOutOfDateObjects()
   arc<Compiler> compiler = Compiler::create(environment);
   compiler->addIncludeDirectory(environment->getPrefix() + Util::fixPath("/src"));
 
-  if(compiler->getName() == "cl")
+  if(PLATFORM_NAME == std::string("windows"))
   {
-    compiler->addIncludeDirectory(environment->getPrefix() + Util::fixPath("/import/include"));
+    compiler->addIncludeDirectory(environment->getPrefix() +
+      Util::fixPath("/import/include"));
   }
 
   for(int i = 0; i < includeDirectories.size(); i++)

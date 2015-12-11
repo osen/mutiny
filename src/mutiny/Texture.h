@@ -2,6 +2,7 @@
 #define MUTINY_ENGINE_TEXTURE_H
 
 #include "Object.h"
+#include "arc.h"
 
 #include <GL/glew.h>
 
@@ -31,7 +32,7 @@ protected:
   int width;
   int height;
   GLuint nativeTexture;
-  std::shared_ptr<void> _nativeTexture;
+  arc<char> _nativeTexture;
 
 };
 

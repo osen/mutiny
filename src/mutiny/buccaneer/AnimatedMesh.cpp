@@ -20,7 +20,9 @@ AnimatedMesh* AnimatedMesh::load(std::string path)
   std::vector<Vector2> uv;
   std::vector<std::vector<int> > triangles;
   int currentSubmesh = 0;
-  std::unique_ptr<AnimatedMesh> animatedMesh(new AnimatedMesh());
+  // TODO
+  //arc<AnimatedMesh> animatedMesh = arc<AnimatedMesh>::alloc();
+  AnimatedMesh* animatedMesh = new AnimatedMesh();
   Vector3 boundsMax;
   Vector3 boundsMin;
   bool boundsSet = false;
@@ -121,8 +123,8 @@ AnimatedMesh* AnimatedMesh::load(std::string path)
       vertices[i] = vertices[i] - offset;
     }
 
-    Mesh* mesh = new Mesh();
-    animatedMesh->meshes.push_back(std::shared_ptr<Mesh>(mesh));
+    arc<Mesh> mesh = arc<Mesh>::alloc();
+    animatedMesh->meshes.push_back(mesh);
     mesh->setVertices(vertices);
     mesh->setNormals(normals);
     mesh->setUv(uv);
@@ -143,7 +145,7 @@ AnimatedMesh* AnimatedMesh::load(std::string path)
 
   animatedMesh->bounds.setMinMax(boundsMin, boundsMax);
 
-  return animatedMesh.release();
+  return animatedMesh;
 }
 
 AnimatedMesh::AnimatedMesh() : bounds(Vector3(), Vector3())

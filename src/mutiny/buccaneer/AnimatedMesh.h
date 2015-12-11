@@ -5,6 +5,7 @@
 #include "../Object.h"
 #include "../Bounds.h"
 #include "../Vector3.h"
+#include "../arc.h"
 
 #include <GL/glew.h>
 
@@ -40,7 +41,7 @@ private:
   AnimatedMesh();
 
   std::vector<std::vector<Texture2d*> > textures;
-  std::vector<std::shared_ptr<Mesh> > meshes;
+  std::vector<arc<Mesh> > meshes;
   std::vector<std::string> meshNames;
   std::vector<Vector3> meshOffsets;
   Bounds bounds;

@@ -1,7 +1,7 @@
-#ifndef ARC_H
-#define ARC_H
+#ifndef MUTINY_ARC_H
+#define MUTINY_ARC_H
 
-#include "features.h"
+#include "internal/platform.h"
 
 #include <memory>
 #include <cstdlib>
@@ -14,6 +14,7 @@ template <class T>
 class arc
 {
 public:
+
   static arc<T> alloc()
   {
     arc<T> rtn;
@@ -23,10 +24,20 @@ public:
     return rtn;
   }
 
+  static arc<T> placement_alloc(T* ptr)
+  {
+    arc<T> rtn;
+
+    rtn.shared.reset(ptr, _arc);
+
+    return rtn;
+  }
+
   static void _arc(T* t)
   {
     t->~T();
     free(t);
+    //delete t;
   }
 
   arc(){}

@@ -74,14 +74,14 @@ public:
     }
 
     paths.push_back(ss.str());
-    objects.push_back(std::shared_ptr<Object>(t));
+    objects.push_back(arc<Object>(t));
 
     return t;
   }
 
 private:
   static std::vector<std::string> paths;
-  static std::vector<std::shared_ptr<Object> > objects;
+  static std::vector<arc<Object> > objects;
 
 };
 

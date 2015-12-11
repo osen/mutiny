@@ -59,9 +59,9 @@ private:
   std::vector<Vector3> normals;
   std::vector<Color> colors;
 
-  std::vector<std::shared_ptr<internal::GlBuffer>> positionBufferIds;
-  std::vector<std::shared_ptr<internal::GlBuffer>> uvBufferIds;
-  std::vector<std::shared_ptr<internal::GlBuffer>> normalBufferIds;
+  std::vector<arc<internal::GlBuffer> > positionBufferIds;
+  std::vector<arc<internal::GlBuffer> > uvBufferIds;
+  std::vector<arc<internal::GlBuffer> > normalBufferIds;
 
   Bounds bounds;
 

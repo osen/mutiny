@@ -218,22 +218,22 @@ void AnimatedMeshRenderer::setAnimatedMesh(AnimatedMesh* mesh)
 
     for(int x = 0; x < m->getSubmeshCount(); x++)
     {
-      Material* material = NULL;
+      arc<Material> material;
 
       Texture* tex = mesh->getTexture(i, x);
 
       if(tex != NULL)
       {
-        material = new Material(Resources::load<Shader>("shaders/Internal-MeshRendererTexture"));
+        material.reset(new Material(Resources::load<Shader>("shaders/Internal-MeshRendererTexture")));
         material->setMainTexture(tex);
       }
       else
       {
-        material = new Material(Resources::load<Shader>("shaders/Internal-DefaultDiffuseTexture"));
+        material.reset(new Material(Resources::load<Shader>("shaders/Internal-DefaultDiffuseTexture")));
       }
 
-      materials.push_back(std::unique_ptr<Material>(material));
-      newMaterials.push_back(material);
+      materials.push_back(material);
+      newMaterials.push_back(material.get());
     }
 
     mr->setMaterials(newMaterials);
