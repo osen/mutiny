@@ -18,7 +18,7 @@ namespace engine
 void AudioSource::playClipAtPoint(AudioClip* audioClip, Vector3 position)
 {
 #ifdef USE_SDL
-  Mix_PlayChannel(-1, audioClip->data.get(), 0);
+  Mix_PlayChannel(-1, audioClip->data->data, 0);
 #endif
 }
 

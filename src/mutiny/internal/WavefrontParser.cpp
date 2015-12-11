@@ -502,7 +502,7 @@ arc<MaterialData> WavefrontParser::getMaterialData(std::string name)
   {
     if(modelData.materials.at(i)->name == name)
     {
-      return modelData.materials.at(i).get();
+      return modelData.materials.at(i);
     }
   }
 

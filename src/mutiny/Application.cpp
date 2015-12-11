@@ -285,21 +285,12 @@ void Application::destroy()
 #endif
 }
 
-void Application::displaySplash()
-{
-  // set timeout
-  // add gui game object
-  // when timeout done, change to next scene
-}
-
 void Application::run()
 {
   if(running == true)
   {
     return;
   }
-
-  //displaySplash();
 
   running = true;
 
@@ -455,64 +446,6 @@ void Application::loadLevel()
   }
 }
 
-void Application::loadLevelAdditive(std::string path)
-{
-  std::ifstream file;
-  std::string line;
-  std::vector<std::string> tokens;
-  GameObject* go;
-
-  file.open(std::string(dataPath + "/" + path + ".scene").c_str());
-
-  if(file.is_open() == false)
-  {
-    Debug::logWarning("Failed to open scene file '" + path + ".scene'");
-    return;
-  }
-
-  while(file.eof() == false)
-  {
-    getline(file, line);
-    tokens.clear();
-    internal::Util::splitStringWhitespace(line, &tokens);
-
-    if(tokens.size() < 1)
-    {
-      continue;
-    }
-
-    if(tokens.at(0) == "go")
-    {
-      if(tokens.size() > 1)
-      {
-        go = GameObject::createModel(tokens.at(1));
-      }
-      else
-      {
-        go = new GameObject();
-      }
-    }
-    else if(tokens.at(0) == "n")
-    {
-      go->setName(tokens.at(1));
-    }
-    else if(tokens.at(0) == "tp")
-    {
-      go->getTransform()->setPosition(Vector3(
-        atof(tokens.at(1).c_str()),
-        atof(tokens.at(2).c_str()),
-        atof(tokens.at(3).c_str())));
-    }
-    else if(tokens.at(0) == "tr")
-    {
-      go->getTransform()->setRotation(Vector3(
-        atof(tokens.at(1).c_str()),
-        atof(tokens.at(2).c_str()),
-        atof(tokens.at(3).c_str())));
-    }
-  }
-}
-
 void Application::loadLevel(std::string path)
 {
   if(running == true)
@@ -612,6 +545,18 @@ void Application::display()
 #else
   glutSwapBuffers();
 #endif
+
+  Input::downKeys.clear();
+  Input::upKeys.clear();
+  Input::downMouseButtons.clear();
+  Input::upMouseButtons.clear();
+
+  if(levelChange != "")
+  {
+    loadedLevelName = levelChange;
+    levelChange = "";
+    loadLevel();
+  }
 }
 
 void Application::idle()
@@ -641,18 +586,6 @@ void Application::idle()
     }
   }
   destroyedGos.clear();
-
-  if(levelChange != "")
-  {
-    loadedLevelName = levelChange;
-    levelChange = "";
-    loadLevel();
-  }
-
-  Input::downKeys.clear();
-  Input::upKeys.clear();
-  Input::downMouseButtons.clear();
-  Input::upMouseButtons.clear();
 
 #ifdef USE_GLUT
   glutPostRedisplay();

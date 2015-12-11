@@ -157,7 +157,7 @@ void Compiler::link(std::string output)
   {
     if(program == "cl")
     {
-      debugFragment += " /DDEBUG";
+      debugFragment += " /DEBUG";
     }
     else
     {

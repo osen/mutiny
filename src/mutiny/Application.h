@@ -46,7 +46,6 @@ public:
   static void run();
   static void quit();
   static void loadLevel(std::string path);
-  static void loadLevelAdditive(std::string path);
   static std::string getLoadedLevelName();
   static std::string getDataPath();
   static int getArgc();
@@ -69,7 +68,6 @@ private:
 
   static void loadLevel();
   static void loop();
-  static void displaySplash();
   static void setupPaths();
   static bool isValidPrefix(std::string path, std::string basename);
 

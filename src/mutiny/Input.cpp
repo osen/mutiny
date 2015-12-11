@@ -4,6 +4,7 @@
 #include <SDL/SDL.h>
 
 #include <string>
+#include <iostream>
 
 namespace mutiny
 {

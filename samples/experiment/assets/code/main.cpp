@@ -18,7 +18,7 @@ void safe_main(int argc, char* argv[])
   Application::run();
 }
 
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(_MSC_VER)
 int WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd)
 {
   int argc = 1;

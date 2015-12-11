@@ -3,6 +3,8 @@
 
 #ifdef EMSCRIPTEN
   #define USE_SDL
+#elif _MSC_VER
+  #define USE_SDL
 #else
   #define USE_GLUT
 #endif
@@ -11,6 +13,8 @@
   #define USE_WINAPI 1
 #endif
 
-#define HAS_TR1_NAMESPACE
+#ifndef _MSC_VER
+  #define HAS_TR1_NAMESPACE
+#endif
 
 #endif
