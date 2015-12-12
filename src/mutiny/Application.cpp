@@ -133,10 +133,33 @@ void Application::init(int argc, char* argv[])
   }
 #endif
 
-  Material::defaultMaterial = Resources::load<Material>("shaders/Internal-DefaultDiffuseTexture");
-  //if(Material::defaultMaterial == NULL) { throw Exception("Failed to load 'shaders/Internal-DefaultDiffuseTexture'"); }
-  if(Material::defaultMaterial == NULL) { throw std::exception(); }
-  Object::dontDestroyOnLoad(Material::defaultMaterial);
+  Texture2d::defaultTexture = new Texture2d(24, 24);
+  Object::dontDestroyOnLoad(Texture2d::defaultTexture);
+
+  for(int y = 0; y < 23; y+=2)
+  {
+    for(int x = 0; x < 23; x+=2)
+    {
+      Texture2d::defaultTexture->setPixel(x, y, Color(1, 0, 1, 1));
+      Texture2d::defaultTexture->setPixel(x+1, y, Color(0, 0, 0, 1));
+      Texture2d::defaultTexture->setPixel(x, y+1, Color(0, 0, 0, 1));
+      Texture2d::defaultTexture->setPixel(x+1, y+1, Color(1, 0, 1, 1));
+    }
+  }
+
+  Texture2d::defaultTexture->apply();
+
+  Shader* shader = Resources::load<Shader>("shaders/internal-mesh-normal");
+  if(shader == NULL) { throw std::exception(); }
+  Object::dontDestroyOnLoad(shader);
+  Material::meshNormalMaterial = new Material(shader);
+  Object::dontDestroyOnLoad(Material::meshNormalMaterial);
+
+  shader = Resources::load<Shader>("shaders/internal-mesh-normal-texture");
+  if(shader == NULL) { throw std::exception(); }
+  Object::dontDestroyOnLoad(shader);
+  Material::meshNormalTextureMaterial = new Material(shader);
+  Object::dontDestroyOnLoad(Material::meshNormalTextureMaterial);
 
   Material::guiMaterial = Resources::load<Material>("shaders/default_gui");
   Object::dontDestroyOnLoad(Material::guiMaterial);

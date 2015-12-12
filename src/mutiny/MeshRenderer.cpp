@@ -8,6 +8,7 @@
 #include "Transform.h"
 #include "Graphics.h"
 #include "Debug.h"
+#include "Texture2d.h"
 
 #include <memory>
 #include <functional>
@@ -70,12 +71,24 @@ void MeshRenderer::render()
 
     if(materials.size() > i)
     {
-      material = materials[i];
+      material = materials.at(i);
     }
 
     if(material == NULL)
     {
-      material = Material::defaultMaterial;
+      if(mesh->getNormals().size() > 0 && mesh->getUv().size() > 0)
+      {
+        material = Material::meshNormalTextureMaterial;
+        material->setMainTexture(Texture2d::defaultTexture);
+      }
+      else if(mesh->getNormals().size() > 0)
+      {
+        material = Material::meshNormalMaterial;
+      }
+      else
+      {
+        material = Material::meshNormalMaterial;
+      }
     }
 
     material->setMatrix("in_Projection", Camera::getCurrent()->getProjectionMatrix());

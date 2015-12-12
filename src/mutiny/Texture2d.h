@@ -14,11 +14,15 @@ namespace engine
 class Color;
 class Resources;
 class Font;
+class Application;
+class MeshRenderer;
 
 class Texture2d : public Texture
 {
   friend class Resources;
   friend class Font;
+  friend class Application;
+  friend class MeshRenderer;
 
 public:
   Texture2d(int width, int height);
@@ -28,6 +32,8 @@ public:
   void apply();
 
 private:
+  static Texture2d* defaultTexture;
+
   static Texture2d* load(std::string path);
 
   std::vector<std::vector<Color> > pixels;

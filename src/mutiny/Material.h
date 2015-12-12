@@ -57,7 +57,8 @@ public:
 
 private:
   static Material* current;
-  static Material* defaultMaterial;
+  static Material* meshNormalTextureMaterial;
+  static Material* meshNormalMaterial;
   static Material* guiMaterial;
   static Material* particleMaterial;
 

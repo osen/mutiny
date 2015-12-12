@@ -19,7 +19,8 @@ namespace engine
 {
 
 Material* Material::current = NULL;
-Material* Material::defaultMaterial = NULL;
+Material* Material::meshNormalTextureMaterial = NULL;
+Material* Material::meshNormalMaterial = NULL;
 Material* Material::guiMaterial = NULL;
 Material* Material::particleMaterial = NULL;
 
