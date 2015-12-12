@@ -32,6 +32,7 @@
 #include "MeshCollider.h"
 #include "Bounds.h"
 #include "CharacterController.h"
+#include "RidgedBody.h"
 #include "ContactPoint.h"
 #include "Collision.h"
 #include "Input.h"

@@ -56,6 +56,10 @@ void Component::levelWasLoaded()
 
 }
 
+void Component::collisionEnter(Collision& collision){}
+void Component::collisionStay(Collision& collision){}
+void Component::collisionExit(Collision& collision){}
+
 }
 
 }

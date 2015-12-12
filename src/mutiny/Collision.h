@@ -12,11 +12,14 @@ namespace mutiny
 namespace engine
 {
 
-class Collision
+class Collider;
+
+struct Collision
 {
 public:
   Vector3 relativeVelocity;
   std::vector<ContactPoint> contacts;
+  Collider* collider;
 
 };
 

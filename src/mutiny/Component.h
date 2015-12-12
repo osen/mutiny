@@ -11,6 +11,7 @@ namespace engine
 
 class GameObject;
 class Application;
+class Collision;
 
 class Component : public Object
 {
@@ -33,6 +34,9 @@ private:
   virtual void gui();
   virtual void destroy();
   virtual void levelWasLoaded();
+  virtual void collisionEnter(Collision& collision);
+  virtual void collisionStay(Collision& collision);
+  virtual void collisionExit(Collision& collision);
 
 };
 

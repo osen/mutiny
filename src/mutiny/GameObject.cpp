@@ -179,6 +179,24 @@ void GameObject::levelWasLoaded()
   }
 }
 
+void GameObject::collisionEnter(Collision& collision)
+{
+  for(int i = 0; i < components.size(); i++)
+    components.at(i)->collisionEnter(collision);
+}
+
+void GameObject::collisionStay(Collision& collision)
+{
+  for(int i = 0; i < components.size(); i++)
+    components.at(i)->collisionStay(collision);
+}
+
+void GameObject::collisionExit(Collision& collision)
+{
+  for(int i = 0; i < components.size(); i++)
+    components.at(i)->collisionExit(collision);
+}
+
 void GameObject::setActive(bool active)
 {
   this->activeSelf = active;

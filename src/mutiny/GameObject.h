@@ -19,10 +19,13 @@ namespace engine
 
 class Component;
 class Transform;
+class Collision;
+class RidgedBody;
 
 class GameObject : public Object
 {
-  friend class Application;
+  friend class mutiny::engine::Application;
+  friend class mutiny::engine::RidgedBody;
 
 public:
   static GameObject* createPrimitive(int primitiveType);
@@ -135,6 +138,9 @@ private:
   virtual void gui();
   virtual void destroy();
   virtual void levelWasLoaded();
+  virtual void collisionEnter(Collision& collision);
+  virtual void collisionStay(Collision& collision);
+  virtual void collisionExit(Collision& collision);
 
 };
 

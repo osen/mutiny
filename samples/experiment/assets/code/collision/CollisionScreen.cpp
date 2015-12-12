@@ -1,5 +1,6 @@
 #include "CollisionScreen.h"
 #include "Player.h"
+#include "FallingCube.h"
 #include "SkyBox.h"
 
 #include <iostream>
@@ -57,6 +58,7 @@ void CollisionScreen::onAwake()
   //level2Go->getTransform()->rotate(Vector3(0, -5, -10));
 
   playerGo = Player::create()->getGameObject();
+  cubeGo = FallingCube::create()->getGameObject();
 }
 
 void CollisionScreen::onUpdate()

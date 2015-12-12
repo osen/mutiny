@@ -218,7 +218,7 @@ void Compiler::link(std::string output)
     }
     else
     {
-      libsFragment += " -lGL -lGLEW -lSDL -lSDL_mixer";
+      libsFragment += " -lGL -lGLEW -lglut";
     }
   }
 

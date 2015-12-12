@@ -18,6 +18,7 @@ private:
   GameObject* cameraGo;
   GameObject* camera2Go;
   GameObject* playerGo;
+  GameObject* cubeGo;
   GameObject* levelGo;
   GameObject* level2Go;
   RenderTexture* renderTexture;
