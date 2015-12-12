@@ -89,13 +89,11 @@ void ProjectBuilder::obtainOutputFilename()
   outputFilename = FileInfo::getFileName(Dir::getcwd());
 }
 
-void ProjectBuilder::syncAssetDirectory()
+void ProjectBuilder::syncAssetDirectory(std::string assetDirectory)
 {
   std::vector<arc<FileInfo> > assetDirectories;
   std::vector<arc<FileInfo> > buildAssetDirectories;
   std::vector<std::string> directoryDeleteList;
-
-  std::string assetDirectory = Util::fixPath("assets");
 
   std::string buildAssetDirectory = Util::fixPath("build/" +
     std::string(PLATFORM_NAME)+"/share/" + outputFilename);
@@ -266,7 +264,12 @@ void ProjectBuilder::generateOutOfDateOutput()
   }
 
   removeOrphanedAssets();
-  syncAssetDirectory();
+  syncAssetDirectory("assets");
+
+  if(environment->isMutinyAvailable() == true)
+  {
+    syncAssetDirectory(environment->getPrefix() + Util::fixPath("/share/mutiny"));
+  }
 
   if(needsRelink == false) return;
 
