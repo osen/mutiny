@@ -210,11 +210,11 @@ void Compiler::link(std::string output)
     }
     else if(name == "cl")
     {
-      libsFragment += " SDL.lib SDLmain.lib SDL_mixer.lib glew32.lib opengl32.lib";
+      libsFragment += " SDL.lib SDLmain.lib SDL_mixer.lib glew32.lib opengl32.lib user32.lib";
     }
     else if(std::string(PLATFORM_NAME) == "windows")
     {
-      libsFragment += " -lglew32 -lfreeglut_static -lopengl32 -lgdi32 -lwinmm";
+      libsFragment += " -lglew32 -lfreeglut_static -lopengl32 -lgdi32 -lwinmm -luser32";
     }
     else
     {

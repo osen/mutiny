@@ -52,6 +52,7 @@
 #include "Mathf.h"
 #include "TextAnchor.h"
 #include "GuiUtility.h"
+#include "Exception.h"
 #include "arc.h"
 
 #include "buccaneer/buccaneer.h"
