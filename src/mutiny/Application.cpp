@@ -110,6 +110,8 @@ void Application::init(int argc, char* argv[])
   glutPassiveMotionFunc(motion);
   glutKeyboardFunc(keyboard);
   glutKeyboardUpFunc(keyboardUp);
+  glutSpecialFunc(_keyboard);
+  glutSpecialUpFunc(_keyboardUp);
 #endif
 
   glewInit();
@@ -425,11 +427,11 @@ void Application::loop()
     }
     else if(event.type == SDL_KEYDOWN)
     {
-      keyboard(event.key.keysym.sym, Input::mousePosition.x, Input::mousePosition.y);
+      _keyboard(event.key.keysym.sym, Input::mousePosition.x, Input::mousePosition.y);
     }
     else if(event.type == SDL_KEYUP)
     {
-      keyboardUp(event.key.keysym.sym, Input::mousePosition.x, Input::mousePosition.y);
+      _keyboardUp(event.key.keysym.sym, Input::mousePosition.x, Input::mousePosition.y);
     }
   }
 #endif
@@ -666,6 +668,11 @@ void Application::mouse(int button, int state, int x, int y)
 
 void Application::keyboard(unsigned char key, int x, int y)
 {
+  _keyboard(key, x, y);
+}
+
+void Application::_keyboard(int key, int x, int y)
+{
   //std::cout << key << std::endl;
   for(int i = 0; i < Input::keys.size(); i++)
   {
@@ -680,6 +687,11 @@ void Application::keyboard(unsigned char key, int x, int y)
 }
 
 void Application::keyboardUp(unsigned char key, int x, int y)
+{
+  _keyboardUp(key, x, y);
+}
+
+void Application::_keyboardUp(int key, int x, int y)
 {
   for(int i = 0; i < Input::keys.size(); i++)
   {

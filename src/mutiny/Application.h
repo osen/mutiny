@@ -79,6 +79,9 @@ private:
   static void keyboard(unsigned char key, int x, int y);
   static void keyboardUp(unsigned char key, int x, int y);
 
+  static void _keyboard(int key, int x, int y);
+  static void _keyboardUp(int key, int x, int y);
+
 };
 
 }
