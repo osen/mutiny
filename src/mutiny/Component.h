@@ -2,6 +2,7 @@
 #define MUTINY_ENGINE_COMPONENT_H
 
 #include "Object.h"
+#include "Collision.h"
 
 namespace mutiny
 {
