@@ -27,8 +27,7 @@ MeshRenderer::~MeshRenderer()
 void MeshRenderer::render()
 {
   MeshFilter* meshFilter = getGameObject()->getComponent<MeshFilter>();
-  Mesh* mesh = NULL;
-  Shader* shader = NULL;
+  arc<Mesh> mesh;
   Transform* transform = getGameObject()->getTransform();
 
   if(transform == NULL)
@@ -45,7 +44,7 @@ void MeshRenderer::render()
 
   mesh = meshFilter->getMesh();
 
-  if(mesh == NULL)
+  if(mesh.get() == NULL)
   {
     Debug::log("No mesh bound");
     return;
@@ -67,19 +66,19 @@ void MeshRenderer::render()
 
   for(int i = 0; i < mesh->getSubmeshCount(); i++)
   {
-    Material* material = getMaterial();
+    arc<Material> material = getMaterial();
 
     if(materials.size() > i)
     {
       material = materials.at(i);
     }
 
-    if(material == NULL)
+    if(material.get() == NULL)
     {
       if(mesh->getNormals().size() > 0 && mesh->getUv().size() > 0)
       {
         material = Material::meshNormalTextureMaterial;
-        material->setMainTexture(Texture2d::defaultTexture);
+        material->setMainTexture(Texture2d::defaultTexture.cast<Texture>());
       }
       else if(mesh->getNormals().size() > 0)
       {
@@ -97,42 +96,44 @@ void MeshRenderer::render()
 
     for(int j = 0; j < material->getPassCount(); j++)
     {
-      material->setPass(j);
+      material->setPass(j, material);
       Graphics::drawMeshNow(mesh, modelMat, i);
     }
   }
 }
 
-void MeshRenderer::setMaterials(std::vector<Material*> materials)
+void MeshRenderer::setMaterials(std::vector<arc<Material> > materials)
 {
   this->materials = materials;
 }
 
-void MeshRenderer::setMaterial(Material* material)
+void MeshRenderer::setMaterial(arc<Material> material)
 {
   if(materials.size() < 1)
   {
-    materials.push_back(NULL);
+    materials.push_back(material);
   }
-
-  materials[0] = material;
+  else
+  {
+    materials.at(0) = material;
+  }
 }
 
-Material* MeshRenderer::getMaterial()
+arc<Material> MeshRenderer::getMaterial()
 {
   if(materials.size() < 1)
   {
-    return NULL;
+    return arc<Material>();
   }
 
-  return materials[0];
+  return materials.at(0);
 }
 
-void MeshRenderer::getMaterials(std::vector<Material*>* materials)
+void MeshRenderer::getMaterials(std::vector<arc<Material> >& materials)
 {
   for(int i = 0; i < this->materials.size(); i++)
   {
-    materials->push_back(this->materials.at(i));
+    materials.push_back(this->materials.at(i));
   }
 }
 

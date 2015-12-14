@@ -17,10 +17,10 @@ void Player::onAwake()
 {
   Debug::log("Player awoken");
 
-  Texture2d* texture = Resources::load<Texture2d>("textures/box");
-  material = new Material(Resources::load<Material>("shaders/mower"));
+  arc<Texture2d> texture = Resources::load<Texture2d>("textures/box");
+  material.reset(new Material(Resources::load<Material>("shaders/mower")));
   //material->setFloat("in_Replace", 1.0f);
-  material->setMainTexture(texture);
+  material->setMainTexture(texture.cast<Texture>());
   getGameObject()->getComponent<MeshRenderer>()->setMaterial(material);
 
   getGameObject()->getTransform()->setPosition(Vector3(0, 10, 0));
@@ -29,7 +29,7 @@ void Player::onAwake()
 
   getGameObject()->addComponent<ParticleEmitter>();
   Material* particleMaterial = new Material(Resources::load<Material>("shaders/Internal-MeshRendererTexture"));
-  particleMaterial->setMainTexture(Resources::load<Texture2d>("particles/grass"));
+  particleMaterial->setMainTexture(Resources::load<Texture2d>("particles/grass").cast<Texture>());
   getGameObject()->addComponent<ParticleRenderer>()->setMaterial(particleMaterial);
 }
 

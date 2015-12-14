@@ -40,7 +40,7 @@ public:
   static const int DOWN = GLUT_KEY_DOWN;
   static const int RIGHT = GLUT_KEY_RIGHT;
   static const int LEFT = GLUT_KEY_LEFT;
-  static const int SPACE = 0;
+  static const int SPACE = ' ';
   static const int A = 'a';
   static const int D = 'd';
   static const int W = 'w';

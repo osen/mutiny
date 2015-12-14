@@ -19,7 +19,7 @@ public:
 
 private:
   arc<QuickNumber> qn;
-  Texture2d* background;
+  arc<Texture2d> background;
   float timeout;
 
 };

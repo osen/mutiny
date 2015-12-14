@@ -18,11 +18,11 @@ namespace mutiny
 namespace engine
 {
 
-Material* Material::current = NULL;
-Material* Material::meshNormalTextureMaterial = NULL;
-Material* Material::meshNormalMaterial = NULL;
-Material* Material::guiMaterial = NULL;
-Material* Material::particleMaterial = NULL;
+arc<Material> Material::current;
+arc<Material> Material::meshNormalTextureMaterial;
+arc<Material> Material::meshNormalMaterial;
+arc<Material> Material::guiMaterial;
+arc<Material> Material::particleMaterial;
 
 Material* Material::load(std::string path)
 {
@@ -75,19 +75,19 @@ Material::Material(std::string vertContents, std::string fragContents)
   indexesDirty = true;
 }
 
-Material::Material(Material* material)
+Material::Material(arc<Material> material)
 {
   shader = material->getShader();
   indexesDirty = true;
 }
 
-Material::Material(Shader* shader)
+Material::Material(arc<Shader> shader)
 {
   this->shader = shader;
   indexesDirty = true;
 }
 
-Texture* Material::getTexture(std::string propertyName)
+arc<Texture> Material::getTexture(std::string propertyName)
 {
   for(int i = 0; i < textureNames.size(); i++)
   {
@@ -97,16 +97,16 @@ Texture* Material::getTexture(std::string propertyName)
     }
   }
 
-  return NULL;
+  return arc<Texture>();
 }
 
-void Material::setTexture(std::string propertyName, Texture* texture)
+void Material::setTexture(std::string propertyName, arc<Texture> texture)
 {
   for(int i = 0; i < textureNames.size(); i++)
   {
     if(textureNames.at(i) == propertyName)
     {
-      textures[i] = texture;
+      textures.at(i) = texture;
       return;
     }
   }
@@ -237,29 +237,29 @@ void Material::refreshIndexes()
   }
 }
 
-Texture* Material::getMainTexture()
+arc<Texture> Material::getMainTexture()
 {
   return getTexture("in_Texture");
 }
 
-void Material::setMainTexture(Texture* texture)
+void Material::setMainTexture(arc<Texture> texture)
 {
   setTexture("in_Texture", texture);
 }
 
-Shader* Material::getShader()
+arc<Shader> Material::getShader()
 {
-  Shader* rtn = shader;
+  arc<Shader> rtn = shader;
 
-  if(rtn == NULL)
+  if(rtn.get() == NULL)
   {
-    rtn = managedShader.get();
+    rtn = managedShader;
   }
 
   return rtn;
 }
 
-void Material::setShader(Shader* shader)
+void Material::setShader(arc<Shader> shader)
 {
   this->shader = shader;
   indexesDirty = true;
@@ -270,9 +270,9 @@ int Material::getPassCount()
   return 1;
 }
 
-void Material::setPass(int pass)
+void Material::setPass(int pass, arc<Material> _this)
 {
-  Material::current = this;
+  Material::current = _this;
   glUseProgram(getShader()->programId);
 
   if(indexesDirty == true)

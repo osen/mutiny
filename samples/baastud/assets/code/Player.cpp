@@ -29,7 +29,7 @@ void Player::onAwake()
   speed = 10.0f;
 
   mr = getGameObject()->addComponent<AnimatedMeshRenderer>();
-  AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/sheep/sheep");
+  arc<AnimatedMesh> mesh = Resources::load<AnimatedMesh>("models/sheep/sheep");
   mr->setAnimatedMesh(mesh);
 
   sheepIconTexture = Resources::load<Texture2d>("textures/sheepIcon");
@@ -263,11 +263,11 @@ void Player::onGui()
     
     Gui::drawTexture(Rect((Screen::getWidth() / 2) - (texWidth / 2),
                           (Screen::getHeight() / 2) - (texHeight / 2),
-                          texWidth, texHeight), censoredTexture);
+                          texWidth, texHeight), censoredTexture.cast<Texture>());
   }
 
   Gui::drawTexture(Rect(10, 10, sheepIconTexture->getWidth()-32, sheepIconTexture->getHeight()-32),
-    sheepIconTexture);
+    sheepIconTexture.cast<Texture>());
 
   quickNumber->draw(score, 115, 55);
 } 

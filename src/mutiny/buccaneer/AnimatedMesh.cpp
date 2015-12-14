@@ -30,7 +30,7 @@ AnimatedMesh* AnimatedMesh::load(std::string path)
   for(int p = 0; p < modelData->parts.size(); p++)
   {
     internal::PartData* part = modelData->parts.at(p).get();
-    animatedMesh->textures.push_back(std::vector<Texture2d*>());
+    animatedMesh->textures.push_back(std::vector<arc<Texture2d> >());
     animatedMesh->meshNames.push_back(part->name);
     Vector3 max;
     Vector3 min;
@@ -43,9 +43,9 @@ AnimatedMesh* AnimatedMesh::load(std::string path)
       std::string texName = materialGroup->material->texture;
       texName = texName.substr(0, texName.length() - 4);
 
-      Texture2d* tex = Resources::load<Texture2d>(texName);
+      arc<Texture2d> tex = Resources::load<Texture2d>(texName);
 
-      if(tex == NULL)
+      if(tex.get() == NULL)
       {
         //Debug::logError("Texture is null " + texName);
         //throw std::exception();
@@ -153,9 +153,9 @@ AnimatedMesh::AnimatedMesh() : bounds(Vector3(), Vector3())
 
 }
 
-Mesh* AnimatedMesh::getMesh(int index)
+arc<Mesh> AnimatedMesh::getMesh(int index)
 {
-  return meshes.at(index).get();
+  return meshes.at(index);
 }
 
 void AnimatedMesh::recalculateBounds()
@@ -173,7 +173,7 @@ int AnimatedMesh::getMeshCount()
   return meshes.size();
 }
 
-Texture2d* AnimatedMesh::getTexture(int mesh, int submesh)
+arc<Texture2d> AnimatedMesh::getTexture(int mesh, int submesh)
 {
   return textures.at(mesh).at(submesh);
 }

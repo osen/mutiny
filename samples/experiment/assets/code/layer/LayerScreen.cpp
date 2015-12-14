@@ -21,9 +21,9 @@ void LayerScreen::onAwake()
 
   MeshRenderer* playerMr = playerGo->addComponent<MeshRenderer>();
   playerMr->setMaterial(Resources::load<Material>("shaders/Internal-MeshRendererTexture"));
-  playerMr->getMaterial()->setMainTexture(Resources::load<Texture2d>("models/curuthers/Whiskers_diffuse"));
+  playerMr->getMaterial()->setMainTexture(Resources::load<Texture2d>("models/curuthers/Whiskers_diffuse").cast<Texture>());
 
-  Mesh* mesh = Resources::load<Mesh>("models/curuthers/curuthers");
+  arc<Mesh> mesh = Resources::load<Mesh>("models/curuthers/curuthers");
   MeshFilter* playerMf = playerGo->addComponent<MeshFilter>();
   playerMf->setMesh(mesh);
 }

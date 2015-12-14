@@ -28,7 +28,7 @@ bool Sheep::isWolf()
 
 void Sheep::onStart()
 {
-  AnimatedMesh* mesh;
+  arc<AnimatedMesh> mesh;
 
   wolf = false;
   getGameObject()->setTag("sheep");

@@ -17,7 +17,6 @@ MeshCollider::~MeshCollider()
 void MeshCollider::awake()
 {
   Debug::log("MeshCollider awaken");
-  mesh = NULL;
 
   MeshFilter* meshFilter = getGameObject()->getComponent<MeshFilter>();
 
@@ -30,12 +29,12 @@ void MeshCollider::awake()
   Collider::awake();
 }
 
-void MeshCollider::setMesh(Mesh* mesh)
+void MeshCollider::setMesh(arc<Mesh> mesh)
 {
   this->mesh = mesh;
 }
 
-Mesh* MeshCollider::getMesh()
+arc<Mesh> MeshCollider::getMesh()
 {
   return mesh;
 }

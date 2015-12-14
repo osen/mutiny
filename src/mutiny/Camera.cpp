@@ -71,7 +71,6 @@ void Camera::onAwake()
   orthographic = false;
   fieldOfView = 60.0f;
   orthographicSize = 100;
-  targetTexture = NULL;
   nearClipPlane = 0.3f;
   farClipPlane = 1000.0f;
   cullMask = 1 << 0;
@@ -89,7 +88,7 @@ int Camera::getCullMask()
   return cullMask;
 }
 
-void Camera::setTargetTexture(RenderTexture* targetTexture)
+void Camera::setTargetTexture(arc<RenderTexture> targetTexture)
 {
   this->targetTexture = targetTexture;
 }

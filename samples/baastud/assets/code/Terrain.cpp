@@ -16,11 +16,11 @@ void Terrain::onAwake()
 {
   MeshRenderer* mr = getGameObject()->addComponent<MeshRenderer>();
   MeshFilter* mf = getGameObject()->addComponent<MeshFilter>();
-  Mesh* mesh = Resources::load<Mesh>("models/terrain/terrain");
-  Texture2d* tex = Resources::load<Texture2d>("models/terrain/terrain");
+  arc<Mesh> mesh = Resources::load<Mesh>("models/terrain/terrain");
+  arc<Texture2d> tex = Resources::load<Texture2d>("models/terrain/terrain");
 
-  Material* material = new Material(Resources::load<Material>("shaders/Internal-MeshRendererTexture"));
-  material->setMainTexture(tex);
+  arc<Material> material(new Material(Resources::load<Material>("shaders/Internal-MeshRendererTexture")));
+  material->setMainTexture(tex.cast<Texture>());
 
   mr->setMaterial(material);
   mf->setMesh(mesh);
@@ -30,7 +30,3 @@ void Terrain::onAwake()
   getGameObject()->getTransform()->setPosition(Vector3(0, -1, 25));
 }
 
-void Terrain::onUpdate()
-{
-
-}

@@ -25,13 +25,13 @@ public:
   virtual ~ParticleRenderer();
 
   void setMaterial(Material* material);
-  Material* getMaterial();
+  arc<Material> getMaterial();
 
 private:
   GLuint positionBufferId; arc<GLuint> _positionBufferId;
   GLuint uvBufferId; arc<GLuint> _uvBufferId;
 
-  Material* material;
+  arc<Material> material;
 
   virtual void render();
   virtual void awake();

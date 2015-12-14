@@ -40,7 +40,7 @@ void Collider::awake()
 
 void Collider::updateBounds()
 {
-  Mesh* mesh = NULL;
+  arc<Mesh> mesh;
   MeshFilter* meshFilter = NULL;
 
   //bounds = Bounds(Vector3(0, 0, 0), Vector3(2, 2, 2));
@@ -51,7 +51,7 @@ void Collider::updateBounds()
   {
     mesh = meshFilter->getMesh();
 
-    if(mesh != NULL)
+    if(mesh.get() != NULL)
     {
       bounds = mesh->getBounds();
     }
@@ -68,7 +68,7 @@ void Collider::updateBounds()
       throw Exception("Cannot add collider since there is no MeshRenderer or AnimatedMeshRenderer");
     }
 
-    if(amr->getAnimatedMesh() != NULL)
+    if(amr->getAnimatedMesh().get() != NULL)
     {
       bounds = amr->getAnimatedMesh()->getBounds();
       //bounds.debug();

@@ -18,7 +18,7 @@ namespace mutiny
 namespace engine
 {
 
-RenderTexture* RenderTexture::active;
+arc<RenderTexture> RenderTexture::active;
 
 RenderTexture::RenderTexture(int width, int height)
 {
@@ -76,14 +76,14 @@ RenderTexture::~RenderTexture()
 
 }
 
-void RenderTexture::setActive(RenderTexture* renderTexture)
+void RenderTexture::setActive(arc<RenderTexture> renderTexture)
 {
-  if(active == renderTexture)
+  if(active.get() == renderTexture.get())
   {
     return;
   }
 
-  if(renderTexture != NULL)
+  if(renderTexture.get() != NULL)
   {
     glBindFramebuffer(GL_FRAMEBUFFER, renderTexture->nativeFrameBuffer);
     glViewport(0, 0, renderTexture->width, renderTexture->height);
@@ -97,7 +97,7 @@ void RenderTexture::setActive(RenderTexture* renderTexture)
   active = renderTexture;
 }
 
-RenderTexture* RenderTexture::getActive()
+arc<RenderTexture> RenderTexture::getActive()
 {
   return active;
 }

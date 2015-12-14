@@ -21,8 +21,8 @@ private:
   GameObject* cubeGo;
   GameObject* levelGo;
   GameObject* level2Go;
-  RenderTexture* renderTexture;
-  Texture* levelTexture;
+  arc<RenderTexture> renderTexture;
+  arc<Texture> levelTexture;
 
 };
 

@@ -6,6 +6,11 @@ namespace mutiny
 namespace engine
 {
 
+void Object::dontDestroyOnLoad(arc<Object> object)
+{
+  object->destroyOnLoad = false;
+}
+
 void Object::dontDestroyOnLoad(Object* object)
 {
   object->destroyOnLoad = false;

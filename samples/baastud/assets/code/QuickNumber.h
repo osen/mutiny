@@ -16,8 +16,8 @@ public:
   void drawW(int number, int x, int y);
 
 private:
-  Texture2d* fontTexture;
-  Texture2d* wFontTexture;
+  arc<Texture2d> fontTexture;
+  arc<Texture2d> wFontTexture;
 
 };
 

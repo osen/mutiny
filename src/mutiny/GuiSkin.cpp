@@ -16,36 +16,36 @@ GuiSkin* GuiSkin::_default;
 
 GuiSkin::GuiSkin()
 {
-  Texture2d* tex = NULL;
+  arc<Texture2d> tex = NULL;
 
   button.reset(new GuiStyle());
 
   tex = Resources::load<Texture2d>("gui/button_normal");
-  Object::dontDestroyOnLoad(tex);
+  Object::dontDestroyOnLoad(tex.cast<Object>());
   button->getNormal()->setBackground(tex);
 
   tex = Resources::load<Texture2d>("gui/button_hover");
-  Object::dontDestroyOnLoad(tex);
+  Object::dontDestroyOnLoad(tex.cast<Object>());
   button->getHover()->setBackground(tex);
 
   tex = Resources::load<Texture2d>("gui/button_active");
-  Object::dontDestroyOnLoad(tex);
+  Object::dontDestroyOnLoad(tex.cast<Object>());
   button->getActive()->setBackground(tex);
 
   box.reset(new GuiStyle());
   tex = Resources::load<Texture2d>("gui/box_normal");
-  Object::dontDestroyOnLoad(tex);
+  Object::dontDestroyOnLoad(tex.cast<Object>());
   box->getNormal()->setBackground(tex);
 }
 
-GuiStyle* GuiSkin::getButton()
+arc<GuiStyle> GuiSkin::getButton()
 {
-  return button.get();
+  return button;
 }
 
-GuiStyle* GuiSkin::getBox()
+arc<GuiStyle> GuiSkin::getBox()
 {
-  return box.get();
+  return box;
 }
 
 }

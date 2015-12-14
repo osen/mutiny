@@ -32,7 +32,7 @@ public:
   void apply();
 
 private:
-  static Texture2d* defaultTexture;
+  static arc<Texture2d> defaultTexture;
 
   static Texture2d* load(std::string path);
 

@@ -17,7 +17,7 @@ void SplashScreen::onGui()
 
   Gui::drawTexture(Rect((Screen::getWidth() / 2) - (splashLogo->getWidth() / 2),
                         (Screen::getHeight() / 2) - (splashLogo->getHeight() / 2),
-                        splashLogo->getWidth(), splashLogo->getHeight()), splashLogo);
+                        splashLogo->getWidth(), splashLogo->getHeight()), splashLogo.get());
 
   timeout -= Time::getDeltaTime();
 

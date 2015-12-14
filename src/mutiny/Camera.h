@@ -33,7 +33,7 @@ public:
   //Matrix4x4 getWorldToCameraMatrix();
   void setProjectionMatrix(Matrix4x4 projectionMatrix);
   void resetProjectionMatrix();
-  void setTargetTexture(RenderTexture* texture);
+  void setTargetTexture(arc<RenderTexture> texture);
   void setBackgroundColor(Color color);
   Color getBackgroundColor();
   int getCullMask();
@@ -51,7 +51,7 @@ private:
   float nearClipPlane;
   float farClipPlane;
   arc<Matrix4x4> projectionMatrix;
-  RenderTexture* targetTexture;
+  arc<RenderTexture> targetTexture;
   int cullMask;
 
   virtual void onAwake();

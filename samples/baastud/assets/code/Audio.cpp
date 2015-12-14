@@ -7,10 +7,10 @@
 
 using namespace mutiny::engine;
 
-std::vector<AudioClip*> Audio::sounds;
-Mix_Music* Audio::music = NULL;
-Mix_Music* Audio::musicA = NULL;
-Mix_Music* Audio::breathing = NULL;
+std::vector<arc<AudioClip> > Audio::sounds;
+//Mix_Music* Audio::music = NULL;
+//Mix_Music* Audio::musicA = NULL;
+//Mix_Music* Audio::breathing = NULL;
 
 void Audio::initialize()
 {
@@ -47,16 +47,18 @@ void Audio::initialize()
 //
   addSound("audio/Scream_1");
 
+/*
   if(music == NULL) music = Mix_LoadMUS(std::string(Application::getDataPath() + "/audio/menuMusic.ogg").c_str());
   if(musicA == NULL) musicA = Mix_LoadMUS(std::string(Application::getDataPath() + "/audio/Bird_ambience.ogg").c_str());
   if(breathing == NULL) breathing = Mix_LoadMUS(std::string(Application::getDataPath() + "/audio/Heavy_Breathing.ogg").c_str());
+*/
 }
 
 void Audio::addSound(std::string path)
 {
-  AudioClip* clip = Resources::load<AudioClip>(path);
+  arc<AudioClip> clip = Resources::load<AudioClip>(path);
 
-  if(clip == NULL)
+  if(clip.get() == NULL)
   {
     throw std::exception();
   }
@@ -66,27 +68,27 @@ void Audio::addSound(std::string path)
 
 void Audio::playSound(int sound)
 {
-  AudioSource::playClipAtPoint(sounds[sound], Vector3());
+  AudioSource::playClipAtPoint(sounds.at(sound), Vector3());
 }
 
 void Audio::playMusic()
 {
-  Mix_PlayMusic(music, -1);
+  //Mix_PlayMusic(music, -1);
 }
 
 void Audio::playMusicA()
 {
-  Mix_PlayMusic(musicA, -1);
+  //Mix_PlayMusic(musicA, -1);
 }
 
 void Audio::playBreathing()
 {
-  Mix_PlayMusic(breathing, -1);
+  //Mix_PlayMusic(breathing, -1);
 }
 
 void Audio::stopMusic()
 {
-  Mix_HaltMusic();
+  //Mix_HaltMusic();
 }
 
 /*

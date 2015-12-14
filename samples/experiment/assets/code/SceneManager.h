@@ -13,7 +13,7 @@ public:
   virtual void onLevelWasLoaded();
 
 private:
-  Texture2d* watermark;
+  arc<Texture2d> watermark;
 
   void loadLevel();
 

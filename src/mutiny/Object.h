@@ -1,6 +1,8 @@
 #ifndef MUTINY_ENGINE_OBJECT_H
 #define MUTINY_ENGINE_OBJECT_H
 
+#include "arc.h"
+
 #include <string>
 
 namespace mutiny
@@ -18,6 +20,7 @@ class Object
   friend class GameObject;
 
 public:
+  static void dontDestroyOnLoad(arc<Object> object);
   static void dontDestroyOnLoad(Object* object);
   static void destroy(Object* object);
 

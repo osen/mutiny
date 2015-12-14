@@ -17,12 +17,12 @@ class GuiStyleState
 public:
   GuiStyleState();
 
-  void setBackground(Texture2d* background);
-  Texture2d* getBackground();
+  void setBackground(arc<Texture2d> background);
+  arc<Texture2d> getBackground();
 
 private:
   arc<Texture2d> defaultBackground;
-  Texture2d* background;
+  arc<Texture2d> background;
 
 };
 

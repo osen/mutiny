@@ -19,16 +19,16 @@ GuiStyleState::GuiStyleState()
   tex->apply();
 }
 
-void GuiStyleState::setBackground(Texture2d* background)
+void GuiStyleState::setBackground(arc<Texture2d> background)
 {
   this->background = background;
 }
 
-Texture2d* GuiStyleState::getBackground()
+arc<Texture2d> GuiStyleState::getBackground()
 {
-  if(background == NULL)
+  if(background.get() == NULL)
   {
-    return defaultBackground.get();
+    return defaultBackground;
   }
 
   return background;

@@ -27,23 +27,23 @@ void WaterScreen::onAwake()
   waterMf->setMesh(Resources::load<Mesh>("models/water/water"));
   waterMaterial = Resources::load<Material>("shaders/water");
   waterMr->setMaterial(waterMaterial);
-  Texture2d* waterTexture = Resources::load<Texture2d>("models/water/water");
-  waterMaterial->setMainTexture(waterTexture);
+  arc<Texture2d> waterTexture = Resources::load<Texture2d>("models/water/water");
+  waterMaterial->setMainTexture(waterTexture.cast<Texture>());
 
   playerGo = new GameObject("Player");
   playerGo->getTransform()->setPosition(Vector3(0, 0, 0));
 
   playerMr = playerGo->addComponent<AnimatedMeshRenderer>();
 
-  AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/captain/captain");
+  arc<AnimatedMesh> mesh = Resources::load<AnimatedMesh>("models/captain/captain");
   playerMr->setAnimatedMesh(mesh);
 
   for(int i = 0; i < playerMr->getRoot()->getTransform()->getChildCount(); i++)
   {
     if(playerMr->getRoot()->getTransform()->getChild(i)->getGameObject()->getName() == "Lightsaber")
     {
-      Material* fullRed = Resources::load<Material>("shaders/accum/full_red");
-      fullRed->setMainTexture(Resources::load<Texture2d>("models/captain/captain"));
+      arc<Material> fullRed = Resources::load<Material>("shaders/accum/full_red");
+      fullRed->setMainTexture(Resources::load<Texture2d>("models/captain/captain").cast<Texture>());
       playerMr->getRoot()->getTransform()->getChild(i)->getGameObject()->getComponent<MeshRenderer>()
         ->setMaterial(fullRed);
     }

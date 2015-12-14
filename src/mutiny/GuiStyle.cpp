@@ -23,28 +23,28 @@ GuiStyle::GuiStyle()
   border = RectOffset(10, 10, 10, 10);
   font = Resources::load<Font>("fonts/default");
 
-  if(font == NULL)
+  if(font.get() == NULL)
   {
     Debug::logError("Failed to load default font");
     throw std::exception();
   }
 
-  Object::dontDestroyOnLoad(font);
+  Object::dontDestroyOnLoad(font.cast<Object>());
 }
 
-GuiStyleState* GuiStyle::getActive()
+arc<GuiStyleState> GuiStyle::getActive()
 {
-  return active.get();
+  return active;
 }
 
-GuiStyleState* GuiStyle::getNormal()
+arc<GuiStyleState> GuiStyle::getNormal()
 {
-  return normal.get();
+  return normal;
 }
 
-GuiStyleState* GuiStyle::getHover()
+arc<GuiStyleState> GuiStyle::getHover()
 {
-  return hover.get();
+  return hover;
 }
 
 void GuiStyle::setAlignment(int alignment)

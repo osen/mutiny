@@ -20,8 +20,8 @@ public:
 
 private:
   GameScreen* gameScreen;
-  Animation* walkAnimation;
-  Animation* eatAnimation;
+  arc<Animation> walkAnimation;
+  arc<Animation> eatAnimation;
   int state;
   float stateTimeout;
   AnimatedMeshRenderer* sheepMr;

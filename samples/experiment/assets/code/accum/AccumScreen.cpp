@@ -20,15 +20,15 @@ void AccumScreen::onAwake()
 
   playerMr = playerGo->addComponent<AnimatedMeshRenderer>();
 
-  AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/darth/darth");
+  arc<AnimatedMesh> mesh = Resources::load<AnimatedMesh>("models/darth/darth");
   playerMr->setAnimatedMesh(mesh);
 
   for(int i = 0; i < playerMr->getRoot()->getTransform()->getChildCount(); i++)
   {
     if(playerMr->getRoot()->getTransform()->getChild(i)->getGameObject()->getName() == "Lightsaber")
     {
-      Material* fullRed = Resources::load<Material>("shaders/accum/full_red");
-      fullRed->setMainTexture(Resources::load<Texture2d>("models/darth/darth"));
+      arc<Material> fullRed = Resources::load<Material>("shaders/accum/full_red");
+      fullRed->setMainTexture(Resources::load<Texture2d>("models/darth/darth").cast<Texture>());
       playerMr->getRoot()->getTransform()->getChild(i)->getGameObject()->getComponent<MeshRenderer>()
         ->setMaterial(fullRed);
     }

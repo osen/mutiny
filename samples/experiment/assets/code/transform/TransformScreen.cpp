@@ -6,6 +6,7 @@ using namespace mutiny::engine;
 
 GameObject* TransformScreen::create()
 {
+  Debug::log("onAwake()");
   GameObject* mainGo = new GameObject("IntroductionScreen");
   mainGo->addComponent<TransformScreen>();
 
@@ -20,9 +21,11 @@ void TransformScreen::onAwake()
 
   cube1Go = GameObject::createPrimitive(PrimitiveType::CUBE);
   cube1Go->getTransform()->setPosition(Vector3(5, 0, 10));
+  cube1Go->setName("cube1Go");
 
   cube2Go = GameObject::createPrimitive(PrimitiveType::CUBE);
   cube2Go->getTransform()->setPosition(Vector3(-5, 0, 10));
+  cube2Go->setName("cube2Go");
 }
 
 void TransformScreen::onUpdate()

@@ -80,7 +80,7 @@ bool AnimatedMeshRenderer::isPlaying()
 
 void AnimatedMeshRenderer::play()
 {
-  if(animation == NULL)
+  if(animation.get() == NULL)
   {
     return;
   }
@@ -116,7 +116,7 @@ void AnimatedMeshRenderer::onUpdate()
     childTransform->setLocalRotation(Vector3());
   }
 
-  if(animation != NULL && animation->frames.size() > 0)
+  if(animation.get() != NULL && animation->frames.size() > 0)
   {
     for(int i = 0; i < rootGo->getTransform()->getChildCount(); i++)
     {
@@ -127,7 +127,7 @@ void AnimatedMeshRenderer::onUpdate()
       {
         if(once == true)
         {
-          setAnimation(NULL);
+          setAnimation(arc<Animation>());
           return;
         }
         else if(interpolateEnd == true)
@@ -200,7 +200,7 @@ void AnimatedMeshRenderer::onUpdate()
   }
 }
 
-void AnimatedMeshRenderer::setAnimatedMesh(AnimatedMesh* mesh)
+void AnimatedMeshRenderer::setAnimatedMesh(arc<AnimatedMesh> mesh)
 {
   this->mesh = mesh;
   materials.clear();
@@ -211,18 +211,18 @@ void AnimatedMeshRenderer::setAnimatedMesh(AnimatedMesh* mesh)
     go->getTransform()->setParent(rootGo->getTransform());
     go->getTransform()->setLocalPosition(mesh->getMeshOffset(i));
     MeshFilter* mf = go->addComponent<MeshFilter>();
-    Mesh* m = mesh->getMesh(i);
+    arc<Mesh> m = mesh->getMesh(i);
     mf->setMesh(m);
     MeshRenderer* mr = go->addComponent<MeshRenderer>();
-    std::vector<Material*> newMaterials;
+    std::vector<arc<Material> > newMaterials;
 
     for(int x = 0; x < m->getSubmeshCount(); x++)
     {
       arc<Material> material;
 
-      Texture* tex = mesh->getTexture(i, x);
+      arc<Texture> tex = mesh->getTexture(i, x).cast<Texture>();
 
-      if(tex != NULL)
+      if(tex.get() != NULL)
       {
         material.reset(new Material(Resources::load<Shader>("shaders/Internal-MeshRendererTexture")));
         material->setMainTexture(tex);
@@ -233,26 +233,26 @@ void AnimatedMeshRenderer::setAnimatedMesh(AnimatedMesh* mesh)
       }
 
       materials.push_back(material);
-      newMaterials.push_back(material.get());
+      newMaterials.push_back(material);
     }
 
     mr->setMaterials(newMaterials);
   }
 }
 
-AnimatedMesh* AnimatedMeshRenderer::getAnimatedMesh()
+arc<AnimatedMesh> AnimatedMeshRenderer::getAnimatedMesh()
 {
   return mesh;
 }
 
-Animation* AnimatedMeshRenderer::getAnimation()
+arc<Animation> AnimatedMeshRenderer::getAnimation()
 {
   return animation;
 }
 
-void AnimatedMeshRenderer::setAnimation(Animation* animation)
+void AnimatedMeshRenderer::setAnimation(arc<Animation> animation)
 {
-  if(this->animation == animation)
+  if(this->animation.get() == animation.get())
   {
     return;
   }

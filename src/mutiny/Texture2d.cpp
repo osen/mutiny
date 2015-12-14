@@ -18,7 +18,7 @@ namespace mutiny
 namespace engine
 {
 
-Texture2d* Texture2d::defaultTexture = NULL;
+arc<Texture2d> Texture2d::defaultTexture;
 
 Texture2d::Texture2d(int width, int height)
 {

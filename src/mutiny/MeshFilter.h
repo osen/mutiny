@@ -16,13 +16,11 @@ class MeshFilter : public Behaviour
 public:
   virtual ~MeshFilter();
 
-  void setMesh(Mesh* mesh);
-  Mesh* getMesh();
+  void setMesh(arc<Mesh> mesh);
+  arc<Mesh> getMesh();
 
 private:
-  Mesh* mesh;
-
-  virtual void onAwake();
+  arc<Mesh> mesh;
 
 };
 

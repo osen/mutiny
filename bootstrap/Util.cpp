@@ -37,6 +37,8 @@ std::string Util::execute(std::string command)
     throw std::exception();
   }
 
+  std::cout << rtn << std::endl;
+
   return rtn;
 }
 

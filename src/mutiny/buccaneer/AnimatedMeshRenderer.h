@@ -21,10 +21,10 @@ class Animation;
 class AnimatedMeshRenderer : public Behaviour
 {
 public:
-  void setAnimatedMesh(AnimatedMesh* mesh);
-  AnimatedMesh* getAnimatedMesh();
-  void setAnimation(Animation* animation);
-  Animation* getAnimation();
+  void setAnimatedMesh(arc<AnimatedMesh> mesh);
+  arc<AnimatedMesh> getAnimatedMesh();
+  void setAnimation(arc<Animation> animation);
+  arc<Animation> getAnimation();
   void play();
   void playOnce();
   void stop();
@@ -37,8 +37,8 @@ public:
 
 private:
   std::vector<arc<Material> > materials;
-  AnimatedMesh* mesh;
-  Animation* animation;
+  arc<AnimatedMesh> mesh;
+  arc<Animation> animation;
   GameObject* rootGo;
   float frame;
   bool playing;

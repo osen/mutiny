@@ -27,7 +27,7 @@ void GameCamera::onAwake()
   camera = getGameObject()->addComponent<Camera>();
   camera->setBackgroundColor(Color(0, 0, 0, 1));
   originalPass.reset(new RenderTexture(512, 512));
-  camera->setTargetTexture(originalPass.get());
+  camera->setTargetTexture(originalPass);
 
   blurPass1.reset(new RenderTexture(64, 64));
   blurPass2.reset(new RenderTexture(256, 256));
@@ -97,27 +97,24 @@ void GameCamera::onStart()
 
 void GameCamera::onPostRender()
 {
-  Graphics::setRenderTarget(blurPass1.get());
+  Graphics::setRenderTarget(blurPass1);
   Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), 
-    originalPass.get(), texturedMaterial);
-  Graphics::setRenderTarget(NULL);
+    originalPass.cast<Texture>(), texturedMaterial);
 
-  Graphics::setRenderTarget(blurPass2.get());
+  Graphics::setRenderTarget(blurPass2);
   Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), 
-    blurPass1.get(), texturedMaterial);
-  Graphics::setRenderTarget(NULL);
+    blurPass1.cast<Texture>(), texturedMaterial);
 
-  Graphics::setRenderTarget(blurPass3.get());
+  Graphics::setRenderTarget(blurPass3);
   Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), 
-    blurPass2.get(), texturedMaterial);
-  Graphics::setRenderTarget(NULL);
+    blurPass2.cast<Texture>(), texturedMaterial);
 
-  Graphics::setRenderTarget(mergePass.get());
-  mergeMaterial->setTexture("in_Merge", blurPass3.get());
+  Graphics::setRenderTarget(mergePass);
+  mergeMaterial->setTexture("in_Merge", blurPass3.cast<Texture>());
   Graphics::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), 
-    originalPass.get(), mergeMaterial);
-  Graphics::setRenderTarget(NULL);
+    originalPass.cast<Texture>(), mergeMaterial);
+  Graphics::setRenderTarget(arc<RenderTexture>());
 
-  Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), mergePass.get());
+  Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), mergePass.cast<Texture>());
 }
 

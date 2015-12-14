@@ -37,7 +37,7 @@ void RidgedBody::update()
   {
     MeshCollider* meshCollider = ((MeshCollider*)collidableObjects.at(i));
     Vector3 position = getGameObject()->getTransform()->getPosition();
-    Mesh* mesh = meshCollider->getMesh();
+    arc<Mesh> mesh = meshCollider->getMesh();
     std::vector<Vector3>& vertices = mesh->getVertices();
 
     Matrix4x4 colliderItrs = Matrix4x4::getTrs(meshCollider->getGameObject()->getTransform()->getPosition(),

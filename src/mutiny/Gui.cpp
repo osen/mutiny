@@ -14,6 +14,7 @@
 #include "Application.h"
 #include "Debug.h"
 #include "Texture.h"
+#include "Texture2d.h"
 #include "TextAnchor.h"
 
 #include <GL/glew.h>
@@ -106,7 +107,7 @@ void Gui::label(Rect rect, std::string text)
 
   if(positions.size() == uvs.size() && positions.size() > 0)
   {
-    drawTextureWithTexCoords(positions, (Texture*)skin->getButton()->font->texture.get(), uvs);
+    drawTextureWithTexCoords(positions, skin->getButton()->font->texture.cast<Texture>(), uvs);
   }
 }
 
@@ -149,7 +150,7 @@ bool Gui::button(Rect rect, std::string text)
     if(Input::getMouseButton(0) == true &&
        rect.contains(Input::mouseDownPosition) == true)
     {
-      drawUi(rect, (Texture*)skin->getButton()->getActive()->getBackground(), skin->getButton());
+      drawUi(rect, skin->getButton()->getActive()->getBackground().cast<Texture>(), skin->getButton());
     }
     else if(Input::getMouseButtonUp(0) == true &&
             rect.contains(Input::mouseDownPosition) == true)
@@ -159,12 +160,12 @@ bool Gui::button(Rect rect, std::string text)
     }
     else
     {
-      drawUi(rect, (Texture*)skin->getButton()->getHover()->getBackground(), skin->getButton());
+      drawUi(rect, skin->getButton()->getHover()->getBackground().cast<Texture>(), skin->getButton());
     }
   }
   else
   {
-    drawUi(rect, (Texture*)skin->getButton()->getNormal()->getBackground(), skin->getButton());
+    drawUi(rect, skin->getButton()->getNormal()->getBackground().cast<Texture>(), skin->getButton());
   }
 
   label(rect, text);
@@ -172,9 +173,9 @@ bool Gui::button(Rect rect, std::string text)
   return false;
 }
 
-void Gui::drawTextureWithTexCoords(std::vector<Rect> positions, Texture* texture, std::vector<Rect> texCoords)
+void Gui::drawTextureWithTexCoords(std::vector<Rect> positions, arc<Texture> texture, std::vector<Rect> texCoords)
 {
-  Material* guiMaterial = Material::guiMaterial;
+  arc<Material> guiMaterial = Material::guiMaterial;
 
   guiMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
   guiMaterial->setMatrix("in_View", Matrix4x4::getIdentity());
@@ -182,9 +183,9 @@ void Gui::drawTextureWithTexCoords(std::vector<Rect> positions, Texture* texture
   Graphics::drawTextureBatch(positions, texture, texCoords, guiMaterial);
 }
 
-void Gui::drawTexture(Rect rect, Texture* texture)
+void Gui::drawTexture(Rect rect, arc<Texture> texture)
 {
-  Material* guiMaterial = Material::guiMaterial;
+  arc<Material> guiMaterial = Material::guiMaterial;
 
   guiMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
   guiMaterial->setMatrix("in_View", Matrix4x4::getIdentity());
@@ -192,9 +193,9 @@ void Gui::drawTexture(Rect rect, Texture* texture)
   Graphics::drawTexture(rect, texture, guiMaterial);
 }
 
-void Gui::drawTextureWithTexCoords(Rect position, Texture* texture, Rect texCoords)
+void Gui::drawTextureWithTexCoords(Rect position, arc<Texture> texture, Rect texCoords)
 {
-  Material* guiMaterial = Material::guiMaterial;
+  arc<Material> guiMaterial = Material::guiMaterial;
 
   guiMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
   guiMaterial->setMatrix("in_View", Matrix4x4::getIdentity());
@@ -202,9 +203,9 @@ void Gui::drawTextureWithTexCoords(Rect position, Texture* texture, Rect texCoor
   Graphics::drawTexture(position, texture, texCoords, guiMaterial);
 }
 
-void Gui::drawUi(Rect rect, Texture* texture, GuiStyle* style)
+void Gui::drawUi(Rect rect, arc<Texture> texture, arc<GuiStyle> style)
 {
-  Material* guiMaterial = Material::guiMaterial;
+  arc<Material> guiMaterial = Material::guiMaterial;
 
   guiMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
   guiMaterial->setMatrix("in_View", Matrix4x4::getIdentity());
@@ -227,7 +228,7 @@ void Gui::box(Rect rect, std::string text)
     skin = GuiSkin::_default;
   }
 
-  drawUi(rect, (Texture*)skin->getBox()->getNormal()->getBackground(), skin->getBox());
+  drawUi(rect, skin->getBox()->getNormal()->getBackground().cast<Texture>(), skin->getBox());
   label(rect, text);
 }
 

@@ -63,10 +63,10 @@ void AccumCamera::regenRenderTextures()
   accumPass.reset(new RenderTexture(idealWidth, idealHeight));
   deaccumPass.reset(new RenderTexture(idealWidth, idealHeight));
 
-  accumA = accumPass.get();
-  accumB = deaccumPass.get();
+  accumA = accumPass;
+  accumB = deaccumPass;
 
-  getGameObject()->getComponent<Camera>()->setTargetTexture(originalPass.get());
+  getGameObject()->getComponent<Camera>()->setTargetTexture(originalPass);
 }
 
 void AccumCamera::onUpdate()
@@ -79,26 +79,26 @@ void AccumCamera::onPostRender()
 {
   Rect rect(0, 0, 1, 1);
 
-  Graphics::setRenderTarget(lightKeyPass.get());
-  Graphics::drawTexture(rect, originalPass.get(), lightKeyMaterial);
-  Graphics::setRenderTarget(NULL);
+  Graphics::setRenderTarget(lightKeyPass);
+  Graphics::drawTexture(rect, originalPass.cast<Texture>(), lightKeyMaterial);
+  Graphics::setRenderTarget(arc<RenderTexture>());
 
   Graphics::setRenderTarget(accumA);
-  Graphics::drawTexture(rect, lightKeyPass.get(), accumMaterial);
-  Graphics::setRenderTarget(NULL);
+  Graphics::drawTexture(rect, lightKeyPass.cast<Texture>(), accumMaterial);
+  Graphics::setRenderTarget(arc<RenderTexture>());
 
   deaccumMaterial->setFloat("in_TimeDelta", Time::getDeltaTime());
   Graphics::setRenderTarget(accumB);
-  Graphics::drawTexture(rect, accumA, deaccumMaterial);
-  Graphics::setRenderTarget(NULL);
+  Graphics::drawTexture(rect, accumA.cast<Texture>(), deaccumMaterial);
+  Graphics::setRenderTarget(arc<RenderTexture>());
 
-  RenderTexture* tmp = accumA;
+  arc<RenderTexture> tmp = accumA;
   accumA = accumB;
   accumB = tmp;
 
-  Graphics::setRenderTarget(blurPass1.get());
-  Graphics::drawTexture(rect, accumB, texturedMaterial);
-  Graphics::setRenderTarget(NULL);
+  Graphics::setRenderTarget(blurPass1);
+  Graphics::drawTexture(rect, accumB.cast<Texture>(), texturedMaterial);
+  Graphics::setRenderTarget(arc<RenderTexture>());
 
   bool swap = false;
 
@@ -110,27 +110,27 @@ void AccumCamera::onPostRender()
     if(swap == false)
     {
       texturedMaterial->setVector("in_Scale", Vector2(1.0f / ((float)idealWidth * 0.3f), 0));
-      Graphics::setRenderTarget(blurPass2.get());
-      Graphics::drawTexture(rect, blurPass1.get(), texturedMaterial);
+      Graphics::setRenderTarget(blurPass2);
+      Graphics::drawTexture(rect, blurPass1.cast<Texture>(), texturedMaterial);
       swap = true;
     }
     else
     {
       texturedMaterial->setVector("in_Scale", Vector2(0, 1.0f / ((float)idealHeight * 0.3f)));
-      Graphics::setRenderTarget(blurPass1.get());
-      Graphics::drawTexture(rect, blurPass2.get(), texturedMaterial);
+      Graphics::setRenderTarget(blurPass1);
+      Graphics::drawTexture(rect, blurPass2.cast<Texture>(), texturedMaterial);
       swap = false;
     }
 
-    Graphics::setRenderTarget(NULL);
+    Graphics::setRenderTarget(arc<RenderTexture>());
   }
 
-  Graphics::setRenderTarget(mergePass.get());
-  mergeMaterial->setTexture("in_Merge", blurPass1.get());
-  Graphics::drawTexture(rect, originalPass.get(), mergeMaterial);
-  Graphics::setRenderTarget(NULL);
+  Graphics::setRenderTarget(mergePass);
+  mergeMaterial->setTexture("in_Merge", blurPass1.cast<Texture>());
+  Graphics::drawTexture(rect, originalPass.cast<Texture>(), mergeMaterial);
+  Graphics::setRenderTarget(arc<RenderTexture>());
 
-  Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), mergePass.get());
+  Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), mergePass.cast<Texture>());
   //Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), accumA);
 }
 

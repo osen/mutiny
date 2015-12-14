@@ -3,6 +3,7 @@
 
 #include "Rect.h"
 #include "Matrix4x4.h"
+#include "arc.h"
 
 #include <GL/glew.h>
 
@@ -33,15 +34,15 @@ public:
   static bool button(Rect rect, std::string text);
   static bool button(Rect rect, Texture* image);
   static void box(Rect rect, std::string text);
-  static void drawTexture(Rect rect, Texture* texture);
-  static void drawTextureWithTexCoords(Rect position, Texture* texture, Rect texCoords);
+  static void drawTexture(Rect rect, arc<Texture> texture);
+  static void drawTextureWithTexCoords(Rect position, arc<Texture> texture, Rect texCoords);
 
 private:
   static GuiSkin* skin;
   static Matrix4x4 matrix;
 
-  static void drawUi(Rect rect, Texture* texture, GuiStyle* style);
-  static void drawTextureWithTexCoords(std::vector<Rect> positions, Texture* texture, std::vector<Rect> texCoords);
+  static void drawUi(Rect rect, arc<Texture> texture, arc<GuiStyle> style);
+  static void drawTextureWithTexCoords(std::vector<Rect> positions, arc<Texture> texture, std::vector<Rect> texCoords);
 
 };
 

@@ -131,7 +131,7 @@ void Compiler::compile(std::string sourceUnit, std::string output)
   }
   else
   {
-    command = program + " -c" +
+    command = program + " -c -Wall" +
       debugFragment +
       includeFragment +
       defineFragment +

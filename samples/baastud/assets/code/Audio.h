@@ -22,10 +22,10 @@ public:
   static void stopMusic();
 
 private:
-  static std::vector<AudioClip*> sounds;
-  static Mix_Music* music;
-  static Mix_Music* musicA;
-  static Mix_Music* breathing;
+  static std::vector<arc<AudioClip> > sounds;
+  //static Mix_Music* music;
+  //static Mix_Music* musicA;
+  //static Mix_Music* breathing;
 
 };
 

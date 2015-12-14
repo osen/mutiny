@@ -39,8 +39,8 @@ void MenuScreen::onGui()
     Application::quit();
   }
 
-  Gui::drawTexture(Rect(10, 10, titleTexture->getWidth(), titleTexture->getHeight()), titleTexture);
+  Gui::drawTexture(Rect(10, 10, titleTexture->getWidth(), titleTexture->getHeight()), titleTexture.cast<Texture>());
   Gui::drawTexture(Rect(10, Screen::getHeight() - wwwTexture->getHeight() + 80, 
-    wwwTexture->getWidth(), wwwTexture->getHeight()), wwwTexture);
+    wwwTexture->getWidth(), wwwTexture->getHeight()), wwwTexture.cast<Texture>());
 }
 

@@ -15,7 +15,7 @@ public:
 
 private:
   arc<Texture2d> background;
-  Texture2d* splashLogo;
+  arc<Texture2d> splashLogo;
   float timeout;
 
 

@@ -26,7 +26,7 @@ public:
 private:
   GameObject* cameraGo;
   GameObject* fenceGo;
-  std::unique_ptr<Audio> audio;
+  arc<Audio> audio;
 
 };
 

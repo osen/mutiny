@@ -33,18 +33,19 @@ public:
     return rtn;
   }
 
-  static void _arc(T* t)
-  {
-    t->~T();
-    free(t);
-    //delete t;
-  }
-
   arc(){}
 
   arc(T* t)
   {
     reset(t);
+  }
+
+  arc<T>& operator=(const arc<T>& other)
+  {
+    shared = other.shared;
+    weak = other.weak;
+
+    return *this;
   }
 
   template <class R>
@@ -86,6 +87,7 @@ public:
     shared.reset();
   }
 
+/*
   arc<T> makeWeak()
   {
     arc<T> rtn = *this;
@@ -111,6 +113,7 @@ public:
 
     return rtn;
   }
+*/
 
   T* get()
   {
@@ -124,6 +127,7 @@ public:
     }
   }
 
+/*
   T& operator* ()
   {
     if(shared.get() != NULL)
@@ -135,6 +139,7 @@ public:
       return *weak.lock();
     }
   }
+*/
 
   T* operator->()
   {
@@ -157,6 +162,15 @@ public:
   std::shared_ptr<T> shared;
   std::weak_ptr<T> weak;
 #endif
+
+private:
+  static void _arc(T* t)
+  {
+    t->~T();
+    free(t);
+    //delete t;
+  }
+
 
 };
 

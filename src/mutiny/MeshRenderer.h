@@ -25,15 +25,15 @@ class MeshRenderer : public Component
 public:
   virtual ~MeshRenderer();
 
-  void setMaterial(Material* material);
-  void setMaterials(std::vector<Material*> materials);
-  void getMaterials(std::vector<Material*>* materials);
-  Material* getMaterial();
+  void setMaterial(arc<Material> material);
+  void setMaterials(std::vector<arc<Material> > materials);
+  void getMaterials(std::vector<arc<Material> >& materials);
+  arc<Material> getMaterial();
 
 private:
   virtual void render();
 
-  std::vector<Material*> materials;
+  std::vector<arc<Material> > materials;
 
 };
 

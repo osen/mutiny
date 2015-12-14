@@ -23,8 +23,8 @@ class GuiSkin : public Object
 public:
   GuiSkin();
 
-  GuiStyle* getButton();
-  GuiStyle* getBox();
+  arc<GuiStyle> getButton();
+  arc<GuiStyle> getBox();
 
 private:
   static GuiSkin* _default;

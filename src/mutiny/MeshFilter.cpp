@@ -12,17 +12,12 @@ MeshFilter::~MeshFilter()
 
 }
 
-void MeshFilter::onAwake()
-{
-  mesh = NULL;
-}
-
-void MeshFilter::setMesh(Mesh* mesh)
+void MeshFilter::setMesh(arc<Mesh> mesh)
 {
   this->mesh = mesh;
 }
 
-Mesh* MeshFilter::getMesh()
+arc<Mesh> MeshFilter::getMesh()
 {
   return mesh;
 }

@@ -22,9 +22,9 @@ class GuiStyle
 public:
   GuiStyle();
 
-  GuiStyleState* getNormal();
-  GuiStyleState* getHover();
-  GuiStyleState* getActive();
+  arc<GuiStyleState> getNormal();
+  arc<GuiStyleState> getHover();
+  arc<GuiStyleState> getActive();
 
   void setAlignment(int alignment);
   int getAlignment();
@@ -33,7 +33,7 @@ private:
   arc<GuiStyleState> normal;
   arc<GuiStyleState> hover;
   arc<GuiStyleState> active;
-  Font* font;
+  arc<Font> font;
   RectOffset border;
   int alignment;
 

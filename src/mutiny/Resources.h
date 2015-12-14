@@ -4,12 +4,14 @@
 #include "Debug.h"
 #include "Material.h"
 #include "Application.h"
+#include "Object.h"
 
 #include <memory>
 #include <string>
 #include <vector>
 #include <typeinfo>
 #include <sstream>
+#include <iostream>
 
 namespace mutiny
 {
@@ -25,7 +27,7 @@ class Resources
   friend class mutiny::engine::Application;
 
 public:
-  template<class T> static T* load(std::string path)
+  template<class T> static arc<T> load(std::string path)
   {
     std::stringstream ss;
     ss << path << "_" << typeid(T).name();
@@ -34,7 +36,7 @@ public:
     {
       if(ss.str() == paths.at(i))
       {
-        return (T*)objects.at(i).get();
+        return objects.at(i).dynamicCast<T>();
       }
     }
 
@@ -67,16 +69,20 @@ public:
       catch(std::exception& e){}
     }
 
+    arc<Object> rtn;
+
     if(t == NULL)
     {
       //Debug::logError("Failed to load '" + path + "'");
-      return NULL;
+      return rtn.dynamicCast<T>();
     }
 
-    paths.push_back(ss.str());
-    objects.push_back(arc<Object>(t));
+    rtn.reset(t);
 
-    return t;
+    paths.push_back(ss.str());
+    objects.push_back(rtn);
+
+    return rtn.dynamicCast<T>();
   }
 
 private:

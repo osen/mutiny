@@ -75,7 +75,7 @@ void ParticleRenderer::awake()
 
 void ParticleRenderer::render()
 {
-  Shader* shader = NULL;
+  arc<Shader> shader;
   Transform* transform = getGameObject()->getTransform();
   ParticleEmitter* emitter = getGameObject()->getComponent<ParticleEmitter>();
 
@@ -91,7 +91,7 @@ void ParticleRenderer::render()
     return;
   }
 
-  if(material == NULL)
+  if(material.get() == NULL)
   {
     material = Material::particleMaterial;
     //Debug::log("ParticleRenderer set to default material");
@@ -142,7 +142,7 @@ void ParticleRenderer::render()
 
     material->setMatrix("in_Model", modelMat);
 
-    material->setPass(0);
+    material->setPass(0, material);
     glDrawArrays(GL_TRIANGLES, 0, 6);
   }
   glEnable(GL_DEPTH_TEST);
@@ -163,7 +163,7 @@ void ParticleRenderer::setMaterial(Material* material)
   this->material = material;
 }
 
-Material* ParticleRenderer::getMaterial()
+arc<Material> ParticleRenderer::getMaterial()
 {
   return material;
 }

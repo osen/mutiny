@@ -24,7 +24,7 @@ void GameOverScreen::onAwake()
 
 void GameOverScreen::onGui()
 {
-  Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), background);
+  Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), background.cast<Texture>());
   qn->drawW(score, Screen::getWidth() * 0.3f, Screen::getHeight() * 0.05f);
 
   timeout -= Time::getDeltaTime();

@@ -28,10 +28,10 @@ class AnimatedMesh : public Object
 
 public:
   void recalculateBounds();
-  Mesh* getMesh(int index);
+  arc<Mesh> getMesh(int index);
   Bounds getBounds();
   int getMeshCount();
-  Texture2d* getTexture(int mesh, int submesh);
+  arc<Texture2d> getTexture(int mesh, int submesh);
   std::string getMeshName(int mesh);
   Vector3 getMeshOffset(int mesh);
 
@@ -40,7 +40,7 @@ private:
 
   AnimatedMesh();
 
-  std::vector<std::vector<Texture2d*> > textures;
+  std::vector<std::vector<arc<Texture2d> > > textures;
   std::vector<arc<Mesh> > meshes;
   std::vector<std::string> meshNames;
   std::vector<Vector3> meshOffsets;

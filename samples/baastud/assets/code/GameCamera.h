@@ -27,9 +27,9 @@ private:
   arc<RenderTexture> blurPass3;
   arc<RenderTexture> lightKeyPass;
   arc<RenderTexture> mergePass;
-  Material* texturedMaterial;
-  Material* lightKeyMaterial;
-  Material* mergeMaterial;
+  arc<Material> texturedMaterial;
+  arc<Material> lightKeyMaterial;
+  arc<Material> mergeMaterial;
   Camera* camera;
   arc<GameObject> playerGo;
   std::vector<Vector3> positionBuffer;

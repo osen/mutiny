@@ -20,13 +20,13 @@ public:
 private:
   GameScreen* gameScreen;
   AnimatedMeshRenderer* mr;
-  Animation* walkAnimation;
-  Animation* idleAnimation;
-  Animation* sprintAnimation;
-  Animation* humpAnimation;
-  Texture2d* censoredTexture;
-  Texture2d* sheepIconTexture;
-  std::unique_ptr<QuickNumber> quickNumber;
+  arc<Animation> walkAnimation;
+  arc<Animation> idleAnimation;
+  arc<Animation> sprintAnimation;
+  arc<Animation> humpAnimation;
+  arc<Texture2d> censoredTexture;
+  arc<Texture2d> sheepIconTexture;
+  arc<QuickNumber> quickNumber;
 
 
   bool firstTime;

@@ -10,10 +10,7 @@ class Terrain : public Behaviour
 public:
   static GameObject* create();
 
-  virtual void onUpdate();
   virtual void onAwake();
-
-private:
 
 };
 

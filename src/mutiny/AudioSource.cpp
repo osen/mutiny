@@ -15,7 +15,7 @@ namespace mutiny
 namespace engine
 {
 
-void AudioSource::playClipAtPoint(AudioClip* audioClip, Vector3 position)
+void AudioSource::playClipAtPoint(arc<AudioClip> audioClip, Vector3 position)
 {
 #ifdef USE_SDL
   Mix_PlayChannel(-1, audioClip->data->data, 0);

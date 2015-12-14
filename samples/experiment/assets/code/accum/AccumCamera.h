@@ -24,13 +24,13 @@ private:
   arc<RenderTexture> mergePass;
   arc<RenderTexture> accumPass;
   arc<RenderTexture> deaccumPass;
-  Material* texturedMaterial;
-  Material* lightKeyMaterial;
-  Material* mergeMaterial;
-  Material* accumMaterial;
-  Material* deaccumMaterial;
-  RenderTexture* accumA;
-  RenderTexture* accumB;
+  arc<Material> texturedMaterial;
+  arc<Material> lightKeyMaterial;
+  arc<Material> mergeMaterial;
+  arc<Material> accumMaterial;
+  arc<Material> deaccumMaterial;
+  arc<RenderTexture> accumA;
+  arc<RenderTexture> accumB;
 
   void regenRenderTextures();
 

@@ -133,8 +133,8 @@ void Application::init(int argc, char* argv[])
   }
 #endif
 
-  Texture2d::defaultTexture = new Texture2d(24, 24);
-  Object::dontDestroyOnLoad(Texture2d::defaultTexture);
+  Texture2d::defaultTexture.reset(new Texture2d(24, 24));
+  Object::dontDestroyOnLoad(Texture2d::defaultTexture.cast<Object>());
 
   for(int y = 0; y < 23; y+=2)
   {
@@ -149,34 +149,32 @@ void Application::init(int argc, char* argv[])
 
   Texture2d::defaultTexture->apply();
 
-  Shader* shader = Resources::load<Shader>("shaders/internal-mesh-normal");
-  if(shader == NULL) { throw std::exception(); }
-  Object::dontDestroyOnLoad(shader);
-  Material::meshNormalMaterial = new Material(shader);
-  Object::dontDestroyOnLoad(Material::meshNormalMaterial);
+  arc<Shader> shader = Resources::load<Shader>("shaders/internal-mesh-normal");
+  if(shader.get() == NULL) { throw std::exception(); }
+  Object::dontDestroyOnLoad(shader.cast<Object>());
+  Material::meshNormalMaterial.reset(new Material(shader));
+  Object::dontDestroyOnLoad(Material::meshNormalMaterial.cast<Object>());
 
   shader = Resources::load<Shader>("shaders/internal-mesh-normal-texture");
-  if(shader == NULL) { throw std::exception(); }
-  Object::dontDestroyOnLoad(shader);
-  Material::meshNormalTextureMaterial = new Material(shader);
-  Object::dontDestroyOnLoad(Material::meshNormalTextureMaterial);
+  if(shader.get() == NULL) { throw std::exception(); }
+  Object::dontDestroyOnLoad(shader.cast<Object>());
+  Material::meshNormalTextureMaterial.reset(new Material(shader));
+  Object::dontDestroyOnLoad(Material::meshNormalTextureMaterial.cast<Object>());
 
   Material::guiMaterial = Resources::load<Material>("shaders/default_gui");
-  Object::dontDestroyOnLoad(Material::guiMaterial);
+  Object::dontDestroyOnLoad(Material::guiMaterial.cast<Object>());
 
   Material::particleMaterial = Resources::load<Material>("shaders/default_particle");
-  Object::dontDestroyOnLoad(Material::particleMaterial);
+  Object::dontDestroyOnLoad(Material::particleMaterial.cast<Object>());
 
   Graphics::defaultMaterial = Resources::load<Material>("shaders/Internal-GUITexture");
-  Object::dontDestroyOnLoad(Graphics::defaultMaterial);
+  Object::dontDestroyOnLoad(Graphics::defaultMaterial.cast<Object>());
 
   GuiSkin::_default = new GuiSkin();
   Material::current = NULL;
-  RenderTexture::active = NULL;
   Camera::current = NULL;
   Camera::_main = NULL;
   Gui::skin = NULL;
-  Graphics::renderTarget = NULL;
 }
 
 void Application::setTitle(std::string title)
@@ -302,6 +300,13 @@ void Application::destroy()
   gameObjects.clear();
   Resources::paths.clear();
   Resources::objects.clear();
+
+  Material::meshNormalMaterial.reset();
+  Material::meshNormalTextureMaterial.reset();
+  Material::guiMaterial.reset();
+  Material::particleMaterial.reset();
+  Graphics::defaultMaterial.reset();
+  Texture2d::defaultTexture.reset();
 
 #ifdef USE_SDL
   SDL_Quit();
@@ -526,7 +531,7 @@ void Application::display()
 
     Camera::current = Camera::getAllCameras()->at(h);
 
-    if(Camera::getCurrent()->targetTexture != NULL)
+    if(Camera::getCurrent()->targetTexture.get() != NULL)
     {
       RenderTexture::setActive(Camera::getCurrent()->targetTexture);
     }
@@ -547,9 +552,9 @@ void Application::display()
       gameObjects.at(i)->render();
     }
 
-    if(Camera::getCurrent()->targetTexture != NULL)
+    if(Camera::getCurrent()->targetTexture.get() != NULL)
     {
-      RenderTexture::setActive(NULL);
+      RenderTexture::setActive(arc<RenderTexture>());
     }
   }
 
