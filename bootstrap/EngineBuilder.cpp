@@ -72,7 +72,7 @@ void EngineBuilder::buildOutOfDateObjects()
   if(PLATFORM_NAME == std::string("windows"))
   {
     compiler->addIncludeDirectory(environment->getPrefix() +
-      Util::fixPath("/import/include"));
+      Util::fixPath("/import/") + PLATFORM_NAME + Util::fixPath("/include"));
   }
 
   for(int i = 0; i < sourceUnits.size(); i++)

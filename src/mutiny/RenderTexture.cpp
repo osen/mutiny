@@ -5,7 +5,6 @@
 #include "Debug.h"
 
 #include <GL/glew.h>
-#include <SDL/SDL.h>
 
 #include <memory>
 #include <functional>

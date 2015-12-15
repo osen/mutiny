@@ -1,7 +1,10 @@
 #include "Input.h"
 #include "Vector3.h"
+#include "internal/platform.h"
 
-#include <SDL/SDL.h>
+#ifdef USE_SDL
+  #include <SDL/SDL.h>
+#endif
 
 #include <string>
 #include <iostream>
@@ -112,6 +115,7 @@ bool Input::getMouseButton(int button)
 
 int Input::translateButton(int input)
 {
+#ifdef USE_SDL
   if(input == 0)
   {
     return SDL_BUTTON_LEFT;
@@ -125,6 +129,9 @@ int Input::translateButton(int input)
   {
     return SDL_BUTTON_MIDDLE;
   }
+#else
+  return input;
+#endif
 }
 
 }

@@ -5,8 +5,6 @@
 #include "Debug.h"
 #include "internal/CWrapper.h"
 
-#include <SDL/SDL.h>
-
 #include <memory>
 #include <functional>
 #include <vector>

@@ -37,6 +37,8 @@ arc<Environment> Environment::create(std::vector<std::string>& args)
   }
   catch(std::exception& e) { }
 
+  rtn->compilerName = DEFAULT_CXX;
+
   for(int i = 0; i < args.size(); i++)
   {
     if(args.at(i) == "-o")

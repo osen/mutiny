@@ -10,12 +10,7 @@ arc<Compiler> Compiler::create(arc<Environment> environment)
 {
   arc<Compiler> rtn = arc<Compiler>::alloc();
   rtn->environment = environment;
-  rtn->name = DEFAULT_CXX;
-
-  if(environment->getCompilerName() != "")
-  {
-    rtn->name = environment->getCompilerName();
-  }
+  rtn->name = environment->getCompilerName();
 
   if(rtn->name == "cl")
   {
@@ -102,6 +97,15 @@ void Compiler::compile(std::string sourceUnit, std::string output)
   }
 
   std::vector<std::string> defines = environment->getDefines();
+
+  if(std::string(PLATFORM_NAME) == "windows")
+  {
+    if(name == "g++" || name == "clang++")
+    {
+      defines.push_back("FREEGLUT_STATIC");
+      defines.push_back("GLEW_STATIC");
+    }
+  }
 
   for(int i = 0; i < defines.size(); i++)
   {
@@ -214,7 +218,7 @@ void Compiler::link(std::string output)
     }
     else if(std::string(PLATFORM_NAME) == "windows")
     {
-      libsFragment += " -lglew32 -lfreeglut_static -lopengl32 -lgdi32 -lwinmm -luser32";
+      libsFragment += " -lglew32 -lfreeglut -lopengl32 -logg -lvorbis -lvorbisfile -lopenal32 -lgdi32 -lwinmm -luser32";
     }
     else
     {

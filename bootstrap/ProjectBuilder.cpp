@@ -27,13 +27,6 @@ arc<ProjectBuilder> ProjectBuilder::create(arc<Environment> environment)
 
   rtn->obtainOutputFilename();
 
-  arc<Compiler> compiler = Compiler::create(environment);
-
-  if(compiler->getExecutableSuffix() != "")
-  {
-    rtn->outputFilename += "." + compiler->getExecutableSuffix();
-  }
-
   rtn->scanForIncludeDirectories(rtn->srcDir);
   rtn->scanSource(rtn->srcDir);
   rtn->prepareDirectories();
@@ -195,6 +188,13 @@ void ProjectBuilder::removeOrphanedAssets()
 void ProjectBuilder::generateOutOfDateOutput()
 {
   arc<Compiler> compiler = Compiler::create(environment);
+  std::string outputExecutableName = outputFilename;
+
+  if(compiler->getExecutableSuffix() != "")
+  {
+    outputExecutableName += "." + compiler->getExecutableSuffix();
+  }
+
 
   if(environment->isMutinyAvailable() == true)
   {
@@ -205,7 +205,11 @@ void ProjectBuilder::generateOutOfDateOutput()
   if(PLATFORM_NAME == std::string("windows"))
   {
     compiler->addLibDirectory(environment->getPrefix() +
-      Util::fixPath("/import/lib"));
+      Util::fixPath("/import/") +
+      PLATFORM_NAME +
+      Util::fixPath("/lib/") +
+      environment->getCompilerName() +
+      Util::fixPath("/x86"));
   }
 
   compiler->addObjectDirectory(Util::fixPath(
@@ -222,7 +226,7 @@ void ProjectBuilder::generateOutOfDateOutput()
   try
   {
     binInfo = FileInfo::create(outputDirectory +
-      Util::fixPath("/bin/") + outputFilename);
+      Util::fixPath("/bin/") + outputExecutableName);
   }
   catch(std::exception& e)
   {
@@ -274,7 +278,7 @@ void ProjectBuilder::generateOutOfDateOutput()
   if(needsRelink == false) return;
 
   //std::cout << "Linking..." << std::endl;
-  compiler->link(outputDirectory + Util::fixPath("/bin/") + outputFilename);
+  compiler->link(outputDirectory + Util::fixPath("/bin/") + outputExecutableName);
 }
 
 void ProjectBuilder::buildOutOfDateObjects()
@@ -285,7 +289,7 @@ void ProjectBuilder::buildOutOfDateObjects()
   if(PLATFORM_NAME == std::string("windows"))
   {
     compiler->addIncludeDirectory(environment->getPrefix() +
-      Util::fixPath("/import/include"));
+      Util::fixPath("/import/") + PLATFORM_NAME + Util::fixPath("/include"));
   }
 
   for(int i = 0; i < includeDirectories.size(); i++)
