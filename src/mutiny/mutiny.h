@@ -56,6 +56,7 @@
 #include "arc.h"
 
 #include "buccaneer/buccaneer.h"
+#include "parrot/parrot.h"
 
 #endif
 

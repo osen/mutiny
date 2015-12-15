@@ -20,6 +20,8 @@ private:
   arc<Texture2d> titleTexture;
   GameObject* cameraGo;
 
+  Button* closeButton;
+
 };
 
 #endif

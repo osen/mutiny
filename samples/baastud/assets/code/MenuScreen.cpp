@@ -20,6 +20,9 @@ void MenuScreen::onAwake()
   Camera* camera = cameraGo->addComponent<Camera>();
   titleTexture = Resources::load<Texture2d>("textures/titleLogo");
   wwwTexture = Resources::load<Texture2d>("textures/www");
+
+  GameObject* closeButtonGo = new GameObject("CloseButton");
+  closeButton = closeButtonGo->addComponent<Button>();
 }
 
 void MenuScreen::onGui()
