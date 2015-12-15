@@ -1,30 +1,20 @@
 ![](https://raw.githubusercontent.com/osen/mutiny/master/docs/logo.png)
 
-[Screenshot of Baastud](https://raw.githubusercontent.com/osen/mutiny/master/docs/ss1.jpg "Screenshot of Baastud")
-
-[Screenshot of Drunken Cowboy](https://raw.githubusercontent.com/osen/mutiny/master/docs/ss2.jpg "Screenshot of Drunken Cowboy")
-
-To build the software on Windows, follow these steps:
-
-```
-> cd mutiny
-> mkdir build
-> cd build
-> cmake -G "NMake Makefiles" -DCMAKE_BUILD_TYPE=RELEASE ..
-> nmake
-```
+![](https://raw.githubusercontent.com/osen/mutiny/master/docs/ss1.jpg)
 ![](https://raw.githubusercontent.com/osen/mutiny/master/docs/mutinytux.png)
-
-To build the software on Linux, follow these steps:
-
-```
-$ cd mutiny
-$ mkdir build
-$ cd build
-$ cmake ..
-$ make
-```
-
 ![](https://raw.githubusercontent.com/osen/mutiny/master/docs/cppbarrel.png)
+
+Building projects with Mutiny is easy
+
+```
+> cd <project directory>
+> mutt
+> build\<platform>\bin\<project name>.exe
+```
+For more information, have a browse through the Mutiny documentation.
+
+[Getting Started](https://raw.githubusercontent.com/osen/mutiny/master/docs/GettingStarted.html "Getting Started")
+
+![](https://raw.githubusercontent.com/osen/mutiny/master/docs/ss2.jpg)
 
 Mutiny is licensed under the GPLv3
