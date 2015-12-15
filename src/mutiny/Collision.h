@@ -14,7 +14,7 @@ namespace engine
 
 class Collider;
 
-struct Collision
+class Collision
 {
 public:
   Vector3 relativeVelocity;

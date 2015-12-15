@@ -31,22 +31,22 @@ echo.
 echo ********************************************
 echo *** Trying Microsoft Visual Studio 10... ***
 echo ********************************************
-call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" || goto gcc
+call "C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC\vcvarsall.bat" || goto clang
 cl /EHsc *.cpp /Fotemp\ /Fe..\bin\mutt && goto done
-
-:gcc
-echo.
-echo ********************************
-echo *** Trying GNU C++ Compiler  ***
-echo ********************************
-g++ *.cpp -o ..\bin\mutt && goto done
 
 :clang
 echo.
-echo *************************************
-echo *** Trying LLVM / Clang Compiler  ***
-echo *************************************
-clang++ *.cpp -o ..\bin\mutt && goto done
+echo ****************************************
+echo *** Trying LLVM / Clang Compiler...  ***
+echo ****************************************
+clang++ *.cpp -o ..\bin\mutt.exe && goto done
+
+:gcc
+echo.
+echo ***********************************
+echo *** Trying GNU C++ Compiler...  ***
+echo ***********************************
+g++ *.cpp -o ..\bin\mutt && goto done
 
 echo.
 echo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
