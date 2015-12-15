@@ -23,7 +23,7 @@ public:
     std::cout << "TestComponent" << std::endl;
   }
 
-  ~TestComponent()
+  virtual ~TestComponent()
   {
     std::cout << "~TestComponent" << std::endl;
   }
@@ -34,9 +34,10 @@ int main(int argc, char* argv[])
 {
   std::cout << "Hello World" << std::endl;
 
-  TestComponent* tc = new(calloc(1, sizeof(*tc))) TestComponent();
+  Component* tc = new(calloc(1, sizeof(*tc))) TestComponent();
   tc->~Component();
   free(tc);
 
   return 0;
 }
+

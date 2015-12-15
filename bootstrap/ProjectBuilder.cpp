@@ -200,16 +200,16 @@ void ProjectBuilder::generateOutOfDateOutput()
   {
     compiler->addObjectDirectory(Util::fixPath(
       "temp/"+std::string(PLATFORM_NAME)+"/obj/mutiny"));
-  }
 
-  if(PLATFORM_NAME == std::string("windows"))
-  {
-    compiler->addLibDirectory(environment->getPrefix() +
-      Util::fixPath("/import/") +
-      PLATFORM_NAME +
-      Util::fixPath("/lib/") +
-      environment->getCompilerName() +
-      Util::fixPath("/x86"));
+    if(PLATFORM_NAME == std::string("windows"))
+    {
+      compiler->addLibDirectory(environment->getPrefix() +
+        Util::fixPath("/import/") +
+        PLATFORM_NAME +
+        Util::fixPath("/lib/") +
+        environment->getCompilerName() +
+        Util::fixPath("/x86"));
+    }
   }
 
   compiler->addObjectDirectory(Util::fixPath(
@@ -286,10 +286,13 @@ void ProjectBuilder::buildOutOfDateObjects()
   arc<Compiler> compiler = Compiler::create(environment);
   compiler->addIncludeDirectory(environment->getPrefix() + Util::fixPath("/src"));
 
-  if(PLATFORM_NAME == std::string("windows"))
+  if(environment->isMutinyAvailable() == true)
   {
-    compiler->addIncludeDirectory(environment->getPrefix() +
-      Util::fixPath("/import/") + PLATFORM_NAME + Util::fixPath("/include"));
+    if(PLATFORM_NAME == std::string("windows"))
+    {
+      compiler->addIncludeDirectory(environment->getPrefix() +
+        Util::fixPath("/import/") + PLATFORM_NAME + Util::fixPath("/include"));
+    }
   }
 
   for(int i = 0; i < includeDirectories.size(); i++)

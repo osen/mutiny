@@ -98,12 +98,15 @@ void Compiler::compile(std::string sourceUnit, std::string output)
 
   std::vector<std::string> defines = environment->getDefines();
 
-  if(std::string(PLATFORM_NAME) == "windows")
+  if(environment->isMutinyAvailable() == true)
   {
-    if(name == "g++" || name == "clang++")
+    if(std::string(PLATFORM_NAME) == "windows")
     {
-      defines.push_back("FREEGLUT_STATIC");
-      defines.push_back("GLEW_STATIC");
+      if(name == "g++" || name == "clang++")
+      {
+        defines.push_back("FREEGLUT_STATIC");
+        defines.push_back("GLEW_STATIC");
+      }
     }
   }
 
