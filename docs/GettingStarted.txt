@@ -1,0 +1,50 @@
+Getting Started
+===============
+
+Getting Mutiny up and running is quick and simple. The main step is compiling
+Mutt, the Mutiny build system.  The commands needed for this step are listed
+below.
+
+Steps for Linux and Mac OS X
+----------------------------
+
+Check out the code from the repository or extract from tarball. Open up a
+command prompt and do the following:
+
+  $ cd <path to mutiny>
+  $ cd bootstrap
+  $ ./bootstrap.sh
+
+Steps for Windows
+-----------------
+
+Check out the code from the repository or extract from tarball. Open up a
+command prompt and do the following:
+
+  > cd <path to mutiny>
+  > cd bootstrap
+  > bootstrap.bat
+
+Compiling a Project
+===================
+
+Now that Mutt has been built, we can now go on to building and running one of
+the sample projects.
+
+Steps for Linux and Mac OS X
+----------------------------
+
+  $ cd samples/experiment
+  $ ../../bin/mutt
+  $ build/linux/bin/experiment
+
+Steps for Windows
+-----------------
+
+  > cd samples\experiment
+  > ..\..\bin\mutt
+  > build\windows\bin\experiment
+
+After the project is built and running successfully, now we can move on to
+creating a new project from scratch.
+
