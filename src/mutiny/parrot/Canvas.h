@@ -26,6 +26,10 @@ public:
 
   bool isHovering();
   bool hasHoveringChanged();
+  bool isPressed();
+  bool hasPressedChanged();
+  bool isReleased();
+  bool hasReleasedChanged();
 
 private:
   arc<Texture2d> texture;
@@ -34,6 +38,10 @@ private:
 
   bool hovering;
   bool hoveringChanged;
+  bool pressed;
+  bool pressedChanged;
+  bool released;
+  bool releasedChanged;
 
   virtual void awake();
   virtual void update();

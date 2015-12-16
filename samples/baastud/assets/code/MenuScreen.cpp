@@ -23,9 +23,11 @@ void MenuScreen::onAwake()
 
   GameObject* closeButtonGo = new GameObject("CloseButton");
   closeButton = closeButtonGo->addComponent<Button>();
+  //closeButtonGo->getTransform()->setLocalScale(Vector3(100, 200, 1));
 
   GameObject* startButtonGo = new GameObject("StartButton");
   startButton = startButtonGo->addComponent<Button>();
+  startButtonGo->getTransform()->setPosition(Vector3(0, 0, 0));
 }
 
 void MenuScreen::onGui()

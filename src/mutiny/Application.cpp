@@ -184,6 +184,10 @@ void Application::setTitle(std::string title)
 #ifdef USE_SDL
   SDL_WM_SetCaption(title.c_str(), NULL);
 #endif
+
+#ifdef USE_GLUT
+  glutSetWindowTitle(title.c_str());
+#endif
 }
 
 bool Application::isValidPrefix(std::string path, std::string basename)
@@ -578,8 +582,8 @@ void Application::display()
 
   Input::downKeys.clear();
   Input::upKeys.clear();
-  Input::downMouseButtons.clear();
-  Input::upMouseButtons.clear();
+  //Input::downMouseButtons.clear();
+  //Input::upMouseButtons.clear();
 
   if(levelChange != "")
   {
@@ -620,6 +624,9 @@ void Application::idle()
 #ifdef USE_GLUT
   glutPostRedisplay();
 #endif
+
+  Input::downMouseButtons.clear();
+  Input::upMouseButtons.clear();
 }
 
 void Application::motion(int x, int y)

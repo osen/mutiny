@@ -48,12 +48,12 @@ void Canvas::awake()
   triangles.push_back(4);
   triangles.push_back(5);
 
-  vertices.push_back(Vector3(x, y, 1));
-  vertices.push_back(Vector3(x, yh, 1));
-  vertices.push_back(Vector3(xw, yh, 1));
-  vertices.push_back(Vector3(xw, yh, 1));
-  vertices.push_back(Vector3(xw, y, 1));
-  vertices.push_back(Vector3(x, y, 1));
+  vertices.push_back(Vector3(x, y, 0));
+  vertices.push_back(Vector3(x, yh, 0));
+  vertices.push_back(Vector3(xw, yh, 0));
+  vertices.push_back(Vector3(xw, yh, 0));
+  vertices.push_back(Vector3(xw, y, 0));
+  vertices.push_back(Vector3(x, y, 0));
 
   uv.push_back(Vector2(0, 0));
   uv.push_back(Vector2(0, 1));
@@ -88,9 +88,32 @@ bool Canvas::hasHoveringChanged()
   return hoveringChanged;
 }
 
+bool Canvas::isPressed()
+{
+  return pressed;
+}
+
+bool Canvas::hasPressedChanged()
+{
+  return pressedChanged;
+}
+
+bool Canvas::isReleased()
+{
+  return released;
+}
+
+bool Canvas::hasReleasedChanged()
+{
+  return releasedChanged;
+}
+
 void Canvas::update()
 {
   hoveringChanged = false;
+  pressedChanged = false;
+  releasedChanged = false;
+  released = false;
 
   Vector3 pos = getGameObject()->getTransform()->getPosition();
   Vector3 scale = getGameObject()->getTransform()->getScale();
@@ -100,11 +123,36 @@ void Canvas::update()
   {
     if(hovering == false) hoveringChanged = true;
     hovering = true;
+
+    if(Input::getMouseButtonDown(0) == true)
+    {
+      if(pressed == false) pressedChanged = true;
+      pressed = true;
+    }
+    else if(Input::getMouseButton(0) == false)
+    {
+      if(pressed == true)
+      {
+        pressedChanged = true;
+        pressed = false;
+        releasedChanged = true;
+        released = true;
+      }
+    }
   }
   else
   {
     if(hovering == true) hoveringChanged = true;
     hovering = false;
+
+    if(Input::getMouseButton(0) == false)
+    {
+      if(pressed == true)
+      {
+        pressedChanged = true;
+        pressed = false;
+      }
+    }
   }
 }
 
@@ -122,9 +170,11 @@ void Canvas::gui()
   modelMat = modelMat.translate(getGameObject()->getTransform()->getPosition());
   modelMat = modelMat.scale(getGameObject()->getTransform()->getScale());
 
+  glDisable(GL_DEPTH_TEST);
   glCullFace(GL_BACK);
   Graphics::drawMeshNow(mesh, modelMat, 0);
   glCullFace(GL_FRONT);
+  glEnable(GL_DEPTH_TEST);
 }
 
 void Canvas::setPosition(int x, int y)
