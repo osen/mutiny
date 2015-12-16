@@ -36,12 +36,31 @@ void Texture2d::setPixel(int x, int y, Color color)
     populateSpace();
   }
 
-  pixels[y][x] = color;
+  pixels.at(y).at(x) = color;
 }
 
 Color Texture2d::getPixel(int x, int y)
 {
-  return pixels[y][x];
+  return pixels.at(y).at(x);
+}
+
+void Texture2d::resize(int width, int height)
+{
+  this->width = width;
+  this->height = height;
+
+  while(pixels.size() < height)
+  {
+    pixels.push_back(std::vector<Color>(width));
+  }
+
+  for(int y = 0; y < height; y++)
+  {
+    while(pixels.at(y).size() < width)
+    {
+      pixels.at(y).push_back(Color(0, 0, 0, 0));
+    }
+  }
 }
 
 void Texture2d::populateSpace()

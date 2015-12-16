@@ -17,6 +17,8 @@ class Button : public Behaviour
 private:
   Canvas* canvas;
 
+  virtual void awake();
+
 };
 
 }

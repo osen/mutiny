@@ -23,6 +23,9 @@ void MenuScreen::onAwake()
 
   GameObject* closeButtonGo = new GameObject("CloseButton");
   closeButton = closeButtonGo->addComponent<Button>();
+
+  GameObject* startButtonGo = new GameObject("StartButton");
+  startButton = startButtonGo->addComponent<Button>();
 }
 
 void MenuScreen::onGui()

@@ -27,6 +27,7 @@ class Texture2d : public Texture
 public:
   Texture2d(int width, int height);
   virtual ~Texture2d();
+  void resize(int width, int height);
   void setPixel(int x, int y, Color color);
   Color getPixel(int x, int y);
   void apply();

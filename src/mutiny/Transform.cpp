@@ -19,6 +19,7 @@ void Transform::onAwake()
 {
   //Debug::log("Transform awake");
   parent = NULL;
+  localScale = Vector3(1, 1, 1);
 }
 
 void Transform::onDestroy()
@@ -36,6 +37,11 @@ void Transform::setLocalPosition(Vector3 position)
 {
   // Take off parent's existing position. Use setLocalPosition to set directly.
   localPosition = position;
+}
+
+void Transform::setLocalScale(Vector3 scale)
+{
+  localScale = scale;
 }
 
 Vector3 Transform::getLocalPosition()
@@ -107,6 +113,11 @@ Vector3 Transform::getRotation()
   }
 
   return rotation;
+}
+
+Vector3 Transform::getScale()
+{
+  return localScale;
 }
 
 void Transform::detachChildren()

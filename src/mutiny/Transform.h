@@ -19,6 +19,7 @@ public:
 
   Vector3 getPosition();
   Vector3 getRotation();
+  Vector3 getScale();
   void setPosition(Vector3 position);
   void setRotation(Vector3 rotation);
 
@@ -26,6 +27,7 @@ public:
   Vector3 getLocalRotation();
   void setLocalPosition(Vector3 position);
   void setLocalRotation(Vector3 rotation);
+  void setLocalScale(Vector3 scale);
 
   void detachChildren();
   Transform* getParent();
@@ -46,6 +48,7 @@ public:
 private:
   Vector3 localPosition;
   Vector3 localRotation;
+  Vector3 localScale;
   Transform* parent;
   std::vector<Transform*> children;
 

@@ -21,6 +21,7 @@ private:
   GameObject* cameraGo;
 
   Button* closeButton;
+  Button* startButton;
 
 };
 

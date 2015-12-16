@@ -16,6 +16,14 @@ Rect::Rect()
   height = 0;
 }
 
+Rect::Rect(Vector2 position, Vector2 size)
+{
+  this->x = position.x;
+  this->y = position.y;
+  this->width = size.x;
+  this->height = size.y;
+}
+
 Rect::Rect(float x, float y, float width, float height)
 {
   this->x = x;

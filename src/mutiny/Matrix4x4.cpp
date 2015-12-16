@@ -94,20 +94,27 @@ float* Matrix4x4::getValue()
 
 Matrix4x4 Matrix4x4::translate(Vector3 vector)
 {
-  Matrix4x4 mat;
+  Matrix4x4 mat = *this;
 
   mat4x4_translate_in_place(mat.m, vector.x, vector.y, vector.z);
 
   return mat;
 }
 
+Matrix4x4 Matrix4x4::scale(Vector3 vector)
+{
+  Matrix4x4 mat = *this;
+
+  mat4x4_scale_aniso(mat.m, m, vector.x, vector.y, vector.z);
+
+  return mat;
+}
+
 Matrix4x4 Matrix4x4::rotate(float angle, Vector3 vector)
 {
-  mat4x4 tmpMat;
   Matrix4x4 mat;
 
-  mat4x4_identity(tmpMat);
-  mat4x4_rotate(mat.m, tmpMat, vector.x, vector.y, vector.z, angle);
+  mat4x4_rotate(mat.m, m, vector.x, vector.y, vector.z, angle);
 
   return mat;
 }

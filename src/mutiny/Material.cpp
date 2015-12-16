@@ -70,21 +70,23 @@ Material* Material::load(std::string path)
 
 Material::Material(std::string vertContents, std::string fragContents)
 {
-  shader = NULL;
   managedShader.reset(new Shader(vertContents, fragContents));
   indexesDirty = true;
+  refreshIds();
 }
 
 Material::Material(arc<Material> material)
 {
   shader = material->getShader();
   indexesDirty = true;
+  refreshIds();
 }
 
 Material::Material(arc<Shader> shader)
 {
   this->shader = shader;
   indexesDirty = true;
+  refreshIds();
 }
 
 arc<Texture> Material::getTexture(std::string propertyName)
@@ -235,6 +237,8 @@ void Material::refreshIndexes()
 
     textureIndexes[i] = uniformId;
   }
+
+  refreshIds();
 }
 
 arc<Texture> Material::getMainTexture()
@@ -263,6 +267,15 @@ void Material::setShader(arc<Shader> shader)
 {
   this->shader = shader;
   indexesDirty = true;
+  refreshIds();
+}
+
+void Material::refreshIds()
+{
+  positionId = glGetAttribLocation(getShader()->programId, "in_Position");
+  uvId = glGetAttribLocation(getShader()->programId, "in_Uv");
+  normalId = glGetAttribLocation(getShader()->programId, "in_Normal");
+  modelUniformId = glGetUniformLocation(getShader()->programId, "in_Model");
 }
 
 int Material::getPassCount()

@@ -186,6 +186,8 @@ void Graphics::drawMeshNow(arc<Mesh> mesh, Matrix4x4 matrix, int materialIndex)
     return;
   }
 
+  material->setMatrix("in_Model", matrix);
+
   shader = material->getShader();
 
   if(shader.get() == NULL)
@@ -194,17 +196,19 @@ void Graphics::drawMeshNow(arc<Mesh> mesh, Matrix4x4 matrix, int materialIndex)
     return;
   }
 
-  GLuint modelUniformId = glGetUniformLocation(shader->programId, "in_Model");
+  GLuint modelUniformId = material->modelUniformId;
 
   if(modelUniformId != -1)
   {
-    //material->setMatrix("in_Model", matrix);
     glUniformMatrix4fv(modelUniformId, 1, GL_FALSE, matrix.getValue());
   }
 
-  GLint positionAttribId = glGetAttribLocation(shader->programId, "in_Position");
-  GLint normalAttribId = glGetAttribLocation(shader->programId, "in_Normal");
-  GLint uvAttribId = glGetAttribLocation(shader->programId, "in_Uv");
+  //GLint positionAttribId = glGetAttribLocation(shader->programId, "in_Position");
+  GLint positionAttribId = material->positionId;
+  //GLint normalAttribId = glGetAttribLocation(shader->programId, "in_Normal");
+  //GLint uvAttribId = glGetAttribLocation(shader->programId, "in_Uv");
+  GLint normalAttribId = material->normalId;
+  GLint uvAttribId = material->uvId;
 
   if(positionAttribId != -1)
   {

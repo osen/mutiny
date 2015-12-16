@@ -69,11 +69,17 @@ private:
   std::vector<Vector2> vector2s; std::vector<GLuint> vector2Indexes; std::vector<std::string> vector2Names;
   std::vector<arc<Texture> > textures; std::vector<GLuint> textureIndexes; std::vector<std::string> textureNames;
 
+  GLint positionId;
+  GLint uvId;
+  GLint normalId;
+  GLint modelUniformId;
+
   arc<Shader> managedShader;
   arc<Shader> shader;
 
   bool indexesDirty;
   void refreshIndexes();
+  void refreshIds();
 
 };
 
