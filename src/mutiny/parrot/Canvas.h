@@ -22,26 +22,25 @@ class Canvas : public Behaviour
 public:
   void setSize(int width, int height);
   void setPosition(int x, int y);
+
   void fillRectangle(Rect rect, Color color);
 
   bool isHovering();
-  bool hasHoveringChanged();
   bool isPressed();
-  bool hasPressedChanged();
   bool isReleased();
-  bool hasReleasedChanged();
+  bool needsRepaint();
 
 private:
   arc<Texture2d> texture;
   arc<Mesh> mesh;
   arc<Material> material;
 
+  bool needsApply;
+
+  bool repaint;
   bool hovering;
-  bool hoveringChanged;
   bool pressed;
-  bool pressedChanged;
   bool released;
-  bool releasedChanged;
 
   virtual void awake();
   virtual void update();

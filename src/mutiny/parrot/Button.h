@@ -14,6 +14,9 @@ class Canvas;
 
 class Button : public Behaviour
 {
+public:
+  Canvas* getCanvas();
+
 private:
   Canvas* canvas;
 

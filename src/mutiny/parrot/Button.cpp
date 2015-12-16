@@ -18,6 +18,11 @@ void Button::awake()
   redraw();
 }
 
+Canvas* Button::getCanvas()
+{
+  return canvas;
+}
+
 void Button::redraw()
 {
   int width = canvas->getGameObject()->getTransform()->getScale().x;
@@ -51,8 +56,7 @@ void Button::redraw()
 
 void Button::update()
 {
-  if(canvas->hasHoveringChanged() == true ||
-     canvas->hasPressedChanged() == true)
+  if(canvas->needsRepaint() == true)
   {
     redraw();
   }

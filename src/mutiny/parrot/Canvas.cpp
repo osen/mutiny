@@ -27,7 +27,7 @@ namespace engine
 void Canvas::awake()
 {
   texture.reset(new Texture2d(128, 128));
-  texture->apply();
+  needsApply = true;
 
   std::vector<Vector3> vertices;
   std::vector<Vector2> uv;
@@ -75,7 +75,21 @@ void Canvas::awake()
   }
 
   material.reset(new Material(shader));
+}
 
+void Canvas::setSize(int width, int height)
+{
+  getGameObject()->getTransform()->setLocalScale(Vector3(width, height, 1));
+}
+
+void Canvas::setPosition(int x, int y)
+{
+  getGameObject()->getTransform()->setLocalPosition(Vector3(x, y, 0));
+}
+
+bool Canvas::needsRepaint()
+{
+  return repaint;
 }
 
 bool Canvas::isHovering()
@@ -83,19 +97,9 @@ bool Canvas::isHovering()
   return hovering;
 }
 
-bool Canvas::hasHoveringChanged()
-{
-  return hoveringChanged;
-}
-
 bool Canvas::isPressed()
 {
   return pressed;
-}
-
-bool Canvas::hasPressedChanged()
-{
-  return pressedChanged;
 }
 
 bool Canvas::isReleased()
@@ -103,17 +107,10 @@ bool Canvas::isReleased()
   return released;
 }
 
-bool Canvas::hasReleasedChanged()
-{
-  return releasedChanged;
-}
-
 void Canvas::update()
 {
-  hoveringChanged = false;
-  pressedChanged = false;
-  releasedChanged = false;
   released = false;
+  repaint = false;
 
   Vector3 pos = getGameObject()->getTransform()->getPosition();
   Vector3 scale = getGameObject()->getTransform()->getScale();
@@ -121,39 +118,53 @@ void Canvas::update()
 
   if(bounds.contains(Input::getMousePosition()) == true)
   {
-    if(hovering == false) hoveringChanged = true;
+    if(hovering == false) repaint = true;
     hovering = true;
 
     if(Input::getMouseButtonDown(0) == true)
     {
-      if(pressed == false) pressedChanged = true;
+      if(pressed == false) repaint = true;
       pressed = true;
     }
     else if(Input::getMouseButton(0) == false)
     {
       if(pressed == true)
       {
-        pressedChanged = true;
+        repaint = true;
         pressed = false;
-        releasedChanged = true;
         released = true;
       }
     }
   }
   else
   {
-    if(hovering == true) hoveringChanged = true;
+    if(hovering == true) repaint = true;
     hovering = false;
 
     if(Input::getMouseButton(0) == false)
     {
       if(pressed == true)
       {
-        pressedChanged = true;
+        repaint = true;
         pressed = false;
       }
     }
   }
+
+  if(scale.x != texture->getWidth() || scale.y != texture->getHeight())
+  {
+    texture->resize(scale.x, scale.y);
+    needsApply = true;
+  }
+
+  if(needsApply == true)
+  {
+    texture->apply();
+    needsApply = false;
+    repaint = true;
+  }
+
+  repaint = true;
 }
 
 void Canvas::gui()
@@ -177,17 +188,6 @@ void Canvas::gui()
   glEnable(GL_DEPTH_TEST);
 }
 
-void Canvas::setPosition(int x, int y)
-{
-  getGameObject()->getTransform()->setLocalPosition(Vector3(x, y, 0));
-}
-
-void Canvas::setSize(int width, int height)
-{
-  getGameObject()->getTransform()->setLocalScale(Vector3(width, height, 0));
-  texture->resize(width, height);
-}
-
 void Canvas::fillRectangle(Rect rect, Color color)
 {
   for(int y = rect.y; y < rect.y + rect.height; y++)
@@ -198,7 +198,7 @@ void Canvas::fillRectangle(Rect rect, Color color)
     }
   }
 
-  texture->apply();
+  needsApply = true;
 }
 
 }
