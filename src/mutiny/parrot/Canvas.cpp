@@ -14,6 +14,7 @@
 #include "../Color.h"
 #include "../GameObject.h"
 #include "../Transform.h"
+#include "../Input.h"
 
 #include <GL/glew.h>
 
@@ -75,6 +76,36 @@ void Canvas::awake()
 
   material.reset(new Material(shader));
 
+}
+
+bool Canvas::isHovering()
+{
+  return hovering;
+}
+
+bool Canvas::hasHoveringChanged()
+{
+  return hoveringChanged;
+}
+
+void Canvas::update()
+{
+  hoveringChanged = false;
+
+  Vector3 pos = getGameObject()->getTransform()->getPosition();
+  Vector3 scale = getGameObject()->getTransform()->getScale();
+  Rect bounds(pos.x, pos.y, scale.x, scale.y);
+
+  if(bounds.contains(Input::getMousePosition()) == true)
+  {
+    if(hovering == false) hoveringChanged = true;
+    hovering = true;
+  }
+  else
+  {
+    if(hovering == true) hoveringChanged = true;
+    hovering = false;
+  }
 }
 
 void Canvas::gui()

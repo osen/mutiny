@@ -17,7 +17,9 @@ class Button : public Behaviour
 private:
   Canvas* canvas;
 
+  void redraw();
   virtual void awake();
+  virtual void update();
 
 };
 
