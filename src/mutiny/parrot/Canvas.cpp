@@ -24,6 +24,8 @@ namespace mutiny
 namespace engine
 {
 
+Canvas* Canvas::active = NULL;
+
 void Canvas::awake()
 {
   texture.reset(new Texture2d(128, 128));
@@ -92,6 +94,16 @@ bool Canvas::needsRepaint()
   return repaint;
 }
 
+bool Canvas::isActive()
+{
+  if(active == this)
+  {
+    return true;
+  }
+
+  return false;
+}
+
 bool Canvas::isHovering()
 {
   return hovering;
@@ -125,6 +137,7 @@ void Canvas::update()
     {
       if(pressed == false) repaint = true;
       pressed = true;
+      active = this;
     }
     else if(Input::getMouseButton(0) == false)
     {
@@ -186,6 +199,11 @@ void Canvas::gui()
   Graphics::drawMeshNow(mesh, modelMat, 0);
   glCullFace(GL_FRONT);
   glEnable(GL_DEPTH_TEST);
+}
+
+void Canvas::drawText(Vector2 position, arc<Font> font, std::string text)
+{
+  fillRectangle(Rect(position.x, position.y, 75, 25), Color(0, 0, 0));
 }
 
 void Canvas::fillRectangle(Rect rect, Color color)

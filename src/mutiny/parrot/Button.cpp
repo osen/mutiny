@@ -33,7 +33,12 @@ void Button::redraw()
   Color tlBevelColor(0.8f, 0.8f, 0.8f);
   Color brBevelColor(0.3f, 0.3f, 0.3f);
 
-  if(canvas->isHovering() == false)
+  if(canvas->isHovering() == true)
+  {
+    backgroundColor = Color(0.7f, 0.7f, 0.7f);
+  }
+
+  if(canvas->isActive() == false)
   {
     activeColor.a = 0;
   }
@@ -52,6 +57,8 @@ void Button::redraw()
   canvas->fillRectangle(Rect(1, 1, 1, height - 2), tlBevelColor);
   canvas->fillRectangle(Rect(width - 2, 1, 1, height - 2), brBevelColor);
   canvas->fillRectangle(Rect(2, height - 2, width - 3, 1), brBevelColor);
+
+  canvas->drawText(Vector2(10, 10), font, "Hello");
 }
 
 void Button::update()

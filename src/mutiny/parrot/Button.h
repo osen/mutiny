@@ -3,6 +3,8 @@
 
 #include "Canvas.h"
 #include "../Behaviour.h"
+#include "../Font.h"
+#include "../arc.h"
 
 namespace mutiny
 {
@@ -19,6 +21,7 @@ public:
 
 private:
   Canvas* canvas;
+  arc<Font> font;
 
   void redraw();
   virtual void awake();

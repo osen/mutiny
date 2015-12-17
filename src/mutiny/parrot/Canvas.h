@@ -6,6 +6,9 @@
 #include "../Color.h"
 #include "../Rect.h"
 #include "../arc.h"
+#include "../Font.h"
+
+#include <string>
 
 namespace mutiny
 {
@@ -24,13 +27,17 @@ public:
   void setPosition(int x, int y);
 
   void fillRectangle(Rect rect, Color color);
+  void drawText(Vector2 position, arc<Font> font, std::string text);
 
   bool isHovering();
   bool isPressed();
   bool isReleased();
   bool needsRepaint();
+  bool isActive();
 
 private:
+  static Canvas* active;
+
   arc<Texture2d> texture;
   arc<Mesh> mesh;
   arc<Material> material;
