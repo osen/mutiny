@@ -24,19 +24,17 @@ RenderTexture::RenderTexture(int width, int height)
   this->width = width;
   this->height = height;
 
-  glGenFramebuffers(1, &nativeFrameBuffer);
+  nativeFrameBuffer = gl::Uint::genFramebuffer();
   // TODO:
   //_nativeFrameBuffer.reset(&nativeFrameBuffer, std::bind(deleteFramebuffer, nativeFrameBuffer));
-  glBindFramebuffer(GL_FRAMEBUFFER, nativeFrameBuffer);
+  glBindFramebuffer(GL_FRAMEBUFFER, nativeFrameBuffer->getGLuint());
 
-  if(nativeTexture == -1)
+  if(nativeTexture.get() == NULL)
   {
-    glGenTextures(1, &nativeTexture);
-    // TODO:
-    //_nativeTexture.reset(&nativeTexture, std::bind(deleteTexture, nativeTexture));
+    nativeTexture = gl::Uint::genTexture();
   }
 
-  glBindTexture(GL_TEXTURE_2D, nativeTexture);
+  glBindTexture(GL_TEXTURE_2D, nativeTexture->getGLuint());
 
   //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -51,14 +49,12 @@ RenderTexture::RenderTexture(int width, int height)
 
   //glGenerateMipmapEXT(GL_TEXTURE_2D);
 
-  glGenRenderbuffers(1, &nativeRenderBuffer);
-  // TODO:
-  //_nativeRenderBuffer.reset(&nativeRenderBuffer, std::bind(deleteRenderbuffer, nativeRenderBuffer));
-  glBindRenderbuffer(GL_RENDERBUFFER, nativeRenderBuffer);
+  nativeRenderBuffer = gl::Uint::genRenderbuffer();
+  glBindRenderbuffer(GL_RENDERBUFFER, nativeRenderBuffer->getGLuint());
   glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height);
-  glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, nativeRenderBuffer);
+  glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, nativeRenderBuffer->getGLuint());
 
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, nativeTexture, 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, nativeTexture->getGLuint(), 0);
 
   if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
   {
@@ -84,7 +80,7 @@ void RenderTexture::setActive(arc<RenderTexture> renderTexture)
 
   if(renderTexture.get() != NULL)
   {
-    glBindFramebuffer(GL_FRAMEBUFFER, renderTexture->nativeFrameBuffer);
+    glBindFramebuffer(GL_FRAMEBUFFER, renderTexture->nativeFrameBuffer->getGLuint());
     glViewport(0, 0, renderTexture->width, renderTexture->height);
   }
   else

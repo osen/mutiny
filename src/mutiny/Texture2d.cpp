@@ -75,11 +75,9 @@ void Texture2d::apply()
 {
   std::vector<GLbyte> imageBytes;
 
-  if(nativeTexture == -1)
+  if(nativeTexture.get() == NULL)
   {
-    glGenTextures(1, &nativeTexture);
-    // TODO:
-    //_nativeTexture.reset(&nativeTexture, std::bind(deleteTexture, nativeTexture));
+    nativeTexture = gl::Uint::genTexture();
   }
 
   if(pixels.size() < 1)
@@ -98,7 +96,7 @@ void Texture2d::apply()
     }
   }
 
-  glBindTexture(GL_TEXTURE_2D, nativeTexture);
+  glBindTexture(GL_TEXTURE_2D, nativeTexture->getGLuint());
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, &imageBytes[0]);
 
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -147,11 +145,9 @@ Texture2d* Texture2d::load(std::string path)
 
   Texture2d* texture = new Texture2d(image->width, image->height);
 
-  if(texture->nativeTexture == -1)
+  if(texture->nativeTexture.get() == NULL)
   {
-    glGenTextures(1, &texture->nativeTexture);
-    // TODO:
-    //texture->_nativeTexture.reset(&texture->nativeTexture, std::bind(deleteTexture, texture->nativeTexture));
+    texture->nativeTexture = gl::Uint::genTexture();
   }
 
   int sampleWidth = image->width;
@@ -180,7 +176,7 @@ Texture2d* Texture2d::load(std::string path)
     }
   }
 
-  glBindTexture(GL_TEXTURE_2D, texture->nativeTexture);
+  glBindTexture(GL_TEXTURE_2D, texture->nativeTexture->getGLuint());
   glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, sampleWidth, sampleHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, &imageBytes[0]);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

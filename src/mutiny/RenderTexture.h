@@ -2,6 +2,7 @@
 #define MUTINY_ENGINE_RENDERTEXTURE_H
 
 #include "Texture.h"
+#include "internal/glmm.h"
 
 namespace mutiny
 {
@@ -27,11 +28,8 @@ public:
 private:
   static arc<RenderTexture> active;
 
-  GLuint nativeFrameBuffer;
-  arc<GLuint> _nativeFrameBuffer;
-
-  GLuint nativeRenderBuffer;
-  arc<GLuint> _nativeRenderBuffer;
+  arc<gl::Uint> nativeFrameBuffer;
+  arc<gl::Uint> nativeRenderBuffer;
 
 };
 

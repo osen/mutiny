@@ -3,6 +3,7 @@
 
 #include "Object.h"
 #include "arc.h"
+#include "internal/glmm.h"
 
 #include <GL/glew.h>
 
@@ -25,14 +26,10 @@ public:
   GLuint getNativeTexture();
 
 protected:
-  static void deleteFramebuffer(GLuint id);
-  static void deleteTexture(GLuint id);
-  static void deleteRenderbuffer(GLuint id);
-
   int width;
   int height;
-  GLuint nativeTexture;
-  arc<char> _nativeTexture;
+
+  arc<gl::Uint> nativeTexture;
 
 };
 
