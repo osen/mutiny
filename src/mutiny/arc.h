@@ -4,6 +4,7 @@
 #include "internal/platform.h"
 
 #include <memory>
+#include <vector>
 #include <cstdlib>
 
 #ifdef HAS_TR1_NAMESPACE
@@ -14,6 +15,21 @@ template <class T>
 class arc
 {
 public:
+  static arc<T> arc_from_ptr(void* ptr)
+  {
+    arc<T> rtn;
+
+    for(int i = 0; i < arcs().size(); i++)
+    {
+      if(arcs().at(i)->get() == ptr)
+      {
+        rtn = *arcs().at(i);
+        break;
+      }
+    }
+
+    return rtn;
+  }
 
   static arc<T> alloc()
   {
@@ -33,11 +49,34 @@ public:
     return rtn;
   }
 
-  arc(){}
+  arc()
+  {
+    arcs().push_back(this);
+  }
+
+  ~arc()
+  {
+    for(int i = 0; i < arcs().size(); i++)
+    {
+      if(arcs().at(i) == this)
+      {
+        arcs().erase(arcs().begin() + i);
+        return;
+      }
+    }
+  }
 
   arc(T* t)
   {
     reset(t);
+    arcs().push_back(this);
+  }
+
+  arc(const arc<T>& other)
+  {
+    shared = other.shared;
+    weak = other.weak;
+    arcs().push_back(this);
   }
 
   arc<T>& operator=(const arc<T>& other)
@@ -171,6 +210,11 @@ private:
     //delete t;
   }
 
+  static std::vector<arc<T>*>& arcs()
+  {
+    static std::vector<arc<T>*> rtn;
+    return rtn;
+  }
 
 };
 
