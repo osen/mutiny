@@ -85,28 +85,14 @@ public:
 
   template<class T> T* addComponent()
   {
-    T* tm = (T*)calloc(1, sizeof(*tm));
-
-    if(tm == NULL)
-    {
-      throw std::exception();
-    }
-
-    T* t = new(tm) T();
-
-    if(t == NULL)
-    {
-      free(tm);
-      throw std::exception();
-    }
-
-    arc<Component> c = arc<Component>::placement_alloc(t);
+    arc<T> t = arc<T>::alloc();
+    arc<Component> c = t.template cast<Component>();
 
     components.push_back(c);
     c->gameObject = this;
     c->awake();
 
-    return (T*)c.get();
+    return t.get();
   }
 
   template<class T> T* getComponent()

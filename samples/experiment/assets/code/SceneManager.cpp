@@ -13,6 +13,7 @@ using namespace mutiny::engine;
 
 void SceneManager::onAwake()
 {
+  Debug::log("Awake");
   watermark = Resources::load<Texture2d>("textures/watermark");
   dontDestroyOnLoad(watermark.cast<Object>());
   dontDestroyOnLoad(getGameObject());

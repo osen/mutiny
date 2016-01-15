@@ -40,15 +40,6 @@ public:
     return rtn;
   }
 
-  static arc<T> placement_alloc(T* ptr)
-  {
-    arc<T> rtn;
-
-    rtn.shared.reset(ptr, _arc);
-
-    return rtn;
-  }
-
   arc()
   {
     arcs().push_back(this);
