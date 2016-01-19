@@ -36,7 +36,7 @@ public:
   bool isActive();
 
 private:
-  static Canvas* active;
+  static arc<Canvas> currentActive;
 
   arc<Texture2d> texture;
   arc<Mesh> mesh;
@@ -48,6 +48,7 @@ private:
   bool hovering;
   bool pressed;
   bool released;
+  bool active;
 
   virtual void awake();
   virtual void update();

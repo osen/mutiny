@@ -36,6 +36,11 @@ void Texture2d::setPixel(int x, int y, Color color)
     populateSpace();
   }
 
+  if(y >= pixels.size() || x >= pixels.at(0).size())
+  {
+    return;
+  }
+
   pixels.at(y).at(x) = color;
 }
 

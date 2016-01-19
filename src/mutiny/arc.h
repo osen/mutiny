@@ -15,22 +15,6 @@ template <class T>
 class arc
 {
 public:
-  static arc<T> arc_from_ptr(void* ptr)
-  {
-    arc<T> rtn;
-
-    for(int i = 0; i < arcs().size(); i++)
-    {
-      if(arcs().at(i)->get() == ptr)
-      {
-        rtn = *arcs().at(i);
-        break;
-      }
-    }
-
-    return rtn;
-  }
-
   static arc<T> alloc()
   {
     arc<T> rtn;
@@ -40,34 +24,19 @@ public:
     return rtn;
   }
 
-  arc()
-  {
-    arcs().push_back(this);
-  }
+  arc(){}
 
-  ~arc()
-  {
-    for(int i = 0; i < arcs().size(); i++)
-    {
-      if(arcs().at(i) == this)
-      {
-        arcs().erase(arcs().begin() + i);
-        return;
-      }
-    }
-  }
+  ~arc(){}
 
   arc(T* t)
   {
     reset(t);
-    arcs().push_back(this);
   }
 
   arc(const arc<T>& other)
   {
     shared = other.shared;
     weak = other.weak;
-    arcs().push_back(this);
   }
 
   arc<T>& operator=(const arc<T>& other)
@@ -117,8 +86,7 @@ public:
     shared.reset();
   }
 
-/*
-  arc<T> makeWeak()
+  arc<T> getWeak()
   {
     arc<T> rtn = *this;
 
@@ -131,7 +99,7 @@ public:
     return rtn;
   }
 
-  arc<T> makeStrong()
+  arc<T> getStrong()
   {
     arc<T> rtn = *this;
 
@@ -143,7 +111,6 @@ public:
 
     return rtn;
   }
-*/
 
   T* get()
   {
@@ -199,12 +166,6 @@ private:
     t->~T();
     free(t);
     //delete t;
-  }
-
-  static std::vector<arc<T>*>& arcs()
-  {
-    static std::vector<arc<T>*> rtn;
-    return rtn;
   }
 
 };

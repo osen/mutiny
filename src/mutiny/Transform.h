@@ -22,6 +22,7 @@ public:
   Vector3 getScale();
   void setPosition(Vector3 position);
   void setRotation(Vector3 rotation);
+  void setScale(Vector3 scale);
 
   Vector3 getLocalPosition();
   Vector3 getLocalRotation();

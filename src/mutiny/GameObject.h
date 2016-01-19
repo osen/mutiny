@@ -87,6 +87,7 @@ public:
   {
     arc<T> t = arc<T>::alloc();
     arc<Component> c = t.template cast<Component>();
+    c->self = c.getWeak();
 
     components.push_back(c);
     c->gameObject = this;

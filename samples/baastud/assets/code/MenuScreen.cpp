@@ -28,6 +28,8 @@ void MenuScreen::onAwake()
   GameObject* startButtonGo = new GameObject("StartButton");
   startButton = startButtonGo->addComponent<Button>();
   startButton->getCanvas()->setPosition(300, 200);
+  startButtonGo->getTransform()->setPosition(Vector3(0, 0, 0));
+  startButtonGo->getTransform()->setScale(Vector3(256, 256, 0));
 }
 
 void MenuScreen::onGui()

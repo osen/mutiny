@@ -87,6 +87,27 @@ void Transform::setPosition(Vector3 position)
   }
 }
 
+void Transform::setScale(Vector3 scale)
+{
+  if(getParent() != NULL)
+  {
+    Matrix4x4 trs = Matrix4x4::getIdentity();
+    Transform* trans = getParent();
+
+    while(trans != NULL)
+    {
+      trs = Matrix4x4::getTrs(trans->localPosition, trans->localRotation, trans->localScale) * trs;
+      trans = trans->getParent();
+    }
+
+    localScale = trs.inverse() * scale;
+  }
+  else
+  {
+    localScale = scale;
+  }
+}
+
 Vector3 Transform::getPosition()
 {
   Matrix4x4 trs = Matrix4x4::getIdentity();

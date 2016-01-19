@@ -24,11 +24,11 @@ namespace mutiny
 namespace engine
 {
 
-Canvas* Canvas::active = NULL;
+arc<Canvas> Canvas::currentActive;
 
 void Canvas::awake()
 {
-  texture.reset(new Texture2d(128, 128));
+  texture.reset(new Texture2d(64, 64));
   needsApply = true;
 
   std::vector<Vector3> vertices;
@@ -36,7 +36,7 @@ void Canvas::awake()
   std::vector<int> triangles;
 
   getGameObject()->getTransform()->setLocalPosition(Vector3(100, 100, 0));
-  getGameObject()->getTransform()->setLocalScale(Vector3(128, 128, 0));
+  getGameObject()->getTransform()->setLocalScale(Vector3(64, 64, 0));
 
   float x = 0;
   float y = 0;
@@ -96,7 +96,7 @@ bool Canvas::needsRepaint()
 
 bool Canvas::isActive()
 {
-  if(active == this)
+  if(currentActive.get() == this)
   {
     return true;
   }
@@ -137,7 +137,8 @@ void Canvas::update()
     {
       if(pressed == false) repaint = true;
       pressed = true;
-      active = this;
+      currentActive = self.dynamicCast<Canvas>();
+      active = true;
     }
     else if(Input::getMouseButton(0) == false)
     {
@@ -168,16 +169,20 @@ void Canvas::update()
   {
     texture->resize(scale.x, scale.y);
     needsApply = true;
+    repaint = true;
+  }
+
+  if(active == true && isActive() == false)
+  {
+    active = false;
+    repaint = true;
   }
 
   if(needsApply == true)
   {
     texture->apply();
     needsApply = false;
-    repaint = true;
   }
-
-  repaint = true;
 }
 
 void Canvas::gui()

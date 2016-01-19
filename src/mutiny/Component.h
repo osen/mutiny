@@ -24,6 +24,9 @@ public:
 
   GameObject* getGameObject();
 
+protected:
+  arc<Component> self;
+
 private:
   GameObject* gameObject;
 
