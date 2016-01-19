@@ -3,6 +3,7 @@
 
 #include "internal/platform.h"
 
+#include <iostream>
 #include <memory>
 #include <vector>
 #include <cstdlib>
@@ -15,6 +16,22 @@ template <class T>
 class arc
 {
 public:
+  static arc<T> arc_from_ptr(void* ptr)
+  {
+    arc<T> rtn;
+
+    for(int i = 0; i < arcs().size(); i++)
+    {
+      if(arcs().at(i)->get() == ptr)
+      {
+        rtn = *arcs().at(i);
+        break;
+      }
+    }
+
+    return rtn;
+  }
+
   static arc<T> alloc()
   {
     arc<T> rtn;
@@ -24,19 +41,44 @@ public:
     return rtn;
   }
 
-  arc(){}
-
-  ~arc(){}
+  arc()
+  {
+    if(arcs == NULL) arcs = new std::vector<arc<T>*>();
+    arcs->push_back(this);
+  }
 
   arc(T* t)
   {
     reset(t);
+    if(arcs == NULL) arcs = new std::vector<arc<T>*>();
+	arcs->push_back(this);
   }
 
   arc(const arc<T>& other)
   {
     shared = other.shared;
     weak = other.weak;
+
+    if(arcs == NULL) arcs = new std::vector<arc<T>*>();
+	arcs->push_back(this);
+  }
+
+  ~arc()
+  {
+    for(size_t i = 0; i < arcs->size(); i++)
+    {
+      if(arcs->at(i) == this)
+      {
+        arcs->erase(arcs->begin() + i);
+        break;
+      }
+    }
+
+    if(arcs->size() <= 0)
+    {
+      delete arcs;
+      arcs = NULL;
+    }
   }
 
   arc<T>& operator=(const arc<T>& other)
@@ -168,6 +210,10 @@ private:
     //delete t;
   }
 
+  static std::vector<arc<T>*>* arcs;
+
 };
+
+template <class T> std::vector<arc<T>*>* arc<T>::arcs = NULL;
 
 #endif
