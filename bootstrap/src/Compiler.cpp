@@ -76,7 +76,7 @@ void Compiler::compile(std::string sourceUnit, std::string output)
   {
     if(program == "cl")
     {
-      debugFragment += " /Ox";
+      debugFragment += " /Ox /DNDEBUG";
     }
     else
     {
@@ -102,11 +102,11 @@ void Compiler::compile(std::string sourceUnit, std::string output)
   {
     if(std::string(PLATFORM_NAME) == "windows")
     {
-      if(name == "g++" || name == "clang++")
-      {
+      //if(name == "g++" || name == "clang++")
+      //{
         defines.push_back("FREEGLUT_STATIC");
         defines.push_back("GLEW_STATIC");
-      }
+      //}
     }
   }
 
@@ -170,16 +170,25 @@ void Compiler::link(std::string output)
 {
   std::string program = name;
   std::string debugFragment;
+  std::string libsFragment;
 
   if(environment->isDebug() == true)
   {
     if(program == "cl")
     {
       debugFragment += " /DEBUG";
+      libsFragment += " /NODEFAULTLIB:freeglut_static.lib /NODEFAULTLIB:freeglut_staticd.lib";
     }
     else
     {
       debugFragment += " -g";
+    }
+  }
+  else
+  {
+    if(program == "cl")
+    {
+      libsFragment += " /NODEFAULTLIB:freeglut_static.lib";
     }
   }
 
@@ -189,8 +198,6 @@ void Compiler::link(std::string output)
   {
     objectsFragment += " " + objectDirectories.at(i) + Util::fixPath("/*.") + getObjectSuffix();
   }
-
-  std::string libsFragment = "";
 
   for(int i = 0; i < libDirectories.size(); i++)
   {
@@ -217,7 +224,8 @@ void Compiler::link(std::string output)
     }
     else if(name == "cl")
     {
-      libsFragment += " SDL.lib SDLmain.lib SDL_mixer.lib glew32.lib opengl32.lib user32.lib";
+      //libsFragment += " SDL.lib SDLmain.lib SDL_mixer.lib glew32.lib opengl32.lib user32.lib";
+      libsFragment += " freeglut.lib glew.lib openal.lib ogg.lib vorbis.lib vorbisfile.lib opengl32.lib user32.lib";
     }
     else if(std::string(PLATFORM_NAME) == "windows")
     {

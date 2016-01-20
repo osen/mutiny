@@ -209,12 +209,7 @@ void ProjectBuilder::generateOutOfDateOutput()
 
     if(PLATFORM_NAME == std::string("windows"))
     {
-      compiler->addLibDirectory(environment->getPrefix() +
-        Util::fixPath("/import/") +
-        PLATFORM_NAME +
-        Util::fixPath("/lib/") +
-        environment->getCompilerName() +
-        Util::fixPath("/x86"));
+      compiler->addLibDirectory(environment->getPrefix() + Util::fixPath("/lib"));
     }
   }
 
@@ -296,8 +291,7 @@ void ProjectBuilder::buildOutOfDateObjects()
   {
     if(PLATFORM_NAME == std::string("windows"))
     {
-      compiler->addIncludeDirectory(environment->getPrefix() +
-        Util::fixPath("/import/") + PLATFORM_NAME + Util::fixPath("/include"));
+      compiler->addIncludeDirectory(environment->getPrefix() + Util::fixPath("/include"));
     }
   }
 

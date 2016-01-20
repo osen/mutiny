@@ -4,7 +4,8 @@
 #ifdef EMSCRIPTEN
   #define USE_SDL
 #elif _MSC_VER
-  #define USE_SDL
+  //#define USE_SDL
+  #define USE_GLUT
 #else
   #define USE_GLUT
 #endif
