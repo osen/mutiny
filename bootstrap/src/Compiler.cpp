@@ -177,7 +177,11 @@ void Compiler::link(std::string output)
     if(program == "cl")
     {
       debugFragment += " /DEBUG";
-      libsFragment += " /NODEFAULTLIB:freeglut_static.lib /NODEFAULTLIB:freeglut_staticd.lib";
+
+      if(environment->isMutinyAvailable() == true)
+      {
+        libsFragment += " /NODEFAULTLIB:freeglut_static.lib /NODEFAULTLIB:freeglut_staticd.lib";
+      }
     }
     else
     {
@@ -188,7 +192,10 @@ void Compiler::link(std::string output)
   {
     if(program == "cl")
     {
-      libsFragment += " /NODEFAULTLIB:freeglut_static.lib";
+      if(environment->isMutinyAvailable() == true)
+      {
+        libsFragment += " /NODEFAULTLIB:freeglut_static.lib";
+      }
     }
   }
 
