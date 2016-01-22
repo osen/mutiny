@@ -22,6 +22,7 @@ public:
   std::string getName();
   std::string getObjectSuffix();
   std::string getExecutableSuffix();
+  void obtainPreEnvironmentScript();
 
 private:
   shared<Environment> environment;
@@ -30,6 +31,7 @@ private:
   std::vector<std::string> objectDirectories;
   std::vector<std::string> libs;
   std::string name;
+  std::string preEnvironmentScript;
 
 };
 

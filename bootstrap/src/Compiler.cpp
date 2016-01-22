@@ -12,12 +12,49 @@ shared<Compiler> Compiler::create(shared<Environment> environment)
   rtn->environment = environment;
   rtn->name = environment->getCompilerName();
 
-  if(rtn->name == "cl")
-  {
-    Util::execute("call \"C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\vcvarsall.bat\"");
-  }
+  rtn->obtainPreEnvironmentScript();
 
   return rtn;
+}
+
+void Compiler::obtainPreEnvironmentScript()
+{
+  std::string script;
+
+  if(name == "cl")
+  {
+    try
+    {
+      script = "call \"C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\VC\\vcvarsall.bat\"";
+      Util::execute(script);
+      preEnvironmentScript = script;
+      return;
+    } catch(std::exception& e){}
+
+    try
+    {
+      script = "call \"C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\vcvarsall.bat\"";
+      Util::execute(script);
+      preEnvironmentScript = script;
+      return;
+    } catch(std::exception& e){}
+
+    try
+    {
+      script = "call \"C:\\Program Files (x86)\\Microsoft Visual Studio 11.0\\VC\\vcvarsall.bat\"";
+      Util::execute(script);
+      preEnvironmentScript = script;
+      return;
+    } catch(std::exception& e){}
+
+    try
+    {
+      script = "call \"C:\\Program Files (x86)\\Microsoft Visual Studio 10.0\\VC\\vcvarsall.bat\"";
+      Util::execute(script);
+      preEnvironmentScript = script;
+      return;
+    } catch(std::exception& e){}
+  }
 }
 
 std::string Compiler::getName()
@@ -126,7 +163,7 @@ void Compiler::compile(std::string sourceUnit, std::string output)
 
   if(program == "cl")
   {
-    command = "call \"C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\vcvarsall.bat\" && " + program +
+    command = preEnvironmentScript + " && " + program +
     //command = program +
       " /EHsc /c /DWINDOWS" +
       debugFragment +
@@ -248,7 +285,7 @@ void Compiler::link(std::string output)
 
   if(program == "cl")
   {
-    command = "call \"C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\VC\\vcvarsall.bat\" && link" +
+    command = preEnvironmentScript + " && link" +
     //command = "link" +
       debugFragment +
       objectsFragment +
