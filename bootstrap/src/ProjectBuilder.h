@@ -1,7 +1,7 @@
 #ifndef PROJECTBUILDER_H
 #define PROJECTBUILDER_H
 
-#include "arc.h"
+#include "features.h"
 
 #include <memory>
 #include <vector>
@@ -15,16 +15,16 @@ class FileInfo;
 class ProjectBuilder
 {
 public:
-  static arc<ProjectBuilder> create(arc<Environment> environment);
+  static shared<ProjectBuilder> create(shared<Environment> environment);
   void removeOrphanedObjects();
   void buildOutOfDateObjects();
   void generateOutOfDateOutput();
 
 private:
-  arc<Environment> environment;
-  std::vector<arc<SourceFileInfo> > sourceUnits;
-  //std::vector<arc<HeaderFileInfo> > headers;
-  std::vector<arc<FileInfo> > libs;
+  shared<Environment> environment;
+  std::vector<shared<SourceFileInfo> > sourceUnits;
+  //std::vector<shared<HeaderFileInfo> > headers;
+  std::vector<shared<FileInfo> > libs;
   std::vector<std::string> includeDirectories;
 
   void scanSource(std::string rootDir);

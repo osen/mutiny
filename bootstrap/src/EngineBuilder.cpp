@@ -8,9 +8,9 @@
 
 #include <iostream>
 
-arc<EngineBuilder> EngineBuilder::create(arc<Environment> environment)
+shared<EngineBuilder> EngineBuilder::create(shared<Environment> environment)
 {
-  arc<EngineBuilder> rtn = arc<EngineBuilder>::alloc();
+  shared<EngineBuilder> rtn = alloc_shared<EngineBuilder>();
 
   rtn->environment = environment;
   rtn->srcDir = environment->getPrefix() + Util::fixPath("/src/mutiny");
@@ -27,8 +27,8 @@ void EngineBuilder::removeOrphanedObjects()
 {
   std::string objDir = Util::fixPath("temp/" + std::string(PLATFORM_NAME) + "/obj/mutiny");
 
-  arc<Dir> dir = Dir::opendir(objDir);
-  arc<Dirent> dirent = dir->readdir();
+  shared<Dir> dir = Dir::opendir(objDir);
+  shared<Dirent> dirent = dir->readdir();
   std::vector<std::string> toDelete;
 
   while(dirent.get() != NULL)
@@ -67,7 +67,7 @@ void EngineBuilder::removeOrphanedObjects()
 
 void EngineBuilder::buildOutOfDateObjects()
 {
-  arc<Compiler> compiler = Compiler::create(environment);
+  shared<Compiler> compiler = Compiler::create(environment);
 
   if(PLATFORM_NAME == std::string("windows"))
   {
@@ -83,7 +83,7 @@ void EngineBuilder::buildOutOfDateObjects()
 
     try
     {
-      arc<FileInfo> objectInfo = FileInfo::create(objPath);
+      shared<FileInfo> objectInfo = FileInfo::create(objPath);
 
       if(objectInfo->getModified() > sourceUnits.at(i)->getModified())
       {
@@ -113,8 +113,8 @@ void EngineBuilder::prepareDirectories()
 
 void EngineBuilder::scanSource(std::string rootDir)
 {
-  arc<Dir> dir = Dir::opendir(rootDir);
-  arc<Dirent> dirent = dir->readdir();
+  shared<Dir> dir = Dir::opendir(rootDir);
+  shared<Dirent> dirent = dir->readdir();
 
   while(dirent.get() != NULL)
   {

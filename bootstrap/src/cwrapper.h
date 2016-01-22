@@ -2,7 +2,7 @@
 #define CWRAPPER_H
 
 #include "features.h"
-#include "arc.h"
+#include "features.h"
 
 #ifdef HAS_DIRENT
   #include <dirent.h>
@@ -22,7 +22,7 @@
 class File
 {
 public:
-  static arc<File> popen(std::string path);
+  static shared<File> popen(std::string path);
   ~File();
 
   int pclose();
@@ -39,7 +39,7 @@ class Dirent
 {
   friend class Dir;
 public:
-  static arc<Dirent> create();
+  static shared<Dirent> create();
 
   std::string d_name();
 
@@ -50,14 +50,14 @@ private:
 #ifdef HAS_WINAPI
   std::string name;
 #endif
-  arc<Dir> parent;
+  shared<Dir> parent;
 
 };
 
 class Dir
 {
 public:
-  static arc<Dir> opendir(std::string path);
+  static shared<Dir> opendir(std::string path);
   static void mkdir(std::string path);
   static void mkdir_r(std::string path);
   static void remove(std::string path);
@@ -65,7 +65,7 @@ public:
   static bool isdir(std::string path);
   ~Dir();
 
-  arc<Dirent> readdir();
+  shared<Dirent> readdir();
 
 private:
 #ifdef HAS_DIRENT
@@ -76,14 +76,14 @@ private:
   WIN32_FIND_DATA ffd;
   bool end;
 #endif
-  arc<Dir> self;
+  weak<Dir> self;
 
 };
 
 class Stat
 {
 public:
-  static arc<Stat> stat(std::string path);
+  static shared<Stat> stat(std::string path);
   static void utime(std::string path, time_t aTime, time_t mTime);
 
   time_t get_st_mtime();
@@ -101,7 +101,7 @@ private:
 class Module
 {
 public:
-  static std::string getModuleFileName(arc<Module> module);
+  static std::string getModuleFileName(shared<Module> module);
 
 private:
   HMODULE hModule;

@@ -1,7 +1,7 @@
 #ifndef ENGINEBUILDER_H
 #define ENGINEBUILDER_H
 
-#include "arc.h"
+#include "features.h"
 
 #include <memory>
 #include <vector>
@@ -14,14 +14,14 @@ class HeaderFileInfo;
 class EngineBuilder
 {
 public:
-  static arc<EngineBuilder> create(arc<Environment> environment);
+  static shared<EngineBuilder> create(shared<Environment> environment);
   void removeOrphanedObjects();
   void buildOutOfDateObjects();
 
 private:
-  arc<Environment> environment;
-  std::vector<arc<SourceFileInfo> > sourceUnits;
-  std::vector<arc<HeaderFileInfo> > headers;
+  shared<Environment> environment;
+  std::vector<shared<SourceFileInfo> > sourceUnits;
+  std::vector<shared<HeaderFileInfo> > headers;
 
   void scanSource(std::string rootDir);
   void prepareDirectories();

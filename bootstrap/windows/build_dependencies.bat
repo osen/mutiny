@@ -1,6 +1,6 @@
 @echo off
 
-set CMAKE_ROOT=cmake-3.4.2-win32-x86
+set CMAKE_ROOT=cmake-3.4.1-win32-x86
 set CMAKE_PACKAGE=%CMAKE_ROOT%.zip
 
 set FREEGLUT_ROOT=freeglut-3.0.0

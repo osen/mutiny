@@ -6,13 +6,13 @@
 
 #include <iostream>
 
-arc<Environment> Environment::create(std::vector<std::string>& args)
+shared<Environment> Environment::create(std::vector<std::string>& args)
 {
-  arc<Environment> rtn = arc<Environment>::alloc();
+  shared<Environment> rtn = alloc_shared<Environment>();
   rtn->args = args;
 
 #ifdef HAS_WINAPI
-  std::string absolutePath = Module::getModuleFileName(arc<Module>());
+  std::string absolutePath = Module::getModuleFileName(shared<Module>());
   std::string absoluteBinPath = FileInfo::getFolderPath(absolutePath);
   rtn->prefix = FileInfo::getFolderPath(absoluteBinPath);
 #else
@@ -25,8 +25,8 @@ arc<Environment> Environment::create(std::vector<std::string>& args)
 
   try
   {
-    arc<Dir> dir = Dir::opendir(rtn->prefix + "/src/mutiny");
-    arc<Dirent> dirent = dir->readdir();
+    shared<Dir> dir = Dir::opendir(rtn->prefix + "/src/mutiny");
+    shared<Dirent> dirent = dir->readdir();
 
     if(dirent.get() != NULL)
     {

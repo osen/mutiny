@@ -6,9 +6,9 @@
 
 #include <iostream>
 
-arc<Compiler> Compiler::create(arc<Environment> environment)
+shared<Compiler> Compiler::create(shared<Environment> environment)
 {
-  arc<Compiler> rtn = arc<Compiler>::alloc();
+  shared<Compiler> rtn = alloc_shared<Compiler>();
   rtn->environment = environment;
   rtn->name = environment->getCompilerName();
 

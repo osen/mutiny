@@ -23,9 +23,9 @@
 #include <string>
 #include <vector>
 
-arc<Dirent> Dirent::create()
+shared<Dirent> Dirent::create()
 {
-  arc<Dirent> rtn = arc<Dirent>::alloc();
+  shared<Dirent> rtn = alloc_shared<Dirent>();
 
   return rtn;
 }
@@ -107,11 +107,11 @@ void Dir::remove(std::string path)
 
 bool Dir::isdir(std::string path)
 {
-  arc<Dir> rtn = arc<Dir>::alloc();
+  shared<Dir> rtn = alloc_shared<Dir>();
 #ifdef HAS_WINAPI
   rtn->hFind = INVALID_HANDLE_VALUE;
 #endif
-  rtn->self = rtn.makeWeak();
+  rtn->self = rtn;
 
 #ifdef HAS_DIRENT
   rtn->dir = ::opendir(path.c_str());
@@ -131,13 +131,13 @@ bool Dir::isdir(std::string path)
   return true;
 }
 
-arc<Dir> Dir::opendir(std::string path)
+shared<Dir> Dir::opendir(std::string path)
 {
-  arc<Dir> rtn = arc<Dir>::alloc();
+  shared<Dir> rtn = alloc_shared<Dir>();
 #ifdef HAS_WINAPI
   rtn->hFind = INVALID_HANDLE_VALUE;
 #endif
-  rtn->self = rtn.makeWeak();
+  rtn->self = rtn;
 
 #ifdef HAS_DIRENT
   rtn->dir = ::opendir(path.c_str());
@@ -174,9 +174,9 @@ Dir::~Dir()
 }
 
 
-arc<Dirent> Dir::readdir()
+shared<Dirent> Dir::readdir()
 {
-  arc<Dirent> rtn = Dirent::create();
+  shared<Dirent> rtn = Dirent::create();
 #ifdef HAS_DIRENT
   rtn->dp = ::readdir(dir);
 
@@ -196,10 +196,10 @@ arc<Dirent> Dir::readdir()
   else
   {
 #endif
-    return arc<Dirent>();
+    return shared<Dirent>();
   }
 
-  rtn->parent = self.makeStrong();
+  rtn->parent = self.lock();
 
   return rtn;
 }
@@ -214,9 +214,9 @@ std::string Dirent::d_name()
 #endif
 }
 
-arc<File> File::popen(std::string path)
+shared<File> File::popen(std::string path)
 {
-  arc<File> rtn = arc<File>::alloc();
+  shared<File> rtn = alloc_shared<File>();
 
 #ifdef HAS__POPEN
   rtn->file = ::_popen(path.c_str(), "r");
@@ -283,9 +283,9 @@ File::~File()
   }
 }
 
-arc<Stat> Stat::stat(std::string path)
+shared<Stat> Stat::stat(std::string path)
 {
-  arc<Stat> rtn = arc<Stat>::alloc();
+  shared<Stat> rtn = alloc_shared<Stat>();
 
 #ifdef HAS__POPEN
   if(::_stat(path.c_str(), &rtn->attrib) == -1)
@@ -317,7 +317,7 @@ void Stat::utime(std::string path, time_t aTime, time_t mTime)
 }
 
 #ifdef HAS_WINAPI
-std::string Module::getModuleFileName(arc<Module> module)
+std::string Module::getModuleFileName(shared<Module> module)
 {
   char buffer[MAX_PATH];
   int result;

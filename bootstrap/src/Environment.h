@@ -1,7 +1,7 @@
 #ifndef ENVIRONMENT_H
 #define ENVIRONMENT_H
 
-#include "arc.h"
+#include "features.h"
 
 #include <string>
 #include <vector>
@@ -10,7 +10,7 @@
 class Environment
 {
 public:
-  static arc<Environment> create(std::vector<std::string>& args);
+  static shared<Environment> create(std::vector<std::string>& args);
   std::string getPrefix();
 
   bool isMutinyAvailable();

@@ -1,7 +1,7 @@
 #ifndef COMPILER_H
 #define COMPILER_H
 
-#include "arc.h"
+#include "features.h"
 
 #include <string>
 #include <memory>
@@ -12,7 +12,7 @@ class Environment;
 class Compiler
 {
 public:
-  static arc<Compiler> create(arc<Environment> environment);
+  static shared<Compiler> create(shared<Environment> environment);
   void compile(std::string sourceUnit, std::string output);
   void addIncludeDirectory(std::string directory);
   void addObjectDirectory(std::string directory);
@@ -24,7 +24,7 @@ public:
   std::string getExecutableSuffix();
 
 private:
-  arc<Environment> environment;
+  shared<Environment> environment;
   std::vector<std::string> includeDirectories;
   std::vector<std::string> libDirectories;
   std::vector<std::string> objectDirectories;

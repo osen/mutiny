@@ -7,10 +7,10 @@
 #include <fstream>
 
 
-void FileInfo::scanDirectory(std::string path, bool directories, std::vector<arc<FileInfo> >& output)
+void FileInfo::scanDirectory(std::string path, bool directories, std::vector<shared<FileInfo> >& output)
 {
-  arc<Dir> dir = Dir::opendir(path);
-  arc<Dirent> dirent = dir->readdir();
+  shared<Dir> dir = Dir::opendir(path);
+  shared<Dirent> dirent = dir->readdir();
 
   while(dirent.get() != NULL)
   {
@@ -38,9 +38,9 @@ void FileInfo::scanDirectory(std::string path, bool directories, std::vector<arc
   }
 }
 
-arc<FileInfo> FileInfo::create(std::string absolutePath)
+shared<FileInfo> FileInfo::create(std::string absolutePath)
 {
-  arc<FileInfo> rtn = arc<FileInfo>::alloc();
+  shared<FileInfo> rtn = alloc_shared<FileInfo>();
   rtn->FileInfo::init(absolutePath);
 
   return rtn;
@@ -63,7 +63,7 @@ std::string FileInfo::getBaseName()
 
 void FileInfo::updateModified()
 {
-  arc<Stat> stat = Stat::stat(absolutePath);
+  shared<Stat> stat = Stat::stat(absolutePath);
   modified = stat->get_st_mtime();
 }
 
@@ -71,7 +71,7 @@ void FileInfo::init(std::string absolutePath)
 {
   this->absolutePath = absolutePath;
 
-  arc<Stat> stat = Stat::stat(absolutePath);
+  shared<Stat> stat = Stat::stat(absolutePath);
   modified = stat->get_st_mtime();
 }
 
@@ -102,15 +102,15 @@ time_t FileInfo::getModified()
   return modified;
 }
 
-arc<SourceFileInfo> SourceFileInfo::create(std::string absolutePath)
+shared<SourceFileInfo> SourceFileInfo::create(std::string absolutePath)
 {
   return SourceFileInfo::create(absolutePath, std::vector<std::string>());
 }
 
-arc<SourceFileInfo> SourceFileInfo::create(std::string absolutePath,
+shared<SourceFileInfo> SourceFileInfo::create(std::string absolutePath,
   std::vector<std::string> additionalIncludeDirectories)
 {
-  arc<SourceFileInfo> rtn = arc<SourceFileInfo>::alloc();
+  shared<SourceFileInfo> rtn = alloc_shared<SourceFileInfo>();
   rtn->additionalIncludeDirectories = additionalIncludeDirectories;
   rtn->FileInfo::init(absolutePath);
 
