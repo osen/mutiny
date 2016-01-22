@@ -27,12 +27,12 @@ public:
 private:
   bool started;
 
-  virtual void awake();
-  virtual void update();
-  virtual void postRender();
-  virtual void gui();
-  virtual void destroy();
-  virtual void levelWasLoaded();
+  void awake();
+  void update();
+  void postRender();
+  void gui();
+  void destroy();
+  void levelWasLoaded();
 
 };
 

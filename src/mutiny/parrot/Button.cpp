@@ -12,7 +12,7 @@ namespace mutiny
 namespace engine
 {
 
-void Button::awake()
+void Button::onAwake()
 {
   canvas = getGameObject()->addComponent<Canvas>();
   redraw();
@@ -61,7 +61,7 @@ void Button::redraw()
   canvas->drawText(Vector2(10, 10), font, "Hello");
 }
 
-void Button::update()
+void Button::onUpdate()
 {
   if(canvas->needsRepaint() == true)
   {

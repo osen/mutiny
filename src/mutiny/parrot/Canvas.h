@@ -50,9 +50,9 @@ private:
   bool released;
   bool active;
 
-  virtual void awake();
-  virtual void update();
-  virtual void gui();
+  virtual void onAwake();
+  virtual void onUpdate();
+  virtual void onGui();
 
 };
 

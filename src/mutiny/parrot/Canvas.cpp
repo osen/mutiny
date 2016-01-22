@@ -26,7 +26,7 @@ namespace engine
 
 arc<Canvas> Canvas::currentActive;
 
-void Canvas::awake()
+void Canvas::onAwake()
 {
   texture.reset(new Texture2d(64, 64));
   needsApply = true;
@@ -119,7 +119,7 @@ bool Canvas::isReleased()
   return released;
 }
 
-void Canvas::update()
+void Canvas::onUpdate()
 {
   released = false;
   repaint = false;
@@ -185,7 +185,7 @@ void Canvas::update()
   }
 }
 
-void Canvas::gui()
+void Canvas::onGui()
 {
   material->setMainTexture(texture.cast<Texture>());
 

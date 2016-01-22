@@ -1,9 +1,8 @@
-#ifndef MUTINY_ENGINE_BUTTON_H
+#ifndef MUTINY_ENGINE_ANCHOR_H
 #define MUTINY_ENGINE_BUTTON_H
 
 #include "Canvas.h"
 #include "../Behaviour.h"
-#include "../Font.h"
 #include "../arc.h"
 
 namespace mutiny
@@ -12,18 +11,16 @@ namespace mutiny
 namespace engine
 {
 
-class Canvas;
-
-class Button : public Behaviour
+class Anchor : public Behaviour
 {
 public:
-  Canvas* getCanvas();
+  static const int RIGHT = 1;
+  static const int BOTTOM = 2;
+
+  void set(int options);
 
 private:
-  Canvas* canvas;
-  arc<Font> font;
-
-  void redraw();
+  int options;
   virtual void onAwake();
   virtual void onUpdate();
 

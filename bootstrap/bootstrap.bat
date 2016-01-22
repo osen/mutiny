@@ -59,4 +59,5 @@ pause
 :done
 rd /s /q temp > nul 2>&1
 cd windows
-REM build_dependencies.bat
+build_dependencies.bat
+cd ..
