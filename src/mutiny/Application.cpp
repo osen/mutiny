@@ -114,6 +114,9 @@ void Application::init(int argc, char* argv[])
   glutSpecialUpFunc(_keyboardUp);
 #endif
 
+  Screen::width = 800;
+  Screen::height = 600;
+
   glewInit();
   //if(glewInit() != 0)
   //{
@@ -520,6 +523,8 @@ void Application::reshape(int width, int height)
 #ifdef USE_SDL
   screen = SDL_SetVideoMode(Screen::width, Screen::height, 32, SDL_OPENGL | SDL_RESIZABLE);
 #endif
+
+  idle();
 }
 
 void Application::display()

@@ -25,7 +25,7 @@ void IntroductionScreen::onAwake()
   startButtonGo->getTransform()->setPosition(Vector3(100, 50, 0));
   startButtonGo->getTransform()->setScale(Vector3(256, 42, 0));
 
-  startButtonGo->addComponent<Anchor>()->set(Anchor::RIGHT | Anchor::BOTTOM);
+  startButtonGo->addComponent<Anchor>()->setAttachment(Anchor::RIGHT | Anchor::BOTTOM);
 }
 
 void IntroductionScreen::onGui()

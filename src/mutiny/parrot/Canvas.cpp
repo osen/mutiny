@@ -1,4 +1,5 @@
 #include "Canvas.h"
+#include "Anchor.h"
 #include "../Gui.h"
 #include "../Vector2.h"
 #include "../Vector3.h"
@@ -124,7 +125,18 @@ void Canvas::onUpdate()
   released = false;
   repaint = false;
 
-  Vector3 pos = getGameObject()->getTransform()->getPosition();
+  Anchor* anchor = getGameObject()->getComponent<Anchor>();
+
+  Vector2 anchorOffset;
+
+  if(anchor != NULL)
+  {
+    anchorOffset = anchor->getOffset();
+  }
+
+  Vector3 pos = getGameObject()->getTransform()->getPosition() +
+    Vector3(anchorOffset.x, anchorOffset.y, 0);
+
   Vector3 scale = getGameObject()->getTransform()->getScale();
   Rect bounds(pos.x, pos.y, scale.x, scale.y);
 
@@ -187,6 +199,15 @@ void Canvas::onUpdate()
 
 void Canvas::onGui()
 {
+  Anchor* anchor = getGameObject()->getComponent<Anchor>();
+
+  Vector2 anchorOffset;
+
+  if(anchor != NULL)
+  {
+    anchorOffset = anchor->getOffset();
+  }
+
   material->setMainTexture(texture.cast<Texture>());
 
   material->setMatrix("in_Projection", Matrix4x4::ortho(
@@ -196,7 +217,7 @@ void Canvas::onGui()
   material->setPass(0, material);
 
   Matrix4x4 modelMat = Matrix4x4::getIdentity();
-  modelMat = modelMat.translate(getGameObject()->getTransform()->getPosition());
+  modelMat = modelMat.translate(getGameObject()->getTransform()->getPosition() + Vector3(anchorOffset.x, anchorOffset.y, 0));
   modelMat = modelMat.scale(getGameObject()->getTransform()->getScale());
 
   glDisable(GL_DEPTH_TEST);

@@ -17,6 +17,7 @@ public:
   Vector2(float x, float y);
 
   Vector2 operator-(Vector2 param);
+  Vector2 operator+(Vector2 param);
 
 };
 

@@ -23,6 +23,11 @@ Vector2 Vector2::operator-(Vector2 param)
   return Vector2(x - param.x, y - param.y);
 }
 
+Vector2 Vector2::operator+(Vector2 param)
+{
+  return Vector2(x + param.x, y + param.y);
+}
+
 }
 
 }
