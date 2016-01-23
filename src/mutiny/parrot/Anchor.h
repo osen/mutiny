@@ -1,5 +1,5 @@
 #ifndef MUTINY_ENGINE_ANCHOR_H
-#define MUTINY_ENGINE_BUTTON_H
+#define MUTINY_ENGINE_ANCHOR_H
 
 #include "../Behaviour.h"
 #include "../arc.h"

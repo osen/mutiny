@@ -8,14 +8,11 @@
   #define USE_GLUT
 #else
   #define USE_GLUT
+  #define HAS_TR1_NAMESPACE
 #endif
 
 #ifdef _WIN32
   #define USE_WINAPI 1
-#endif
-
-#ifndef _MSC_VER
-  #define HAS_TR1_NAMESPACE
 #endif
 
 #endif
