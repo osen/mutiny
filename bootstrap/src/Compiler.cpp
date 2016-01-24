@@ -234,6 +234,10 @@ void Compiler::link(std::string output)
         libsFragment += " /NODEFAULTLIB:freeglut_static.lib";
       }
     }
+    else if(program == "em++")
+    {
+      debugFragment += " -O3";
+    }
   }
 
   std::string objectsFragment = "";
@@ -282,6 +286,35 @@ void Compiler::link(std::string output)
   }
 
   std::string command;
+
+  if(program == "em++")
+  {
+    command = "emar cr" +
+      std::string(" mutiny.a") +
+      Util::fixPath(" temp/" + std::string(PLATFORM_NAME)  + "/obj/mutiny/*.o");
+
+    std::cout << command << std::endl;
+    std::string result1 = Util::execute(command);
+
+    command = "emar cr" +
+      std::string(" experiment.a") +
+      Util::fixPath(" temp/" + std::string(PLATFORM_NAME)  + "/obj/experiment/*.o");
+
+    std::cout << command << std::endl;
+    std::string result2 = Util::execute(command);
+
+    command = program +
+      debugFragment +
+      std::string(" mutiny.a experiment.a") +
+      " -o" +
+      " " + output +
+      libsFragment;
+
+    std::cout << command << std::endl;
+    std::string emresult = Util::execute(command);
+
+    return;
+  }
 
   if(program == "cl")
   {
