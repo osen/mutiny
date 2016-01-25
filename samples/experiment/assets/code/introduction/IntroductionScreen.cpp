@@ -23,7 +23,7 @@ void IntroductionScreen::onAwake()
   GameObject* startButtonGo = new GameObject("StartButton");
   Button* startButton = startButtonGo->addComponent<Button>();
   startButtonGo->getTransform()->setPosition(Vector3(100, 50, 0));
-  startButtonGo->getTransform()->setScale(Vector3(256, 42, 0));
+  startButtonGo->getTransform()->setScale(Vector3(256, 64, 0));
 
   startButtonGo->addComponent<Anchor>()->setAttachment(Anchor::RIGHT | Anchor::BOTTOM);
 }

@@ -306,7 +306,7 @@ void Compiler::link(std::string output)
 
     command = "emar cr" +
       std::string(" temp/" + std::string(PLATFORM_NAME)  + "/obj/" + projectName + ".a") +
-      Util::fixPath(objectsFragment);
+      Util::fixPath(" temp/" + std::string(PLATFORM_NAME)  + "/obj/" + projectName + "/*.o");
 
     std::cout << command << std::endl;
     std::string result2 = Util::execute(command);
