@@ -224,8 +224,8 @@ void Application::setupPaths()
   std::string basename;
 
 #ifdef EMSCRIPTEN
-  engineDataPath = "";
-  dataPath = "";
+  engineDataPath = ".";
+  dataPath = ".";
 #elif USE_WINAPI
   char strExePath [MAX_PATH];
 

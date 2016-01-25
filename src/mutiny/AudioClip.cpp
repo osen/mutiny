@@ -1,5 +1,6 @@
 #include "AudioClip.h"
 #include "internal/platform.h"
+#include "Debug.h"
 
 namespace mutiny
 {

@@ -73,6 +73,7 @@ public:
 
     if(t == NULL)
     {
+      std::cout << "Loading: " << path << "... Failed" << std::endl;
       //Debug::logError("Failed to load '" + path + "'");
       return rtn.dynamicCast<T>();
     }
@@ -82,6 +83,7 @@ public:
     paths.push_back(ss.str());
     objects.push_back(rtn);
 
+    std::cout << "Loading: " << path << "... Success" << std::endl;
     return rtn.dynamicCast<T>();
   }
 

@@ -29,6 +29,7 @@ Ks 0.800000 0.800000 0.800000
 Ni 1.000000
 d 1.000000
 illum 2
+map_Kd sheep_wool.png
 
 newmtl skin
 Ns 0.000000
