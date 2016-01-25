@@ -224,8 +224,8 @@ void Application::setupPaths()
   std::string basename;
 
 #ifdef EMSCRIPTEN
-  engineDataPath = "share/mutiny";
-  dataPath = "share/_data";
+  engineDataPath = "";
+  dataPath = "";
 #elif USE_WINAPI
   char strExePath [MAX_PATH];
 

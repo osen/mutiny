@@ -234,7 +234,7 @@ void Compiler::link(std::string output)
         libsFragment += " /NODEFAULTLIB:freeglut_static.lib";
       }
     }
-    else if(program == "em++")
+    else if(FileInfo::getFileName(name) == "em++")
     {
       debugFragment += " -O3";
     }
@@ -287,7 +287,7 @@ void Compiler::link(std::string output)
 
   std::string command;
 
-  if(program == "em++")
+  if(FileInfo::getFileName(name) == "em++")
   {
     std::string projectName = environment->getProjectName();
     std::string objectArchives = " temp/" + std::string(PLATFORM_NAME)  + "/obj/" + projectName + ".a";
@@ -316,7 +316,8 @@ void Compiler::link(std::string output)
       objectArchives +
       " -o" +
       " " + output +
-      libsFragment;
+      libsFragment +
+      " --preload-file " + Util::fixPath("build/windows/share/" + projectName + "@");
 
     std::cout << command << std::endl;
     std::string emresult = Util::execute(command);
