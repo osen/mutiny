@@ -21,6 +21,8 @@ shared<Environment> Environment::create(std::vector<std::string>& args)
   rtn->prefix = Util::stripEol(Util::execute("dirname \"" + absoluteBinPath + "\""));
 #endif
 
+  rtn->projectName = FileInfo::getFileName(Dir::getcwd());
+
   //std::cout << "Mutiny Prefix: " << rtn->prefix << std::endl;
 
   try
@@ -67,6 +69,11 @@ shared<Environment> Environment::create(std::vector<std::string>& args)
   }
 
   return rtn;
+}
+
+std::string Environment::getProjectName()
+{
+  return projectName;
 }
 
 std::vector<std::string> Environment::getDefines()

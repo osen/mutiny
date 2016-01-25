@@ -18,11 +18,13 @@ public:
   std::string getOutputDirectory();
   std::string getCompilerName();
   std::vector<std::string> getDefines();
+  std::string getProjectName();
 
 private:
   std::vector<std::string> args;
   std::string prefix;
 
+  std::string projectName;
   bool mutinyAvailable;
   std::string outputDirectory;
   std::string compilerName;

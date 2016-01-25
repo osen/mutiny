@@ -289,23 +289,31 @@ void Compiler::link(std::string output)
 
   if(program == "em++")
   {
-    command = "emar cr" +
-      std::string(" mutiny.a") +
-      Util::fixPath(" temp/" + std::string(PLATFORM_NAME)  + "/obj/mutiny/*.o");
+    std::string projectName = environment->getProjectName();
+    std::string objectArchives = " temp/" + std::string(PLATFORM_NAME)  + "/obj/" + projectName + ".a";
 
-    std::cout << command << std::endl;
-    std::string result1 = Util::execute(command);
+    if(environment->isMutinyAvailable() == true)
+    {
+      command = "emar cr" +
+        std::string(" temp/" + std::string(PLATFORM_NAME)  + "/obj/mutiny.a") +
+        Util::fixPath(" temp/" + std::string(PLATFORM_NAME)  + "/obj/mutiny/*.o");
+
+      std::cout << command << std::endl;
+      std::string result1 = Util::execute(command);
+
+      objectArchives = " temp/" + std::string(PLATFORM_NAME)  + "/obj/mutiny.a" + objectArchives;
+    }
 
     command = "emar cr" +
-      std::string(" experiment.a") +
-      Util::fixPath(" temp/" + std::string(PLATFORM_NAME)  + "/obj/experiment/*.o");
+      std::string(" temp/" + std::string(PLATFORM_NAME)  + "/obj/" + projectName + ".a") +
+      Util::fixPath(objectsFragment);
 
     std::cout << command << std::endl;
     std::string result2 = Util::execute(command);
 
     command = program +
       debugFragment +
-      std::string(" mutiny.a experiment.a") +
+      objectArchives +
       " -o" +
       " " + output +
       libsFragment;

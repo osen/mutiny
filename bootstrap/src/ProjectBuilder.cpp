@@ -288,10 +288,11 @@ void ProjectBuilder::generateOutOfDateOutput()
 void ProjectBuilder::buildOutOfDateObjects()
 {
   shared<Compiler> compiler = Compiler::create(environment);
-  compiler->addIncludeDirectory(environment->getPrefix() + Util::fixPath("/src"));
 
   if(environment->isMutinyAvailable() == true)
   {
+    compiler->addIncludeDirectory(environment->getPrefix() + Util::fixPath("/src"));
+
     if(PLATFORM_NAME == std::string("windows"))
     {
       if(compiler->getName() != "em++")
