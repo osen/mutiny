@@ -30,7 +30,7 @@ private:
   void scanSource(std::string rootDir);
   void scanForIncludeDirectories(std::string rootDir);
   void prepareDirectories();
-  void syncAssetDirectory(std::string assetDirectory);
+  bool syncAssetDirectory(std::string assetDirectory);
   void removeOrphanedAssets();
   void obtainOutputFilename();
 

@@ -88,11 +88,12 @@ void ProjectBuilder::obtainOutputFilename()
   outputFilename = FileInfo::getFileName(Dir::getcwd());
 }
 
-void ProjectBuilder::syncAssetDirectory(std::string assetDirectory)
+bool ProjectBuilder::syncAssetDirectory(std::string assetDirectory)
 {
   std::vector<shared<FileInfo> > assetDirectories;
   std::vector<shared<FileInfo> > buildAssetDirectories;
   std::vector<std::string> directoryDeleteList;
+  bool changed = false;
 
   std::string buildAssetDirectory = Util::fixPath("build/" +
     std::string(PLATFORM_NAME)+"/share/" + outputFilename);
@@ -120,9 +121,8 @@ void ProjectBuilder::syncAssetDirectory(std::string assetDirectory)
            buildAssetDirectories.at(j)->getModified())
         {
           found = true;
+          break;
         }
-
-        break;
       }
     }
 
@@ -139,12 +139,18 @@ void ProjectBuilder::syncAssetDirectory(std::string assetDirectory)
       }
       else
       {
+        std::cout << "Syncing Asset: " << assetDirectories.at(i)->getAbsolutePath() << std::endl;
+
         Util::copyFile(assetDirectories.at(i)->getAbsolutePath(),
           buildAssetDirectory + assetDirectories.at(i)->
           getAbsolutePath().substr(assetDirectory.length()));
+
+        changed = true;
       }
     }
   }
+
+  return changed;
 }
 
 void ProjectBuilder::removeOrphanedAssets()
@@ -272,11 +278,24 @@ void ProjectBuilder::generateOutOfDateOutput()
   }
 
   removeOrphanedAssets();
-  syncAssetDirectory("assets");
+
+  if(syncAssetDirectory("assets") == true)
+  {
+    if(compiler->getName() == "em++")
+    {
+      needsRelink = true;
+    }
+  }
 
   if(environment->isMutinyAvailable() == true)
   {
-    syncAssetDirectory(environment->getPrefix() + Util::fixPath("/share/mutiny"));
+    if(syncAssetDirectory(environment->getPrefix() + Util::fixPath("/share/mutiny")) == true)
+    {
+      if(compiler->getName() == "em++")
+      {
+        needsRelink = true;
+      }
+    }
   }
 
   if(needsRelink == false) return;
