@@ -50,7 +50,7 @@ GameObject* GameObject::createModel(std::string path)
 
 GameObject::GameObject(std::string name)
 {
-  components = Application::getGC()->gc_list<arc<Component> >();
+  components = Application::getGC()->gc_list<Component*>();
   setName(name);
   addComponent<Transform>();
   Application::getGameObjects()->push_back(this);
@@ -60,7 +60,7 @@ GameObject::GameObject(std::string name)
 
 GameObject::GameObject()
 {
-  components = Application::getGC()->gc_list<arc<Component> >();
+  components = Application::getGC()->gc_list<Component*>();
   addComponent<Transform>();
   Application::getGameObjects()->push_back(this);
   activeSelf = true;

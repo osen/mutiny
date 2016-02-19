@@ -75,36 +75,28 @@ public:
   void setTag(std::string tag);
   std::string getTag();
 
-  template<class T>
-  arc<Component> castToComponent()
+  template <class T>
+  T* addComponent()
   {
-    arc<GameObject> g;
-    arc<Object> c = g.cast<Object>();
-    return arc<Component>();
-  }
-
-  template<class T> T* addComponent()
-  {
-    arc<T> t = arc<T>::alloc();
-    arc<Component> c = t.template cast<Component>();
-    c->self = c.getWeak();
+    T* c = Application::getGC()->gc_new<T>();
 
     components->push_back(c);
     c->gameObject = this;
     c->awake();
 
-    return t.get();
+    return c;
   }
 
-  template<class T> T* getComponent()
+  template<class T>
+  T* getComponent()
   {
     for(int i = 0; i < components->size(); i++)
     {
-      T* t = dynamic_cast<T*>(components->at(i).get());
+      T* t = dynamic_cast<T*>(components->at(i));
 
       if(t != NULL)
       {
-        return (T*)components->at(i).get();
+        return t;
       }
     }
 
@@ -112,7 +104,7 @@ public:
   }
 
 private:
-  internal::gc::list<arc<Component> >* components;
+  internal::gc::list<Component*>* components;
   bool activeSelf;
   int layer;
   std::string tag;
