@@ -32,11 +32,11 @@ public:
     std::stringstream ss;
     ss << path << "_" << typeid(T).name();
 
-    for(int i = 0; i < paths.size(); i++)
+    for(int i = 0; i < Application::context->paths.size(); i++)
     {
-      if(ss.str() == paths.at(i))
+      if(ss.str() == Application::context->paths.at(i))
       {
-        return objects.at(i).dynamicCast<T>();
+        return Application::context->objects->at(i).dynamicCast<T>();
       }
     }
 
@@ -80,16 +80,12 @@ public:
 
     rtn.reset(t);
 
-    paths.push_back(ss.str());
-    objects.push_back(rtn);
+    Application::context->paths.push_back(ss.str());
+    Application::context->objects->push_back(rtn);
 
     std::cout << "Loading: " << path << "... Success" << std::endl;
     return rtn.dynamicCast<T>();
   }
-
-private:
-  static std::vector<std::string> paths;
-  static std::vector<arc<Object> > objects;
 
 };
 

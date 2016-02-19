@@ -4,6 +4,7 @@
 #include "internal/platform.h"
 #include "internal/gcmm.h"
 #include "arc.h"
+#include "Object.h"
 
 #ifdef USE_SDL
   #include <SDL/SDL.h>
@@ -33,6 +34,7 @@ class Application;
 class Context
 {
   friend class mutiny::engine::Application;
+  friend class mutiny::engine::Resources;
 
 private:
   internal::gc::context* gc_ctx;
@@ -48,6 +50,10 @@ private:
 
   int argc;
   std::vector<std::string> argv;
+
+  // Resources
+  std::vector<std::string> paths;
+  internal::gc::list<arc<Object> >* objects;
 };
 
 class Application

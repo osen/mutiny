@@ -63,6 +63,7 @@ void Application::init(int argc, char* argv[])
   context = gc_ctx->gc_new<Context>();
   context->gc_ctx = gc_ctx;
 
+  context->objects = gc_ctx->gc_list<arc<Object> >();
   context->gameObjects = gc_ctx->gc_list<GameObject*>();
   context->running = false;
   context->argc = argc;
@@ -303,8 +304,8 @@ void Application::destroy()
 
   Camera::allCameras.clear();
   context->gameObjects->clear();
-  Resources::paths.clear();
-  Resources::objects.clear();
+  context->paths.clear();
+  context->objects->clear();
 
   Material::meshNormalMaterial.reset();
   Material::meshNormalTextureMaterial.reset();
@@ -468,12 +469,12 @@ void Application::loadLevel()
     }
   }
 
-  for(int i = 0; i < Resources::objects.size(); i++)
+  for(int i = 0; i < context->objects->size(); i++)
   {
-    if(Resources::objects.at(i)->destroyOnLoad == true)
+    if(context->objects->at(i)->destroyOnLoad == true)
     {
-      Resources::objects.erase(Resources::objects.begin() + i);
-      Resources::paths.erase(Resources::paths.begin() + i);
+      context->objects->remove_at(i);
+      context->paths.erase(context->paths.begin() + i);
       i--;
     }
   }
