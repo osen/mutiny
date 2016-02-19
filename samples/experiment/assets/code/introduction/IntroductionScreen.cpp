@@ -6,7 +6,7 @@ using namespace mutiny::engine;
 
 GameObject* IntroductionScreen::create()
 {
-  GameObject* mainGo = new GameObject("IntroductionScreen");
+  GameObject* mainGo = GameObject::create("IntroductionScreen");
   mainGo->addComponent<IntroductionScreen>();
 
   return mainGo;
@@ -14,13 +14,13 @@ GameObject* IntroductionScreen::create()
 
 void IntroductionScreen::onAwake()
 {
-  cameraGo = new GameObject("MainCamera");
+  cameraGo = GameObject::create("MainCamera");
   Camera* camera = cameraGo->addComponent<Camera>();
 
   //GameObject* closeButtonGo = new GameObject();
   //closeButtonGo->addComponent<Button>();
 
-  GameObject* startButtonGo = new GameObject("StartButton");
+  GameObject* startButtonGo = GameObject::create("StartButton");
   Button* startButton = startButtonGo->addComponent<Button>();
   startButtonGo->getTransform()->setPosition(Vector3(100, 50, 0));
   startButtonGo->getTransform()->setScale(Vector3(256, 64, 0));
@@ -71,6 +71,11 @@ void IntroductionScreen::onGui()
   if(Gui::button(Rect(middle + padding, 500, 200, 50), "Water Shader") == true)
   {
     Application::loadLevel("water");
+  }
+
+  if(Gui::button(Rect(middle + padding, 550, 200, 50), "Quit") == true)
+  {
+    Application::quit();
   }
 }
 

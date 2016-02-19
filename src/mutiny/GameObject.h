@@ -3,7 +3,6 @@
 
 #include "Component.h"
 #include "Application.h"
-#include "arc.h"
 
 #include <memory>
 #include <string>
@@ -59,8 +58,8 @@ public:
   }
 
   static void findGameObjectsWithTag(std::string tag, std::vector<GameObject*>* gameObjects);
-  static arc<GameObject> create();
-  static arc<GameObject> create(std::string name);
+  static GameObject* create();
+  static GameObject* create(std::string name);
 
   GameObject();
   GameObject(std::string name);

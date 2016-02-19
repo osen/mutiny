@@ -74,6 +74,7 @@ public:
   static int getArgc();
   static std::string getArgv(int i);
   static void setTitle(std::string title);
+  static internal::gc::context* getGC();
 
 private:
   static Context* context;

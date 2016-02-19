@@ -65,28 +65,19 @@ GameObject::GameObject()
   layer = 1 << 0;
 }
 
-GameObject::GameObject(int dummy)
+GameObject* GameObject::create(std::string name)
 {
-
-}
-
-arc<GameObject> GameObject::create(std::string name)
-{
-  arc<GameObject> rtn = create();
+  GameObject* rtn = create();
   rtn->name = name;
 
   return rtn;
 }
 
-arc<GameObject> GameObject::create()
+GameObject* GameObject::create()
 {
-  static GameObject s(8);
-  arc<GameObject> rtn(new GameObject(s));
+  GameObject* rtn = NULL;
 
-  rtn->addComponent<Transform>();
-  Application::getGameObjects()->push_back(rtn.get());
-  rtn->activeSelf = true;
-  rtn->layer = 1 << 0;
+  rtn = Application::getGC()->gc_new<GameObject>();
 
   return rtn;
 }

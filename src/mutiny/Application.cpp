@@ -443,13 +443,17 @@ void Application::loop()
 
   idle();
   display();
-
-  context->gc_ctx->gc_collect();
 }
 
 void Application::quit()
 {
   context->running = false;
+  delete context->gc_ctx;
+}
+
+internal::gc::context* Application::getGC()
+{
+  return context->gc_ctx;
 }
 
 void Application::loadLevel()
@@ -636,6 +640,8 @@ void Application::idle()
 
   Input::downMouseButtons.clear();
   Input::upMouseButtons.clear();
+
+  context->gc_ctx->gc_collect();
 }
 
 void Application::motion(int x, int y)
