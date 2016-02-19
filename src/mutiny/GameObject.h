@@ -89,7 +89,7 @@ public:
     arc<Component> c = t.template cast<Component>();
     c->self = c.getWeak();
 
-    components.push_back(c);
+    components->push_back(c);
     c->gameObject = this;
     c->awake();
 
@@ -98,13 +98,13 @@ public:
 
   template<class T> T* getComponent()
   {
-    for(int i = 0; i < components.size(); i++)
+    for(int i = 0; i < components->size(); i++)
     {
-      T* t = dynamic_cast<T*>(components.at(i).get());
+      T* t = dynamic_cast<T*>(components->at(i).get());
 
       if(t != NULL)
       {
-        return (T*)components.at(i).get();
+        return (T*)components->at(i).get();
       }
     }
 
@@ -112,7 +112,7 @@ public:
   }
 
 private:
-  std::vector<arc<Component> > components;
+  internal::gc::list<arc<Component> >* components;
   bool activeSelf;
   int layer;
   std::string tag;

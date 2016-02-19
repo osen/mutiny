@@ -27,7 +27,7 @@ void AnimatedMeshRenderer::onAwake()
   frame = 0;
   playing = false;
   fps = 1;
-  rootGo = new GameObject("root");
+  rootGo = GameObject::create("root");
   rootGo->getTransform()->setParent(getGameObject()->getTransform());
   rootGo->getTransform()->setLocalPosition(Vector3());
   rootGo->getTransform()->setLocalRotation(Vector3());
@@ -207,7 +207,7 @@ void AnimatedMeshRenderer::setAnimatedMesh(arc<AnimatedMesh> mesh)
 
   for(int i = 0; i < mesh->getMeshCount(); i++)
   {
-    GameObject* go = new GameObject(mesh->getMeshName(i));
+    GameObject* go = GameObject::create(mesh->getMeshName(i));
     go->getTransform()->setParent(rootGo->getTransform());
     go->getTransform()->setLocalPosition(mesh->getMeshOffset(i));
     MeshFilter* mf = go->addComponent<MeshFilter>();

@@ -18,7 +18,7 @@ namespace engine
 
 GameObject* GameObject::createPrimitive(int primitiveType)
 {
-  GameObject* gameObject = new GameObject();
+  GameObject* gameObject = GameObject::create();
 
   MeshFilter* meshFilter = gameObject->addComponent<MeshFilter>();
   meshFilter->setMesh(Resources::load<Mesh>("primitives/cube"));
@@ -34,7 +34,7 @@ GameObject* GameObject::createModel(std::string path)
   // TODO: Do we really want to be creating an AnimatedMesh?
   // I have only done this because it does much of the work for me
   // rather than manually loading textures per material group etc...
-  GameObject* gameObject = new GameObject();
+  GameObject* gameObject = GameObject::create();
 
   AnimatedMeshRenderer* amr = gameObject->addComponent<AnimatedMeshRenderer>();
   arc<AnimatedMesh> mesh = Resources::load<AnimatedMesh>(path);
@@ -50,6 +50,7 @@ GameObject* GameObject::createModel(std::string path)
 
 GameObject::GameObject(std::string name)
 {
+  components = Application::getGC()->gc_list<arc<Component> >();
   setName(name);
   addComponent<Transform>();
   Application::getGameObjects()->push_back(this);
@@ -59,6 +60,7 @@ GameObject::GameObject(std::string name)
 
 GameObject::GameObject()
 {
+  components = Application::getGC()->gc_list<arc<Component> >();
   addComponent<Transform>();
   Application::getGameObjects()->push_back(this);
   activeSelf = true;
@@ -99,93 +101,93 @@ int GameObject::getLayer()
 
 void GameObject::awake()
 {
-  for(int i = 0; i < components.size(); i++)
+  for(int i = 0; i < components->size(); i++)
   {
-    components.at(i)->awake();
+    components->at(i)->awake();
   }
 }
 
 void GameObject::start()
 {
-  for(int i = 0; i < components.size(); i++)
+  for(int i = 0; i < components->size(); i++)
   {
-    components.at(i)->start();
+    components->at(i)->start();
   }
 }
 
 void GameObject::update()
 {
-  for(int i = 0; i < components.size(); i++)
+  for(int i = 0; i < components->size(); i++)
   {
-    if(components.at(i)->destroyed == true)
+    if(components->at(i)->destroyed == true)
     {
-      components.at(i)->destroy();
-      components.erase(components.begin() + i);
+      components->at(i)->destroy();
+      components->remove_at(i);
       i--;
     }
     else
     {
-      components.at(i)->update();
+      components->at(i)->update();
     }
   }
 }
 
 void GameObject::render()
 {
-  for(int i = 0; i < components.size(); i++)
+  for(int i = 0; i < components->size(); i++)
   {
-    components.at(i)->render();
+    components->at(i)->render();
   }
 }
 
 void GameObject::postRender()
 {
-  for(int i = 0; i < components.size(); i++)
+  for(int i = 0; i < components->size(); i++)
   {
-    components.at(i)->postRender();
+    components->at(i)->postRender();
   }
 }
 
 void GameObject::gui()
 {
-  for(int i = 0; i < components.size(); i++)
+  for(int i = 0; i < components->size(); i++)
   {
-    components.at(i)->gui();
+    components->at(i)->gui();
   }
 }
 
 void GameObject::destroy()
 {
-  for(int i = 0; i < components.size(); i++)
+  for(int i = 0; i < components->size(); i++)
   {
-    components.at(i)->destroy();
+    components->at(i)->destroy();
   }
 }
 
 void GameObject::levelWasLoaded()
 {
-  for(int i = 0; i < components.size(); i++)
+  for(int i = 0; i < components->size(); i++)
   {
-    components.at(i)->levelWasLoaded();
+    components->at(i)->levelWasLoaded();
   }
 }
 
 void GameObject::collisionEnter(Collision& collision)
 {
-  for(int i = 0; i < components.size(); i++)
-    components.at(i)->collisionEnter(collision);
+  for(int i = 0; i < components->size(); i++)
+    components->at(i)->collisionEnter(collision);
 }
 
 void GameObject::collisionStay(Collision& collision)
 {
-  for(int i = 0; i < components.size(); i++)
-    components.at(i)->collisionStay(collision);
+  for(int i = 0; i < components->size(); i++)
+    components->at(i)->collisionStay(collision);
 }
 
 void GameObject::collisionExit(Collision& collision)
 {
-  for(int i = 0; i < components.size(); i++)
-    components.at(i)->collisionExit(collision);
+  for(int i = 0; i < components->size(); i++)
+    components->at(i)->collisionExit(collision);
 }
 
 void GameObject::setActive(bool active)
