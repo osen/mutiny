@@ -6,7 +6,7 @@ using namespace mutiny::engine;
 
 GameObject* ModelScreen::create()
 {
-  GameObject* mainGo = new GameObject("ModelScreen");
+  GameObject* mainGo = GameObject::create("ModelScreen");
   mainGo->addComponent<ModelScreen>();
 
   return mainGo;
@@ -14,11 +14,11 @@ GameObject* ModelScreen::create()
 
 void ModelScreen::onStart()
 {
-  cameraGo = new GameObject("MainCamera");
+  cameraGo = GameObject::create("MainCamera");
   Camera* camera = cameraGo->addComponent<Camera>();
   cameraGo->getTransform()->setPosition(Vector3(0, 1, -10));
 
-  modelGo = new GameObject("Model");
+  modelGo = GameObject::create("Model");
   modelGo->getTransform()->setPosition(Vector3(0, 0, 10));
 
   AnimatedMeshRenderer* playerMr = modelGo->addComponent<AnimatedMeshRenderer>();

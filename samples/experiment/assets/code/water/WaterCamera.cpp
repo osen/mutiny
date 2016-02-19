@@ -6,7 +6,7 @@ using namespace mutiny::engine;
 
 WaterCamera* WaterCamera::create()
 {
-  GameObject* cameraGo = new GameObject("WaterCamera");
+  GameObject* cameraGo = GameObject::create("WaterCamera");
   WaterCamera* camera = cameraGo->addComponent<WaterCamera>();
 
   return camera;

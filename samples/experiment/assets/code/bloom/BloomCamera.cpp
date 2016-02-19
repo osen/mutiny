@@ -6,7 +6,7 @@ using namespace mutiny::engine;
 
 BloomCamera* BloomCamera::create()
 {
-  GameObject* cameraGo = new GameObject("BloomCamera");
+  GameObject* cameraGo = GameObject::create("BloomCamera");
   BloomCamera* camera = cameraGo->addComponent<BloomCamera>();
 
   return camera;

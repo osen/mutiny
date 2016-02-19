@@ -5,7 +5,7 @@ using namespace mutiny::engine;
 
 GameObject* PostScreen::create()
 {
-  GameObject* mainGo = new GameObject("PostScreen");
+  GameObject* mainGo = GameObject::create("PostScreen");
   mainGo->addComponent<PostScreen>();
 
   return mainGo;
@@ -14,7 +14,7 @@ GameObject* PostScreen::create()
 void PostScreen::onAwake()
 {
   MainCamera::create();
-  GameObject* playerGo = new GameObject("Player");
+  GameObject* playerGo = GameObject::create("Player");
   playerGo->getTransform()->setPosition(Vector3(0, 0, 0));
 
   MeshRenderer* playerMr = playerGo->addComponent<MeshRenderer>();

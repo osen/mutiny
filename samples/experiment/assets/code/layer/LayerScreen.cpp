@@ -5,7 +5,7 @@ using namespace mutiny::engine;
 
 GameObject* LayerScreen::create()
 {
-  GameObject* mainGo = new GameObject("LayerScreen");
+  GameObject* mainGo = GameObject::create("LayerScreen");
   mainGo->addComponent<LayerScreen>();
 
   return mainGo;
@@ -15,7 +15,7 @@ void LayerScreen::onAwake()
 {
   cameraGo = LayerCamera::create();
 
-  playerGo = new GameObject("Player");
+  playerGo = GameObject::create("Player");
   //playerGo->setLayer(1 << 1);
   playerGo->getTransform()->setPosition(Vector3(0, 0, 0));
 

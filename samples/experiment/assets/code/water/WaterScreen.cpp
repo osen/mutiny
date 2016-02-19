@@ -5,7 +5,7 @@ using namespace mutiny::engine;
 
 GameObject* WaterScreen::create()
 {
-  GameObject* mainGo = new GameObject("WaterScreen");
+  GameObject* mainGo = GameObject::create("WaterScreen");
   mainGo->addComponent<WaterScreen>();
 
   return mainGo;
@@ -19,7 +19,7 @@ void WaterScreen::onAwake()
   effectOffset = 0.0f;
   texOffset = 0.0f;
 
-  waterGo = new GameObject("Water");
+  waterGo = GameObject::create("Water");
   waterGo->getTransform()->rotate(Vector3(0, 180, 0));
   waterGo->getTransform()->translate(Vector3(0, -1, 0));
   waterMr = waterGo->addComponent<MeshRenderer>();
@@ -30,7 +30,7 @@ void WaterScreen::onAwake()
   arc<Texture2d> waterTexture = Resources::load<Texture2d>("models/water/water");
   waterMaterial->setMainTexture(waterTexture.cast<Texture>());
 
-  playerGo = new GameObject("Player");
+  playerGo = GameObject::create("Player");
   playerGo->getTransform()->setPosition(Vector3(0, 0, 0));
 
   playerMr = playerGo->addComponent<AnimatedMeshRenderer>();

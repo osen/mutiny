@@ -5,7 +5,7 @@ using namespace mutiny::engine;
 
 GameObject* BloomScreen::create()
 {
-  GameObject* mainGo = new GameObject("BloomScreen");
+  GameObject* mainGo = GameObject::create("BloomScreen");
   mainGo->addComponent<BloomScreen>();
 
   return mainGo;
@@ -14,7 +14,7 @@ GameObject* BloomScreen::create()
 void BloomScreen::onAwake()
 {
   BloomCamera::create();
-  playerGo = new GameObject("Player");
+  playerGo = GameObject::create("Player");
   playerGo->getTransform()->setPosition(Vector3(-10, 0, -10));
 
   MeshRenderer* playerMr = playerGo->addComponent<MeshRenderer>();

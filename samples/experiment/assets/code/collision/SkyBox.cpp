@@ -6,7 +6,7 @@ using namespace mutiny::engine;
 
 SkyBox* SkyBox::create(GameObject* playerGo)
 {
-  GameObject* skyboxGo = new GameObject("SkyBox");
+  GameObject* skyboxGo = GameObject::create("SkyBox");
   SkyBox* skybox = skyboxGo->addComponent<SkyBox>();
   skybox->playerGo = playerGo;
 

@@ -7,7 +7,7 @@ using namespace mutiny::engine;
 GameObject* TransformScreen::create()
 {
   Debug::log("onAwake()");
-  GameObject* mainGo = new GameObject("IntroductionScreen");
+  GameObject* mainGo = GameObject::create("IntroductionScreen");
   mainGo->addComponent<TransformScreen>();
 
   return mainGo;
@@ -15,7 +15,7 @@ GameObject* TransformScreen::create()
 
 void TransformScreen::onAwake()
 {
-  cameraGo = new GameObject("MainCamera");
+  cameraGo = GameObject::create("MainCamera");
   Camera* camera = cameraGo->addComponent<Camera>();
   cameraGo->getTransform()->setPosition(Vector3(0, 1, -10));
 

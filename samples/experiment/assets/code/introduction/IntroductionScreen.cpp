@@ -17,9 +17,6 @@ void IntroductionScreen::onAwake()
   cameraGo = GameObject::create("MainCamera");
   Camera* camera = cameraGo->addComponent<Camera>();
 
-  //GameObject* closeButtonGo = new GameObject();
-  //closeButtonGo->addComponent<Button>();
-
   GameObject* startButtonGo = GameObject::create("StartButton");
   Button* startButton = startButtonGo->addComponent<Button>();
   startButtonGo->getTransform()->setPosition(Vector3(100, 50, 0));

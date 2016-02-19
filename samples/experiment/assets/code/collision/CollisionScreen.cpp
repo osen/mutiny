@@ -9,7 +9,7 @@ using namespace mutiny::engine;
 
 GameObject* CollisionScreen::create()
 {
-  GameObject* mainGo = new GameObject("CollisionScreen");
+  GameObject* mainGo = GameObject::create("CollisionScreen");
   mainGo->addComponent<CollisionScreen>();
 
   return mainGo;
@@ -21,7 +21,7 @@ void CollisionScreen::onAwake()
   arc<Mesh> levelMesh;
 
   Camera* camera = NULL;
-  cameraGo = new GameObject("MainCamera");
+  cameraGo = GameObject::create("MainCamera");
   camera = cameraGo->addComponent<Camera>();
   cameraGo->getTransform()->translate(Vector3(0, 7.5, -20));
   //cameraGo->getTransform()->rotate(Vector3(-25, 0, 0));
@@ -30,7 +30,7 @@ void CollisionScreen::onAwake()
   renderTexture.reset(new RenderTexture(128, 128));
   camera->setTargetTexture(renderTexture);
 
-  camera2Go = new GameObject("SubCamera");
+  camera2Go = GameObject::create("SubCamera");
   camera = camera2Go->addComponent<Camera>();
   camera2Go->getTransform()->translate(Vector3(0, 7.5, -20));
   //camera2Go->getTransform()->rotate(Vector3(-25, 0, 0));
@@ -42,14 +42,14 @@ void CollisionScreen::onAwake()
   levelTexture = Resources::load<Texture2d>("models/level/level").cast<Texture>();
   levelMaterial->setMainTexture(levelTexture);
 
-  levelGo = new GameObject("Level");
+  levelGo = GameObject::create("Level");
   levelGo->addComponent<MeshFilter>()->setMesh(levelMesh);
   levelGo->addComponent<MeshRenderer>()->setMaterial(levelMaterial);
   levelGo->addComponent<MeshCollider>();
   levelGo->getTransform()->translate(Vector3(-20, 0, 0));
   levelGo->getTransform()->rotate(Vector3(0, -5, -10));
 
-  level2Go = new GameObject("Level");
+  level2Go = GameObject::create("Level");
   level2Go->addComponent<MeshFilter>()->setMesh(levelMesh);
   level2Go->addComponent<MeshRenderer>()->setMaterial(levelMaterial);
   level2Go->addComponent<MeshCollider>();

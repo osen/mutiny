@@ -5,7 +5,7 @@ using namespace mutiny::engine;
 
 GameObject* AccumScreen::create()
 {
-  GameObject* mainGo = new GameObject("AccumScreen");
+  GameObject* mainGo = GameObject::create("AccumScreen");
   mainGo->addComponent<AccumScreen>();
 
   return mainGo;
@@ -15,7 +15,7 @@ void AccumScreen::onAwake()
 {
   accel = 0.0f;
   AccumCamera::create();
-  playerGo = new GameObject("Player");
+  playerGo = GameObject::create("Player");
   playerGo->getTransform()->setPosition(Vector3(0, 0, 0));
 
   playerMr = playerGo->addComponent<AnimatedMeshRenderer>();

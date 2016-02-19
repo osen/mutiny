@@ -6,7 +6,7 @@ using namespace mutiny::engine;
 
 MainCamera* MainCamera::create()
 {
-  GameObject* cameraGo = new GameObject("MainCamera");
+  GameObject* cameraGo = GameObject::create("MainCamera");
   MainCamera* camera = cameraGo->addComponent<MainCamera>();
 
   return camera;
