@@ -44,7 +44,7 @@ private:
   std::string levelChange;
   std::string dataPath;
   std::string engineDataPath;
-  std::vector<arc<GameObject> > gameObjects;
+  internal::gc::list<GameObject*>* gameObjects;
 
   int argc;
   std::vector<std::string> argv;
@@ -82,7 +82,7 @@ private:
   static void loop();
   static void setupPaths();
   static bool isValidPrefix(std::string path, std::string basename);
-  static std::vector<arc<GameObject> >* getGameObjects();
+  static internal::gc::list<GameObject*>* getGameObjects();
 
   static void reshape(int width, int height);
   static void display();

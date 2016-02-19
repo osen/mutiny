@@ -27,15 +27,15 @@ class list
 public:
   void push_back(T t)
   {
-    if(actualSize < size + 1)
+    if(actualSize < _size + 1)
     {
-      size_t newSize = (size * 10) + 1;
+      size_t newSize = (_size * 10) + 1;
       T* newData = (T*)gc_alloc(ctx, sizeof(t) * newSize);
 
       if(data != NULL)
       {
         //memcpy(newData, data, sizeof(t) * size);
-        for(size_t i = 0; i < size; i++)
+        for(size_t i = 0; i < _size; i++)
         {
           newData[i] = data[i];
         }
@@ -45,24 +45,52 @@ public:
       actualSize = newSize;
     }
 
-    data[size] = t;
-    size++;
+    data[_size] = t;
+    _size++;
   }
 
-  T& at(size_t idx)
+  void remove_at(size_t idx)
   {
-    if(idx >= size)
+    if(idx >= _size)
     {
       // Error
       exit(1);
     }
 
-    return data[size];
+    for(size_t i = idx + 1; i < _size; i++)
+    {
+      data[i-1] = data[i];
+    }
+
+    _size--;
+  }
+
+  T& at(size_t idx)
+  {
+    if(idx >= _size)
+    {
+      // Error
+      exit(1);
+    }
+
+    return data[idx];
+  }
+
+  void clear()
+  {
+    data = NULL;
+    _size = 0;
+    actualSize = 0;
+  }
+
+  size_t size()
+  {
+    return _size;
   }
 
 private:
   T* data;
-  size_t size;
+  size_t _size;
   size_t actualSize;
   GcContext* ctx;
 

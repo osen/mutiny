@@ -33,13 +33,13 @@ public:
 
   template<class T> static std::vector<Object*> findObjectsOfType()
   {
-    std::vector<arc<GameObject> >* gameObjects = Application::getGameObjects();
+    internal::gc::list<GameObject*>* gameObjects = Application::getGameObjects();
     std::vector<Object*> objects;
 
     for(int i = 0; i < gameObjects->size(); i++)
     {
       void* gameObject =
-        dynamic_cast<T*>(gameObjects->at(i).get());
+        dynamic_cast<T*>(gameObjects->at(i));
 
       if(gameObject != NULL)
       {

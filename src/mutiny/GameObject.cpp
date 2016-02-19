@@ -52,7 +52,7 @@ GameObject::GameObject(std::string name)
 {
   setName(name);
   addComponent<Transform>();
-  Application::getGameObjects()->push_back(arc<GameObject>(this));
+  Application::getGameObjects()->push_back(this);
   activeSelf = true;
   layer = 1 << 0;
 }
@@ -60,7 +60,7 @@ GameObject::GameObject(std::string name)
 GameObject::GameObject()
 {
   addComponent<Transform>();
-  Application::getGameObjects()->push_back(arc<GameObject>(this));
+  Application::getGameObjects()->push_back(this);
   activeSelf = true;
   layer = 1 << 0;
 }
@@ -84,7 +84,7 @@ arc<GameObject> GameObject::create()
   arc<GameObject> rtn(new GameObject(s));
 
   rtn->addComponent<Transform>();
-  Application::getGameObjects()->push_back(rtn);
+  Application::getGameObjects()->push_back(rtn.get());
   rtn->activeSelf = true;
   rtn->layer = 1 << 0;
 
@@ -230,13 +230,13 @@ void GameObject::setTag(std::string tag)
 
 void GameObject::findGameObjectsWithTag(std::string tag, std::vector<GameObject*>* gameObjects)
 {
-  std::vector<arc<GameObject> >* _gameObjects = Application::getGameObjects();
+  internal::gc::list<GameObject*>* _gameObjects = Application::getGameObjects();
 
   for(int i = 0; i < _gameObjects->size(); i++)
   {
     if(_gameObjects->at(i)->getTag() == tag)
     {
-      gameObjects->push_back(_gameObjects->at(i).get());
+      gameObjects->push_back(_gameObjects->at(i));
     }
   }
 }

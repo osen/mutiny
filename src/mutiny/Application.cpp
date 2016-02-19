@@ -63,6 +63,7 @@ void Application::init(int argc, char* argv[])
   context = gc_ctx->gc_new<Context>();
   context->gc_ctx = gc_ctx;
 
+  context->gameObjects = gc_ctx->gc_list<GameObject*>();
   context->running = false;
   context->argc = argc;
 
@@ -301,7 +302,7 @@ void Application::destroy()
   delete GuiSkin::_default;
 
   Camera::allCameras.clear();
-  context->gameObjects.clear();
+  context->gameObjects->clear();
   Resources::paths.clear();
   Resources::objects.clear();
 
@@ -346,9 +347,9 @@ void Application::run()
 
   context->running = false;
 
-  for(int i = 0; i < context->gameObjects.size(); i++)
+  for(int i = 0; i < context->gameObjects->size(); i++)
   {
-    context->gameObjects.at(i)->destroy();
+    context->gameObjects->at(i)->destroy();
   }
 }
 
@@ -442,6 +443,8 @@ void Application::loop()
 
   idle();
   display();
+
+  context->gc_ctx->gc_collect();
 }
 
 void Application::quit()
@@ -451,18 +454,15 @@ void Application::quit()
 
 void Application::loadLevel()
 {
-  std::vector<arc<GameObject> > destroyedGos;
-  for(int i = 0; i < context->gameObjects.size(); i++)
+  for(int i = 0; i < context->gameObjects->size(); i++)
   {
-    if(context->gameObjects.at(i)->destroyOnLoad == true)
+    if(context->gameObjects->at(i)->destroyOnLoad == true)
     {
-      context->gameObjects.at(i)->destroy();
-      destroyedGos.push_back(context->gameObjects.at(i));
-      context->gameObjects.erase(context->gameObjects.begin() + i);
+      context->gameObjects->at(i)->destroy();
+      context->gameObjects->remove_at(i);
       i--;
     }
   }
-  destroyedGos.clear();
 
   for(int i = 0; i < Resources::objects.size(); i++)
   {
@@ -474,9 +474,9 @@ void Application::loadLevel()
     }
   }
 
-  for(int i = 0; i < context->gameObjects.size(); i++)
+  for(int i = 0; i < context->gameObjects->size(); i++)
   {
-    context->gameObjects.at(i)->levelWasLoaded();
+    context->gameObjects->at(i)->levelWasLoaded();
   }
 }
 
@@ -508,9 +508,9 @@ std::string Application::getEngineDataPath()
   return context->engineDataPath;
 }
 
-std::vector<arc<GameObject> >* Application::getGameObjects()
+internal::gc::list<GameObject*>* Application::getGameObjects()
 {
-  return &context->gameObjects;
+  return context->gameObjects;
 }
 
 int Application::getArgc()
@@ -559,15 +559,15 @@ void Application::display()
     glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    for(int i = 0; i < context->gameObjects.size(); i++)
+    for(int i = 0; i < context->gameObjects->size(); i++)
     {
-      if((Camera::getCurrent()->getCullMask() & context->gameObjects.at(i)->getLayer()) !=
-        context->gameObjects.at(i)->getLayer())
+      if((Camera::getCurrent()->getCullMask() & context->gameObjects->at(i)->getLayer()) !=
+        context->gameObjects->at(i)->getLayer())
       {
         continue;
       }
 
-      context->gameObjects.at(i)->render();
+      context->gameObjects->at(i)->render();
     }
 
     if(Camera::getCurrent()->targetTexture.get() != NULL)
@@ -576,14 +576,14 @@ void Application::display()
     }
   }
 
-  for(int i = 0; i < context->gameObjects.size(); i++)
+  for(int i = 0; i < context->gameObjects->size(); i++)
   {
-    context->gameObjects.at(i)->postRender();
+    context->gameObjects->at(i)->postRender();
   }
 
-  for(int i = 0; i < context->gameObjects.size(); i++)
+  for(int i = 0; i < context->gameObjects->size(); i++)
   {
-    context->gameObjects.at(i)->gui();
+    context->gameObjects->at(i)->gui();
   }
 
 #ifdef USE_SDL
@@ -615,23 +615,20 @@ void Application::idle()
   lastTime = time;
 #endif
 
-  for(int i = 0; i < context->gameObjects.size(); i++)
+  for(int i = 0; i < context->gameObjects->size(); i++)
   {
-    context->gameObjects.at(i)->update();
+    context->gameObjects->at(i)->update();
   }
 
-  std::vector<arc<GameObject> > destroyedGos;
-  for(int i = 0; i < context->gameObjects.size(); i++)
+  for(int i = 0; i < context->gameObjects->size(); i++)
   {
-    if(context->gameObjects.at(i)->destroyed == true)
+    if(context->gameObjects->at(i)->destroyed == true)
     {
-      context->gameObjects.at(i)->destroy();
-      destroyedGos.push_back(context->gameObjects.at(i));
-      context->gameObjects.erase(context->gameObjects.begin() + i);
+      context->gameObjects->at(i)->destroy();
+      context->gameObjects->remove_at(i);
       i--;
     }
   }
-  destroyedGos.clear();
 
 #ifdef USE_GLUT
   glutPostRedisplay();
