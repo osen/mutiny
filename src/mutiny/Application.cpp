@@ -18,6 +18,7 @@
 #include "Exception.h"
 #include "arc.h"
 #include "internal/platform.h"
+#include "internal/gcmm.h"
 
 #include "internal/Util.h"
 #include "internal/CWrapper.h"
@@ -54,26 +55,20 @@ namespace mutiny
 namespace engine
 {
 
-std::vector<arc<GameObject> > Application::gameObjects;
-#ifdef USE_SDL
-SDL_Surface* Application::screen;
-#endif
-bool Application::running;
-std::string Application::loadedLevelName;
-std::string Application::levelChange;
-std::string Application::dataPath;
-std::string Application::engineDataPath;
-int Application::argc;
-std::vector<std::string> Application::argv;
+Context* Application::context = NULL;
 
 void Application::init(int argc, char* argv[])
 {
-  running = false;
-  Application::argc = argc;
+  internal::gc::context* gc_ctx = new internal::gc::context();
+  context = gc_ctx->gc_new<Context>();
+  context->gc_ctx = gc_ctx;
+
+  context->running = false;
+  context->argc = argc;
 
   for(int i = 0; i < argc; i++)
   {
-    Application::argv.push_back(argv[i]);
+    context->argv.push_back(argv[i]);
   }
 
   srand(time(NULL));
@@ -250,8 +245,8 @@ void Application::setupPaths()
     }
   }
 
-  engineDataPath = dirname + "/share/mutiny";
-  dataPath = dirname + "/share" + basename;
+  context->engineDataPath = dirname + "/share/mutiny";
+  context->dataPath = dirname + "/share" + basename;
 #else
   FILE* process = NULL;
   std::string command;
@@ -298,7 +293,7 @@ void Application::setupPaths()
 void Application::destroy()
 {
   // TODO: Running is a flag, not a reliable state
-  if(running == true)
+  if(context->running == true)
   {
     throw std::exception();
   }
@@ -306,7 +301,7 @@ void Application::destroy()
   delete GuiSkin::_default;
 
   Camera::allCameras.clear();
-  gameObjects.clear();
+  context->gameObjects.clear();
   Resources::paths.clear();
   Resources::objects.clear();
 
@@ -320,16 +315,18 @@ void Application::destroy()
 #ifdef USE_SDL
   SDL_Quit();
 #endif
+
+  delete context->gc_ctx;
 }
 
 void Application::run()
 {
-  if(running == true)
+  if(context->running == true)
   {
     return;
   }
 
-  running = true;
+  context->running = true;
 
 #ifdef USE_SDL
   #ifdef EMSCRIPTEN
@@ -337,7 +334,7 @@ void Application::run()
   //emscripten_set_main_loop(loop, 60, true);
   emscripten_set_main_loop(loop, 0, true);
   #else
-  while(running == true)
+  while(context->running == true)
   {
     loop();
   }
@@ -347,11 +344,11 @@ void Application::run()
   glutMainLoop();
 #endif
 
-  running = false;
+  context->running = false;
 
-  for(int i = 0; i < gameObjects.size(); i++)
+  for(int i = 0; i < context->gameObjects.size(); i++)
   {
-    gameObjects.at(i)->destroy();
+    context->gameObjects.at(i)->destroy();
   }
 }
 
@@ -449,19 +446,19 @@ void Application::loop()
 
 void Application::quit()
 {
-  running = false;
+  context->running = false;
 }
 
 void Application::loadLevel()
 {
   std::vector<arc<GameObject> > destroyedGos;
-  for(int i = 0; i < gameObjects.size(); i++)
+  for(int i = 0; i < context->gameObjects.size(); i++)
   {
-    if(gameObjects.at(i)->destroyOnLoad == true)
+    if(context->gameObjects.at(i)->destroyOnLoad == true)
     {
-      gameObjects.at(i)->destroy();
-      destroyedGos.push_back(gameObjects.at(i));
-      gameObjects.erase(gameObjects.begin() + i);
+      context->gameObjects.at(i)->destroy();
+      destroyedGos.push_back(context->gameObjects.at(i));
+      context->gameObjects.erase(context->gameObjects.begin() + i);
       i--;
     }
   }
@@ -477,43 +474,53 @@ void Application::loadLevel()
     }
   }
 
-  for(int i = 0; i < gameObjects.size(); i++)
+  for(int i = 0; i < context->gameObjects.size(); i++)
   {
-    gameObjects.at(i)->levelWasLoaded();
+    context->gameObjects.at(i)->levelWasLoaded();
   }
 }
 
 void Application::loadLevel(std::string path)
 {
-  if(running == true)
+  if(context->running == true)
   {
-    levelChange = path;
+    context->levelChange = path;
   }
   else
   {
-    loadedLevelName = path;
+    context->loadedLevelName = path;
     loadLevel();
   }
 }
 
 std::string Application::getLoadedLevelName()
 {
-  return loadedLevelName;
+  return context->loadedLevelName;
 }
 
 std::string Application::getDataPath()
 {
-  return dataPath;
+  return context->dataPath;
+}
+
+std::string Application::getEngineDataPath()
+{
+  return context->engineDataPath;
+}
+
+std::vector<arc<GameObject> >* Application::getGameObjects()
+{
+  return &context->gameObjects;
 }
 
 int Application::getArgc()
 {
-  return argc;
+  return context->argc;
 }
 
 std::string Application::getArgv(int i)
 {
-  return argv.at(i);
+  return context->argv.at(i);
 }
 
 void Application::reshape(int width, int height)
@@ -521,7 +528,7 @@ void Application::reshape(int width, int height)
   Screen::width = width;
   Screen::height = height;
 #ifdef USE_SDL
-  screen = SDL_SetVideoMode(Screen::width, Screen::height, 32, SDL_OPENGL | SDL_RESIZABLE);
+  context->screen = SDL_SetVideoMode(Screen::width, Screen::height, 32, SDL_OPENGL | SDL_RESIZABLE);
 #endif
 
   idle();
@@ -552,15 +559,15 @@ void Application::display()
     glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    for(int i = 0; i < gameObjects.size(); i++)
+    for(int i = 0; i < context->gameObjects.size(); i++)
     {
-      if((Camera::getCurrent()->getCullMask() & gameObjects.at(i)->getLayer()) !=
-        gameObjects.at(i)->getLayer())
+      if((Camera::getCurrent()->getCullMask() & context->gameObjects.at(i)->getLayer()) !=
+        context->gameObjects.at(i)->getLayer())
       {
         continue;
       }
 
-      gameObjects.at(i)->render();
+      context->gameObjects.at(i)->render();
     }
 
     if(Camera::getCurrent()->targetTexture.get() != NULL)
@@ -569,14 +576,14 @@ void Application::display()
     }
   }
 
-  for(int i = 0; i < gameObjects.size(); i++)
+  for(int i = 0; i < context->gameObjects.size(); i++)
   {
-    gameObjects.at(i)->postRender();
+    context->gameObjects.at(i)->postRender();
   }
 
-  for(int i = 0; i < gameObjects.size(); i++)
+  for(int i = 0; i < context->gameObjects.size(); i++)
   {
-    gameObjects.at(i)->gui();
+    context->gameObjects.at(i)->gui();
   }
 
 #ifdef USE_SDL
@@ -590,10 +597,10 @@ void Application::display()
   //Input::downMouseButtons.clear();
   //Input::upMouseButtons.clear();
 
-  if(levelChange != "")
+  if(context->levelChange != "")
   {
-    loadedLevelName = levelChange;
-    levelChange = "";
+    context->loadedLevelName = context->levelChange;
+    context->levelChange = "";
     loadLevel();
   }
 }
@@ -608,19 +615,19 @@ void Application::idle()
   lastTime = time;
 #endif
 
-  for(int i = 0; i < gameObjects.size(); i++)
+  for(int i = 0; i < context->gameObjects.size(); i++)
   {
-    gameObjects.at(i)->update();
+    context->gameObjects.at(i)->update();
   }
 
   std::vector<arc<GameObject> > destroyedGos;
-  for(int i = 0; i < gameObjects.size(); i++)
+  for(int i = 0; i < context->gameObjects.size(); i++)
   {
-    if(gameObjects.at(i)->destroyed == true)
+    if(context->gameObjects.at(i)->destroyed == true)
     {
-      gameObjects.at(i)->destroy();
-      destroyedGos.push_back(gameObjects.at(i));
-      gameObjects.erase(gameObjects.begin() + i);
+      context->gameObjects.at(i)->destroy();
+      destroyedGos.push_back(context->gameObjects.at(i));
+      context->gameObjects.erase(context->gameObjects.begin() + i);
       i--;
     }
   }

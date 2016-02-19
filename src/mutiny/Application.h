@@ -2,6 +2,7 @@
 #define MUTINY_ENGINE_APPLICATION_H
 
 #include "internal/platform.h"
+#include "internal/gcmm.h"
 #include "arc.h"
 
 #ifdef USE_SDL
@@ -27,6 +28,27 @@ class Graphics;
 class Material;
 class RenderTexture;
 class Screen;
+class Application;
+
+class Context
+{
+  friend class mutiny::engine::Application;
+
+private:
+  internal::gc::context* gc_ctx;
+#ifdef USE_SDL
+  SDL_Surface* screen;
+#endif
+  bool running;
+  std::string loadedLevelName;
+  std::string levelChange;
+  std::string dataPath;
+  std::string engineDataPath;
+  std::vector<arc<GameObject> > gameObjects;
+
+  int argc;
+  std::vector<std::string> argv;
+};
 
 class Application
 {
@@ -48,28 +70,19 @@ public:
   static void loadLevel(std::string path);
   static std::string getLoadedLevelName();
   static std::string getDataPath();
+  static std::string getEngineDataPath();
   static int getArgc();
   static std::string getArgv(int i);
   static void setTitle(std::string title);
 
 private:
-#ifdef USE_SDL
-  static SDL_Surface* screen;
-#endif
-  static bool running;
-  static std::string loadedLevelName;
-  static std::string levelChange;
-  static std::string dataPath;
-  static std::string engineDataPath;
-  static std::vector<arc<GameObject> > gameObjects;
-
-  static int argc;
-  static std::vector<std::string> argv;
+  static Context* context;
 
   static void loadLevel();
   static void loop();
   static void setupPaths();
   static bool isValidPrefix(std::string path, std::string basename);
+  static std::vector<arc<GameObject> >* getGameObjects();
 
   static void reshape(int width, int height);
   static void display();
