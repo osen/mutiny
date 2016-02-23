@@ -4,6 +4,7 @@
 #include "Mathf.h"
 #include "Debug.h"
 #include "internal/CWrapper.h"
+#include "Exception.h"
 
 #include <memory>
 #include <functional>
@@ -16,7 +17,20 @@ namespace mutiny
 namespace engine
 {
 
-arc<Texture2d> Texture2d::defaultTexture;
+Texture2d* Texture2d::create(int width, int height)
+{
+  Texture2d* rtn = Application::getGC()->gc_new<Texture2d>();
+  rtn->width = width;
+  rtn->height = height;
+
+  return rtn;
+}
+
+Texture2d::Texture2d()
+{
+  width = 256;
+  height = 256;
+}
 
 Texture2d::Texture2d(int width, int height)
 {
@@ -80,7 +94,7 @@ void Texture2d::apply()
 {
   std::vector<GLbyte> imageBytes;
 
-  if(nativeTexture.get() == NULL)
+  if(nativeTexture == NULL)
   {
     nativeTexture = gl::Uint::genTexture();
   }
@@ -140,17 +154,17 @@ int poweroftwo(int input)
 
 Texture2d* Texture2d::load(std::string path)
 {
-  arc<internal::PngData> image = internal::PngData::create();
+  internal::PngData* image = internal::PngData::create();
   path = path + ".png";
 
   if(lodepng_decode32_file(&image->image, &image->width, &image->height, path.c_str()) != 0)
   {
-    throw std::exception();
+    throw Exception("Failed to decode PNG file");
   }
 
-  Texture2d* texture = new Texture2d(image->width, image->height);
+  Texture2d* texture = Texture2d::create(image->width, image->height);
 
-  if(texture->nativeTexture.get() == NULL)
+  if(texture->nativeTexture == NULL)
   {
     texture->nativeTexture = gl::Uint::genTexture();
   }
@@ -161,7 +175,7 @@ Texture2d* Texture2d::load(std::string path)
   sampleWidth = poweroftwo(image->width);
   sampleHeight = poweroftwo(image->height);
 
-  std::cout << sampleWidth << " " << sampleHeight << std::endl;
+  //std::cout << sampleWidth << " " << sampleHeight << std::endl;
 
   std::vector<GLbyte> imageBytes(sampleHeight * sampleWidth * 4);
 

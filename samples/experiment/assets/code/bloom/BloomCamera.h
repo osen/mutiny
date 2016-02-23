@@ -17,14 +17,14 @@ public:
   virtual void onPostRender();
 
 private:
-  arc<RenderTexture> originalPass;
-  arc<RenderTexture> blurPass1;
-  arc<RenderTexture> blurPass2;
-  arc<RenderTexture> lightKeyPass;
-  arc<RenderTexture> mergePass;
-  arc<Material> texturedMaterial;
-  arc<Material> lightKeyMaterial;
-  arc<Material> mergeMaterial;
+  RenderTexture* originalPass;
+  RenderTexture* blurPass1;
+  RenderTexture* blurPass2;
+  RenderTexture* lightKeyPass;
+  RenderTexture* mergePass;
+  Material* texturedMaterial;
+  Material* lightKeyMaterial;
+  Material* mergeMaterial;
 
   void regenRenderTextures();
 

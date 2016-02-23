@@ -2,7 +2,6 @@
 #define MUTINY_ENGINE_GUI_SKIN_H
 
 #include "Object.h"
-#include "arc.h"
 
 #include <memory>
 
@@ -23,14 +22,12 @@ class GuiSkin : public Object
 public:
   GuiSkin();
 
-  arc<GuiStyle> getButton();
-  arc<GuiStyle> getBox();
+  GuiStyle* getButton();
+  GuiStyle* getBox();
 
 private:
-  static GuiSkin* _default;
-
-  arc<GuiStyle> button;
-  arc<GuiStyle> box;
+  GuiStyle* button;
+  GuiStyle* box;
 
 };
 

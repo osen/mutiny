@@ -3,7 +3,6 @@
 
 #include "internal/platform.h"
 #include "internal/gcmm.h"
-#include "arc.h"
 #include "Object.h"
 
 #ifdef USE_SDL
@@ -30,13 +29,14 @@ class Material;
 class RenderTexture;
 class Screen;
 class Application;
+class Mesh;
+class MeshRenderer;
+class ParticleRenderer;
+class GuiSkin;
+class Texture2d;
 
-class Context
+struct Context
 {
-  friend class mutiny::engine::Application;
-  friend class mutiny::engine::Resources;
-
-private:
   internal::gc::context* gc_ctx;
 #ifdef USE_SDL
   SDL_Surface* screen;
@@ -53,7 +53,26 @@ private:
 
   // Resources
   std::vector<std::string> paths;
-  internal::gc::list<arc<Object> >* objects;
+  internal::gc::list<Object*>* objects;
+
+  // Graphics
+  Material* defaultMaterial;
+  RenderTexture* renderTarget;
+  Mesh* tempMesh;
+
+  // Material
+  Material* currentMaterial;
+  Material* meshNormalTextureMaterial;
+  Material* meshNormalMaterial;
+  Material* guiMaterial;
+  Material* particleMaterial;
+
+  // GUI
+  GuiSkin* currentGuiSkin;
+  GuiSkin* defaultGuiSkin;
+
+  // Texture2d
+  Texture2d* defaultTexture;
 };
 
 class Application
@@ -67,6 +86,8 @@ class Application
   friend class mutiny::engine::Material;
   friend class mutiny::engine::RenderTexture;
   friend class mutiny::engine::Screen;
+  friend class mutiny::engine::MeshRenderer;
+  friend class mutiny::engine::ParticleRenderer;
 
 public:
   static void init(int argc, char* argv[]);

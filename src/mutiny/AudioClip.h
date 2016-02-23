@@ -2,8 +2,9 @@
 #define MUTINY_ENGINE_AUDIOCLIP_H
 
 #include "Object.h"
+#include "Exception.h"
+
 #include "internal/platform.h"
-#include "arc.h"
 
 #ifdef USE_SDL
   #include <SDL/SDL_mixer.h>
@@ -24,14 +25,14 @@ class Resources;
 class Chunk
 {
 public:
-  static arc<Chunk> LoadWAV(std::string path)
+  static Chunk* LoadWAV(std::string path)
   {
-    arc<Chunk> rtn = arc<Chunk>::alloc();
+    Chunk* rtn = Application::getGC()->gc_new<Chunk>();
     rtn->data = Mix_LoadWAV(path.c_str());
 
     if(rtn->data == NULL)
     {
-      throw std::exception();
+      throw Exception("Failed to load file '" + path + "'");
     }
 
     return rtn;
@@ -60,7 +61,7 @@ private:
   static AudioClip* load(std::string path);
 
 #ifdef USE_SDL
-  arc<Chunk> data;
+  Chunk* data;
 #endif
 
 };

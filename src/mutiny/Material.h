@@ -4,7 +4,7 @@
 #include "Object.h"
 #include "Matrix4x4.h"
 #include "Vector2.h"
-#include "arc.h"
+#include "internal/gcmm.h"
 
 #include <GL/glew.h>
 
@@ -37,45 +37,43 @@ class Material : public Object
   friend class mutiny::engine::Graphics;
 
 public:
+  Material();
   Material(std::string vertContents, std::string fragContents);
-  Material(arc<Shader> shader);
-  Material(arc<Material> material);
+  Material(Shader* shader);
+  Material(Material* material);
 
-  arc<Shader> getShader();
-  void setShader(arc<Shader> shader);
+  static Material* create(Shader* shader);
+  static Material* create(std::string vertContents, std::string fragContents);
+
+  Shader* getShader();
+  void setShader(Shader* shader);
   void setMatrix(std::string propertyName, Matrix4x4 matrix);
   Matrix4x4 getMatrix(std::string propertyName);
   void setFloat(std::string propertyName, float value);
   void setVector(std::string propertyName, Vector2 value);
-  void setTexture(std::string propertyName, arc<Texture> texture);
-  arc<Texture> getTexture(std::string propertyName);
-  void setMainTexture(arc<Texture> texture);
-  arc<Texture> getMainTexture();
+  void setTexture(std::string propertyName, Texture* texture);
+  Texture* getTexture(std::string propertyName);
+  void setMainTexture(Texture* texture);
+  Texture* getMainTexture();
 
   int getPassCount();
-  void setPass(int pass, arc<Material> _this);
+  void setPass(int pass, Material* _this);
 
 private:
-  static arc<Material> current;
-  static arc<Material> meshNormalTextureMaterial;
-  static arc<Material> meshNormalMaterial;
-  static arc<Material> guiMaterial;
-  static arc<Material> particleMaterial;
-
   static Material* load(std::string path);
 
   std::vector<Matrix4x4> matrices; std::vector<GLuint> matrixIndexes; std::vector<std::string> matrixNames;
   std::vector<float> floats; std::vector<GLuint> floatIndexes; std::vector<std::string> floatNames;
   std::vector<Vector2> vector2s; std::vector<GLuint> vector2Indexes; std::vector<std::string> vector2Names;
-  std::vector<arc<Texture> > textures; std::vector<GLuint> textureIndexes; std::vector<std::string> textureNames;
+  internal::gc::list<Texture*>* textures; std::vector<GLuint> textureIndexes; std::vector<std::string> textureNames;
 
   GLint positionId;
   GLint uvId;
   GLint normalId;
   GLint modelUniformId;
 
-  arc<Shader> managedShader;
-  arc<Shader> shader;
+  Shader* managedShader;
+  Shader* shader;
 
   bool indexesDirty;
   void refreshIndexes();

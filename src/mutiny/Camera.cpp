@@ -41,9 +41,9 @@ Camera::~Camera()
 
 Matrix4x4 Camera::getProjectionMatrix()
 {
-  if(projectionMatrix.get() != NULL)
+  if(projectionMatrix != NULL)
   {
-    return *projectionMatrix.get();
+    return *projectionMatrix;
   }
 
   if(orthographic == true)
@@ -58,12 +58,13 @@ Matrix4x4 Camera::getProjectionMatrix()
 
 void Camera::setProjectionMatrix(Matrix4x4 projectionMatrix)
 {
-  this->projectionMatrix.reset(new Matrix4x4(projectionMatrix));
+  this->projectionMatrix = Application::getGC()->gc_new<Matrix4x4>();
+  *this->projectionMatrix = projectionMatrix;
 }
 
 void Camera::resetProjectionMatrix()
 {
-  projectionMatrix.reset();
+  projectionMatrix = NULL;
 }
 
 void Camera::onAwake()
@@ -88,7 +89,7 @@ int Camera::getCullMask()
   return cullMask;
 }
 
-void Camera::setTargetTexture(arc<RenderTexture> targetTexture)
+void Camera::setTargetTexture(RenderTexture* targetTexture)
 {
   this->targetTexture = targetTexture;
 }

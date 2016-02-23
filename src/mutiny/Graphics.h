@@ -3,7 +3,6 @@
 
 #include "Rect.h"
 #include "Color.h"
-#include "arc.h"
 
 #include <GL/glew.h>
 
@@ -31,19 +30,16 @@ class Graphics
   friend class mutiny::engine::Application;
 
 public:
-  static void setRenderTarget(arc<RenderTexture> renderTarget);
-  static void drawTexture(Rect rect, arc<Texture> texture, arc<Material> material);
-  static void drawTexture(Rect rect, arc<Texture> texture, Rect sourceRect, arc<Material> material);
-  static void drawTexture(Rect rect, arc<Texture> texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder, Color color, arc<Material> material);
-  static void drawTexture(Rect rect, arc<Texture> texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder, arc<Material> material);
+  static void setRenderTarget(RenderTexture* renderTarget);
+  static void drawTexture(Rect rect, Texture* texture, Material* material);
+  static void drawTexture(Rect rect, Texture* texture, Rect sourceRect, Material* material);
+  static void drawTexture(Rect rect, Texture* texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder, Color color, Material* material);
+  static void drawTexture(Rect rect, Texture* texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder, Material* material);
 
-  static void drawMeshNow(arc<Mesh> mesh, Matrix4x4 matrix, int materialIndex);
+  static void drawMeshNow(Mesh* mesh, Matrix4x4 matrix, int materialIndex);
 
 private:
-  static arc<Material> defaultMaterial;
-  static arc<RenderTexture> renderTarget;
-
-  static void drawTextureBatch(std::vector<Rect> rects, arc<Texture> texture, std::vector<Rect> sourceRects, arc<Material> material);
+  static void drawTextureBatch(std::vector<Rect> rects, Texture* texture, std::vector<Rect> sourceRects, Material* material);
 
 };
 

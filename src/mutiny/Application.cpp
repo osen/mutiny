@@ -16,7 +16,6 @@
 #include "Graphics.h"
 #include "Transform.h"
 #include "Exception.h"
-#include "arc.h"
 #include "internal/platform.h"
 #include "internal/gcmm.h"
 
@@ -63,7 +62,7 @@ void Application::init(int argc, char* argv[])
   context = gc_ctx->gc_new<Context>();
   context->gc_ctx = gc_ctx;
 
-  context->objects = gc_ctx->gc_list<arc<Object> >();
+  context->objects = gc_ctx->gc_list<Object*>();
   context->gameObjects = gc_ctx->gc_list<GameObject*>();
   context->running = false;
   context->argc = argc;
@@ -79,16 +78,14 @@ void Application::init(int argc, char* argv[])
 #ifdef USE_SDL
   if(SDL_Init(SDL_INIT_EVERYTHING) == -1)
   {
-    std::cout << "Error: Failed to initialize" << std::endl;
-    throw std::exception();
+    throw Exception("Failed to initialize");
   }
 
   screen = SDL_SetVideoMode(800, 600, 32, SDL_OPENGL | SDL_RESIZABLE);
 
   if(screen == NULL)
   {
-    std::cout << "Error: Failed to create rendering context" << std::endl;
-    throw std::exception();
+    throw Exception("Failed to create rendering context");
   }
 
   setTitle("Mutiny Engine");
@@ -99,6 +96,8 @@ void Application::init(int argc, char* argv[])
   glutInitWindowSize(800, 600);
   glutInitDisplayMode(GLUT_RGBA | GLUT_DOUBLE | GLUT_DEPTH);
   glutCreateWindow("Mutiny Engine");
+  glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
+
   glutIdleFunc(idle);
   glutDisplayFunc(display);
   glutReshapeFunc(reshape);
@@ -130,53 +129,52 @@ void Application::init(int argc, char* argv[])
 #ifdef USE_SDL
   if(Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 1024) == -1)
   {
-    std::cout << "Audio failed to initialize" << std::endl;
-    throw std::exception();
+    throw Exception("Audio failed to initialize");
   }
 #endif
 
-  Texture2d::defaultTexture.reset(new Texture2d(24, 24));
-  Object::dontDestroyOnLoad(Texture2d::defaultTexture.cast<Object>());
+  context->defaultTexture = Texture2d::create(24, 24);
+  Object::dontDestroyOnLoad(context->defaultTexture);
 
   for(int y = 0; y < 23; y+=2)
   {
     for(int x = 0; x < 23; x+=2)
     {
-      Texture2d::defaultTexture->setPixel(x, y, Color(1, 0, 1, 1));
-      Texture2d::defaultTexture->setPixel(x+1, y, Color(0, 0, 0, 1));
-      Texture2d::defaultTexture->setPixel(x, y+1, Color(0, 0, 0, 1));
-      Texture2d::defaultTexture->setPixel(x+1, y+1, Color(1, 0, 1, 1));
+      context->defaultTexture->setPixel(x, y, Color(1, 0, 1, 1));
+      context->defaultTexture->setPixel(x+1, y, Color(0, 0, 0, 1));
+      context->defaultTexture->setPixel(x, y+1, Color(0, 0, 0, 1));
+      context->defaultTexture->setPixel(x+1, y+1, Color(1, 0, 1, 1));
     }
   }
 
-  Texture2d::defaultTexture->apply();
+  context->defaultTexture->apply();
 
-  arc<Shader> shader = Resources::load<Shader>("shaders/internal-mesh-normal");
-  if(shader.get() == NULL) { throw std::exception(); }
-  Object::dontDestroyOnLoad(shader.cast<Object>());
-  Material::meshNormalMaterial.reset(new Material(shader));
-  Object::dontDestroyOnLoad(Material::meshNormalMaterial.cast<Object>());
+  Shader* shader = Resources::load<Shader>("shaders/internal-mesh-normal");
+  if(shader == NULL) { throw Exception("Failed to load default shader"); }
+  Object::dontDestroyOnLoad(shader);
+  context->meshNormalMaterial = Material::create(shader);
+  Object::dontDestroyOnLoad(context->meshNormalMaterial);
 
   shader = Resources::load<Shader>("shaders/internal-mesh-normal-texture");
-  if(shader.get() == NULL) { throw std::exception(); }
-  Object::dontDestroyOnLoad(shader.cast<Object>());
-  Material::meshNormalTextureMaterial.reset(new Material(shader));
-  Object::dontDestroyOnLoad(Material::meshNormalTextureMaterial.cast<Object>());
+  if(shader == NULL) { Exception("Failed to load default shader"); }
+  Object::dontDestroyOnLoad(shader);
+  context->meshNormalTextureMaterial = Material::create(shader);
+  Object::dontDestroyOnLoad(context->meshNormalTextureMaterial);
 
-  Material::guiMaterial = Resources::load<Material>("shaders/default_gui");
-  Object::dontDestroyOnLoad(Material::guiMaterial.cast<Object>());
+  context->guiMaterial = Resources::load<Material>("shaders/default_gui");
+  Object::dontDestroyOnLoad(context->guiMaterial);
 
-  Material::particleMaterial = Resources::load<Material>("shaders/default_particle");
-  Object::dontDestroyOnLoad(Material::particleMaterial.cast<Object>());
+  context->particleMaterial = Resources::load<Material>("shaders/default_particle");
+  Object::dontDestroyOnLoad(context->particleMaterial);
 
-  Graphics::defaultMaterial = Resources::load<Material>("shaders/Internal-GUITexture");
-  Object::dontDestroyOnLoad(Graphics::defaultMaterial.cast<Object>());
+  context->defaultMaterial = Resources::load<Material>("shaders/Internal-GUITexture");
+  Object::dontDestroyOnLoad(context->defaultMaterial);
 
-  GuiSkin::_default = new GuiSkin();
-  Material::current = NULL;
+  context->defaultGuiSkin = getGC()->gc_new<GuiSkin>();
+  context->currentGuiSkin = NULL;
+
   Camera::current = NULL;
   Camera::_main = NULL;
-  Gui::skin = NULL;
 }
 
 void Application::setTitle(std::string title)
@@ -195,8 +193,8 @@ bool Application::isValidPrefix(std::string path, std::string basename)
 #ifdef USE_WINAPI
   try
   {
-    arc<internal::Win32FindData> findData = internal::Win32FindData::create();
-    arc<internal::FindHandle> findHandle = internal::FindHandle::FindFirstFile(path + "\\share\\*", findData);
+    internal::Win32FindData* findData = internal::Win32FindData::create();
+    internal::FindHandle* findHandle = internal::FindHandle::FindFirstFile(path + "\\share\\*", findData);
 
     do
     {
@@ -259,8 +257,7 @@ void Application::setupPaths()
 
   if(process == NULL)
   {
-    throw std::exception();
-    //throw Exception("Failed to open child process");
+    throw Exception("Failed to open child process");
   }
 
   while(fgets(buffer, 7, process) != NULL)
@@ -274,8 +271,7 @@ void Application::setupPaths()
 
   if(process == NULL)
   {
-    throw std::exception();
-    //throw Exception("Failed to open child process");
+    throw Exception("Failed to open child process");
   }
 
   while(fgets(buffer, 7, process) != NULL)
@@ -297,22 +293,13 @@ void Application::destroy()
   // TODO: Running is a flag, not a reliable state
   if(context->running == true)
   {
-    throw std::exception();
+    throw Exception("Immediate shutdown not supported");
   }
-
-  delete GuiSkin::_default;
 
   Camera::allCameras.clear();
   context->gameObjects->clear();
   context->paths.clear();
   context->objects->clear();
-
-  Material::meshNormalMaterial.reset();
-  Material::meshNormalTextureMaterial.reset();
-  Material::guiMaterial.reset();
-  Material::particleMaterial.reset();
-  Graphics::defaultMaterial.reset();
-  Texture2d::defaultTexture.reset();
 
 #ifdef USE_SDL
   SDL_Quit();
@@ -344,7 +331,6 @@ void Application::run()
   #endif
 #else
   glutMainLoop();
-#endif
 
   context->running = false;
 
@@ -352,6 +338,8 @@ void Application::run()
   {
     context->gameObjects->at(i)->destroy();
   }
+
+#endif
 }
 
 void Application::loop()
@@ -449,7 +437,8 @@ void Application::loop()
 void Application::quit()
 {
   context->running = false;
-  delete context->gc_ctx;
+
+  glutLeaveMainLoop();
 }
 
 internal::gc::context* Application::getGC()
@@ -554,7 +543,7 @@ void Application::display()
 
     Camera::current = Camera::getAllCameras()->at(h);
 
-    if(Camera::getCurrent()->targetTexture.get() != NULL)
+    if(Camera::getCurrent()->targetTexture != NULL)
     {
       RenderTexture::setActive(Camera::getCurrent()->targetTexture);
     }
@@ -575,9 +564,9 @@ void Application::display()
       context->gameObjects->at(i)->render();
     }
 
-    if(Camera::getCurrent()->targetTexture.get() != NULL)
+    if(Camera::getCurrent()->targetTexture != NULL)
     {
-      RenderTexture::setActive(arc<RenderTexture>());
+      RenderTexture::setActive(NULL);
     }
   }
 
@@ -617,7 +606,16 @@ void Application::idle()
   float time = glutGet(GLUT_ELAPSED_TIME);
   float diff = time - lastTime;
   Time::deltaTime = diff / 1000.0f;
-  lastTime = time;
+
+  float idealDiff = 1000.0f / 50.0f;
+
+  if(diff < idealDiff)
+  {
+    Sleep(idealDiff - diff);
+    Time::deltaTime = idealDiff / 1000.0f;
+  }
+
+  lastTime = glutGet(GLUT_ELAPSED_TIME);
 #endif
 
   for(int i = 0; i < context->gameObjects->size(); i++)

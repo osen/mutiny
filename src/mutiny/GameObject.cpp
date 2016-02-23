@@ -37,7 +37,7 @@ GameObject* GameObject::createModel(std::string path)
   GameObject* gameObject = GameObject::create();
 
   AnimatedMeshRenderer* amr = gameObject->addComponent<AnimatedMeshRenderer>();
-  arc<AnimatedMesh> mesh = Resources::load<AnimatedMesh>(path);
+  AnimatedMesh* mesh = Resources::load<AnimatedMesh>(path);
   amr->setAnimatedMesh(mesh);
 
   for(int i = 0; i < amr->getRoot()->getTransform()->getChildCount(); i++)

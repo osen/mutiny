@@ -29,12 +29,12 @@ void MeshCollider::awake()
   Collider::awake();
 }
 
-void MeshCollider::setMesh(arc<Mesh> mesh)
+void MeshCollider::setMesh(Mesh* mesh)
 {
   this->mesh = mesh;
 }
 
-arc<Mesh> MeshCollider::getMesh()
+Mesh* MeshCollider::getMesh()
 {
   return mesh;
 }

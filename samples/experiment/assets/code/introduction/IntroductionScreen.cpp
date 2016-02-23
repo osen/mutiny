@@ -17,12 +17,12 @@ void IntroductionScreen::onAwake()
   cameraGo = GameObject::create("MainCamera");
   Camera* camera = cameraGo->addComponent<Camera>();
 
-  GameObject* startButtonGo = GameObject::create("StartButton");
-  Button* startButton = startButtonGo->addComponent<Button>();
-  startButtonGo->getTransform()->setPosition(Vector3(100, 50, 0));
-  startButtonGo->getTransform()->setScale(Vector3(256, 64, 0));
+  //GameObject* startButtonGo = GameObject::create("StartButton");
+  //Button* startButton = startButtonGo->addComponent<Button>();
+  //startButtonGo->getTransform()->setPosition(Vector3(100, 50, 0));
+  //startButtonGo->getTransform()->setScale(Vector3(256, 64, 0));
 
-  startButtonGo->addComponent<Anchor>()->setAttachment(Anchor::RIGHT | Anchor::BOTTOM);
+  //startButtonGo->addComponent<Anchor>()->setAttachment(Anchor::RIGHT | Anchor::BOTTOM);
 }
 
 void IntroductionScreen::onGui()

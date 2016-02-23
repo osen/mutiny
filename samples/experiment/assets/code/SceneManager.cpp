@@ -15,7 +15,7 @@ void SceneManager::onAwake()
 {
   Debug::log("Awake");
   watermark = Resources::load<Texture2d>("textures/watermark");
-  dontDestroyOnLoad(watermark.cast<Object>());
+  dontDestroyOnLoad(watermark);
   dontDestroyOnLoad(getGameObject());
   loadLevel();
 }
@@ -29,11 +29,11 @@ void SceneManager::onGui()
 {
   if(Application::getLoadedLevelName() == "introduction")
   {
-    Gui::drawTexture(Rect(Screen::getWidth() / 2 - watermark->getWidth() / 2, 40, watermark->getWidth(), watermark->getHeight()), watermark.cast<Texture>());
+    Gui::drawTexture(Rect(Screen::getWidth() / 2 - watermark->getWidth() / 2, 40, watermark->getWidth(), watermark->getHeight()), watermark);
   }
   else
   {
-    Gui::drawTexture(Rect(0, Screen::getHeight() - watermark->getHeight() / 2.0f - 25, watermark->getWidth() / 2.0f, watermark->getHeight() / 2.0f), watermark.cast<Texture>());
+    Gui::drawTexture(Rect(0, Screen::getHeight() - watermark->getHeight() / 2.0f - 25, watermark->getWidth() / 2.0f, watermark->getHeight() / 2.0f), watermark);
   }
 }
 

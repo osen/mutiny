@@ -20,6 +20,7 @@ namespace engine
 
 void AnimatedMeshRenderer::onAwake()
 {
+  materials = Application::getGC()->gc_list<Material*>();
   once = false;
   interpolateEnd = true;
   mesh = NULL;
@@ -55,9 +56,9 @@ void AnimatedMeshRenderer::setFps(float fps)
 
 void AnimatedMeshRenderer::setFrame(float frame)
 {
-  if(frame >= animation->frames.size())
+  if(frame >= animation->frames->size())
   {
-    frame = animation->frames.size() - 1;
+    frame = animation->frames->size() - 1;
   }
 
   if(frame < 0)
@@ -80,7 +81,7 @@ bool AnimatedMeshRenderer::isPlaying()
 
 void AnimatedMeshRenderer::play()
 {
-  if(animation.get() == NULL)
+  if(animation == NULL)
   {
     return;
   }
@@ -116,53 +117,53 @@ void AnimatedMeshRenderer::onUpdate()
     childTransform->setLocalRotation(Vector3());
   }
 
-  if(animation.get() != NULL && animation->frames.size() > 0)
+  if(animation != NULL && animation->frames->size() > 0)
   {
     for(int i = 0; i < rootGo->getTransform()->getChildCount(); i++)
     {
       childTransform = rootGo->getTransform()->getChild(i);
-      animationFrameA = &animation->frames.at(frame);
+      animationFrameA = animation->frames->at(frame);
 
-      if(frame + 1 >= animation->frames.size())
+      if(frame + 1 >= animation->frames->size())
       {
         if(once == true)
         {
-          setAnimation(arc<Animation>());
+          setAnimation(NULL);
           return;
         }
         else if(interpolateEnd == true)
         {
-          animationFrameB = &animation->frames.at(0);
+          animationFrameB = animation->frames->at(0);
         }
         else
         {
-          animationFrameB = &animation->frames.at(frame);
-          animationFrameA = &animation->frames.at(frame);
+          animationFrameB = animation->frames->at(frame);
+          animationFrameA = animation->frames->at(frame);
           setFrame(0);
         }
       }
       else
       {
-        animationFrameB = &animation->frames.at(frame + 1);
+        animationFrameB = animation->frames->at(frame + 1);
       }
 
       transformA = NULL;
       transformB = NULL;
 
-      for(int j = 0; j < animationFrameA->transforms.size(); j++)
+      for(int j = 0; j < animationFrameA->transforms->size(); j++)
       {
-        if(childTransform->getGameObject()->getName() == animationFrameA->transforms.at(j).partName)
+        if(childTransform->getGameObject()->getName() == animationFrameA->transforms->at(j)->partName)
         {
-          transformA = &animationFrameA->transforms.at(j);
+          transformA = animationFrameA->transforms->at(j);
           break;
         }
       }
 
-      for(int j = 0; j < animationFrameB->transforms.size(); j++)
+      for(int j = 0; j < animationFrameB->transforms->size(); j++)
       {
-        if(childTransform->getGameObject()->getName() == animationFrameB->transforms.at(j).partName)
+        if(childTransform->getGameObject()->getName() == animationFrameB->transforms->at(j)->partName)
         {
-          transformB = &animationFrameB->transforms.at(j);
+          transformB = animationFrameB->transforms->at(j);
           break;
         }
       }
@@ -193,17 +194,17 @@ void AnimatedMeshRenderer::onUpdate()
       frame += fps * Time::getDeltaTime();
     }
 
-    if(frame >= animation->frames.size())
+    if(frame >= animation->frames->size())
     {
       frame = 0;
     }
   }
 }
 
-void AnimatedMeshRenderer::setAnimatedMesh(arc<AnimatedMesh> mesh)
+void AnimatedMeshRenderer::setAnimatedMesh(AnimatedMesh* mesh)
 {
   this->mesh = mesh;
-  materials.clear();
+  materials->clear();
 
   for(int i = 0; i < mesh->getMeshCount(); i++)
   {
@@ -211,48 +212,48 @@ void AnimatedMeshRenderer::setAnimatedMesh(arc<AnimatedMesh> mesh)
     go->getTransform()->setParent(rootGo->getTransform());
     go->getTransform()->setLocalPosition(mesh->getMeshOffset(i));
     MeshFilter* mf = go->addComponent<MeshFilter>();
-    arc<Mesh> m = mesh->getMesh(i);
+    Mesh* m = mesh->getMesh(i);
     mf->setMesh(m);
     MeshRenderer* mr = go->addComponent<MeshRenderer>();
-    std::vector<arc<Material> > newMaterials;
+    internal::gc::list<Material*>* newMaterials = Application::getGC()->gc_list<Material*>();
 
     for(int x = 0; x < m->getSubmeshCount(); x++)
     {
-      arc<Material> material;
+      Material* material = NULL;
 
-      arc<Texture> tex = mesh->getTexture(i, x).cast<Texture>();
+      Texture* tex = mesh->getTexture(i, x);
 
-      if(tex.get() != NULL)
+      if(tex != NULL)
       {
-        material.reset(new Material(Resources::load<Shader>("shaders/Internal-MeshRendererTexture")));
+        material = Material::create(Resources::load<Shader>("shaders/Internal-MeshRendererTexture"));
         material->setMainTexture(tex);
       }
       else
       {
-        material.reset(new Material(Resources::load<Shader>("shaders/Internal-DefaultDiffuseTexture")));
+        material = Material::create(Resources::load<Shader>("shaders/Internal-DefaultDiffuseTexture"));
       }
 
-      materials.push_back(material);
-      newMaterials.push_back(material);
+      materials->push_back(material);
+      newMaterials->push_back(material);
     }
 
     mr->setMaterials(newMaterials);
   }
 }
 
-arc<AnimatedMesh> AnimatedMeshRenderer::getAnimatedMesh()
+AnimatedMesh* AnimatedMeshRenderer::getAnimatedMesh()
 {
   return mesh;
 }
 
-arc<Animation> AnimatedMeshRenderer::getAnimation()
+Animation* AnimatedMeshRenderer::getAnimation()
 {
   return animation;
 }
 
-void AnimatedMeshRenderer::setAnimation(arc<Animation> animation)
+void AnimatedMeshRenderer::setAnimation(Animation* animation)
 {
-  if(this->animation.get() == animation.get())
+  if(this->animation == animation)
   {
     return;
   }

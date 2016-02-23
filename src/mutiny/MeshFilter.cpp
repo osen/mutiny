@@ -12,12 +12,12 @@ MeshFilter::~MeshFilter()
 
 }
 
-void MeshFilter::setMesh(arc<Mesh> mesh)
+void MeshFilter::setMesh(Mesh* mesh)
 {
   this->mesh = mesh;
 }
 
-arc<Mesh> MeshFilter::getMesh()
+Mesh* MeshFilter::getMesh()
 {
   return mesh;
 }

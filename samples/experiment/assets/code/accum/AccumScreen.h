@@ -17,9 +17,9 @@ public:
 private:
   GameObject* playerGo;
   AnimatedMeshRenderer* playerMr;
-  arc<Animation> runAnimation;
-  arc<Animation> idleAnimation;
-  arc<Animation> jumpAnimation;
+  Animation* runAnimation;
+  Animation* idleAnimation;
+  Animation* jumpAnimation;
   float accel;
 
 };

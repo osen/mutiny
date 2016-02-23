@@ -5,7 +5,7 @@
 #include "../Object.h"
 #include "../Bounds.h"
 #include "../Vector3.h"
-#include "../arc.h"
+#include "../internal/gcmm.h"
 
 #include <GL/glew.h>
 
@@ -27,21 +27,20 @@ class AnimatedMesh : public Object
   friend class mutiny::engine::Resources;
 
 public:
+  AnimatedMesh();
   void recalculateBounds();
-  arc<Mesh> getMesh(int index);
+  Mesh* getMesh(int index);
   Bounds getBounds();
   int getMeshCount();
-  arc<Texture2d> getTexture(int mesh, int submesh);
+  Texture2d* getTexture(int mesh, int submesh);
   std::string getMeshName(int mesh);
   Vector3 getMeshOffset(int mesh);
 
 private:
   static AnimatedMesh* load(std::string path);
 
-  AnimatedMesh();
-
-  std::vector<std::vector<arc<Texture2d> > > textures;
-  std::vector<arc<Mesh> > meshes;
+  internal::gc::list<internal::gc::list<Texture2d*>*>* textures;
+  internal::gc::list<Mesh*>* meshes;
   std::vector<std::string> meshNames;
   std::vector<Vector3> meshOffsets;
   Bounds bounds;

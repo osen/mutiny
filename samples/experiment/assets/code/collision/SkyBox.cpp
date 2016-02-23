@@ -41,7 +41,7 @@ void SkyBox::onAwake()
   triangles.push_back(4);
   triangles.push_back(5);
 
-  arc<Mesh> mesh = arc<Mesh>::alloc();
+  Mesh* mesh = Application::getGC()->gc_new<Mesh>();
   mesh->setVertices(vertices);
   mesh->setUv(uv);
   mesh->setTriangles(triangles, 0);
@@ -49,15 +49,15 @@ void SkyBox::onAwake()
   MeshFilter* meshFilter = getGameObject()->addComponent<MeshFilter>();
   meshFilter->setMesh(mesh);
 
-  arc<Texture2d> texture = Resources::load<Texture2d>("textures/clouds");
+  Texture2d* texture = Resources::load<Texture2d>("textures/clouds");
 
   //Texture2d* texture = new Texture2d(1, 1);
   //texture->setPixel(0, 0, Color(1, 0, 0));
   //texture->apply();
 
-  arc<Material> material;
-  material.reset(new Material(Resources::load<Material>("shaders/Internal-SkyboxTexture")));
-  material->setMainTexture(texture.cast<Texture>());
+  Material* material = NULL;
+  material = Material::create(Resources::load<Shader>("shaders/Internal-SkyboxTexture"));
+  material->setMainTexture(texture);
 
   MeshRenderer* meshRenderer = getGameObject()->addComponent<MeshRenderer>();
   meshRenderer->setMaterial(material);

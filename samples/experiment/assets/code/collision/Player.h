@@ -14,7 +14,7 @@ public:
   virtual void onUpdate();
 
 private:
-  arc<Material> material;
+  Material* material;
 
 };
 

@@ -17,14 +17,14 @@ public:
 private:
   GameObject* playerGo;
   AnimatedMeshRenderer* playerMr;
-  arc<Animation> runAnimation;
-  arc<Animation> idleAnimation;
-  arc<Animation> jumpAnimation;
+  Animation* runAnimation;
+  Animation* idleAnimation;
+  Animation* jumpAnimation;
   float accel;
 
   GameObject* waterGo;
   MeshRenderer* waterMr;
-  arc<Material> waterMaterial;
+  Material* waterMaterial;
   float effectOffset;
   float texOffset;
   bool effectUp;

@@ -27,7 +27,7 @@ class Resources
   friend class mutiny::engine::Application;
 
 public:
-  template<class T> static arc<T> load(std::string path)
+  template<class T> static T* load(std::string path)
   {
     std::stringstream ss;
     ss << path << "_" << typeid(T).name();
@@ -36,7 +36,7 @@ public:
     {
       if(ss.str() == Application::context->paths.at(i))
       {
-        return Application::context->objects->at(i).dynamicCast<T>();
+        return dynamic_cast<T*>(Application::context->objects->at(i));
       }
     }
 
@@ -69,22 +69,18 @@ public:
       catch(std::exception& e){}
     }
 
-    arc<Object> rtn;
-
     if(t == NULL)
     {
       std::cout << "Loading: " << path << "... Failed" << std::endl;
       //Debug::logError("Failed to load '" + path + "'");
-      return rtn.dynamicCast<T>();
+      return NULL;
     }
 
-    rtn.reset(t);
-
     Application::context->paths.push_back(ss.str());
-    Application::context->objects->push_back(rtn);
+    Application::context->objects->push_back(t);
 
     std::cout << "Loading: " << path << "... Success" << std::endl;
-    return rtn.dynamicCast<T>();
+    return t;
   }
 
 };

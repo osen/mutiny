@@ -44,7 +44,7 @@ public:
   Vector3 operator*(Vector3 param);
   Matrix4x4 operator*(Matrix4x4 param);
 
-private:
+//private:
   mat4x4 m;
 
   Matrix4x4();

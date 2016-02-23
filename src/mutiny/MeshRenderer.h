@@ -2,6 +2,7 @@
 #define MUTINY_ENGINE_MESHRENDERER_H
 
 #include "Component.h"
+#include "internal/gcmm.h"
 
 #include <GL/glew.h>
 
@@ -23,17 +24,18 @@ class MeshRenderer : public Component
   friend class mutiny::engine::GameObject;
 
 public:
+  MeshRenderer();
   virtual ~MeshRenderer();
 
-  void setMaterial(arc<Material> material);
-  void setMaterials(std::vector<arc<Material> > materials);
-  void getMaterials(std::vector<arc<Material> >& materials);
-  arc<Material> getMaterial();
+  void setMaterial(Material* material);
+  void setMaterials(internal::gc::list<Material*>* materials);
+  internal::gc::list<Material*>* getMaterials();
+  Material* getMaterial();
 
 private:
   virtual void render();
 
-  std::vector<arc<Material> > materials;
+  internal::gc::list<Material*>* materials;
 
 };
 

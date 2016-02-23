@@ -2,7 +2,6 @@
 #define MUTINY_ENGINE_TEXTURE_H
 
 #include "Object.h"
-#include "arc.h"
 #include "internal/glmm.h"
 
 #include <GL/glew.h>
@@ -29,7 +28,7 @@ protected:
   int width;
   int height;
 
-  arc<gl::Uint> nativeTexture;
+  gl::Uint* nativeTexture;
 
 };
 

@@ -3,6 +3,7 @@
 
 #include "Behaviour.h"
 #include "Vector3.h"
+#include "internal/gcmm.h"
 
 #include <vector>
 
@@ -51,7 +52,7 @@ private:
   Vector3 localRotation;
   Vector3 localScale;
   Transform* parent;
-  std::vector<Transform*> children;
+  internal::gc::list<Transform*>* children;
 
   virtual void onAwake();
   virtual void onDestroy();

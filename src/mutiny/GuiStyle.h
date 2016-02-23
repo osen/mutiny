@@ -2,7 +2,6 @@
 #define MUTINY_ENGINE_GUI_STYLE_H
 
 #include "RectOffset.h"
-#include "arc.h"
 
 #include <memory>
 
@@ -22,18 +21,18 @@ class GuiStyle
 public:
   GuiStyle();
 
-  arc<GuiStyleState> getNormal();
-  arc<GuiStyleState> getHover();
-  arc<GuiStyleState> getActive();
+  GuiStyleState* getNormal();
+  GuiStyleState* getHover();
+  GuiStyleState* getActive();
 
   void setAlignment(int alignment);
   int getAlignment();
 
 private:
-  arc<GuiStyleState> normal;
-  arc<GuiStyleState> hover;
-  arc<GuiStyleState> active;
-  arc<Font> font;
+  GuiStyleState* normal;
+  GuiStyleState* hover;
+  GuiStyleState* active;
+  Font* font;
   RectOffset border;
   int alignment;
 

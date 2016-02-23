@@ -22,7 +22,7 @@ void ModelScreen::onStart()
   modelGo->getTransform()->setPosition(Vector3(0, 0, 10));
 
   AnimatedMeshRenderer* playerMr = modelGo->addComponent<AnimatedMeshRenderer>();
-  arc<AnimatedMesh> mesh = Resources::load<AnimatedMesh>("models/al/al");
+  AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/al/al");
   playerMr->setAnimatedMesh(mesh);
   //modelGo->getTransform()->setPosition(Vector3(0, 0, 10));
 }

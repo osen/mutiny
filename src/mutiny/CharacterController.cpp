@@ -65,7 +65,7 @@ void CharacterController::checkCollision(MeshCollider* collider)
 {
   Vector3 pos = getGameObject()->getTransform()->getPosition();
 
-  arc<Mesh> mesh = collider->getMesh();
+  Mesh* mesh = collider->getMesh();
   std::vector<Vector3>& vertices = mesh->getVertices();
 
   // We basically want to set the mesh to the origin, including its rotation.

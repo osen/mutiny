@@ -44,7 +44,7 @@ void AccumCamera::regenRenderTextures()
   int idealWidth = Mathf::nextPowerOfTwo(Screen::getWidth());
   int idealHeight = Mathf::nextPowerOfTwo(Screen::getHeight());
 
-  if(originalPass.get() != NULL)
+  if(originalPass != NULL)
   {
     if(originalPass->getWidth() == idealWidth &&
        originalPass->getHeight() == idealHeight)
@@ -55,13 +55,13 @@ void AccumCamera::regenRenderTextures()
 
   Debug::logWarning("Resizing render textures");
 
-  originalPass.reset(new RenderTexture(idealWidth, idealHeight));
-  lightKeyPass.reset(new RenderTexture(idealWidth, idealHeight));
-  blurPass1.reset(new RenderTexture(idealWidth/2.0f, idealHeight/2.0f));
-  blurPass2.reset(new RenderTexture(idealWidth/2.0f, idealHeight/2.0f));
-  mergePass.reset(new RenderTexture(idealWidth, idealHeight));
-  accumPass.reset(new RenderTexture(idealWidth, idealHeight));
-  deaccumPass.reset(new RenderTexture(idealWidth, idealHeight));
+  originalPass = RenderTexture::create(idealWidth, idealHeight);
+  lightKeyPass = RenderTexture::create(idealWidth, idealHeight);
+  blurPass1 = RenderTexture::create(idealWidth/2.0f, idealHeight/2.0f);
+  blurPass2 = RenderTexture::create(idealWidth/2.0f, idealHeight/2.0f);
+  mergePass = RenderTexture::create(idealWidth, idealHeight);
+  accumPass = RenderTexture::create(idealWidth, idealHeight);
+  deaccumPass = RenderTexture::create(idealWidth, idealHeight);
 
   accumA = accumPass;
   accumB = deaccumPass;
@@ -80,25 +80,25 @@ void AccumCamera::onPostRender()
   Rect rect(0, 0, 1, 1);
 
   Graphics::setRenderTarget(lightKeyPass);
-  Graphics::drawTexture(rect, originalPass.cast<Texture>(), lightKeyMaterial);
-  Graphics::setRenderTarget(arc<RenderTexture>());
+  Graphics::drawTexture(rect, originalPass, lightKeyMaterial);
+  Graphics::setRenderTarget(NULL);
 
   Graphics::setRenderTarget(accumA);
-  Graphics::drawTexture(rect, lightKeyPass.cast<Texture>(), accumMaterial);
-  Graphics::setRenderTarget(arc<RenderTexture>());
+  Graphics::drawTexture(rect, lightKeyPass, accumMaterial);
+  Graphics::setRenderTarget(NULL);
 
   deaccumMaterial->setFloat("in_TimeDelta", Time::getDeltaTime());
   Graphics::setRenderTarget(accumB);
-  Graphics::drawTexture(rect, accumA.cast<Texture>(), deaccumMaterial);
-  Graphics::setRenderTarget(arc<RenderTexture>());
+  Graphics::drawTexture(rect, accumA, deaccumMaterial);
+  Graphics::setRenderTarget(NULL);
 
-  arc<RenderTexture> tmp = accumA;
+  RenderTexture* tmp = accumA;
   accumA = accumB;
   accumB = tmp;
 
   Graphics::setRenderTarget(blurPass1);
-  Graphics::drawTexture(rect, accumB.cast<Texture>(), texturedMaterial);
-  Graphics::setRenderTarget(arc<RenderTexture>());
+  Graphics::drawTexture(rect, accumB, texturedMaterial);
+  Graphics::setRenderTarget(NULL);
 
   bool swap = false;
 
@@ -111,26 +111,26 @@ void AccumCamera::onPostRender()
     {
       texturedMaterial->setVector("in_Scale", Vector2(1.0f / ((float)idealWidth * 0.3f), 0));
       Graphics::setRenderTarget(blurPass2);
-      Graphics::drawTexture(rect, blurPass1.cast<Texture>(), texturedMaterial);
+      Graphics::drawTexture(rect, blurPass1, texturedMaterial);
       swap = true;
     }
     else
     {
       texturedMaterial->setVector("in_Scale", Vector2(0, 1.0f / ((float)idealHeight * 0.3f)));
       Graphics::setRenderTarget(blurPass1);
-      Graphics::drawTexture(rect, blurPass2.cast<Texture>(), texturedMaterial);
+      Graphics::drawTexture(rect, blurPass2, texturedMaterial);
       swap = false;
     }
 
-    Graphics::setRenderTarget(arc<RenderTexture>());
+    Graphics::setRenderTarget(NULL);
   }
 
   Graphics::setRenderTarget(mergePass);
-  mergeMaterial->setTexture("in_Merge", blurPass1.cast<Texture>());
-  Graphics::drawTexture(rect, originalPass.cast<Texture>(), mergeMaterial);
-  Graphics::setRenderTarget(arc<RenderTexture>());
+  mergeMaterial->setTexture("in_Merge", blurPass1);
+  Graphics::drawTexture(rect, originalPass, mergeMaterial);
+  Graphics::setRenderTarget(NULL);
 
-  Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), mergePass.cast<Texture>());
+  Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), mergePass);
   //Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), accumA);
 }
 

@@ -1,5 +1,6 @@
 #include "CWrapper.h"
 #include "../Exception.h"
+#include "../Application.h"
 
 namespace mutiny
 {
@@ -10,9 +11,9 @@ namespace engine
 namespace internal
 {
 
-arc<PngData> PngData::create()
+PngData* PngData::create()
 {
-  arc<PngData> rtn = arc<PngData>::alloc();
+  PngData* rtn = Application::getGC()->gc_new<PngData>();
 
   return rtn;
 }
@@ -22,9 +23,9 @@ PngData::~PngData()
   free(image);
 }
 
-arc<GlBuffer> GlBuffer::create()
+GlBuffer* GlBuffer::create()
 {
-  arc<GlBuffer> rtn = arc<GlBuffer>::alloc();
+  GlBuffer* rtn = Application::getGC()->gc_new<GlBuffer>();
 
   return rtn;
 }
@@ -38,9 +39,9 @@ GlBuffer::~GlBuffer()
 }
 
 #ifdef _WIN32
-arc<Win32FindData> Win32FindData::create()
+Win32FindData* Win32FindData::create()
 {
-  arc<Win32FindData> rtn = arc<Win32FindData>::alloc();
+  Win32FindData* rtn = Application::getGC()->gc_new<Win32FindData>();
 
   return rtn;
 }
@@ -53,9 +54,9 @@ FindHandle::~FindHandle()
   }
 }
 
-arc<FindHandle> FindHandle::FindFirstFile(std::string path, arc<Win32FindData> findData)
+FindHandle* FindHandle::FindFirstFile(std::string path, Win32FindData* findData)
 {
-  arc<FindHandle> rtn = arc<FindHandle>::alloc();
+  FindHandle* rtn = Application::getGC()->gc_new<FindHandle>();
   rtn->hFind = INVALID_HANDLE_VALUE;
   rtn->findData = findData;
   rtn->hFind = ::FindFirstFile(path.c_str(), &rtn->findData->ffd);

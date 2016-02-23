@@ -2,6 +2,7 @@
 #define MUTINY_ENGINE_ANIMATION_H
 
 #include "../Object.h"
+#include "../internal/gcmm.h"
 
 #include <string>
 #include <vector>
@@ -36,7 +37,8 @@ public:
 class AnimationFrame
 {
 public:
-  std::vector<AnimationTransform> transforms;
+  AnimationFrame();
+  internal::gc::list<AnimationTransform*>* transforms;
 
 };
 
@@ -48,13 +50,14 @@ class Animation : public Object
   friend class ::Timeline;
 
 public:
+  Animation();
   int getFrameCount();
   void save(std::string path);
 
 private:
   static Animation* load(std::string path);
 
-  std::vector<AnimationFrame> frames;
+  internal::gc::list<AnimationFrame*>* frames;
 
 };
 

@@ -4,7 +4,6 @@
 #include "Behaviour.h"
 #include "Matrix4x4.h"
 #include "Color.h"
-#include "arc.h"
 
 #include <memory>
 #include <vector>
@@ -33,7 +32,7 @@ public:
   //Matrix4x4 getWorldToCameraMatrix();
   void setProjectionMatrix(Matrix4x4 projectionMatrix);
   void resetProjectionMatrix();
-  void setTargetTexture(arc<RenderTexture> texture);
+  void setTargetTexture(RenderTexture* texture);
   void setBackgroundColor(Color color);
   Color getBackgroundColor();
   int getCullMask();
@@ -50,8 +49,8 @@ private:
   float orthographicSize;
   float nearClipPlane;
   float farClipPlane;
-  arc<Matrix4x4> projectionMatrix;
-  arc<RenderTexture> targetTexture;
+  Matrix4x4* projectionMatrix;
+  RenderTexture* targetTexture;
   int cullMask;
 
   virtual void onAwake();

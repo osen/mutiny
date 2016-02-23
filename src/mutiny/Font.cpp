@@ -3,7 +3,7 @@
 #include "CharacterInfo.h"
 #include "Vector2.h"
 #include "Debug.h"
-#include "arc.h"
+#include "Application.h"
 
 #include <string>
 #include <fstream>
@@ -19,10 +19,15 @@ Font* Font::load(std::string path)
 {
   // TODO:
   //arc<Font> font = arc<Font>::alloc();
-  Font* font = new Font();
+  Font* font = Application::getGC()->gc_new<Font>();
 
   //Debug::log("Loading font from '" + path + "'");
-  font->texture.reset(Texture2d::load(path));
+  font->texture = Texture2d::load(path);
+
+  if(font->texture == NULL)
+  {
+    return NULL;
+  }
 
   std::vector<std::string> characters;
   int maxChars = 0;
@@ -44,7 +49,7 @@ Font* Font::load(std::string path)
   {
     for(int x = 0; x < characters[y].length(); x++)
     {
-      CharacterInfo info;
+      CharacterInfo info = {};
       info.index = characters[y][x];
       info.vert = Rect(0, 0, charSize.x, charSize.y);
       info.uv.x = ((float)x * charSize.x) / (float)font->texture->getWidth();

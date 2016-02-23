@@ -2,7 +2,6 @@
 #define MUTINY_ENGINE_PARTICLERENDERER_H
 
 #include "Component.h"
-#include "arc.h"
 
 #include <GL/glew.h>
 
@@ -25,13 +24,13 @@ public:
   virtual ~ParticleRenderer();
 
   void setMaterial(Material* material);
-  arc<Material> getMaterial();
+  Material* getMaterial();
 
 private:
-  GLuint positionBufferId; arc<GLuint> _positionBufferId;
-  GLuint uvBufferId; arc<GLuint> _uvBufferId;
+  GLuint positionBufferId; GLuint* _positionBufferId;
+  GLuint uvBufferId; GLuint* _uvBufferId;
 
-  arc<Material> material;
+  Material* material;
 
   virtual void render();
   virtual void awake();

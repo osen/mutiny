@@ -5,6 +5,7 @@
 #include "Texture.h"
 #include "Resources.h"
 #include "Debug.h"
+#include "Exception.h"
 
 #include <memory>
 #include <functional>
@@ -17,12 +18,6 @@ namespace mutiny
 
 namespace engine
 {
-
-arc<Material> Material::current;
-arc<Material> Material::meshNormalTextureMaterial;
-arc<Material> Material::meshNormalMaterial;
-arc<Material> Material::guiMaterial;
-arc<Material> Material::particleMaterial;
 
 Material* Material::load(std::string path)
 {
@@ -38,8 +33,7 @@ Material* Material::load(std::string path)
 
   if(file.is_open() == false)
   {
-    //Debug::logError("Failed to read vertex shader file '" + path + "'");
-    throw std::exception();
+    throw Exception("Failed to read vertex shader file '" + path + "'");
   }
 
   while(file.eof() == false)
@@ -53,8 +47,7 @@ Material* Material::load(std::string path)
 
   if(file.is_open() == false)
   {
-    //Debug::logError("Failed to read fragment shader file");
-    throw std::exception();
+    Exception("Failed to read fragment shader file");
   }
 
   while(file.eof() == false)
@@ -63,57 +56,85 @@ Material* Material::load(std::string path)
     fragContents += line + '\n';
   }
 
-  Material* material = new Material(vertContents, fragContents);
+  Material* material = Material::create(vertContents, fragContents);
 
   return material;
 }
 
 Material::Material(std::string vertContents, std::string fragContents)
 {
-  managedShader.reset(new Shader(vertContents, fragContents));
+  textures = Application::getGC()->gc_list<Texture*>();
+  managedShader = Shader::create(vertContents, fragContents);
   indexesDirty = true;
   refreshIds();
 }
 
-Material::Material(arc<Material> material)
+Material::Material()
 {
+  textures = Application::getGC()->gc_list<Texture*>();
+}
+
+Material* Material::create(std::string vertContents, std::string fragContents)
+{
+  Material* rtn = Application::getGC()->gc_new<Material>();
+  rtn->managedShader = Shader::create(vertContents, fragContents);
+  rtn->indexesDirty = true;
+  rtn->refreshIds();
+
+  return rtn;
+}
+
+Material* Material::create(Shader* shader)
+{
+  Material* rtn = Application::getGC()->gc_new<Material>();
+  rtn->shader = shader;
+  rtn->indexesDirty = true;
+  rtn->refreshIds();
+
+  return rtn;
+}
+
+Material::Material(Material* material)
+{
+  textures = Application::getGC()->gc_list<Texture*>();
   shader = material->getShader();
   indexesDirty = true;
   refreshIds();
 }
 
-Material::Material(arc<Shader> shader)
+Material::Material(Shader* shader)
 {
+  textures = Application::getGC()->gc_list<Texture*>();
   this->shader = shader;
   indexesDirty = true;
   refreshIds();
 }
 
-arc<Texture> Material::getTexture(std::string propertyName)
+Texture* Material::getTexture(std::string propertyName)
 {
   for(int i = 0; i < textureNames.size(); i++)
   {
     if(textureNames.at(i) == propertyName)
     {
-      return textures.at(i);
+      return textures->at(i);
     }
   }
 
-  return arc<Texture>();
+  return NULL;
 }
 
-void Material::setTexture(std::string propertyName, arc<Texture> texture)
+void Material::setTexture(std::string propertyName, Texture* texture)
 {
   for(int i = 0; i < textureNames.size(); i++)
   {
     if(textureNames.at(i) == propertyName)
     {
-      textures.at(i) = texture;
+      textures->at(i) = texture;
       return;
     }
   }
 
-  textures.push_back(texture);
+  textures->push_back(texture);
   textureIndexes.push_back(-1);
   textureNames.push_back(propertyName);
   indexesDirty = true;
@@ -241,21 +262,21 @@ void Material::refreshIndexes()
   refreshIds();
 }
 
-arc<Texture> Material::getMainTexture()
+Texture* Material::getMainTexture()
 {
   return getTexture("in_Texture");
 }
 
-void Material::setMainTexture(arc<Texture> texture)
+void Material::setMainTexture(Texture* texture)
 {
   setTexture("in_Texture", texture);
 }
 
-arc<Shader> Material::getShader()
+Shader* Material::getShader()
 {
-  arc<Shader> rtn = shader;
+  Shader* rtn = shader;
 
-  if(rtn.get() == NULL)
+  if(rtn == NULL)
   {
     rtn = managedShader;
   }
@@ -263,7 +284,7 @@ arc<Shader> Material::getShader()
   return rtn;
 }
 
-void Material::setShader(arc<Shader> shader)
+void Material::setShader(Shader* shader)
 {
   this->shader = shader;
   indexesDirty = true;
@@ -283,9 +304,9 @@ int Material::getPassCount()
   return 1;
 }
 
-void Material::setPass(int pass, arc<Material> _this)
+void Material::setPass(int pass, Material* _this)
 {
-  Material::current = _this;
+  Application::context->currentMaterial = _this;
   glUseProgram(getShader()->programId);
 
   if(indexesDirty == true)
@@ -312,7 +333,7 @@ void Material::setPass(int pass, arc<Material> _this)
   {
     glUniform1i(textureIndexes[i], i);
     glActiveTexture(GL_TEXTURE0 + i);
-    glBindTexture(GL_TEXTURE_2D, textures[i]->getNativeTexture());
+    glBindTexture(GL_TEXTURE_2D, textures->at(i)->getNativeTexture());
   }
 }
 

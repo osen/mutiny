@@ -2,7 +2,6 @@
 #define MUTINY_ENGINE_ANCHOR_H
 
 #include "../Behaviour.h"
-#include "../arc.h"
 #include "../Vector2.h"
 
 namespace mutiny

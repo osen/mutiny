@@ -20,6 +20,7 @@ void Transform::onAwake()
   //Debug::log("Transform awake");
   parent = NULL;
   localScale = Vector3(1, 1, 1);
+  children = Application::getGC()->gc_list<Transform*>();
 }
 
 void Transform::onDestroy()
@@ -143,26 +144,24 @@ Vector3 Transform::getScale()
 
 void Transform::detachChildren()
 {
-  std::vector<Transform*> tmpChildren = children;
-
-  for(int i = 0; i < tmpChildren.size(); i++)
+  for(int i = 0; i < children->size(); i++)
   {
-    tmpChildren.at(i)->setParent(NULL);
+    Transform* child = children->at(i);
+    child->setParent(NULL);
     // Dont just detach.. destroy
-    Object::destroy(tmpChildren.at(i)->getGameObject());
+    Object::destroy(child->getGameObject());
   }
 
-  // Just to make sure.
-  children.clear();
+  children->clear();
 }
 
 Transform* Transform::find(std::string name)
 {
-  for(int i = 0; i < children.size(); i++)
+  for(int i = 0; i < children->size(); i++)
   {
-    if(children.at(i)->getGameObject()->getName() == name)
+    if(children->at(i)->getGameObject()->getName() == name)
     {
-      return children.at(i);
+      return children->at(i);
     }
   }
 
@@ -178,11 +177,11 @@ void Transform::setParent(Transform* transform)
 {
   if(this->parent != NULL)
   {
-    for(int i = 0; i < this->parent->children.size(); i++)
+    for(int i = 0; i < this->parent->children->size(); i++)
     {
-      if(this->parent->children.at(i) == this)
+      if(this->parent->children->at(i) == this)
       {
-        this->parent->children.erase(this->parent->children.begin() + i);
+        this->parent->children->remove_at(i);
         break;
       }
     }
@@ -190,7 +189,7 @@ void Transform::setParent(Transform* transform)
 
   if(transform != NULL)
   {
-    transform->children.push_back(this);
+    transform->children->push_back(this);
   }
 
   setLocalPosition(getPosition());
@@ -202,12 +201,12 @@ void Transform::setParent(Transform* transform)
 
 int Transform::getChildCount()
 {
-  return children.size();
+  return children->size();
 }
 
 Transform* Transform::getChild(int index)
 {
-  return children.at(index);
+  return children->at(index);
 }
 
 Transform* Transform::getRoot()

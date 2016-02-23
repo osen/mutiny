@@ -19,17 +19,18 @@ class RenderTexture : public Texture
   friend class mutiny::engine::Graphics;
 
 public:
-  static void setActive(arc<RenderTexture> renderTexture);
-  static arc<RenderTexture> getActive();
+  static void setActive(RenderTexture* renderTexture);
+  static RenderTexture* getActive();
 
-  RenderTexture(int width, int height);
+  static RenderTexture* create(int width, int height);
+
   virtual ~RenderTexture();
 
 private:
-  static arc<RenderTexture> active;
+  static RenderTexture* active;
 
-  arc<gl::Uint> nativeFrameBuffer;
-  arc<gl::Uint> nativeRenderBuffer;
+  gl::Uint* nativeFrameBuffer;
+  gl::Uint* nativeRenderBuffer;
 
 };
 

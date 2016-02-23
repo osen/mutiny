@@ -2,6 +2,7 @@
 #include "Application.h"
 #include "Color.h"
 #include "Debug.h"
+#include "Exception.h"
 
 #include "internal/WavefrontParser.h"
 
@@ -15,6 +16,13 @@ namespace mutiny
 namespace engine
 {
 
+Mesh::Mesh()
+{
+  positionBufferIds = Application::getGC()->gc_list<internal::GlBuffer*>();
+  uvBufferIds = Application::getGC()->gc_list<internal::GlBuffer*>();
+  normalBufferIds = Application::getGC()->gc_list<internal::GlBuffer*>();
+}
+
 Mesh* Mesh::load(std::string path)
 {
   internal::WavefrontParser parser(path + ".obj");
@@ -26,18 +34,18 @@ Mesh* Mesh::load(std::string path)
   std::vector<std::vector<int> > triangles;
   int currentSubmesh = 0;
 
-  for(int p = 0; p < modelData->parts.size(); p++)
+  for(int p = 0; p < modelData->parts->size(); p++)
   {
-    internal::PartData* part = modelData->parts.at(p).get();
+    internal::PartData* part = modelData->parts->at(p);
 
-    for(int m = 0; m < part->materialGroups.size(); m++)
+    for(int m = 0; m < part->materialGroups->size(); m++)
     {
-      internal::MaterialGroupData* materialGroup = part->materialGroups.at(m).get();
+      internal::MaterialGroupData* materialGroup = part->materialGroups->at(m);
       triangles.push_back(std::vector<int>());
 
-      for(int f = 0; f < materialGroup->faces.size(); f++)
+      for(int f = 0; f < materialGroup->faces->size(); f++)
       {
-        internal::FaceData* face = materialGroup->faces.at(f).get();
+        internal::FaceData* face = materialGroup->faces->at(f);
 
         triangles.at(currentSubmesh).push_back(vertices.size());
         vertices.push_back(Vector3(face->a.position.x, face->a.position.y, face->a.position.z));
@@ -72,7 +80,7 @@ Mesh* Mesh::load(std::string path)
   }
 
 
-  Mesh* mesh = new Mesh();
+  Mesh* mesh = Application::getGC()->gc_new<Mesh>();
   mesh->setVertices(vertices);
   mesh->setNormals(normals);
   mesh->setUv(uv);
@@ -105,15 +113,20 @@ void Mesh::setColors(std::vector<Color> colors)
 
 void Mesh::setTriangles(std::vector<int> triangles, int submesh)
 {
-  if(submesh > positionBufferIds.size())
-  {
-    Debug::logError("Submesh > positionBufferIds");
-    throw std::exception();
-  }
+  bool insert = false;
 
-  if(submesh == positionBufferIds.size())
+  if(submesh > positionBufferIds->size())
+  {
+    throw Exception("Submesh index out of bounds");
+  }
+  else if(submesh == positionBufferIds->size())
   {
     this->triangles.push_back(triangles);
+    insert = true;
+  }
+  else
+  {
+    this->triangles.at(submesh) = triangles;
   }
 
   recalculateBounds();
@@ -127,9 +140,18 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
     values.push_back(vertices.at(triangles.at(i)).z);
   }
 
-  arc<internal::GlBuffer> positionBufferId = internal::GlBuffer::create();
-  glGenBuffers(1, &positionBufferId->id);
-  positionBufferIds.push_back(positionBufferId);
+  internal::GlBuffer* positionBufferId = NULL;
+
+  if(insert == true)
+  {
+    positionBufferId = internal::GlBuffer::create();
+    glGenBuffers(1, &positionBufferId->id);
+    positionBufferIds->push_back(positionBufferId);
+  }
+  else
+  {
+    positionBufferId = positionBufferIds->at(submesh);
+  }
 
   glBindBuffer(GL_ARRAY_BUFFER, positionBufferId->id);
   //glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_STATIC_DRAW);
@@ -149,9 +171,19 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
       values.push_back(normals.at(triangles.at(i)).z);
     }
 
-    arc<internal::GlBuffer> normalBufferId = internal::GlBuffer::create();
-    glGenBuffers(1, &normalBufferId->id);
-    normalBufferIds.push_back(normalBufferId);
+    internal::GlBuffer* normalBufferId = NULL;
+
+    if(insert == true)
+    {
+      normalBufferId = internal::GlBuffer::create();
+      glGenBuffers(1, &normalBufferId->id);
+      normalBufferIds->push_back(normalBufferId);
+    }
+    else
+    {
+      normalBufferId = normalBufferIds->at(submesh);
+    }
+
     glBindBuffer(GL_ARRAY_BUFFER, normalBufferId->id);
     //glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_STATIC_DRAW);
     glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_DYNAMIC_DRAW);
@@ -170,9 +202,19 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
       values.push_back(uv.at(triangles.at(i)).y);
     }
 
-    arc<internal::GlBuffer> uvBufferId = internal::GlBuffer::create();
-    glGenBuffers(1, &uvBufferId->id);
-    uvBufferIds.push_back(uvBufferId);
+    internal::GlBuffer* uvBufferId = NULL;
+
+    if(insert == true)
+    {
+      uvBufferId = internal::GlBuffer::create();
+      glGenBuffers(1, &uvBufferId->id);
+      uvBufferIds->push_back(uvBufferId);
+    }
+    else
+    {
+      uvBufferId = uvBufferIds->at(submesh);
+    }
+
     glBindBuffer(GL_ARRAY_BUFFER, uvBufferId->id);
     //glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_STATIC_DRAW);
     glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_DYNAMIC_DRAW);

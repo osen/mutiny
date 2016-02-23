@@ -2,7 +2,6 @@
 #define MUTINY_ENGINE_SHADER_H
 
 #include "Object.h"
-#include "arc.h"
 
 #include <GL/glew.h>
 
@@ -36,12 +35,12 @@ private:
   static void deleteVertexArray(GLuint id);
   static Shader* load(std::string path);
 
-  GLuint vertexShaderId; arc<GLuint> _vertexShaderId;
-  GLuint fragmentShaderId; arc<GLuint> _fragmentShaderId;
-  GLuint programId; arc<GLuint> _programId;
-  GLuint vertexArrayId; arc<GLuint> _vertexArrayId;
+  GLuint vertexShaderId; GLuint* _vertexShaderId;
+  GLuint fragmentShaderId; GLuint* _fragmentShaderId;
+  GLuint programId; GLuint* _programId;
+  GLuint vertexArrayId; GLuint* _vertexArrayId;
 
-  Shader(std::string vertContents, std::string fragContents);
+  static Shader* create(std::string vertContents, std::string fragContents);
 
 };
 

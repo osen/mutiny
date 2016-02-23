@@ -1,17 +1,19 @@
 #include "glmm.h"
+#include "../Application.h"
+#include "../Exception.h"
 
 namespace gl
 {
 
-arc<Uint> Uint::genTexture()
+Uint* Uint::genTexture()
 {
-  arc<Uint> rtn = arc<Uint>::alloc();
+  Uint* rtn = mutiny::engine::Application::getGC()->gc_new<Uint>();
 
   glGenTextures(1, &rtn->uint);
 
   if(rtn->uint == 0)
   {
-    throw std::exception();
+    throw mutiny::engine::Exception("Failed to allocate texture");
   }
 
   rtn->type = TEXTURE;
@@ -19,15 +21,20 @@ arc<Uint> Uint::genTexture()
   return rtn;
 }
 
-arc<Uint> Uint::genFramebuffer()
+Uint* Uint::genFramebuffer()
 {
-  arc<Uint> rtn = arc<Uint>::alloc();
+  Uint* rtn = mutiny::engine::Application::getGC()->gc_new<Uint>();
+
+  if(glGenFramebuffers == NULL)
+  {
+    throw mutiny::engine::Exception("Frame buffers not supported by system");
+  }
 
   glGenFramebuffers(1, &rtn->uint);
 
   if(rtn->uint == 0)
   {
-    throw std::exception();
+    throw mutiny::engine::Exception("Failed to allocate frame buffer");
   }
 
   rtn->type = FRAMEBUFFER;
@@ -35,15 +42,15 @@ arc<Uint> Uint::genFramebuffer()
   return rtn;
 }
 
-arc<Uint> Uint::genRenderbuffer()
+Uint* Uint::genRenderbuffer()
 {
-  arc<Uint> rtn = arc<Uint>::alloc();
+  Uint* rtn = mutiny::engine::Application::getGC()->gc_new<Uint>();
 
   glGenRenderbuffers(1, &rtn->uint);
 
   if(rtn->uint == 0)
   {
-    throw std::exception();
+    throw mutiny::engine::Exception("Failed to allocate render buffer");
   }
 
   rtn->type = RENDERBUFFER;

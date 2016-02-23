@@ -17,8 +17,8 @@ GameObject* CollisionScreen::create()
 
 void CollisionScreen::onAwake()
 {
-  arc<Material> levelMaterial;
-  arc<Mesh> levelMesh;
+  Material* levelMaterial = NULL;
+  Mesh* levelMesh = NULL;
 
   Camera* camera = NULL;
   cameraGo = GameObject::create("MainCamera");
@@ -27,7 +27,7 @@ void CollisionScreen::onAwake()
   //cameraGo->getTransform()->rotate(Vector3(-25, 0, 0));
 
   //renderTexture = new RenderTexture(Screen::getHeight() / 5, Screen::getWidth() / 5);
-  renderTexture.reset(new RenderTexture(128, 128));
+  renderTexture = RenderTexture::create(128, 128);
   camera->setTargetTexture(renderTexture);
 
   camera2Go = GameObject::create("SubCamera");
@@ -39,7 +39,7 @@ void CollisionScreen::onAwake()
 
   levelMesh = Resources::load<Mesh>("models/level/level");
   levelMaterial = Resources::load<Material>("shaders/internal-mesh-normal-texture");
-  levelTexture = Resources::load<Texture2d>("models/level/level").cast<Texture>();
+  levelTexture = Resources::load<Texture2d>("models/level/level");
   levelMaterial->setMainTexture(levelTexture);
 
   levelGo = GameObject::create("Level");
@@ -81,7 +81,7 @@ void CollisionScreen::onUpdate()
 void CollisionScreen::onGui()
 {
   //Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), renderTexture);
-  Gui::drawTexture(Rect(100, 100, 200, 200), renderTexture.cast<Texture>());
+  Gui::drawTexture(Rect(100, 100, 200, 200), renderTexture);
   //Gui::drawTexture(Rect(0, 200, 100, 100), levelTexture);
 
   if(Gui::button(Rect(Screen::getWidth() - 210, 10, 200, 50), "Back") == true)

@@ -102,7 +102,7 @@ void Compiler::compile(std::string sourceUnit, std::string output)
   {
     if(program == "cl")
     {
-      debugFragment += " /DDEBUG";
+      debugFragment += " /DDEBUG /Zi";
     }
     else
     {

@@ -22,41 +22,41 @@ AnimatedMesh* AnimatedMesh::load(std::string path)
   int currentSubmesh = 0;
   // TODO
   //arc<AnimatedMesh> animatedMesh = arc<AnimatedMesh>::alloc();
-  AnimatedMesh* animatedMesh = new AnimatedMesh();
+  AnimatedMesh* animatedMesh = Application::getGC()->gc_new<AnimatedMesh>();
   Vector3 boundsMax;
   Vector3 boundsMin;
   bool boundsSet = false;
 
-  for(int p = 0; p < modelData->parts.size(); p++)
+  for(int p = 0; p < modelData->parts->size(); p++)
   {
-    internal::PartData* part = modelData->parts.at(p).get();
-    animatedMesh->textures.push_back(std::vector<arc<Texture2d> >());
+    internal::PartData* part = modelData->parts->at(p);
+    animatedMesh->textures->push_back(Application::getGC()->gc_list<Texture2d*>());
     animatedMesh->meshNames.push_back(part->name);
     Vector3 max;
     Vector3 min;
     bool mmSet = false;
 
-    for(int m = 0; m < part->materialGroups.size(); m++)
+    for(int m = 0; m < part->materialGroups->size(); m++)
     {
-      internal::MaterialGroupData* materialGroup = part->materialGroups.at(m).get();
+      internal::MaterialGroupData* materialGroup = part->materialGroups->at(m);
       //Debug::log(materialGroup->material->texture);
       std::string texName = materialGroup->material->texture;
       texName = texName.substr(0, texName.length() - 4);
 
-      arc<Texture2d> tex = Resources::load<Texture2d>(texName);
+      Texture2d* tex = Resources::load<Texture2d>(texName);
 
-      if(tex.get() == NULL)
+      if(tex == NULL)
       {
-        //Debug::logError("Texture is null " + texName);
+        Debug::logWarning("Failed to load texture '" + texName + "'");
         //throw std::exception();
       }
 
-      animatedMesh->textures.at(animatedMesh->textures.size() - 1).push_back(tex);
+      animatedMesh->textures->at(animatedMesh->textures->size() - 1)->push_back(tex);
       triangles.push_back(std::vector<int>());
 
-      for(int f = 0; f < materialGroup->faces.size(); f++)
+      for(int f = 0; f < materialGroup->faces->size(); f++)
       {
-        internal::FaceData* face = materialGroup->faces.at(f).get();
+        internal::FaceData* face = materialGroup->faces->at(f);
 
         if(mmSet == false) { max.x = face->a.position.x; max.y = face->a.position.y; max.z = face->a.position.z;
                              min.x = face->a.position.x; min.y = face->a.position.y; min.z = face->a.position.z;
@@ -123,8 +123,8 @@ AnimatedMesh* AnimatedMesh::load(std::string path)
       vertices[i] = vertices[i] - offset;
     }
 
-    arc<Mesh> mesh = arc<Mesh>::alloc();
-    animatedMesh->meshes.push_back(mesh);
+    Mesh* mesh = Application::getGC()->gc_new<Mesh>();
+    animatedMesh->meshes->push_back(mesh);
     mesh->setVertices(vertices);
     mesh->setNormals(normals);
     mesh->setUv(uv);
@@ -150,12 +150,13 @@ AnimatedMesh* AnimatedMesh::load(std::string path)
 
 AnimatedMesh::AnimatedMesh() : bounds(Vector3(), Vector3())
 {
-
+  textures = Application::getGC()->gc_list<internal::gc::list<Texture2d*>*>();
+  meshes = Application::getGC()->gc_list<Mesh*>();
 }
 
-arc<Mesh> AnimatedMesh::getMesh(int index)
+Mesh* AnimatedMesh::getMesh(int index)
 {
-  return meshes.at(index);
+  return meshes->at(index);
 }
 
 void AnimatedMesh::recalculateBounds()
@@ -170,12 +171,12 @@ Bounds AnimatedMesh::getBounds()
 
 int AnimatedMesh::getMeshCount()
 {
-  return meshes.size();
+  return meshes->size();
 }
 
-arc<Texture2d> AnimatedMesh::getTexture(int mesh, int submesh)
+Texture2d* AnimatedMesh::getTexture(int mesh, int submesh)
 {
-  return textures.at(mesh).at(submesh);
+  return textures->at(mesh)->at(submesh);
 }
 
 Vector3 AnimatedMesh::getMeshOffset(int mesh)

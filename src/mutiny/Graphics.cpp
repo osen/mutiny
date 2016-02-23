@@ -26,17 +26,14 @@ namespace mutiny
 namespace engine
 {
 
-arc<Material> Graphics::defaultMaterial;
-arc<RenderTexture> Graphics::renderTarget;
-
 // TODO: Does this need to be re-enabled every draw?
-void Graphics::setRenderTarget(arc<RenderTexture> renderTarget)
+void Graphics::setRenderTarget(RenderTexture* renderTarget)
 {
-  Graphics::renderTarget = renderTarget;
+  Application::context->renderTarget = renderTarget;
 }
 
 // if material is null, a default material with internal-GUITexture.shader is used.
-void Graphics::drawTexture(Rect rect, arc<Texture> texture, Rect sourceRect, arc<Material> material)
+void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, Material* material)
 {
   std::vector<Rect> rects;
   std::vector<Rect> sourceRects;
@@ -47,26 +44,26 @@ void Graphics::drawTexture(Rect rect, arc<Texture> texture, Rect sourceRect, arc
   drawTextureBatch(rects, texture, sourceRects, material);
 }
 
-void Graphics::drawTextureBatch(std::vector<Rect> rects, arc<Texture> texture, std::vector<Rect> sourceRects, arc<Material> material)
+void Graphics::drawTextureBatch(std::vector<Rect> rects, Texture* texture, std::vector<Rect> sourceRects, Material* material)
 {
-  arc<RenderTexture> currentRenderTexture;
+  RenderTexture* currentRenderTexture = NULL;
 
   std::vector<Vector3> vertices;
   std::vector<Vector2> uv;
   std::vector<Color> colors;
   std::vector<int> triangles;
 
-  if(material.get() == NULL)
+  if(material == NULL)
   {
     // TODO: Use a unique material with MVP set
-    material = Graphics::defaultMaterial;
+    material = Application::context->defaultMaterial;
     //material = Material::guiMaterial;
     material->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
     material->setMatrix("in_View", Matrix4x4::getIdentity());
     material->setMatrix("in_Model", Matrix4x4::getIdentity());
   }
 
-  if(texture.get() == NULL)
+  if(texture == NULL)
   {
     Debug::logWarning("Texture is null");
     return;
@@ -99,9 +96,14 @@ void Graphics::drawTextureBatch(std::vector<Rect> rects, arc<Texture> texture, s
     uv.push_back(Vector2(sourceRects.at(i).width, sourceRects.at(i).height));
     uv.push_back(Vector2(sourceRects.at(i).width, sourceRects.at(i).y));
     uv.push_back(Vector2(sourceRects.at(i).x, sourceRects.at(i).y));
+  }  
+
+  if(Application::context->tempMesh == NULL)
+  {
+    Application::context->tempMesh = Application::getGC()->gc_new<Mesh>();
   }
 
-  arc<Mesh> mesh = arc<Mesh>::alloc();
+  Mesh* mesh = Application::context->tempMesh;
   mesh->setVertices(vertices);
   mesh->setUv(uv);
   //mesh.setColors(colors);
@@ -110,7 +112,7 @@ void Graphics::drawTextureBatch(std::vector<Rect> rects, arc<Texture> texture, s
   material->setMainTexture(texture);
 
   currentRenderTexture = RenderTexture::getActive();
-  RenderTexture::setActive(Graphics::renderTarget);
+  RenderTexture::setActive(Application::context->renderTarget);
 
   glDisable(GL_DEPTH_TEST);
   glCullFace(GL_BACK);
@@ -128,12 +130,12 @@ void Graphics::drawTextureBatch(std::vector<Rect> rects, arc<Texture> texture, s
   RenderTexture::setActive(currentRenderTexture);
 }
 
-void Graphics::drawTexture(Rect rect, arc<Texture> texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder, arc<Material> material)
+void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder, Material* material)
 {
   drawTexture(rect, texture, sourceRect, leftBorder, rightBorder, topBorder, bottomBorder, Color(1, 1, 1), material);
 }
 
-void Graphics::drawTexture(Rect rect, arc<Texture> texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder, Color color, arc<Material> material)
+void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder, Color color, Material* material)
 {
   float left = 1.0f / (float)leftBorder;
   float right = 1.0f / (float)rightBorder;
@@ -156,17 +158,17 @@ void Graphics::drawTexture(Rect rect, arc<Texture> texture, Rect sourceRect, int
   drawTexture(Rect(rect.x + texture->getWidth() * left, rect.y + texture->getHeight() * top, rect.width - texture->getWidth() * right - texture->getWidth() * left, rect.height - texture->getHeight() * top - texture->getHeight() * bottom), texture, Rect(left, top, 1.0f - right, 1.0f - top), material);
 }
 
-void Graphics::drawTexture(Rect rect, arc<Texture> texture, arc<Material> material)
+void Graphics::drawTexture(Rect rect, Texture* texture, Material* material)
 {
   drawTexture(rect, texture, Rect(0, 0, 1, 1), material);
 }
 
-void Graphics::drawMeshNow(arc<Mesh> mesh, Matrix4x4 matrix, int materialIndex)
+void Graphics::drawMeshNow(Mesh* mesh, Matrix4x4 matrix, int materialIndex)
 {
-  arc<Material> material;
-  arc<Shader> shader;
+  Material* material = NULL;
+  Shader* shader = NULL;
 
-  if(mesh.get() == NULL)
+  if(mesh == NULL)
   {
     Debug::log("Mesh is null");
     return;
@@ -178,9 +180,9 @@ void Graphics::drawMeshNow(arc<Mesh> mesh, Matrix4x4 matrix, int materialIndex)
     return;
   }
 
-  material = Material::current;
+  material = Application::context->currentMaterial;
 
-  if(material.get() == NULL)
+  if(material == NULL)
   {
     Debug::log("Material is NULL");
     return;
@@ -190,7 +192,7 @@ void Graphics::drawMeshNow(arc<Mesh> mesh, Matrix4x4 matrix, int materialIndex)
 
   shader = material->getShader();
 
-  if(shader.get() == NULL)
+  if(shader == NULL)
   {
     Debug::log("Shader is NULL");
     return;
@@ -212,21 +214,21 @@ void Graphics::drawMeshNow(arc<Mesh> mesh, Matrix4x4 matrix, int materialIndex)
 
   if(positionAttribId != -1)
   {
-    glBindBuffer(GL_ARRAY_BUFFER, mesh->positionBufferIds.at(materialIndex)->id);
+    glBindBuffer(GL_ARRAY_BUFFER, mesh->positionBufferIds->at(materialIndex)->id);
     glVertexAttribPointer(positionAttribId, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(positionAttribId);
   }
 
-  if(normalAttribId != -1 && mesh->normalBufferIds.size() > materialIndex)
+  if(normalAttribId != -1 && mesh->normalBufferIds->size() > materialIndex)
   {
-    glBindBuffer(GL_ARRAY_BUFFER, mesh->normalBufferIds.at(materialIndex)->id);
+    glBindBuffer(GL_ARRAY_BUFFER, mesh->normalBufferIds->at(materialIndex)->id);
     glVertexAttribPointer(normalAttribId, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(normalAttribId);
   }
 
   if(uvAttribId != -1)
   {
-    glBindBuffer(GL_ARRAY_BUFFER, mesh->uvBufferIds.at(materialIndex)->id);
+    glBindBuffer(GL_ARRAY_BUFFER, mesh->uvBufferIds->at(materialIndex)->id);
     glVertexAttribPointer(uvAttribId, 2, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(uvAttribId);
   }
@@ -239,7 +241,7 @@ void Graphics::drawMeshNow(arc<Mesh> mesh, Matrix4x4 matrix, int materialIndex)
     glDisableVertexAttribArray(positionAttribId);
   }
 
-  if(normalAttribId != -1 && mesh->normalBufferIds.size() > materialIndex)
+  if(normalAttribId != -1 && mesh->normalBufferIds->size() > materialIndex)
   {
     glDisableVertexAttribArray(normalAttribId);
   }

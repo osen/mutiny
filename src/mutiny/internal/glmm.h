@@ -1,8 +1,6 @@
 #ifndef GLMM_H
 #define GLMM_H
 
-#include "../arc.h"
-
 #include <GL/glew.h>
 
 namespace gl
@@ -11,9 +9,9 @@ namespace gl
 class Uint
 {
 public:
-  static arc<Uint> genTexture();
-  static arc<Uint> genFramebuffer();
-  static arc<Uint> genRenderbuffer();
+  static Uint* genTexture();
+  static Uint* genFramebuffer();
+  static Uint* genRenderbuffer();
 
   ~Uint();
 

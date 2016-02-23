@@ -2,6 +2,7 @@
 #define MUTINY_ENGINE_INTERNAL_GCMM_H
 
 #include "gc.h"
+#include "../Exception.h"
 
 #include <cstdlib>
 
@@ -53,8 +54,7 @@ public:
   {
     if(idx >= _size)
     {
-      // Error
-      exit(1);
+      throw Exception("Index out of bounds");
     }
 
     for(size_t i = idx + 1; i < _size; i++)
@@ -69,8 +69,7 @@ public:
   {
     if(idx >= _size)
     {
-      // Error
-      exit(1);
+      throw Exception("Index out of bounds");
     }
 
     return data[idx];

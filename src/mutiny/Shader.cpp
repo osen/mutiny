@@ -3,6 +3,7 @@
 #include "Matrix4x4.h"
 #include "Texture.h"
 #include "Debug.h"
+#include "Exception.h"
 
 #include <memory>
 #include <functional>
@@ -35,8 +36,7 @@ Shader* Shader::load(std::string path)
 
   if(file.is_open() == false)
   {
-    //Debug::logError("Failed to read vertex shader file '" + path + "'");
-    throw std::exception();
+    throw Exception("Failed to read vertex shader file '" + path + "'");
   }
 
   while(file.eof() == false)
@@ -50,8 +50,7 @@ Shader* Shader::load(std::string path)
 
   if(file.is_open() == false)
   {
-    //Debug::logError("Failed to read fragment shader file");
-    throw std::exception();
+    throw Exception("Failed to read fragment shader file");
   }
 
   while(file.eof() == false)
@@ -60,13 +59,15 @@ Shader* Shader::load(std::string path)
     fragContents += line + '\n';
   }
 
-  Shader* shader = new Shader(vertContents, fragContents);
+  Shader* shader = Shader::create(vertContents, fragContents);
 
   return shader;
 }
 
-Shader::Shader(std::string vertContents, std::string fragContents)
+Shader* Shader::create(std::string vertContents, std::string fragContents)
 {
+  Shader* rtn = Application::getGC()->gc_new<Shader>();
+
   const char* vertSrc = NULL;
   const char* fragSrc = NULL;
   GLint isCompiled = GL_FALSE;
@@ -74,82 +75,81 @@ Shader::Shader(std::string vertContents, std::string fragContents)
   //glGenVertexArrays(1, &vertexArrayId);
   //_vertexArrayId.reset(&vertexArrayId, std::bind(deleteVertexArray, vertexArrayId));
 
-  vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
+  rtn->vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
   // TODO:
   //_vertexShaderId.reset(&vertexShaderId, std::bind(glDeleteShader, vertexShaderId));
   vertSrc = vertContents.c_str();
-  glShaderSource(vertexShaderId, 1, &vertSrc, NULL);
-  glCompileShader(vertexShaderId);
+  glShaderSource(rtn->vertexShaderId, 1, &vertSrc, NULL);
+  glCompileShader(rtn->vertexShaderId);
 
-  glGetShaderiv(vertexShaderId, GL_COMPILE_STATUS, &isCompiled);
+  glGetShaderiv(rtn->vertexShaderId, GL_COMPILE_STATUS, &isCompiled);
 
   if(isCompiled == GL_FALSE)
   {
     GLint maxLength = 0;
-    glGetShaderiv(vertexShaderId, GL_INFO_LOG_LENGTH, &maxLength);
+    glGetShaderiv(rtn->vertexShaderId, GL_INFO_LOG_LENGTH, &maxLength);
  
     //The maxLength includes the NULL character
     std::vector<GLchar> infoLog(maxLength);
-    glGetShaderInfoLog(vertexShaderId, maxLength, &maxLength, &infoLog[0]);
+    glGetShaderInfoLog(rtn->vertexShaderId, maxLength, &maxLength, &infoLog[0]);
 
     char* log = &infoLog[0];
  
-    Debug::logError("Failed to compile vertex shader: \n" + std::string(log));
-    throw std::exception();
+    throw Exception("Failed to compile vertex shader: \n" + std::string(log));
   }
 
-  fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
+  rtn->fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
   // TODO:
   //_fragmentShaderId.reset(&fragmentShaderId, std::bind(glDeleteShader, fragmentShaderId));
   fragSrc = fragContents.c_str();
-  glShaderSource(fragmentShaderId, 1, &fragSrc, NULL);
-  glCompileShader(fragmentShaderId);
+  glShaderSource(rtn->fragmentShaderId, 1, &fragSrc, NULL);
+  glCompileShader(rtn->fragmentShaderId);
 
-  glGetShaderiv(fragmentShaderId, GL_COMPILE_STATUS, &isCompiled);
+  glGetShaderiv(rtn->fragmentShaderId, GL_COMPILE_STATUS, &isCompiled);
 
   if(isCompiled == GL_FALSE)
   {
     GLint maxLength = 0;
-    glGetShaderiv(fragmentShaderId, GL_INFO_LOG_LENGTH, &maxLength);
+    glGetShaderiv(rtn->fragmentShaderId, GL_INFO_LOG_LENGTH, &maxLength);
  
     //The maxLength includes the NULL character
     std::vector<GLchar> infoLog(maxLength);
-    glGetShaderInfoLog(fragmentShaderId, maxLength, &maxLength, &infoLog[0]);
+    glGetShaderInfoLog(rtn->fragmentShaderId, maxLength, &maxLength, &infoLog[0]);
 
     char* log = &infoLog[0];
  
-    Debug::logError("Failed to compile fragment shader: \n" + std::string(log));
-    throw std::exception();
+    throw Exception("Failed to compile fragment shader: \n" + std::string(log));
   }
 
-  programId = glCreateProgram();
+  rtn->programId = glCreateProgram();
   // TODO:
   //_programId.reset(&programId, std::bind(glDeleteProgram, programId));
-  glAttachShader(programId, vertexShaderId);
-  glAttachShader(programId, fragmentShaderId);
-  glLinkProgram(programId);
+  glAttachShader(rtn->programId, rtn->vertexShaderId);
+  glAttachShader(rtn->programId, rtn->fragmentShaderId);
+  glLinkProgram(rtn->programId);
 
   GLint isLinked = 0;
-  glGetProgramiv(programId, GL_LINK_STATUS, (int *)&isLinked);
+  glGetProgramiv(rtn->programId, GL_LINK_STATUS, (int *)&isLinked);
 
   if(isLinked == GL_FALSE)
   {
     GLint maxLength = 0;
-    glGetProgramiv(programId, GL_INFO_LOG_LENGTH, &maxLength);
+    glGetProgramiv(rtn->programId, GL_INFO_LOG_LENGTH, &maxLength);
  
     //The maxLength includes the NULL character
     std::vector<GLchar> infoLog(maxLength);
-    glGetProgramInfoLog(programId, maxLength, &maxLength, &infoLog[0]);
+    glGetProgramInfoLog(rtn->programId, maxLength, &maxLength, &infoLog[0]);
  
     char* log = &infoLog[0];
  
-    Debug::logError("Failed to compile fragment shader: \n" + std::string(log));
-    throw std::exception();
+    throw Exception("Failed to compile fragment shader: \n" + std::string(log));
   }
  
   //Always detach shaders after a successful link.
   //glDetachShader(programId, vertexShaderId);
   //glDetachShader(programId, fragmentShaderId);
+
+  return rtn;
 }
 
 }

@@ -2,7 +2,7 @@
 #define MUTINY_ENGINE_ANIMATEDMESHRENDERER_H
 
 #include "../Behaviour.h"
-#include "../arc.h"
+#include "../internal/gcmm.h"
 
 #include <vector>
 #include <memory>
@@ -21,10 +21,10 @@ class Animation;
 class AnimatedMeshRenderer : public Behaviour
 {
 public:
-  void setAnimatedMesh(arc<AnimatedMesh> mesh);
-  arc<AnimatedMesh> getAnimatedMesh();
-  void setAnimation(arc<Animation> animation);
-  arc<Animation> getAnimation();
+  void setAnimatedMesh(AnimatedMesh* mesh);
+  AnimatedMesh* getAnimatedMesh();
+  void setAnimation(Animation* animation);
+  Animation* getAnimation();
   void play();
   void playOnce();
   void stop();
@@ -36,9 +36,9 @@ public:
   void setInterpolateEnd(bool interpolateEnd);
 
 private:
-  std::vector<arc<Material> > materials;
-  arc<AnimatedMesh> mesh;
-  arc<Animation> animation;
+  internal::gc::list<Material*>* materials;
+  AnimatedMesh* mesh;
+  Animation* animation;
   GameObject* rootGo;
   float frame;
   bool playing;

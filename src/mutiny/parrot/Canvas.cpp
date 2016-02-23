@@ -25,11 +25,11 @@ namespace mutiny
 namespace engine
 {
 
-arc<Canvas> Canvas::currentActive;
+Canvas* Canvas::currentActive = NULL;
 
 void Canvas::onAwake()
 {
-  texture.reset(new Texture2d(64, 64));
+  texture = Texture2d::create(64, 64);
   needsApply = true;
 
   std::vector<Vector3> vertices;
@@ -65,19 +65,19 @@ void Canvas::onAwake()
   uv.push_back(Vector2(1, 0));
   uv.push_back(Vector2(0, 0));
 
-  mesh = arc<Mesh>::alloc();
+  mesh = Application::getGC()->gc_new<Mesh>();
   mesh->setVertices(vertices);
   mesh->setUv(uv);
   mesh->setTriangles(triangles, 0);
 
-  arc<Shader> shader = Resources::load<Shader>("shaders/internal-gui-texture");
+  Shader* shader = Resources::load<Shader>("shaders/internal-gui-texture");
 
-  if(shader.get() == NULL)
+  if(shader == NULL)
   {
     throw Exception("Failed to load GUI shader");
   }
 
-  material.reset(new Material(shader));
+  material = Material::create(shader);
 }
 
 void Canvas::setSize(int width, int height)
@@ -97,7 +97,7 @@ bool Canvas::needsRepaint()
 
 bool Canvas::isActive()
 {
-  if(currentActive.get() == this)
+  if(currentActive == this)
   {
     return true;
   }
@@ -149,7 +149,7 @@ void Canvas::onUpdate()
     {
       if(pressed == false) repaint = true;
       pressed = true;
-      currentActive = self.dynamicCast<Canvas>();
+      currentActive = this;
       active = true;
     }
     else if(Input::getMouseButton(0) == false)
@@ -208,7 +208,7 @@ void Canvas::onGui()
     anchorOffset = anchor->getOffset();
   }
 
-  material->setMainTexture(texture.cast<Texture>());
+  material->setMainTexture(texture);
 
   material->setMatrix("in_Projection", Matrix4x4::ortho(
     0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
@@ -227,7 +227,7 @@ void Canvas::onGui()
   glEnable(GL_DEPTH_TEST);
 }
 
-void Canvas::drawText(Vector2 position, arc<Font> font, std::string text)
+void Canvas::drawText(Vector2 position, Font* font, std::string text)
 {
   fillRectangle(Rect(position.x, position.y, 75, 25), Color(0, 0, 0));
 }

@@ -7,6 +7,7 @@
 #include "Bounds.h"
 #include "Color.h"
 #include "internal/CWrapper.h"
+#include "internal/gcmm.h"
 
 #include <GL/glew.h>
 
@@ -31,6 +32,7 @@ class Mesh : public Object
   friend class mutiny::engine::Graphics;
 
 public:
+  Mesh();
   void recalculateNormals();
   void recalculateBounds();
 
@@ -59,9 +61,9 @@ private:
   std::vector<Vector3> normals;
   std::vector<Color> colors;
 
-  std::vector<arc<internal::GlBuffer> > positionBufferIds;
-  std::vector<arc<internal::GlBuffer> > uvBufferIds;
-  std::vector<arc<internal::GlBuffer> > normalBufferIds;
+  internal::gc::list<internal::GlBuffer*>* positionBufferIds;
+  internal::gc::list<internal::GlBuffer*>* uvBufferIds;
+  internal::gc::list<internal::GlBuffer*>* normalBufferIds;
 
   Bounds bounds;
 

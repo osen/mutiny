@@ -5,6 +5,7 @@
 #include "Texture2d.h"
 #include "Font.h"
 #include "TextAnchor.h"
+#include "Exception.h"
 
 namespace mutiny
 {
@@ -14,35 +15,33 @@ namespace engine
 
 GuiStyle::GuiStyle()
 {
-  normal.reset(new GuiStyleState());
-  hover.reset(new GuiStyleState());
-  active.reset(new GuiStyleState());
+  normal = Application::getGC()->gc_new<GuiStyleState>();
+  hover = Application::getGC()->gc_new<GuiStyleState>();
+  active = Application::getGC()->gc_new<GuiStyleState>();
 
   alignment = TextAnchor::MiddleCenter;
-
   border = RectOffset(10, 10, 10, 10);
   font = Resources::load<Font>("fonts/default");
 
-  if(font.get() == NULL)
+  if(font == NULL)
   {
-    Debug::logError("Failed to load default font");
-    throw std::exception();
+    throw Exception("Failed to load default font");
   }
 
-  Object::dontDestroyOnLoad(font.cast<Object>());
+  Object::dontDestroyOnLoad(font);
 }
 
-arc<GuiStyleState> GuiStyle::getActive()
+GuiStyleState* GuiStyle::getActive()
 {
   return active;
 }
 
-arc<GuiStyleState> GuiStyle::getNormal()
+GuiStyleState* GuiStyle::getNormal()
 {
   return normal;
 }
 
-arc<GuiStyleState> GuiStyle::getHover()
+GuiStyleState* GuiStyle::getHover()
 {
   return hover;
 }

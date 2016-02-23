@@ -75,7 +75,7 @@ void ParticleRenderer::awake()
 
 void ParticleRenderer::render()
 {
-  arc<Shader> shader;
+  Shader* shader = NULL;
   Transform* transform = getGameObject()->getTransform();
   ParticleEmitter* emitter = getGameObject()->getComponent<ParticleEmitter>();
 
@@ -91,9 +91,9 @@ void ParticleRenderer::render()
     return;
   }
 
-  if(material.get() == NULL)
+  if(material == NULL)
   {
-    material = Material::particleMaterial;
+    material = Application::context->particleMaterial;
     //Debug::log("ParticleRenderer set to default material");
   }
 
@@ -163,7 +163,7 @@ void ParticleRenderer::setMaterial(Material* material)
   this->material = material;
 }
 
-arc<Material> ParticleRenderer::getMaterial()
+Material* ParticleRenderer::getMaterial()
 {
   return material;
 }

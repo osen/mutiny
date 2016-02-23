@@ -19,6 +19,11 @@ namespace mutiny
 namespace engine
 {
 
+MeshRenderer::MeshRenderer()
+{
+  materials = Application::getGC()->gc_list<Material*>();
+}
+
 MeshRenderer::~MeshRenderer()
 {
 
@@ -27,7 +32,7 @@ MeshRenderer::~MeshRenderer()
 void MeshRenderer::render()
 {
   MeshFilter* meshFilter = getGameObject()->getComponent<MeshFilter>();
-  arc<Mesh> mesh;
+  Mesh* mesh;
   Transform* transform = getGameObject()->getTransform();
 
   if(transform == NULL)
@@ -44,7 +49,7 @@ void MeshRenderer::render()
 
   mesh = meshFilter->getMesh();
 
-  if(mesh.get() == NULL)
+  if(mesh == NULL)
   {
     Debug::log("No mesh bound");
     return;
@@ -66,27 +71,27 @@ void MeshRenderer::render()
 
   for(int i = 0; i < mesh->getSubmeshCount(); i++)
   {
-    arc<Material> material = getMaterial();
+    Material* material = getMaterial();
 
-    if(materials.size() > i)
+    if(materials->size() > i)
     {
-      material = materials.at(i);
+      material = materials->at(i);
     }
 
-    if(material.get() == NULL)
+    if(material == NULL)
     {
       if(mesh->getNormals().size() > 0 && mesh->getUv().size() > 0)
       {
-        material = Material::meshNormalTextureMaterial;
-        material->setMainTexture(Texture2d::defaultTexture.cast<Texture>());
+        material = Application::context->meshNormalTextureMaterial;
+        material->setMainTexture(Application::context->defaultTexture);
       }
       else if(mesh->getNormals().size() > 0)
       {
-        material = Material::meshNormalMaterial;
+        material = material = Application::context->meshNormalMaterial;
       }
       else
       {
-        material = Material::meshNormalMaterial;
+        material = material = Application::context->meshNormalMaterial;
       }
     }
 
@@ -102,39 +107,36 @@ void MeshRenderer::render()
   }
 }
 
-void MeshRenderer::setMaterials(std::vector<arc<Material> > materials)
+void MeshRenderer::setMaterials(internal::gc::list<Material*>* materials)
 {
   this->materials = materials;
 }
 
-void MeshRenderer::setMaterial(arc<Material> material)
+void MeshRenderer::setMaterial(Material* material)
 {
-  if(materials.size() < 1)
+  if(materials->size() < 1)
   {
-    materials.push_back(material);
+    materials->push_back(material);
   }
   else
   {
-    materials.at(0) = material;
+    materials->at(0) = material;
   }
 }
 
-arc<Material> MeshRenderer::getMaterial()
+Material* MeshRenderer::getMaterial()
 {
-  if(materials.size() < 1)
+  if(materials->size() < 1)
   {
-    return arc<Material>();
+    return NULL;
   }
 
-  return materials.at(0);
+  return materials->at(0);
 }
 
-void MeshRenderer::getMaterials(std::vector<arc<Material> >& materials)
+internal::gc::list<Material*>* MeshRenderer::getMaterials()
 {
-  for(int i = 0; i < this->materials.size(); i++)
-  {
-    materials.push_back(this->materials.at(i));
-  }
+  return materials;
 }
 
 }

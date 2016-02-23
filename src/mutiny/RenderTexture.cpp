@@ -17,24 +17,26 @@ namespace mutiny
 namespace engine
 {
 
-arc<RenderTexture> RenderTexture::active;
+RenderTexture* RenderTexture::active = NULL;
 
-RenderTexture::RenderTexture(int width, int height)
+//RenderTexture::RenderTexture(int width, int height)
+RenderTexture* RenderTexture::create(int width, int height)
 {
-  this->width = width;
-  this->height = height;
+  RenderTexture* rtn = Application::getGC()->gc_new<RenderTexture>();
+  rtn->width = width;
+  rtn->height = height;
 
-  nativeFrameBuffer = gl::Uint::genFramebuffer();
+  rtn->nativeFrameBuffer = gl::Uint::genFramebuffer();
   // TODO:
   //_nativeFrameBuffer.reset(&nativeFrameBuffer, std::bind(deleteFramebuffer, nativeFrameBuffer));
-  glBindFramebuffer(GL_FRAMEBUFFER, nativeFrameBuffer->getGLuint());
+  glBindFramebuffer(GL_FRAMEBUFFER, rtn->nativeFrameBuffer->getGLuint());
 
-  if(nativeTexture.get() == NULL)
+  if(rtn->nativeTexture == NULL)
   {
-    nativeTexture = gl::Uint::genTexture();
+    rtn->nativeTexture = gl::Uint::genTexture();
   }
 
-  glBindTexture(GL_TEXTURE_2D, nativeTexture->getGLuint());
+  glBindTexture(GL_TEXTURE_2D, rtn->nativeTexture->getGLuint());
 
   //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
   //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
@@ -49,12 +51,12 @@ RenderTexture::RenderTexture(int width, int height)
 
   //glGenerateMipmapEXT(GL_TEXTURE_2D);
 
-  nativeRenderBuffer = gl::Uint::genRenderbuffer();
-  glBindRenderbuffer(GL_RENDERBUFFER, nativeRenderBuffer->getGLuint());
+  rtn->nativeRenderBuffer = gl::Uint::genRenderbuffer();
+  glBindRenderbuffer(GL_RENDERBUFFER, rtn->nativeRenderBuffer->getGLuint());
   glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT16, width, height);
-  glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, nativeRenderBuffer->getGLuint());
+  glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rtn->nativeRenderBuffer->getGLuint());
 
-  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, nativeTexture->getGLuint(), 0);
+  glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, rtn->nativeTexture->getGLuint(), 0);
 
   if(glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
   {
@@ -64,6 +66,8 @@ RenderTexture::RenderTexture(int width, int height)
   glBindTexture(GL_TEXTURE_2D, 0);
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
   glBindRenderbuffer(GL_RENDERBUFFER, 0);
+
+  return rtn;
 }
 
 RenderTexture::~RenderTexture()
@@ -71,14 +75,14 @@ RenderTexture::~RenderTexture()
 
 }
 
-void RenderTexture::setActive(arc<RenderTexture> renderTexture)
+void RenderTexture::setActive(RenderTexture* renderTexture)
 {
-  if(active.get() == renderTexture.get())
+  if(active == renderTexture)
   {
     return;
   }
 
-  if(renderTexture.get() != NULL)
+  if(renderTexture != NULL)
   {
     glBindFramebuffer(GL_FRAMEBUFFER, renderTexture->nativeFrameBuffer->getGLuint());
     glViewport(0, 0, renderTexture->width, renderTexture->height);
@@ -92,7 +96,7 @@ void RenderTexture::setActive(arc<RenderTexture> renderTexture)
   active = renderTexture;
 }
 
-arc<RenderTexture> RenderTexture::getActive()
+RenderTexture* RenderTexture::getActive()
 {
   return active;
 }

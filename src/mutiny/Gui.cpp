@@ -29,7 +29,6 @@ namespace mutiny
 namespace engine
 {
 
-GuiSkin* Gui::skin;
 Matrix4x4 Gui::matrix;
 
 Matrix4x4 Gui::getMatrix()
@@ -44,12 +43,7 @@ void Gui::setMatrix(Matrix4x4 matrix)
 
 void Gui::label(Rect rect, std::string text)
 {
-  GuiSkin* skin = Gui::skin;
-
-  if(skin == NULL)
-  {
-    skin = GuiSkin::_default;
-  }
+  GuiSkin* skin = getSkin();
 
   std::vector<Rect> positions;
   std::vector<Rect> uvs;
@@ -107,18 +101,18 @@ void Gui::label(Rect rect, std::string text)
 
   if(positions.size() == uvs.size() && positions.size() > 0)
   {
-    drawTextureWithTexCoords(positions, skin->getButton()->font->texture.cast<Texture>(), uvs);
+    drawTextureWithTexCoords(positions, skin->getButton()->font->texture, uvs);
   }
 }
 
 GuiSkin* Gui::getSkin()
 {
-  if(skin == NULL)
+  if(Application::context->currentGuiSkin == NULL)
   {
-    return GuiSkin::_default;
+    return Application::context->defaultGuiSkin;
   }
 
-  return skin;
+  return Application::context->currentGuiSkin;
 }
 
 bool Gui::button(Rect rect, Texture* image)
@@ -138,19 +132,14 @@ bool Gui::button(Rect rect, Texture* image)
 
 bool Gui::button(Rect rect, std::string text)
 {
-  GuiSkin* skin = Gui::skin;
-
-  if(skin == NULL)
-  {
-    skin = GuiSkin::_default;
-  }
+  GuiSkin* skin = getSkin();
 
   if(rect.contains(Input::getMousePosition()) == true)
   {
     if(Input::getMouseButton(0) == true &&
        rect.contains(Input::mouseDownPosition) == true)
     {
-      drawUi(rect, skin->getButton()->getActive()->getBackground().cast<Texture>(), skin->getButton());
+      drawUi(rect, skin->getButton()->getActive()->getBackground(), skin->getButton());
     }
     else if(Input::getMouseButtonUp(0) == true &&
             rect.contains(Input::mouseDownPosition) == true)
@@ -160,12 +149,12 @@ bool Gui::button(Rect rect, std::string text)
     }
     else
     {
-      drawUi(rect, skin->getButton()->getHover()->getBackground().cast<Texture>(), skin->getButton());
+      drawUi(rect, skin->getButton()->getHover()->getBackground(), skin->getButton());
     }
   }
   else
   {
-    drawUi(rect, skin->getButton()->getNormal()->getBackground().cast<Texture>(), skin->getButton());
+    drawUi(rect, skin->getButton()->getNormal()->getBackground(), skin->getButton());
   }
 
   label(rect, text);
@@ -173,9 +162,9 @@ bool Gui::button(Rect rect, std::string text)
   return false;
 }
 
-void Gui::drawTextureWithTexCoords(std::vector<Rect> positions, arc<Texture> texture, std::vector<Rect> texCoords)
+void Gui::drawTextureWithTexCoords(std::vector<Rect> positions, Texture* texture, std::vector<Rect> texCoords)
 {
-  arc<Material> guiMaterial = Material::guiMaterial;
+  Material* guiMaterial = Application::context->guiMaterial;
 
   guiMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
   guiMaterial->setMatrix("in_View", Matrix4x4::getIdentity());
@@ -183,9 +172,9 @@ void Gui::drawTextureWithTexCoords(std::vector<Rect> positions, arc<Texture> tex
   Graphics::drawTextureBatch(positions, texture, texCoords, guiMaterial);
 }
 
-void Gui::drawTexture(Rect rect, arc<Texture> texture)
+void Gui::drawTexture(Rect rect, Texture* texture)
 {
-  arc<Material> guiMaterial = Material::guiMaterial;
+  Material* guiMaterial = Application::context->guiMaterial;
 
   guiMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
   guiMaterial->setMatrix("in_View", Matrix4x4::getIdentity());
@@ -193,9 +182,9 @@ void Gui::drawTexture(Rect rect, arc<Texture> texture)
   Graphics::drawTexture(rect, texture, guiMaterial);
 }
 
-void Gui::drawTextureWithTexCoords(Rect position, arc<Texture> texture, Rect texCoords)
+void Gui::drawTextureWithTexCoords(Rect position, Texture* texture, Rect texCoords)
 {
-  arc<Material> guiMaterial = Material::guiMaterial;
+  Material* guiMaterial = Application::context->guiMaterial;
 
   guiMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
   guiMaterial->setMatrix("in_View", Matrix4x4::getIdentity());
@@ -203,9 +192,9 @@ void Gui::drawTextureWithTexCoords(Rect position, arc<Texture> texture, Rect tex
   Graphics::drawTexture(position, texture, texCoords, guiMaterial);
 }
 
-void Gui::drawUi(Rect rect, arc<Texture> texture, arc<GuiStyle> style)
+void Gui::drawUi(Rect rect, Texture* texture, GuiStyle* style)
 {
-  arc<Material> guiMaterial = Material::guiMaterial;
+  Material* guiMaterial = Application::context->guiMaterial;
 
   guiMaterial->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
   guiMaterial->setMatrix("in_View", Matrix4x4::getIdentity());
@@ -221,14 +210,9 @@ void Gui::drawUi(Rect rect, arc<Texture> texture, arc<GuiStyle> style)
 
 void Gui::box(Rect rect, std::string text)
 {
-  GuiSkin* skin = Gui::skin;
+  GuiSkin* skin = getSkin();
 
-  if(skin == NULL)
-  {
-    skin = GuiSkin::_default;
-  }
-
-  drawUi(rect, skin->getBox()->getNormal()->getBackground().cast<Texture>(), skin->getBox());
+  drawUi(rect, skin->getBox()->getNormal()->getBackground(), skin->getBox());
   label(rect, text);
 }
 
