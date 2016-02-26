@@ -113,7 +113,7 @@ void ParticleRenderer::render()
   material->setMatrix("in_Projection", Camera::getCurrent()->getProjectionMatrix());
   material->setMatrix("in_View", viewMat);
 
-  GLint positionAttribId = glGetAttribLocation(shader->programId, "in_Position");
+  GLint positionAttribId = glGetAttribLocation(shader->programId->getGLuint(), "in_Position");
 
   if(positionAttribId != -1)
   {
@@ -122,7 +122,7 @@ void ParticleRenderer::render()
     glEnableVertexAttribArray(positionAttribId);
   }
 
-  GLint uvAttribId = glGetAttribLocation(shader->programId, "in_Uv");
+  GLint uvAttribId = glGetAttribLocation(shader->programId->getGLuint(), "in_Uv");
 
   if(uvAttribId != -1)
   {

@@ -209,7 +209,7 @@ void Material::refreshIndexes()
 {
   for(int i = 0; i < matrixNames.size(); i++)
   {
-    GLuint uniformId = glGetUniformLocation(getShader()->programId, matrixNames.at(i).c_str());
+    GLuint uniformId = glGetUniformLocation(getShader()->programId->getGLuint(), matrixNames.at(i).c_str());
 
     if(uniformId == -1)
     {
@@ -222,7 +222,7 @@ void Material::refreshIndexes()
 
   for(int i = 0; i < vector2Names.size(); i++)
   {
-    GLuint uniformId = glGetUniformLocation(getShader()->programId, vector2Names.at(i).c_str());
+    GLuint uniformId = glGetUniformLocation(getShader()->programId->getGLuint(), vector2Names.at(i).c_str());
 
     if(uniformId == -1)
     {
@@ -235,7 +235,7 @@ void Material::refreshIndexes()
 
   for(int i = 0; i < floatNames.size(); i++)
   {
-    GLuint uniformId = glGetUniformLocation(getShader()->programId, floatNames.at(i).c_str());
+    GLuint uniformId = glGetUniformLocation(getShader()->programId->getGLuint(), floatNames.at(i).c_str());
 
     if(uniformId == -1)
     {
@@ -248,7 +248,7 @@ void Material::refreshIndexes()
 
   for(int i = 0; i < textureNames.size(); i++)
   {
-    GLint uniformId = glGetUniformLocation(getShader()->programId, textureNames.at(i).c_str());
+    GLint uniformId = glGetUniformLocation(getShader()->programId->getGLuint(), textureNames.at(i).c_str());
 
     if(uniformId == -1)
     {
@@ -293,10 +293,10 @@ void Material::setShader(Shader* shader)
 
 void Material::refreshIds()
 {
-  positionId = glGetAttribLocation(getShader()->programId, "in_Position");
-  uvId = glGetAttribLocation(getShader()->programId, "in_Uv");
-  normalId = glGetAttribLocation(getShader()->programId, "in_Normal");
-  modelUniformId = glGetUniformLocation(getShader()->programId, "in_Model");
+  positionId = glGetAttribLocation(getShader()->programId->getGLuint(), "in_Position");
+  uvId = glGetAttribLocation(getShader()->programId->getGLuint(), "in_Uv");
+  normalId = glGetAttribLocation(getShader()->programId->getGLuint(), "in_Normal");
+  modelUniformId = glGetUniformLocation(getShader()->programId->getGLuint(), "in_Model");
 }
 
 int Material::getPassCount()
@@ -307,7 +307,7 @@ int Material::getPassCount()
 void Material::setPass(int pass, Material* _this)
 {
   Application::context->currentMaterial = _this;
-  glUseProgram(getShader()->programId);
+  glUseProgram(getShader()->programId->getGLuint());
 
   if(indexesDirty == true)
   {

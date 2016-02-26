@@ -5,6 +5,54 @@
 namespace gl
 {
 
+Uint* Uint::createProgram()
+{
+  Uint* rtn = mutiny::engine::Application::getGC()->gc_new<Uint>();
+
+  rtn->uint = glCreateProgram();
+
+  if(rtn->uint == 0)
+  {
+    throw mutiny::engine::Exception("Failed to allocate shader program");
+  }
+
+  rtn->type = PROGRAM;
+
+  return rtn;
+}
+
+Uint* Uint::createVertexShader()
+{
+  Uint* rtn = mutiny::engine::Application::getGC()->gc_new<Uint>();
+
+  rtn->uint = glCreateShader(GL_VERTEX_SHADER);
+
+  if(rtn->uint == 0)
+  {
+    throw mutiny::engine::Exception("Failed to allocate vertex shader");
+  }
+
+  rtn->type = VERTEXSHADER;
+
+  return rtn;
+}
+
+Uint* Uint::createFragmentShader()
+{
+  Uint* rtn = mutiny::engine::Application::getGC()->gc_new<Uint>();
+
+  rtn->uint = glCreateShader(GL_FRAGMENT_SHADER);
+
+  if(rtn->uint == 0)
+  {
+    throw mutiny::engine::Exception("Failed to allocate fragment shader");
+  }
+
+  rtn->type = FRAGMENTSHADER;
+
+  return rtn;
+}
+
 Uint* Uint::genBuffer()
 {
   Uint* rtn = mutiny::engine::Application::getGC()->gc_new<Uint>();
@@ -98,6 +146,14 @@ Uint::~Uint()
   else if(type == RENDERBUFFER)
   {
     glDeleteRenderbuffers(1, &uint);
+  }
+  else if(type == VERTEXSHADER || type == FRAGMENTSHADER)
+  {
+    glDeleteShader(uint);
+  }
+  else if(type == PROGRAM)
+  {
+    glDeleteProgram(uint);
   }
 }
 

@@ -72,73 +72,62 @@ Shader* Shader::create(std::string vertContents, std::string fragContents)
   const char* fragSrc = NULL;
   GLint isCompiled = GL_FALSE;
 
-  //glGenVertexArrays(1, &vertexArrayId);
-  //_vertexArrayId.reset(&vertexArrayId, std::bind(deleteVertexArray, vertexArrayId));
-
-  rtn->vertexShaderId = glCreateShader(GL_VERTEX_SHADER);
-  // TODO:
-  //_vertexShaderId.reset(&vertexShaderId, std::bind(glDeleteShader, vertexShaderId));
+  rtn->vertexShaderId = gl::Uint::createVertexShader();
   vertSrc = vertContents.c_str();
-  glShaderSource(rtn->vertexShaderId, 1, &vertSrc, NULL);
-  glCompileShader(rtn->vertexShaderId);
-
-  glGetShaderiv(rtn->vertexShaderId, GL_COMPILE_STATUS, &isCompiled);
+  glShaderSource(rtn->vertexShaderId->getGLuint(), 1, &vertSrc, NULL);
+  glCompileShader(rtn->vertexShaderId->getGLuint());
+  glGetShaderiv(rtn->vertexShaderId->getGLuint(), GL_COMPILE_STATUS, &isCompiled);
 
   if(isCompiled == GL_FALSE)
   {
     GLint maxLength = 0;
-    glGetShaderiv(rtn->vertexShaderId, GL_INFO_LOG_LENGTH, &maxLength);
+    glGetShaderiv(rtn->vertexShaderId->getGLuint(), GL_INFO_LOG_LENGTH, &maxLength);
  
     //The maxLength includes the NULL character
     std::vector<GLchar> infoLog(maxLength);
-    glGetShaderInfoLog(rtn->vertexShaderId, maxLength, &maxLength, &infoLog[0]);
+    glGetShaderInfoLog(rtn->vertexShaderId->getGLuint(), maxLength, &maxLength, &infoLog[0]);
 
     char* log = &infoLog[0];
  
     throw Exception("Failed to compile vertex shader: \n" + std::string(log));
   }
 
-  rtn->fragmentShaderId = glCreateShader(GL_FRAGMENT_SHADER);
-  // TODO:
-  //_fragmentShaderId.reset(&fragmentShaderId, std::bind(glDeleteShader, fragmentShaderId));
+  rtn->fragmentShaderId = gl::Uint::createFragmentShader();
   fragSrc = fragContents.c_str();
-  glShaderSource(rtn->fragmentShaderId, 1, &fragSrc, NULL);
-  glCompileShader(rtn->fragmentShaderId);
-
-  glGetShaderiv(rtn->fragmentShaderId, GL_COMPILE_STATUS, &isCompiled);
+  glShaderSource(rtn->fragmentShaderId->getGLuint(), 1, &fragSrc, NULL);
+  glCompileShader(rtn->fragmentShaderId->getGLuint());
+  glGetShaderiv(rtn->fragmentShaderId->getGLuint(), GL_COMPILE_STATUS, &isCompiled);
 
   if(isCompiled == GL_FALSE)
   {
     GLint maxLength = 0;
-    glGetShaderiv(rtn->fragmentShaderId, GL_INFO_LOG_LENGTH, &maxLength);
+    glGetShaderiv(rtn->fragmentShaderId->getGLuint(), GL_INFO_LOG_LENGTH, &maxLength);
  
     //The maxLength includes the NULL character
     std::vector<GLchar> infoLog(maxLength);
-    glGetShaderInfoLog(rtn->fragmentShaderId, maxLength, &maxLength, &infoLog[0]);
+    glGetShaderInfoLog(rtn->fragmentShaderId->getGLuint(), maxLength, &maxLength, &infoLog[0]);
 
     char* log = &infoLog[0];
  
     throw Exception("Failed to compile fragment shader: \n" + std::string(log));
   }
 
-  rtn->programId = glCreateProgram();
-  // TODO:
-  //_programId.reset(&programId, std::bind(glDeleteProgram, programId));
-  glAttachShader(rtn->programId, rtn->vertexShaderId);
-  glAttachShader(rtn->programId, rtn->fragmentShaderId);
-  glLinkProgram(rtn->programId);
+  rtn->programId = gl::Uint::createProgram();
+  glAttachShader(rtn->programId->getGLuint(), rtn->vertexShaderId->getGLuint());
+  glAttachShader(rtn->programId->getGLuint(), rtn->fragmentShaderId->getGLuint());
+  glLinkProgram(rtn->programId->getGLuint());
 
   GLint isLinked = 0;
-  glGetProgramiv(rtn->programId, GL_LINK_STATUS, (int *)&isLinked);
+  glGetProgramiv(rtn->programId->getGLuint(), GL_LINK_STATUS, (int *)&isLinked);
 
   if(isLinked == GL_FALSE)
   {
     GLint maxLength = 0;
-    glGetProgramiv(rtn->programId, GL_INFO_LOG_LENGTH, &maxLength);
+    glGetProgramiv(rtn->programId->getGLuint(), GL_INFO_LOG_LENGTH, &maxLength);
  
     //The maxLength includes the NULL character
     std::vector<GLchar> infoLog(maxLength);
-    glGetProgramInfoLog(rtn->programId, maxLength, &maxLength, &infoLog[0]);
+    glGetProgramInfoLog(rtn->programId->getGLuint(), maxLength, &maxLength, &infoLog[0]);
  
     char* log = &infoLog[0];
  
