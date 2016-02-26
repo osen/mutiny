@@ -32,7 +32,7 @@ public:
     std::stringstream ss;
     ss << path << "_" << typeid(T).name();
 
-    for(int i = 0; i < Application::context->paths.size(); i++)
+    for(size_t i = 0; i < Application::context->paths.size(); i++)
     {
       if(ss.str() == Application::context->paths.at(i))
       {

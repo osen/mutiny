@@ -38,6 +38,8 @@
 
 #endif
 
+#include <stdlib.h>
+
 template <class T>
 void free_shared(T* ptr)
 {

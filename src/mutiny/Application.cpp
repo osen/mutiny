@@ -252,7 +252,7 @@ void Application::setupPaths()
   std::string command;
   char buffer[8];
 
-  command = "cd `dirname \\`which " + std::string(argv.at(0)) + "\\``; cd ..; pwd | tr -d '\n'";
+  command = "cd `dirname \\`which " + std::string(context->argv.at(0)) + "\\``; cd ..; pwd | tr -d '\n'";
   process = popen(command.c_str(), "r");
 
   if(process == NULL)
@@ -266,7 +266,7 @@ void Application::setupPaths()
   }
 
   pclose(process);
-  command = "basename " + std::string(argv.at(0)) + " | tr -d '\n'";
+  command = "basename " + std::string(context->argv.at(0)) + " | tr -d '\n'";
   process = popen(command.c_str(), "r");
 
   if(process == NULL)
@@ -281,8 +281,8 @@ void Application::setupPaths()
 
   pclose(process);
 
-  engineDataPath = dirname + "/share/mutiny";
-  dataPath = dirname + "/share/" + basename;
+  context->engineDataPath = dirname + "/share/mutiny";
+  context->dataPath = dirname + "/share/" + basename;
 #endif
 
   //std::cout << "Paths: " << engineDataPath << " " << dataPath << std::endl;
@@ -334,7 +334,7 @@ void Application::run()
 
   context->running = false;
 
-  for(int i = 0; i < context->gameObjects->size(); i++)
+  for(size_t i = 0; i < context->gameObjects->size(); i++)
   {
     context->gameObjects->at(i)->destroy();
   }
@@ -448,7 +448,7 @@ internal::gc::context* Application::getGC()
 
 void Application::loadLevel()
 {
-  for(int i = 0; i < context->gameObjects->size(); i++)
+  for(size_t i = 0; i < context->gameObjects->size(); i++)
   {
     if(context->gameObjects->at(i)->destroyOnLoad == true)
     {
@@ -458,7 +458,7 @@ void Application::loadLevel()
     }
   }
 
-  for(int i = 0; i < context->objects->size(); i++)
+  for(size_t i = 0; i < context->objects->size(); i++)
   {
     if(context->objects->at(i)->destroyOnLoad == true)
     {
@@ -468,7 +468,7 @@ void Application::loadLevel()
     }
   }
 
-  for(int i = 0; i < context->gameObjects->size(); i++)
+  for(size_t i = 0; i < context->gameObjects->size(); i++)
   {
     context->gameObjects->at(i)->levelWasLoaded();
   }
@@ -534,7 +534,7 @@ void Application::display()
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glViewport(0, 0, Screen::getWidth(), Screen::getHeight());
 
-  for(int h = 0; h < Camera::getAllCameras()->size(); h++)
+  for(size_t h = 0; h < Camera::getAllCameras()->size(); h++)
   {
     if(Camera::getAllCameras()->at(h)->getGameObject()->getActive() == false)
     {
@@ -553,7 +553,7 @@ void Application::display()
     glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    for(int i = 0; i < context->gameObjects->size(); i++)
+    for(size_t i = 0; i < context->gameObjects->size(); i++)
     {
       if((Camera::getCurrent()->getCullMask() & context->gameObjects->at(i)->getLayer()) !=
         context->gameObjects->at(i)->getLayer())
@@ -570,12 +570,12 @@ void Application::display()
     }
   }
 
-  for(int i = 0; i < context->gameObjects->size(); i++)
+  for(size_t i = 0; i < context->gameObjects->size(); i++)
   {
     context->gameObjects->at(i)->postRender();
   }
 
-  for(int i = 0; i < context->gameObjects->size(); i++)
+  for(size_t i = 0; i < context->gameObjects->size(); i++)
   {
     context->gameObjects->at(i)->gui();
   }
@@ -611,19 +611,23 @@ void Application::idle()
 
   if(diff < idealDiff)
   {
+#ifdef USE_WINAPI
     Sleep(idealDiff - diff);
+#else
+    usleep((idealDiff - diff) * 1000);
+#endif
     Time::deltaTime = idealDiff / 1000.0f;
   }
 
   lastTime = glutGet(GLUT_ELAPSED_TIME);
 #endif
 
-  for(int i = 0; i < context->gameObjects->size(); i++)
+  for(size_t i = 0; i < context->gameObjects->size(); i++)
   {
     context->gameObjects->at(i)->update();
   }
 
-  for(int i = 0; i < context->gameObjects->size(); i++)
+  for(size_t i = 0; i < context->gameObjects->size(); i++)
   {
     if(context->gameObjects->at(i)->destroyed == true)
     {
@@ -658,7 +662,7 @@ void Application::mouse(int button, int state, int x, int y)
   if(state == GLUT_DOWN)
 #endif
   {
-    for(int i = 0; i < Input::mouseButtons.size(); i++)
+    for(size_t i = 0; i < Input::mouseButtons.size(); i++)
     {
       if(Input::mouseButtons.at(i) == button)
       {
@@ -673,7 +677,7 @@ void Application::mouse(int button, int state, int x, int y)
   }
   else
   {
-    for(int i = 0; i < Input::mouseButtons.size(); i++)
+    for(size_t i = 0; i < Input::mouseButtons.size(); i++)
     {
       if(Input::mouseButtons.at(i) == button)
       {
@@ -695,7 +699,7 @@ void Application::keyboard(unsigned char key, int x, int y)
 void Application::_keyboard(int key, int x, int y)
 {
   //std::cout << key << std::endl;
-  for(int i = 0; i < Input::keys.size(); i++)
+  for(size_t i = 0; i < Input::keys.size(); i++)
   {
     if(Input::keys.at(i) == key)
     {
@@ -714,7 +718,7 @@ void Application::keyboardUp(unsigned char key, int x, int y)
 
 void Application::_keyboardUp(int key, int x, int y)
 {
-  for(int i = 0; i < Input::keys.size(); i++)
+  for(size_t i = 0; i < Input::keys.size(); i++)
   {
     if(Input::keys.at(i) == key)
     {

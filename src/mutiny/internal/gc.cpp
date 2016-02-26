@@ -70,7 +70,7 @@ void gc_destroy(struct GcContext *ctx)
 
   if(block != NULL)
   {
-    while(block != ctx->root)
+    while(block != NULL)
     {
       if(block->deleter != NULL)
       {

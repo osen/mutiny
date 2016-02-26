@@ -28,7 +28,7 @@ void Player::onAwake()
   getGameObject()->addComponent<CharacterController>();
 
   getGameObject()->addComponent<ParticleEmitter>();
-  Material* particleMaterial = new Material(Resources::load<Material>("shaders/Internal-MeshRendererTexture"));
+  Material* particleMaterial = Material::create(Resources::load<Shader>("shaders/Internal-MeshRendererTexture"));
   particleMaterial->setMainTexture(Resources::load<Texture2d>("particles/grass"));
   getGameObject()->addComponent<ParticleRenderer>()->setMaterial(particleMaterial);
 }
