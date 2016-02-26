@@ -8,6 +8,7 @@
 #include "Color.h"
 #include "internal/CWrapper.h"
 #include "internal/gcmm.h"
+#include "internal/glmm.h"
 
 #include <GL/glew.h>
 
@@ -61,9 +62,9 @@ private:
   std::vector<Vector3> normals;
   std::vector<Color> colors;
 
-  internal::gc::list<internal::GlBuffer*>* positionBufferIds;
-  internal::gc::list<internal::GlBuffer*>* uvBufferIds;
-  internal::gc::list<internal::GlBuffer*>* normalBufferIds;
+  internal::gc::list<gl::Uint*>* positionBufferIds;
+  internal::gc::list<gl::Uint*>* uvBufferIds;
+  internal::gc::list<gl::Uint*>* normalBufferIds;
 
   Bounds bounds;
 

@@ -214,21 +214,21 @@ void Graphics::drawMeshNow(Mesh* mesh, Matrix4x4 matrix, int materialIndex)
 
   if(positionAttribId != -1)
   {
-    glBindBuffer(GL_ARRAY_BUFFER, mesh->positionBufferIds->at(materialIndex)->id);
+    glBindBuffer(GL_ARRAY_BUFFER, mesh->positionBufferIds->at(materialIndex)->getGLuint());
     glVertexAttribPointer(positionAttribId, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(positionAttribId);
   }
 
   if(normalAttribId != -1 && mesh->normalBufferIds->size() > materialIndex)
   {
-    glBindBuffer(GL_ARRAY_BUFFER, mesh->normalBufferIds->at(materialIndex)->id);
+    glBindBuffer(GL_ARRAY_BUFFER, mesh->normalBufferIds->at(materialIndex)->getGLuint());
     glVertexAttribPointer(normalAttribId, 3, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(normalAttribId);
   }
 
   if(uvAttribId != -1)
   {
-    glBindBuffer(GL_ARRAY_BUFFER, mesh->uvBufferIds->at(materialIndex)->id);
+    glBindBuffer(GL_ARRAY_BUFFER, mesh->uvBufferIds->at(materialIndex)->getGLuint());
     glVertexAttribPointer(uvAttribId, 2, GL_FLOAT, GL_FALSE, 0, 0);
     glEnableVertexAttribArray(uvAttribId);
   }

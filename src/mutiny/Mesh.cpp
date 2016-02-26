@@ -18,9 +18,9 @@ namespace engine
 
 Mesh::Mesh()
 {
-  positionBufferIds = Application::getGC()->gc_list<internal::GlBuffer*>();
-  uvBufferIds = Application::getGC()->gc_list<internal::GlBuffer*>();
-  normalBufferIds = Application::getGC()->gc_list<internal::GlBuffer*>();
+  positionBufferIds = Application::getGC()->gc_list<gl::Uint*>();
+  uvBufferIds = Application::getGC()->gc_list<gl::Uint*>();
+  normalBufferIds = Application::getGC()->gc_list<gl::Uint*>();
 }
 
 Mesh* Mesh::load(std::string path)
@@ -140,12 +140,11 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
     values.push_back(vertices.at(triangles.at(i)).z);
   }
 
-  internal::GlBuffer* positionBufferId = NULL;
+  gl::Uint* positionBufferId = NULL;
 
   if(insert == true)
   {
-    positionBufferId = internal::GlBuffer::create();
-    glGenBuffers(1, &positionBufferId->id);
+    positionBufferId = gl::Uint::genBuffer();
     positionBufferIds->push_back(positionBufferId);
   }
   else
@@ -153,7 +152,7 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
     positionBufferId = positionBufferIds->at(submesh);
   }
 
-  glBindBuffer(GL_ARRAY_BUFFER, positionBufferId->id);
+  glBindBuffer(GL_ARRAY_BUFFER, positionBufferId->getGLuint());
   //glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_STATIC_DRAW);
   glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_DYNAMIC_DRAW);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -171,12 +170,11 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
       values.push_back(normals.at(triangles.at(i)).z);
     }
 
-    internal::GlBuffer* normalBufferId = NULL;
+    gl::Uint* normalBufferId = NULL;
 
     if(insert == true)
     {
-      normalBufferId = internal::GlBuffer::create();
-      glGenBuffers(1, &normalBufferId->id);
+      normalBufferId = gl::Uint::genBuffer();
       normalBufferIds->push_back(normalBufferId);
     }
     else
@@ -184,7 +182,7 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
       normalBufferId = normalBufferIds->at(submesh);
     }
 
-    glBindBuffer(GL_ARRAY_BUFFER, normalBufferId->id);
+    glBindBuffer(GL_ARRAY_BUFFER, normalBufferId->getGLuint());
     //glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_STATIC_DRAW);
     glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -202,12 +200,11 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
       values.push_back(uv.at(triangles.at(i)).y);
     }
 
-    internal::GlBuffer* uvBufferId = NULL;
+    gl::Uint* uvBufferId = NULL;
 
     if(insert == true)
     {
-      uvBufferId = internal::GlBuffer::create();
-      glGenBuffers(1, &uvBufferId->id);
+      uvBufferId = gl::Uint::genBuffer();
       uvBufferIds->push_back(uvBufferId);
     }
     else
@@ -215,7 +212,7 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
       uvBufferId = uvBufferIds->at(submesh);
     }
 
-    glBindBuffer(GL_ARRAY_BUFFER, uvBufferId->id);
+    glBindBuffer(GL_ARRAY_BUFFER, uvBufferId->getGLuint());
     //glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_STATIC_DRAW);
     glBufferData(GL_ARRAY_BUFFER, values.size() * sizeof(values[0]), &values[0], GL_DYNAMIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);

@@ -5,6 +5,22 @@
 namespace gl
 {
 
+Uint* Uint::genBuffer()
+{
+  Uint* rtn = mutiny::engine::Application::getGC()->gc_new<Uint>();
+
+  glGenBuffers(1, &rtn->uint);
+
+  if(rtn->uint == 0)
+  {
+    throw mutiny::engine::Exception("Failed to allocate buffer");
+  }
+
+  rtn->type = BUFFER;
+
+  return rtn;
+}
+
 Uint* Uint::genTexture()
 {
   Uint* rtn = mutiny::engine::Application::getGC()->gc_new<Uint>();
@@ -67,7 +83,11 @@ Uint::~Uint()
 {
   if(uint == 0) return;
 
-  if(type == TEXTURE)
+  if(type == BUFFER)
+  {
+    glDeleteBuffers(1, &uint);
+  }
+  else if(type == TEXTURE)
   {
     glDeleteTextures(1, &uint);
   }

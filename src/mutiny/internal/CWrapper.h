@@ -31,14 +31,6 @@ struct PngData
   unsigned height;
 };
 
-struct GlBuffer
-{
-  static GlBuffer* create();
-  ~GlBuffer();
-
-  GLuint id;
-};
-
 #ifdef _WIN32
 struct Win32FindData
 {

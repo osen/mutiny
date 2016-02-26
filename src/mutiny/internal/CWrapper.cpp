@@ -23,21 +23,6 @@ PngData::~PngData()
   free(image);
 }
 
-GlBuffer* GlBuffer::create()
-{
-  GlBuffer* rtn = Application::getGC()->gc_new<GlBuffer>();
-
-  return rtn;
-}
-
-GlBuffer::~GlBuffer()
-{
-  if(id != 0)
-  {
-    glDeleteBuffers(1, &id);
-  }
-}
-
 #ifdef _WIN32
 Win32FindData* Win32FindData::create()
 {
