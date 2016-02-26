@@ -57,5 +57,7 @@
 #include "buccaneer/buccaneer.h"
 #include "parrot/parrot.h"
 
+#define gcnew Application::getGC()->gc_new
+
 #endif
 

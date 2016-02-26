@@ -113,6 +113,47 @@ public:
     ::gc_collect(gc_ctx);
   }
 
+/*
+  template <class N, class... U>
+  N* gc_new(U&&... u)
+  {
+    void* data = NULL;
+    N* rtn = NULL;
+
+    data = gc_alloc(gc_ctx, sizeof(*rtn));
+    rtn = new(data) N(std::forward<U>(u)...);
+    gc_finalizer(gc_ctx, rtn, gc_delete<N>);
+
+    return rtn;
+  }
+*/
+
+  template <class N, class U>
+  N* gc_new(U& u)
+  {
+    void* data = NULL;
+    N* rtn = NULL;
+
+    data = gc_alloc(gc_ctx, sizeof(*rtn));
+    rtn = new(data) N(u);
+    gc_finalizer(gc_ctx, rtn, gc_delete<N>);
+
+    return rtn;
+  }
+
+  template <class N, class U, class V>
+  N* gc_new(U& u, V& v)
+  {
+    void* data = NULL;
+    N* rtn = NULL;
+
+    data = gc_alloc(gc_ctx, sizeof(*rtn));
+    rtn = new(data) N(u, v);
+    gc_finalizer(gc_ctx, rtn, gc_delete<N>);
+
+    return rtn;
+  }
+
   template <class N>
   N* gc_new()
   {
