@@ -13,7 +13,7 @@ using namespace mutiny::engine;
 
 GameObject* GameScreen::create()
 {
-  GameObject* mainGo = new GameObject("GameScreen");
+  GameObject* mainGo = gcnew<GameObject>("GameScreen");
   mainGo->addComponent<GameScreen>();
 
   return mainGo;
@@ -26,7 +26,7 @@ GameObject* GameScreen::getFence()
 
 void GameScreen::onAwake()
 {
-  audio.reset(new Audio());
+  audio = gcnew<Audio>();
 
   if(Application::getLoadedLevelName() != "introduction")
   {
@@ -37,7 +37,7 @@ void GameScreen::onAwake()
 
 Audio* GameScreen::getAudio()
 {
-  return audio.get();
+  return audio;
 }
 
 GameCamera* GameScreen::getCamera()
@@ -56,7 +56,7 @@ void GameScreen::onStart()
     Sheep::create(this);
  
   fenceGo = Fence::create();
-  arc<GameObject> playerGo = Player::create(this);
+  GameObject* playerGo = Player::create(this);
   SkyBox::create(playerGo);
   cameraGo = GameCamera::create(playerGo);
   Terrain::create();

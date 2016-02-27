@@ -7,7 +7,7 @@ using namespace mutiny::engine;
 
 GameObject* MenuScreen::create()
 {
-  GameObject* mainGo = new GameObject("MenuScreen");
+  GameObject* mainGo = gcnew<GameObject>("MenuScreen");
   mainGo->addComponent<MenuScreen>();
 
   return mainGo;
@@ -16,7 +16,7 @@ GameObject* MenuScreen::create()
 void MenuScreen::onAwake()
 {
   Audio::playMusic();
-  cameraGo = new GameObject("MainCamera");
+  cameraGo = gcnew<GameObject>("MainCamera");
   Camera* camera = cameraGo->addComponent<Camera>();
   titleTexture = Resources::load<Texture2d>("textures/titleLogo");
   wwwTexture = Resources::load<Texture2d>("textures/www");
@@ -39,8 +39,8 @@ void MenuScreen::onGui()
     Application::quit();
   }
 
-  Gui::drawTexture(Rect(10, 10, titleTexture->getWidth(), titleTexture->getHeight()), titleTexture.cast<Texture>());
+  Gui::drawTexture(Rect(10, 10, titleTexture->getWidth(), titleTexture->getHeight()), titleTexture);
   Gui::drawTexture(Rect(10, Screen::getHeight() - wwwTexture->getHeight() + 80, 
-    wwwTexture->getWidth(), wwwTexture->getHeight()), wwwTexture.cast<Texture>());
+    wwwTexture->getWidth(), wwwTexture->getHeight()), wwwTexture);
 }
 

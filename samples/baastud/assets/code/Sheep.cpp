@@ -14,7 +14,7 @@ int Sheep::random(int min, int max)
 
 GameObject* Sheep::create(GameScreen* gameScreen)
 {
-  GameObject* mainGo = new GameObject("Sheep");
+  GameObject* mainGo = gcnew<GameObject>("Sheep");
   Sheep* sheep = mainGo->addComponent<Sheep>();
   sheep->gameScreen = gameScreen;
 
@@ -28,7 +28,7 @@ bool Sheep::isWolf()
 
 void Sheep::onStart()
 {
-  arc<AnimatedMesh> mesh;
+  AnimatedMesh* mesh = NULL;
 
   wolf = false;
   getGameObject()->setTag("sheep");

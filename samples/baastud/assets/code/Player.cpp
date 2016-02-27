@@ -11,9 +11,9 @@
 
 using namespace mutiny::engine;
 
-arc<GameObject> Player::create(GameScreen* gameScreen)
+GameObject* Player::create(GameScreen* gameScreen)
 {
-  arc<GameObject> mainGo = GameObject::create("Player");
+  GameObject* mainGo = GameObject::create("Player");
   Player* player = mainGo->addComponent<Player>();
   player->gameScreen = gameScreen;
 
@@ -29,12 +29,12 @@ void Player::onAwake()
   speed = 10.0f;
 
   mr = getGameObject()->addComponent<AnimatedMeshRenderer>();
-  arc<AnimatedMesh> mesh = Resources::load<AnimatedMesh>("models/sheep/sheep");
+  AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/sheep/sheep");
   mr->setAnimatedMesh(mesh);
 
   sheepIconTexture = Resources::load<Texture2d>("textures/sheepIcon");
   censoredTexture = Resources::load<Texture2d>("textures/censored");
-  quickNumber.reset(new QuickNumber());
+  quickNumber = gcnew<QuickNumber>();
 
   walkAnimation = Resources::load<Animation>("models/sheep/run.anm");
   idleAnimation = Resources::load<Animation>("models/sheep/idle.anm");
@@ -263,11 +263,11 @@ void Player::onGui()
     
     Gui::drawTexture(Rect((Screen::getWidth() / 2) - (texWidth / 2),
                           (Screen::getHeight() / 2) - (texHeight / 2),
-                          texWidth, texHeight), censoredTexture.cast<Texture>());
+                          texWidth, texHeight), censoredTexture);
   }
 
   Gui::drawTexture(Rect(10, 10, sheepIconTexture->getWidth()-32, sheepIconTexture->getHeight()-32),
-    sheepIconTexture.cast<Texture>());
+    sheepIconTexture);
 
   quickNumber->draw(score, 115, 55);
 } 

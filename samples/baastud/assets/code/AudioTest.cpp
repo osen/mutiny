@@ -7,7 +7,7 @@ using namespace mutiny::engine;
 
 GameObject* AudioTest::create()
 {
-  GameObject* mainGo = new GameObject("AudioTest");
+  GameObject* mainGo = gcnew<GameObject>("AudioTest");
   mainGo->addComponent<AudioTest>();
 
   return mainGo;
@@ -15,7 +15,7 @@ GameObject* AudioTest::create()
 
 void AudioTest::onAwake()
 {
-  audio.reset(new Audio());
+  audio = gcnew<Audio>();
 }
 
 void AudioTest::onGui()

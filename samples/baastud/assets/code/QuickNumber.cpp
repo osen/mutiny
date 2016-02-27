@@ -28,7 +28,7 @@ void QuickNumber::drawW(int number, int x, int y)
     float nc = atoi(cs.c_str());
 
     Gui::drawTextureWithTexCoords(Rect(x + i * charWidth, y, charWidth, wFontTexture->getHeight()),
-      wFontTexture.cast<Texture>(), Rect(point * nc, 0, (point * nc) + point, 1));
+      wFontTexture, Rect(point * nc, 0, (point * nc) + point, 1));
   }
 }
 
@@ -49,6 +49,6 @@ void QuickNumber::draw(int number, int x, int y)
     float nc = atoi(cs.c_str());
 
     Gui::drawTextureWithTexCoords(Rect(x + i * charWidth, y, charWidth, fontTexture->getHeight()),  
-      fontTexture.cast<Texture>(), Rect(point * nc, 0, (point * nc) + point, 1));
+      fontTexture, Rect(point * nc, 0, (point * nc) + point, 1));
   }
 }

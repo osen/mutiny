@@ -18,8 +18,8 @@ public:
   virtual void onGui();
 
 private:
-  arc<QuickNumber> qn;
-  arc<Texture2d> background;
+  QuickNumber* qn;
+  Texture2d* background;
   float timeout;
 
 };

@@ -7,7 +7,7 @@ using namespace mutiny::engine;
 
 GameObject* FencePanel::create(Fence* fence)
 {
-  GameObject* mainGo = new GameObject("FencePanel");
+  GameObject* mainGo = gcnew<GameObject>("FencePanel");
   FencePanel* fp = mainGo->addComponent<FencePanel>();
   fp->fence = fence;
 
@@ -17,8 +17,8 @@ GameObject* FencePanel::create(Fence* fence)
 void FencePanel::onStart()
 {
   MeshRenderer* fencePanelMr = getGameObject()->addComponent<MeshRenderer>();
-  arc<Material> material(new Material(Resources::load<Material>("shaders/Internal-MeshRendererTexture")));
-  material->setMainTexture(Resources::load<Texture2d>("models/fence/fence").cast<Texture>());
+  Material* material = Material::create(Resources::load<Shader>("shaders/Internal-MeshRendererTexture"));
+  material->setMainTexture(Resources::load<Texture2d>("models/fence/fence"));
   
   MeshFilter* mf = getGameObject()->addComponent<MeshFilter>();
 

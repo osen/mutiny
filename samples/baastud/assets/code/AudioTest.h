@@ -16,7 +16,7 @@ public:
   virtual void onGui();
 
 private:
-  arc<Audio> audio;
+  Audio* audio;
 };
 
 #endif

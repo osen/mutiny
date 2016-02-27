@@ -7,14 +7,20 @@
 
 using namespace mutiny::engine;
 
-std::vector<arc<AudioClip> > Audio::sounds;
-//Mix_Music* Audio::music = NULL;
-//Mix_Music* Audio::musicA = NULL;
-//Mix_Music* Audio::breathing = NULL;
+Audio* Audio::self = NULL;
 
 void Audio::initialize()
 {
-  sounds.clear();
+  if(self == NULL)
+  {
+    GameObject* audioGo = gcnew<GameObject>("AudioSystem");
+    Audio* audio = audioGo->addComponent<Audio>();
+    audio->sounds = gcnewlist<AudioClip*>();
+    Object::dontDestroyOnLoad(audioGo);
+    self = audio;
+  }
+
+  self->sounds->clear();
   // Load audio files
   addSound("audio/Ambient_2");
   addSound("audio/Ambient_1");
@@ -56,19 +62,19 @@ void Audio::initialize()
 
 void Audio::addSound(std::string path)
 {
-  arc<AudioClip> clip = Resources::load<AudioClip>(path);
+  AudioClip* clip = Resources::load<AudioClip>(path);
 
-  if(clip.get() == NULL)
+  if(clip == NULL)
   {
     throw std::exception();
   }
 
-  sounds.push_back(clip);
+  self->sounds->push_back(clip);
 }
 
 void Audio::playSound(int sound)
 {
-  AudioSource::playClipAtPoint(sounds.at(sound), Vector3());
+  AudioSource::playClipAtPoint(self->sounds->at(sound), Vector3());
 }
 
 void Audio::playMusic()

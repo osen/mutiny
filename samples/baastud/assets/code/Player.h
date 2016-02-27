@@ -11,7 +11,7 @@ class QuickNumber;
 class Player : public Behaviour
 {
 public:
-  static arc<GameObject> create(GameScreen* gameScreen);
+  static GameObject* create(GameScreen* gameScreen);
 
   virtual void onAwake();
   virtual void onUpdate();
@@ -20,13 +20,13 @@ public:
 private:
   GameScreen* gameScreen;
   AnimatedMeshRenderer* mr;
-  arc<Animation> walkAnimation;
-  arc<Animation> idleAnimation;
-  arc<Animation> sprintAnimation;
-  arc<Animation> humpAnimation;
-  arc<Texture2d> censoredTexture;
-  arc<Texture2d> sheepIconTexture;
-  arc<QuickNumber> quickNumber;
+  Animation* walkAnimation;
+  Animation* idleAnimation;
+  Animation* sprintAnimation;
+  Animation* humpAnimation;
+  Texture2d* censoredTexture;
+  Texture2d* sheepIconTexture;
+  QuickNumber* quickNumber;
 
 
   bool firstTime;

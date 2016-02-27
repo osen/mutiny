@@ -8,7 +8,7 @@ int GameOverScreen::score = 0;
 
 GameObject* GameOverScreen::create()
 {
-  GameObject* mainGo = new GameObject("GameOverScreen");
+  GameObject* mainGo = gcnew<GameObject>("GameOverScreen");
   mainGo->addComponent<GameOverScreen>();
 
   return mainGo;
@@ -17,14 +17,14 @@ GameObject* GameOverScreen::create()
 void GameOverScreen::onAwake()
 {
   Audio::playSound(23);
-  qn.reset(new QuickNumber());
+  qn = gcnew<QuickNumber>();
   background = Resources::load<Texture2d>("textures/failScreen");
   timeout = 5;
 }
 
 void GameOverScreen::onGui()
 {
-  Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), background.cast<Texture>());
+  Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), background);
   qn->drawW(score, Screen::getWidth() * 0.3f, Screen::getHeight() * 0.05f);
 
   timeout -= Time::getDeltaTime();

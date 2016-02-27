@@ -4,9 +4,9 @@
 
 using namespace mutiny::engine;
 
-GameObject* GameCamera::create(arc<GameObject> playerGo)
+GameObject* GameCamera::create(GameObject* playerGo)
 {
-  GameObject* mainGo = new GameObject("GameCamera");
+  GameObject* mainGo = gcnew<GameObject>("GameCamera");
   GameCamera* gameCamera = mainGo->addComponent<GameCamera>();
   gameCamera->playerGo = playerGo;
 
@@ -26,13 +26,13 @@ void GameCamera::onAwake()
   eventMode = false;
   camera = getGameObject()->addComponent<Camera>();
   camera->setBackgroundColor(Color(0, 0, 0, 1));
-  originalPass.reset(new RenderTexture(512, 512));
+  originalPass = RenderTexture::create(512, 512);
   camera->setTargetTexture(originalPass);
 
-  blurPass1.reset(new RenderTexture(64, 64));
-  blurPass2.reset(new RenderTexture(256, 256));
-  blurPass3.reset(new RenderTexture(64, 64));
-  mergePass.reset(new RenderTexture(512, 512));
+  blurPass1 = RenderTexture::create(64, 64);
+  blurPass2 = RenderTexture::create(256, 256);
+  blurPass3 = RenderTexture::create(64, 64);
+  mergePass = RenderTexture::create(512, 512);
 
   getGameObject()->getTransform()->setPosition(Vector3(0, 0, -8));
 
@@ -99,22 +99,22 @@ void GameCamera::onPostRender()
 {
   Graphics::setRenderTarget(blurPass1);
   Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), 
-    originalPass.cast<Texture>(), texturedMaterial);
+    originalPass, texturedMaterial);
 
   Graphics::setRenderTarget(blurPass2);
   Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), 
-    blurPass1.cast<Texture>(), texturedMaterial);
+    blurPass1, texturedMaterial);
 
   Graphics::setRenderTarget(blurPass3);
   Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), 
-    blurPass2.cast<Texture>(), texturedMaterial);
+    blurPass2, texturedMaterial);
 
   Graphics::setRenderTarget(mergePass);
-  mergeMaterial->setTexture("in_Merge", blurPass3.cast<Texture>());
+  mergeMaterial->setTexture("in_Merge", blurPass3);
   Graphics::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), 
-    originalPass.cast<Texture>(), mergeMaterial);
-  Graphics::setRenderTarget(arc<RenderTexture>());
+    originalPass, mergeMaterial);
+  Graphics::setRenderTarget(NULL);
 
-  Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), mergePass.cast<Texture>());
+  Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), mergePass);
 }
 

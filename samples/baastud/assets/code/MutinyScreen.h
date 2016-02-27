@@ -14,8 +14,8 @@ public:
   virtual void onGui();
 
 private:
-  arc<Texture2d> mutinyLogo;
-  arc<Texture2d> background;
+  Texture2d* mutinyLogo;
+  Texture2d* background;
   float timeout;
 
 };

@@ -26,7 +26,7 @@ public:
 private:
   GameObject* cameraGo;
   GameObject* fenceGo;
-  arc<Audio> audio;
+  Audio* audio;
 
 };
 

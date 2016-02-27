@@ -16,7 +16,7 @@ public:
   static const int FENCE_X_WIDTH = 12;
   static const int FENCE_Z_WIDTH = 8;
 
-  arc<Mesh> mesh;
+  Mesh* mesh;
   Bounds getBounds();
 
 };

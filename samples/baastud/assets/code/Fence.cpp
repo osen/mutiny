@@ -7,7 +7,7 @@ using namespace mutiny::engine;
 
 GameObject* Fence::create()
 {
-  GameObject* mainGo = new GameObject("Fence");
+  GameObject* mainGo = gcnew<GameObject>("Fence");
   mainGo->addComponent<Fence>();
 
   return mainGo;
