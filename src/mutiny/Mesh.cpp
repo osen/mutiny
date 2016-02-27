@@ -43,9 +43,9 @@ Mesh* Mesh::load(std::string path)
       internal::MaterialGroupData* materialGroup = part->materialGroups->at(m);
       triangles.push_back(std::vector<int>());
 
-      for(int f = 0; f < materialGroup->faces->size(); f++)
+      for(int f = 0; f < materialGroup->faces.size(); f++)
       {
-        internal::FaceData* face = materialGroup->faces->at(f);
+        internal::FaceData* face = &materialGroup->faces.at(f);
 
         triangles.at(currentSubmesh).push_back(vertices.size());
         vertices.push_back(Vector3(face->a.position.x, face->a.position.y, face->a.position.z));

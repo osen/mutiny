@@ -54,9 +54,9 @@ AnimatedMesh* AnimatedMesh::load(std::string path)
       animatedMesh->textures->at(animatedMesh->textures->size() - 1)->push_back(tex);
       triangles.push_back(std::vector<int>());
 
-      for(int f = 0; f < materialGroup->faces->size(); f++)
+      for(int f = 0; f < materialGroup->faces.size(); f++)
       {
-        internal::FaceData* face = materialGroup->faces->at(f);
+        internal::FaceData* face = &materialGroup->faces.at(f);
 
         if(mmSet == false) { max.x = face->a.position.x; max.y = face->a.position.y; max.z = face->a.position.z;
                              min.x = face->a.position.x; min.y = face->a.position.y; min.z = face->a.position.z;

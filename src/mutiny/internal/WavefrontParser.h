@@ -48,7 +48,7 @@ struct MaterialGroupData
   MaterialGroupData();
 
   MaterialData* material;
-  internal::gc::list<FaceData*>* faces;
+  std::vector<FaceData> faces;
   
 };
 

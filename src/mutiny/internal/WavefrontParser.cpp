@@ -130,8 +130,8 @@ WavefrontParser::WavefrontParser(std::string path)
     else if(splitLine.at(0) == "f")
     {
       splitLine = mungeSplitLine(splitLine);
-      currentFace = Application::getGC()->gc_new<FaceData>();
-      currentMaterialGroup->faces->push_back(currentFace);
+      currentMaterialGroup->faces.push_back(FaceData());
+      FaceData* currentFace = &currentMaterialGroup->faces.at(currentMaterialGroup->faces.size() - 1);
       subSplit.clear(); Util::splitString(splitLine.at(1), '/', &subSplit);
 
       currentFace->a.position = Vector3(vertexPositions.at(atoi(subSplit.at(0).c_str()) - 1));
@@ -178,8 +178,8 @@ WavefrontParser::WavefrontParser(std::string path)
 
       if(splitLine.size() >= 5)
       {
-        currentFace = Application::getGC()->gc_new<FaceData>();
-        currentMaterialGroup->faces->push_back(currentFace);
+        currentMaterialGroup->faces.push_back(FaceData());
+        FaceData* currentFace = &currentMaterialGroup->faces.at(currentMaterialGroup->faces.size() - 1);
         subSplit.clear(); Util::splitString(splitLine.at(3), '/', &subSplit);
 
         currentFace->a.position = Vector3(vertexPositions.at(atoi(subSplit.at(0).c_str()) - 1));
@@ -229,7 +229,7 @@ WavefrontParser::WavefrontParser(std::string path)
   {
     for(int b = 0; b < modelData.parts->at(a)->materialGroups->size(); b++)
     {
-      if(modelData.parts->at(a)->materialGroups->at(b)->faces->size() < 1)
+      if(modelData.parts->at(a)->materialGroups->at(b)->faces.size() < 1)
       {
         modelData.parts->at(a)->materialGroups->remove_at(b);
         b--;
@@ -250,7 +250,7 @@ WavefrontParser::WavefrontParser(std::string path)
 
 MaterialGroupData::MaterialGroupData()
 {
-  faces = Application::getGC()->gc_list<FaceData*>();
+
 }
 
 PartData::PartData()
@@ -297,21 +297,21 @@ void WavefrontParser::obtainSizes()
     {
       materialGroup = part->materialGroups->at(b);
 
-      for(int c = 0; c < materialGroup->faces->size(); c++)
+      for(int c = 0; c < materialGroup->faces.size(); c++)
       {
         for(int d = 0; d < 3; d++)
         {
           if(d == 0)
           {
-            current = &materialGroup->faces->at(c)->a.position;
+            current = &materialGroup->faces.at(c).a.position;
           }
           else if(d == 1)
           {
-            current = &materialGroup->faces->at(c)->b.position;
+            current = &materialGroup->faces.at(c).b.position;
           }
           else
           {
-            current = &materialGroup->faces->at(c)->c.position;
+            current = &materialGroup->faces.at(c).c.position;
           }
         }
 
