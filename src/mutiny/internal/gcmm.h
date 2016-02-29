@@ -26,6 +26,18 @@ class list
   friend class mutiny::engine::internal::gc::context;
 
 public:
+  void insert(size_t idx, T t)
+  {
+    push_back(t);
+
+    for(size_t i = idx; i < size(); i++)
+    {
+      at(i + 1) = at(i);
+    }
+
+    at(idx) = t;
+  }
+
   void push_back(T t)
   {
     if(actualSize < _size + 1)
