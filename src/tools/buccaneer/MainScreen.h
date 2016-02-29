@@ -29,15 +29,15 @@ private:
   Material* selectedMaterial;
   float pulseAmount;
   bool pulseDown;
-  std::unique_ptr<Texture2d> fallbackTex;
+  Texture2d* fallbackTex;
   bool changeMade;
   int transformMode;
   Timeline* timeline;
 
   GameObject* selectedPart;
-  std::vector<Material*> origMaterials;
-  std::vector<std::unique_ptr<Material> > newMaterials;
-  std::vector<std::vector<AnimationFrame> > undoBuffer;
+  gclist<Material*>* origMaterials;
+  gclist<Material*>* newMaterials;
+  gclist<gclist<AnimationFrame*>*>* undoBuffer;
 
   void modifyTransform(AnimationTransform* transform);
   void selectPart(std::string partName);

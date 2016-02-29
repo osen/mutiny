@@ -40,7 +40,7 @@ void SelectModelScreen::onGui()
       choice = files.at(i);
       //Application::loadLevel("Main");
       //Application::loadLevel("SelectAnimation");
-      GameObject* go = new GameObject("SelectAnimation");
+      GameObject* go = gcnew<GameObject>("SelectAnimation");
       go->addComponent<SelectAnimationScreen>();
       Object::destroy(this);
     }
