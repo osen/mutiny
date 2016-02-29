@@ -67,7 +67,7 @@ void Timeline::onGui()
 
   if(Gui::button(Rect(10, Screen::getHeight() - 60, 40, 50), "Add") == true)
   {
-    amr->getAnimation()->frames->insert(amr->getFrame(), amr->getAnimation()->frames->at(amr->getFrame()));
+    amr->getAnimation()->frames->insert(amr->getFrame(), AnimationFrame::copy(amr->getAnimation()->frames->at(amr->getFrame())));
     amr->setFrame(amr->getFrame() + 1);
     mainScreen->undoBuffer->push_back(mainScreen->animation->frames);
   }

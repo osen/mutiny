@@ -28,6 +28,33 @@ int Animation::getFrameCount()
   return frames->size();
 }
 
+AnimationTransform* AnimationTransform::copy(AnimationTransform* other)
+{
+  AnimationTransform* rtn = Application::getGC()->gc_new<AnimationTransform>();
+
+  rtn->partName = other->partName;
+  rtn->pX = other->pX;
+  rtn->pY = other->pY;
+  rtn->pZ = other->pZ;
+  rtn->rX = other->rX;
+  rtn->rY = other->rY;
+  rtn->rZ = other->rZ;
+
+  return rtn;
+}
+
+AnimationFrame* AnimationFrame::copy(AnimationFrame* other)
+{
+  AnimationFrame* rtn = Application::getGC()->gc_new<AnimationFrame>();
+
+  for(size_t i = 0; i < other->transforms->size(); i++)
+  {
+    rtn->transforms->push_back(AnimationTransform::copy(other->transforms->at(i)));
+  }
+
+  return rtn;
+}
+
 AnimationFrame::AnimationFrame()
 {
   transforms = Application::getGC()->gc_list<AnimationTransform*>();

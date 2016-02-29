@@ -30,7 +30,7 @@ public:
   {
     push_back(t);
 
-    for(size_t i = idx; i < size(); i++)
+    for(size_t i = idx; i < size() - 1; i++)
     {
       at(i + 1) = at(i);
     }
@@ -152,6 +152,21 @@ public:
 
     return rtn;
   }
+
+/*
+  template <class N, class U>
+  N* gc_new(U u)
+  {
+    void* data = NULL;
+    N* rtn = NULL;
+
+    data = gc_alloc(gc_ctx, sizeof(*rtn));
+    rtn = new(data) N(u);
+    gc_finalizer(gc_ctx, rtn, gc_delete<N>);
+
+    return rtn;
+  }
+*/
 
   template <class N, class U, class V>
   N* gc_new(U& u, V& v)

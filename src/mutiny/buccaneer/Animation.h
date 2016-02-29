@@ -31,12 +31,14 @@ public:
   float rZ;
 
   AnimationTransform();
+  static AnimationTransform* copy(AnimationTransform* other);
 
 };
 
 class AnimationFrame
 {
 public:
+  static AnimationFrame* copy(AnimationFrame* other);
   AnimationFrame();
   internal::gc::list<AnimationTransform*>* transforms;
 
