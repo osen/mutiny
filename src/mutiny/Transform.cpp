@@ -144,13 +144,20 @@ Vector3 Transform::getScale()
 
 void Transform::detachChildren()
 {
-  for(int i = 0; i < children->size(); i++)
+  while(children->size() > 0)
   {
-    Transform* child = children->at(i);
+    Transform* child = children->at(0);
     child->setParent(NULL);
-    // Dont just detach.. destroy
     Object::destroy(child->getGameObject());
   }
+
+  //for(int i = 0; i < children->size(); i++)
+  //{
+  //  Transform* child = children->at(i);
+  //  child->setParent(NULL);
+  //  // Dont just detach.. destroy
+  //  Object::destroy(child->getGameObject());
+  //}
 
   children->clear();
 }

@@ -19,6 +19,7 @@ struct GcContext
 {
   struct GcBlock *root;
   struct GcBlock *last;
+  int needsCollect;
 };
 
 struct GcContext *gc_context()
@@ -48,6 +49,8 @@ int gc_addblock(struct GcContext *ctx, struct GcBlock *block)
   ctx->last->next = block;
   block->prev = ctx->last;
   ctx->last = block;
+
+  ctx->needsCollect = 1;
 
   return 0;
 }
@@ -299,6 +302,11 @@ void gc_collect(struct GcContext *ctx)
 {
   struct GcBlock *block = NULL;
 
+  if(ctx->needsCollect == 0)
+  {
+    return;
+  }
+
   if(ctx->root == NULL)
   {
     return;
@@ -315,5 +323,7 @@ void gc_collect(struct GcContext *ctx)
   gc_scan_block(ctx, ctx->root);
 
   gc_purgeblocks(ctx);
+
+  ctx->needsCollect = 0;
 }
 
