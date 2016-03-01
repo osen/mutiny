@@ -242,20 +242,34 @@ void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, int lef
   float top = 1.0f / (float)topBorder;
   float bottom = 1.0f / (float)bottomBorder;
 
+  std::vector<Rect> rects;
+  std::vector<Rect> sourceRects;
+
   // Top
-  drawTexture(Rect(rect.x, rect.y, texture->getWidth() * left, texture->getHeight() * top), texture, Rect(0, 0, left, top), material);
-  drawTexture(Rect(rect.x + (texture->getWidth() * left), rect.y, rect.width - (texture->getWidth() * left) - (texture->getWidth() * right), texture->getHeight() * top), texture, Rect(left, 0, 1.0f - right, top), material);
-  drawTexture(Rect(rect.x + rect.width - (texture->getWidth() * right), rect.y, texture->getWidth() * right, texture->getHeight() * top), texture, Rect(1.0f - right, 0, 1.0f, top), material);
+  rects.push_back(Rect(rect.x, rect.y, texture->getWidth() * left, texture->getHeight() * top));
+  sourceRects.push_back(Rect(0, 0, left, top));
+  rects.push_back(Rect(rect.x + (texture->getWidth() * left), rect.y, rect.width - (texture->getWidth() * left) - (texture->getWidth() * right), texture->getHeight() * top));
+  sourceRects.push_back(Rect(left, 0, 1.0f - right, top));
+  rects.push_back(Rect(rect.x + rect.width - (texture->getWidth() * right), rect.y, texture->getWidth() * right, texture->getHeight() * top));
+  sourceRects.push_back(Rect(1.0f - right, 0, 1.0f, top));
 
   // Bottom
-  drawTexture(Rect(rect.x, rect.y + rect.height - (texture->getHeight() * bottom), texture->getWidth() * left, texture->getHeight() * bottom), texture, Rect(0, 1.0f - bottom, left, 1.0f), material);
-  drawTexture(Rect(rect.x + (texture->getWidth() * left), rect.y + rect.height - (texture->getHeight() * bottom), rect.width - (texture->getWidth() * left) - (texture->getWidth() * right), texture->getHeight() * bottom), texture, Rect(left, 1.0f - bottom, 1.0f - right, 1.0f), material);
-  drawTexture(Rect(rect.x + rect.width - (texture->getWidth() * right), rect.y + rect.height - (texture->getHeight() * bottom), texture->getWidth() * right, texture->getHeight() * bottom), texture, Rect(1.0f - right, 1.0f - bottom, 1.0f, 1.0f), material);
+  rects.push_back(Rect(rect.x, rect.y + rect.height - (texture->getHeight() * bottom), texture->getWidth() * left, texture->getHeight() * bottom));
+  sourceRects.push_back(Rect(0, 1.0f - bottom, left, 1.0f));
+  rects.push_back(Rect(rect.x + (texture->getWidth() * left), rect.y + rect.height - (texture->getHeight() * bottom), rect.width - (texture->getWidth() * left) - (texture->getWidth() * right), texture->getHeight() * bottom));
+  sourceRects.push_back(Rect(left, 1.0f - bottom, 1.0f - right, 1.0f));
+  rects.push_back(Rect(rect.x + rect.width - (texture->getWidth() * right), rect.y + rect.height - (texture->getHeight() * bottom), texture->getWidth() * right, texture->getHeight() * bottom));
+  sourceRects.push_back(Rect(1.0f - right, 1.0f - bottom, 1.0f, 1.0f));
 
   // Side
-  drawTexture(Rect(rect.x, rect.y + texture->getHeight() * top, texture->getWidth() * left, rect.height - texture->getHeight() * top - texture->getHeight() * bottom), texture, Rect(0, top, left, 1.0f - top), material);
-  drawTexture(Rect(rect.x + rect.width - texture->getWidth() * right, rect.y + texture->getHeight() * top, texture->getWidth() * right, rect.height - texture->getHeight() * top - texture->getHeight() * bottom), texture, Rect(1.0f - right, top, 1.0f, 1.0f - bottom), material);
-  drawTexture(Rect(rect.x + texture->getWidth() * left, rect.y + texture->getHeight() * top, rect.width - texture->getWidth() * right - texture->getWidth() * left, rect.height - texture->getHeight() * top - texture->getHeight() * bottom), texture, Rect(left, top, 1.0f - right, 1.0f - top), material);
+  rects.push_back(Rect(rect.x, rect.y + texture->getHeight() * top, texture->getWidth() * left, rect.height - texture->getHeight() * top - texture->getHeight() * bottom));
+  sourceRects.push_back(Rect(0, top, left, 1.0f - top));
+  rects.push_back(Rect(rect.x + rect.width - texture->getWidth() * right, rect.y + texture->getHeight() * top, texture->getWidth() * right, rect.height - texture->getHeight() * top - texture->getHeight() * bottom));
+  sourceRects.push_back(Rect(1.0f - right, top, 1.0f, 1.0f - bottom));
+  rects.push_back(Rect(rect.x + texture->getWidth() * left, rect.y + texture->getHeight() * top, rect.width - texture->getWidth() * right - texture->getWidth() * left, rect.height - texture->getHeight() * top - texture->getHeight() * bottom));
+  sourceRects.push_back(Rect(left, top, 1.0f - right, 1.0f - top));
+
+  drawTextureBatch(rects, texture, sourceRects, material);
 }
 
 void Graphics::drawTexture(Rect rect, Texture* texture, Material* material)
