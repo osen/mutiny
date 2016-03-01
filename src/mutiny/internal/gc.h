@@ -9,6 +9,7 @@ struct GcContext *gc_context();
 void *gc_alloc(struct GcContext *ctx, size_t size);
 int gc_finalizer(struct GcContext *ctx, void *ptr, void (*deleter)(void*));
 void gc_collect(struct GcContext *ctx);
+void gc_collect_incr(struct GcContext *ctx);
 void gc_destroy(struct GcContext *ctx);
 
 #endif

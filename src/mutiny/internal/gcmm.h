@@ -125,6 +125,11 @@ public:
     ::gc_collect(gc_ctx);
   }
 
+  void gc_collect_incr()
+  {
+    ::gc_collect_incr(gc_ctx);
+  }
+
 /*
   template <class N, class... U>
   N* gc_new(U&&... u)

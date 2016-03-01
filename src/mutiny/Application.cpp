@@ -480,11 +480,13 @@ void Application::loadLevel(std::string path)
   if(context->running == true)
   {
     context->levelChange = path;
+    context->fullCollect = 1;
   }
   else
   {
     context->loadedLevelName = path;
     loadLevel();
+    context->fullCollect = 1;
   }
 }
 
@@ -647,7 +649,15 @@ void Application::idle()
 
   context->graphicsCache->sweepUnused();
 
-  context->gc_ctx->gc_collect();
+  if(context->fullCollect > 0)
+  {
+    context->gc_ctx->gc_collect();
+    context->fullCollect--;
+  }
+  else
+  {
+    context->gc_ctx->gc_collect_incr();
+  }
 }
 
 void Application::motion(int x, int y)

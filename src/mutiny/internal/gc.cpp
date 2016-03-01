@@ -5,6 +5,10 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#define UNMARK 0
+#define MARK 1
+#define SWEEP 2
+
 struct GcBlock
 {
   void *ptr;
@@ -17,6 +21,10 @@ struct GcBlock
 
 struct GcContext
 {
+  int state;
+  struct GcBlock **processList;
+  int processListCount;
+
   struct GcBlock *root;
   struct GcBlock *last;
   int needsCollect;
@@ -27,6 +35,7 @@ struct GcContext *gc_context()
   struct GcContext *rtn = NULL;
 
   rtn = (struct GcContext*)calloc(1, sizeof(*rtn));
+  rtn->processList = (struct GcBlock**)calloc(1024, sizeof(*rtn->processList));
 
   return rtn;
 }
@@ -97,6 +106,7 @@ void gc_destroy(struct GcContext *ctx)
     printf("Garbage Collector: %i destroys\n", destroyCount);
   }
 
+  free(ctx->processList);
   free(ctx);
 }
 
@@ -290,6 +300,55 @@ void gc_scan_block(struct GcContext *ctx, struct GcBlock *block)
   }
 }
 
+void gc_scan_block_incr(struct GcContext *ctx, struct GcBlock *block)
+{
+  struct GcBlock *currentBlock = NULL;
+  uintptr_t current = 0;
+  uintptr_t end = 0;
+
+  block->generation = 1;
+
+  if(block->size <= 0)
+  {
+    return;
+  }
+
+  current = (uintptr_t)block->ptr;
+  end = current + block->size;
+  end -= sizeof(block->ptr);
+
+  while(current <= end)
+  {
+    void **test = (void**)current;
+    currentBlock = ctx->root;
+
+    while(currentBlock != NULL)
+    {
+      // We will let self references pass
+      //if(currentBlock == block)
+      //{
+      //  currentBlock = currentBlock->next;
+      //  continue;
+      //}
+
+      if(*test == currentBlock->ptr)
+      {
+        if(currentBlock->generation != 1)
+        {
+          ctx->processList[ctx->processListCount] = currentBlock;
+          ctx->processListCount++;
+        }
+
+        break;
+      }
+
+      currentBlock = currentBlock->next;
+    }
+
+    current++;
+  }
+}
+
 /******************************************************************************
  * gc_collect
  *
@@ -325,5 +384,44 @@ void gc_collect(struct GcContext *ctx)
   gc_purgeblocks(ctx);
 
   ctx->needsCollect = 0;
+  ctx->state = UNMARK;
+}
+
+void gc_collect_incr(struct GcContext *ctx)
+{
+  struct GcBlock *block = NULL;
+
+  if(ctx->state == UNMARK)
+  {
+    printf("Marking blocks\n");
+    block = ctx->root;
+
+    while(block != NULL)
+    {
+      block->generation = -1;
+      block = block->next;
+    }
+
+    ctx->processList[0] = ctx->root;
+    ctx->processListCount = 1;
+    ctx->state = MARK;
+  }
+  else if(ctx->state == MARK)
+  {
+    block = ctx->processList[ctx->processListCount - 1];
+    ctx->processListCount--;
+    gc_scan_block_incr(ctx, block);
+
+    if(ctx->processListCount <= 0)
+    {
+      ctx->state = SWEEP;
+    }
+  }
+  else if(ctx->state == SWEEP)
+  {
+    printf("Sweeping blocks\n");
+    gc_purgeblocks(ctx);
+    ctx->state = UNMARK;
+  }
 }
 

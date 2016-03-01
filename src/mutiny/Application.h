@@ -42,6 +42,7 @@ struct Context
 #ifdef USE_SDL
   SDL_Surface* screen;
 #endif
+  int fullCollect;
   bool running;
   std::string loadedLevelName;
   std::string levelChange;
