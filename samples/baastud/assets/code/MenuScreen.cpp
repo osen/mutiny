@@ -24,17 +24,17 @@ void MenuScreen::onAwake()
 
 void MenuScreen::onGui()
 {
-  if(Gui::button(Rect(Screen::getWidth() - 280, 350, 200, 50), "begin game") == true)
+  if(Gui::button(Rect(Screen::getWidth() - 280, 350, 200, 50), "Begin Game") == true)
   {
     Audio::stopMusic();
     Application::loadLevel("game");
   }
-  else if(Gui::button(Rect(Screen::getWidth() - 280, 425, 200, 50), "audio test") == true)
+  else if(Gui::button(Rect(Screen::getWidth() - 280, 425, 200, 50), "Audio Test") == true)
   {
     Audio::stopMusic();
     Application::loadLevel("audiotest");
   }
-  else if(Gui::button(Rect(Screen::getWidth() - 110, Screen::getHeight() - 40, 100, 30), "quit") == true)
+  else if(Gui::button(Rect(Screen::getWidth() - 110, Screen::getHeight() - 40, 100, 30), "Quit") == true)
   {
     Application::quit();
   }
