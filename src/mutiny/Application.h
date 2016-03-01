@@ -34,6 +34,7 @@ class MeshRenderer;
 class ParticleRenderer;
 class GuiSkin;
 class Texture2d;
+class GraphicsCache;
 
 struct Context
 {
@@ -59,6 +60,7 @@ struct Context
   Material* defaultMaterial;
   RenderTexture* renderTarget;
   Mesh* tempMesh;
+  GraphicsCache* graphicsCache;
 
   // Material
   Material* currentMaterial;

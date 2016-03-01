@@ -24,6 +24,7 @@ public:
 
   bool contains(Vector3 point);
   bool contains(Vector2 point);
+  bool equals(Rect& other);
 
 };
 

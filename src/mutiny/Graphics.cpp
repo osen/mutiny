@@ -26,6 +26,96 @@ namespace mutiny
 namespace engine
 {
 
+GraphicsCacheEntry* GraphicsCacheEntry::create()
+{
+  GraphicsCacheEntry* rtn = NULL;
+
+  rtn = Application::getGC()->gc_new<GraphicsCacheEntry>();
+  rtn->useCount = 10;
+
+  return rtn;
+}
+
+GraphicsCache* GraphicsCache::create()
+{
+  GraphicsCache* rtn = NULL;
+
+  rtn = Application::getGC()->gc_new<GraphicsCache>();
+  rtn->entries = Application::getGC()->gc_list<GraphicsCacheEntry*>();
+
+  return rtn;
+}
+
+Mesh* GraphicsCache::matchMesh(std::vector<Rect>& rects, std::vector<Rect>& sourceRects)
+{
+  for(size_t i = 0; i < entries->size(); i++)
+  {
+    GraphicsCacheEntry* entry = entries->at(i);
+    bool different = false;
+
+    if(rects.size() != entry->rects.size() || sourceRects.size() != entry->sourceRects.size())
+    {
+      continue;
+    }
+
+    for(size_t r = 0; r < entry->rects.size(); r++)
+    {
+      if(rects.at(r).equals(entry->rects.at(r)) == false)
+      {
+        different = true;
+        break;
+      }
+    }
+
+    if(different == true)
+    {
+      continue;
+    }
+
+    for(size_t r = 0; r < entry->sourceRects.size(); r++)
+    {
+      if(sourceRects.at(r).equals(entry->sourceRects.at(r)) == false)
+      {
+        different = true;
+        break;
+      }
+    }
+
+    if(different == true)
+    {
+      continue;
+    }
+
+    entry->useCount = 10;
+    return entry->mesh;
+  }
+
+  return NULL;
+}
+
+void GraphicsCache::addMesh(std::vector<Rect>& rects, std::vector<Rect>& sourceRects, Mesh* mesh)
+{
+  GraphicsCacheEntry* entry = GraphicsCacheEntry::create();
+  entry->rects = rects;
+  entry->sourceRects = sourceRects;
+  entry->mesh = mesh;
+  entries->push_back(entry);
+}
+
+void GraphicsCache::sweepUnused()
+{
+  for(size_t i = 0; i < entries->size(); i++)
+  {
+    entries->at(i)->useCount--;
+
+    if(entries->at(i)->useCount <= 0)
+    {
+      entries->remove_at(i);
+      i--;
+    }
+  }
+}
+
 // TODO: Does this need to be re-enabled every draw?
 void Graphics::setRenderTarget(RenderTexture* renderTarget)
 {
@@ -56,7 +146,8 @@ void Graphics::drawTextureBatch(std::vector<Rect> rects, Texture* texture, std::
   if(material == NULL)
   {
     // TODO: Use a unique material with MVP set
-    material = Application::context->defaultMaterial;
+    //material = Application::context->defaultMaterial;
+    material = Application::context->guiMaterial;
     //material = Material::guiMaterial;
     material->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
     material->setMatrix("in_View", Matrix4x4::getIdentity());
@@ -103,12 +194,21 @@ void Graphics::drawTextureBatch(std::vector<Rect> rects, Texture* texture, std::
     Application::context->tempMesh = Application::getGC()->gc_new<Mesh>();
   }
 
-  Mesh* mesh = Application::context->tempMesh;
-  mesh->setVertices(vertices);
-  mesh->setUv(uv);
-  //mesh.setColors(colors);
+  GraphicsCache* cache = Application::context->graphicsCache;
+  Mesh* mesh = cache->matchMesh(rects, sourceRects);
 
-  mesh->setTriangles(triangles, 0);
+  if(mesh == NULL)
+  {
+    //mesh = Application::context->tempMesh;
+    mesh = Application::getGC()->gc_new<Mesh>();
+    mesh->setVertices(vertices);
+    mesh->setUv(uv);
+    //mesh.setColors(colors);
+
+    mesh->setTriangles(triangles, 0);
+    cache->addMesh(rects, sourceRects, mesh);
+  }
+
   material->setMainTexture(texture);
 
   currentRenderTexture = RenderTexture::getActive();

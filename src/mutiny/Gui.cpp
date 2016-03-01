@@ -50,7 +50,7 @@ void Gui::label(Rect rect, std::string text)
 
   for(int i = 0; i < text.length(); i++)
   {
-    CharacterInfo info;
+    CharacterInfo info = {};
     int padding = 0;
 
     if(skin->getButton()->getAlignment() == TextAnchor::MiddleLeft)

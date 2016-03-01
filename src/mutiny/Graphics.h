@@ -3,6 +3,7 @@
 
 #include "Rect.h"
 #include "Color.h"
+#include "internal/gcmm.h"
 
 #include <GL/glew.h>
 
@@ -23,6 +24,37 @@ class Mesh;
 class Camera;
 class Gui;
 class Application;
+class GraphicsCache;
+class Graphics;
+
+class GraphicsCacheEntry
+{
+  friend class mutiny::engine::GraphicsCache;
+
+private:
+  static GraphicsCacheEntry* create();
+
+  std::vector<Rect> rects;
+  std::vector<Rect> sourceRects;
+  Mesh* mesh;
+  int useCount;
+
+};
+
+class GraphicsCache
+{
+  friend class mutiny::engine::Graphics;
+  friend class mutiny::engine::Application;
+
+private:
+  static GraphicsCache* create();
+  Mesh* matchMesh(std::vector<Rect>& rects, std::vector<Rect>& sourceRects);
+  void addMesh(std::vector<Rect>& rects, std::vector<Rect>& sourceRects, Mesh* mesh);
+  void sweepUnused();
+
+  internal::gc::list<GraphicsCacheEntry*>* entries;
+
+};
 
 class Graphics
 {

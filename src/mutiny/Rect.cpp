@@ -50,6 +50,16 @@ bool Rect::contains(Vector3 point)
   return true;
 }
 
+bool Rect::equals(Rect& other)
+{
+  if(x != other.x) return false;
+  if(y != other.y) return false;
+  if(width != other.width) return false;
+  if(height != other.height) return false;
+
+  return true;
+}
+
 }
 
 }

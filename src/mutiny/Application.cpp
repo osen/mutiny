@@ -148,6 +148,7 @@ void Application::init(int argc, char* argv[])
   }
 
   context->defaultTexture->apply();
+  context->graphicsCache = GraphicsCache::create();
 
   Shader* shader = Resources::load<Shader>("shaders/internal-mesh-normal");
   if(shader == NULL) { throw Exception("Failed to load default shader"); }
@@ -643,6 +644,8 @@ void Application::idle()
 
   Input::downMouseButtons.clear();
   Input::upMouseButtons.clear();
+
+  context->graphicsCache->sweepUnused();
 
   context->gc_ctx->gc_collect();
 }
