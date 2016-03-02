@@ -7,7 +7,8 @@
 
 #define UNMARK 0
 #define MARK 1
-#define SWEEP 2
+#define REMARK 2
+#define SWEEP 3
 
 struct GcBlock
 {
@@ -300,6 +301,52 @@ void gc_scan_block(struct GcContext *ctx, struct GcBlock *block)
   }
 }
 
+int gc_rescan_block(struct GcContext *ctx, struct GcBlock *block)
+{
+  struct GcBlock *currentBlock = NULL;
+  uintptr_t current = 0;
+  uintptr_t end = 0;
+
+  currentBlock = ctx->root;
+
+  while(currentBlock != NULL)
+  {
+    if(currentBlock->size <= 0)
+    {
+      currentBlock = currentBlock->next;
+      continue;
+    }
+
+    if(currentBlock->generation == -1)
+    {
+      currentBlock = currentBlock->next;
+      continue;
+    }
+
+    current = (uintptr_t)currentBlock->ptr;
+    end = current + currentBlock->size;
+    end -= sizeof(currentBlock->ptr);
+
+    while(current <= end)
+    {
+      void **test = (void**)current;
+
+      if(*test == block->ptr)
+      {
+        block->generation = 1;
+
+        return 1;
+      }
+
+      current++;
+    }
+
+    currentBlock = currentBlock->next;
+  }
+
+  return 0;
+}
+
 void gc_scan_block_incr(struct GcContext *ctx, struct GcBlock *block)
 {
   struct GcBlock *currentBlock = NULL;
@@ -411,6 +458,43 @@ void gc_collect_incr(struct GcContext *ctx)
     block = ctx->processList[ctx->processListCount - 1];
     ctx->processListCount--;
     gc_scan_block_incr(ctx, block);
+
+    if(ctx->processListCount <= 0)
+    {
+      ctx->state = REMARK;
+    }
+  }
+  else if(ctx->state == REMARK)
+  {
+    if(ctx->processListCount <= 0)
+    {
+      printf("Remarking blocks\n");
+      block = ctx->root;
+
+      while(block != NULL)
+      {
+        if(block->generation == -1)
+        {
+          ctx->processList[ctx->processListCount] = block;
+          ctx->processListCount++;
+        }
+
+        block = block->next;
+      }
+
+      printf("%i blocks set to be remarked\n", ctx->processListCount);
+    }
+
+    if(ctx->processListCount > 0)
+    {
+      if(gc_rescan_block(ctx, ctx->processList[ctx->processListCount - 1]) == 1)
+      {
+        ctx->processListCount = 0;
+        return;
+      }
+
+      ctx->processListCount--;
+    }
 
     if(ctx->processListCount <= 0)
     {
