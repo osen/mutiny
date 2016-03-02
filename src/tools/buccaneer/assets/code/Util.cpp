@@ -1,7 +1,12 @@
 #include "Util.h"
 
 #include <sys/types.h>
+
+#ifdef _WIN32
+#include "dirent.h"
+#else
 #include <dirent.h>
+#endif
 
 void Util::scanDir(std::string directory, std::vector<std::string>* files)
 {
