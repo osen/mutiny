@@ -5,9 +5,9 @@
 namespace gl
 {
 
-Uint* Uint::createProgram()
+shared<Uint> Uint::createProgram()
 {
-  Uint* rtn = mutiny::engine::Application::getGC()->gc_new<Uint>();
+  shared<Uint> rtn(new Uint());
 
   rtn->uint = glCreateProgram();
 
@@ -21,9 +21,9 @@ Uint* Uint::createProgram()
   return rtn;
 }
 
-Uint* Uint::createVertexShader()
+shared<Uint> Uint::createVertexShader()
 {
-  Uint* rtn = mutiny::engine::Application::getGC()->gc_new<Uint>();
+  shared<Uint> rtn(new Uint());
 
   rtn->uint = glCreateShader(GL_VERTEX_SHADER);
 
@@ -37,9 +37,9 @@ Uint* Uint::createVertexShader()
   return rtn;
 }
 
-Uint* Uint::createFragmentShader()
+shared<Uint> Uint::createFragmentShader()
 {
-  Uint* rtn = mutiny::engine::Application::getGC()->gc_new<Uint>();
+  shared<Uint> rtn(new Uint());
 
   rtn->uint = glCreateShader(GL_FRAGMENT_SHADER);
 
@@ -53,9 +53,9 @@ Uint* Uint::createFragmentShader()
   return rtn;
 }
 
-Uint* Uint::genBuffer()
+shared<Uint> Uint::genBuffer()
 {
-  Uint* rtn = mutiny::engine::Application::getGC()->gc_new<Uint>();
+  shared<Uint> rtn(new Uint());
 
   glGenBuffers(1, &rtn->uint);
 
@@ -69,9 +69,9 @@ Uint* Uint::genBuffer()
   return rtn;
 }
 
-Uint* Uint::genTexture()
+shared<Uint> Uint::genTexture()
 {
-  Uint* rtn = mutiny::engine::Application::getGC()->gc_new<Uint>();
+  shared<Uint> rtn(new Uint());
 
   glGenTextures(1, &rtn->uint);
 
@@ -85,9 +85,9 @@ Uint* Uint::genTexture()
   return rtn;
 }
 
-Uint* Uint::genFramebuffer()
+shared<Uint> Uint::genFramebuffer()
 {
-  Uint* rtn = mutiny::engine::Application::getGC()->gc_new<Uint>();
+  shared<Uint> rtn(new Uint());
 
   if(glGenFramebuffers == NULL)
   {
@@ -106,9 +106,9 @@ Uint* Uint::genFramebuffer()
   return rtn;
 }
 
-Uint* Uint::genRenderbuffer()
+shared<Uint> Uint::genRenderbuffer()
 {
-  Uint* rtn = mutiny::engine::Application::getGC()->gc_new<Uint>();
+  shared<Uint> rtn(new Uint());
 
   glGenRenderbuffers(1, &rtn->uint);
 

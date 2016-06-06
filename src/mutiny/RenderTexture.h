@@ -29,8 +29,8 @@ public:
 private:
   static RenderTexture* active;
 
-  gl::Uint* nativeFrameBuffer;
-  gl::Uint* nativeRenderBuffer;
+  shared<gl::Uint> nativeFrameBuffer;
+  shared<gl::Uint> nativeRenderBuffer;
 
 };
 

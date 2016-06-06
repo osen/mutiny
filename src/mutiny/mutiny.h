@@ -53,6 +53,7 @@
 #include "TextAnchor.h"
 #include "GuiUtility.h"
 #include "Exception.h"
+#include "ref.h"
 
 #include "buccaneer/buccaneer.h"
 #include "parrot/parrot.h"

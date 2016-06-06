@@ -1,6 +1,7 @@
 #ifndef MUTINY_ENGINE_TEXTURE_H
 #define MUTINY_ENGINE_TEXTURE_H
 
+#include "ref.h"
 #include "Object.h"
 #include "internal/glmm.h"
 
@@ -28,7 +29,7 @@ protected:
   int width;
   int height;
 
-  gl::Uint* nativeTexture;
+  shared<gl::Uint> nativeTexture;
 
 };
 

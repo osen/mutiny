@@ -33,7 +33,6 @@ class Mesh : public Object
   friend class mutiny::engine::Graphics;
 
 public:
-  Mesh();
   void recalculateNormals();
   void recalculateBounds();
 
@@ -62,9 +61,9 @@ private:
   std::vector<Vector3> normals;
   std::vector<Color> colors;
 
-  internal::gc::list<gl::Uint*>* positionBufferIds;
-  internal::gc::list<gl::Uint*>* uvBufferIds;
-  internal::gc::list<gl::Uint*>* normalBufferIds;
+  std::vector<shared<gl::Uint> > positionBufferIds;
+  std::vector<shared<gl::Uint> > uvBufferIds;
+  std::vector<shared<gl::Uint> > normalBufferIds;
 
   Bounds bounds;
 

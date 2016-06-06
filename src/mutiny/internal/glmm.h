@@ -1,21 +1,23 @@
 #ifndef GLMM_H
 #define GLMM_H
 
+#include "../ref.h"
+
 #include <GL/glew.h>
 
 namespace gl
 {
 
-class Uint
+class Uint : public enable_ref
 {
 public:
-  static Uint* genBuffer();
-  static Uint* genTexture();
-  static Uint* genFramebuffer();
-  static Uint* genRenderbuffer();
-  static Uint* createVertexShader();
-  static Uint* createFragmentShader();
-  static Uint* createProgram();
+  static shared<Uint> genBuffer();
+  static shared<Uint> genTexture();
+  static shared<Uint> genFramebuffer();
+  static shared<Uint> genRenderbuffer();
+  static shared<Uint> createVertexShader();
+  static shared<Uint> createFragmentShader();
+  static shared<Uint> createProgram();
 
   ~Uint();
 

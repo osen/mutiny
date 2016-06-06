@@ -15,4 +15,9 @@
   #define USE_WINAPI 1
 #endif
 
+#ifdef HAS_TR1_NAMESPACE
+  #include <tr1/memory>
+  #define shared std::tr1::shared_ptr
+#endif
+
 #endif

@@ -16,13 +16,6 @@ namespace mutiny
 namespace engine
 {
 
-Mesh::Mesh()
-{
-  positionBufferIds = Application::getGC()->gc_list<gl::Uint*>();
-  uvBufferIds = Application::getGC()->gc_list<gl::Uint*>();
-  normalBufferIds = Application::getGC()->gc_list<gl::Uint*>();
-}
-
 Mesh* Mesh::load(std::string path)
 {
   internal::WavefrontParser parser(path + ".obj");
@@ -115,11 +108,11 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
 {
   bool insert = false;
 
-  if(submesh > positionBufferIds->size())
+  if(submesh > positionBufferIds.size())
   {
     throw Exception("Submesh index out of bounds");
   }
-  else if(submesh == positionBufferIds->size())
+  else if(submesh == positionBufferIds.size())
   {
     this->triangles.push_back(triangles);
     insert = true;
@@ -140,16 +133,16 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
     values.push_back(vertices.at(triangles.at(i)).z);
   }
 
-  gl::Uint* positionBufferId = NULL;
+  shared<gl::Uint> positionBufferId;
 
   if(insert == true)
   {
     positionBufferId = gl::Uint::genBuffer();
-    positionBufferIds->push_back(positionBufferId);
+    positionBufferIds.push_back(positionBufferId);
   }
   else
   {
-    positionBufferId = positionBufferIds->at(submesh);
+    positionBufferId = positionBufferIds.at(submesh);
   }
 
   glBindBuffer(GL_ARRAY_BUFFER, positionBufferId->getGLuint());
@@ -170,16 +163,16 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
       values.push_back(normals.at(triangles.at(i)).z);
     }
 
-    gl::Uint* normalBufferId = NULL;
+    shared<gl::Uint> normalBufferId;
 
     if(insert == true)
     {
       normalBufferId = gl::Uint::genBuffer();
-      normalBufferIds->push_back(normalBufferId);
+      normalBufferIds.push_back(normalBufferId);
     }
     else
     {
-      normalBufferId = normalBufferIds->at(submesh);
+      normalBufferId = normalBufferIds.at(submesh);
     }
 
     glBindBuffer(GL_ARRAY_BUFFER, normalBufferId->getGLuint());
@@ -200,16 +193,16 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
       values.push_back(uv.at(triangles.at(i)).y);
     }
 
-    gl::Uint* uvBufferId = NULL;
+    shared<gl::Uint> uvBufferId;
 
     if(insert == true)
     {
       uvBufferId = gl::Uint::genBuffer();
-      uvBufferIds->push_back(uvBufferId);
+      uvBufferIds.push_back(uvBufferId);
     }
     else
     {
-      uvBufferId = uvBufferIds->at(submesh);
+      uvBufferId = uvBufferIds.at(submesh);
     }
 
     glBindBuffer(GL_ARRAY_BUFFER, uvBufferId->getGLuint());
