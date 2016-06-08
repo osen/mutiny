@@ -17,9 +17,9 @@ namespace mutiny
 namespace engine
 {
 
-Texture2d* Texture2d::create(int width, int height)
+shared<Texture2d> Texture2d::create(int width, int height)
 {
-  Texture2d* rtn = Application::getGC()->gc_new<Texture2d>();
+  shared<Texture2d> rtn(new Texture2d());
   rtn->width = width;
   rtn->height = height;
 
@@ -30,12 +30,16 @@ Texture2d::Texture2d()
 {
   width = 256;
   height = 256;
+  //Application::context->paths.push_back("");
+  //Application::context->objects.push_back(shared<Texture2d>(this));
 }
 
 Texture2d::Texture2d(int width, int height)
 {
   this->width = width;
   this->height = height;
+  //Application::context->paths.push_back("");
+  //Application::context->objects.push_back(shared<Texture2d>(this));
 }
 
 Texture2d::~Texture2d()
@@ -94,7 +98,7 @@ void Texture2d::apply()
 {
   std::vector<GLbyte> imageBytes;
 
-  if(nativeTexture == NULL)
+  if(nativeTexture.get() == NULL)
   {
     nativeTexture = gl::Uint::genTexture();
   }
@@ -152,9 +156,9 @@ int poweroftwo(int input)
   return input;
 }
 
-Texture2d* Texture2d::load(std::string path)
+ref<Texture2d> Texture2d::load(std::string path)
 {
-  internal::PngData* image = internal::PngData::create();
+  shared<internal::PngData> image = internal::PngData::create();
   path = path + ".png";
 
   if(lodepng_decode32_file(&image->image, &image->width, &image->height, path.c_str()) != 0)
@@ -162,9 +166,9 @@ Texture2d* Texture2d::load(std::string path)
     throw Exception("Failed to decode PNG file");
   }
 
-  Texture2d* texture = Texture2d::create(image->width, image->height);
+  ref<Texture2d> texture = new Texture2d(image->width, image->height);
 
-  if(texture->nativeTexture == NULL)
+  if(texture->nativeTexture.get() == NULL)
   {
     texture->nativeTexture = gl::Uint::genTexture();
   }

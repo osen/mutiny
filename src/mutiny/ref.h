@@ -6,6 +6,7 @@
 #include <vector>
 #include <memory>
 #include <string>
+#include <iostream>
 
 class ref_exception : public std::exception
 {
@@ -22,13 +23,12 @@ class ref;
 
 class enable_ref
 {
-public:
-  std::vector<ref<enable_ref>*> refs;
+  static void dummy(void *ptr);
 
+public:
+  shared<void> self;
   enable_ref();
-  enable_ref(const enable_ref& other);
   virtual ~enable_ref();
-  enable_ref& operator=(const enable_ref& other);
 
 };
 
@@ -36,119 +36,108 @@ template <typename T>
 class ref
 {
 public:
+  weak<void> ptr;
+
   ref()
   {
-    t = NULL;
+
   }
 
   ref(const T* t)
   {
-    this->t = (T*)t;
-    this->t->refs.push_back((ref<enable_ref>*)this);
+    if(t != NULL)
+    {
+      ptr = t->self;
+    }
   }
 
-  ref(const shared<T>& ptr)
+  ref(const shared<T>& other)
   {
-    t = ptr.get();
-    t->refs.push_back((ref<enable_ref>*)this);
+    if(other.get() != NULL)
+    {
+      ptr = other.get()->self;
+    }
   }
 
   ~ref()
   {
-    release();
+
   }
 
   T* get()
   {
-    if(t == NULL)
+    if(try_get() == NULL)
     {
       throw ref_exception("NULL pointer");
     }
 
-    return t;
+    return try_get();
   }
 
   T* try_get()
   {
-    return t;
+    return (T*)ptr.lock().get();
+  }
+
+  bool valid()
+  {
+    if(try_get() == NULL)
+    {
+      return false;
+    }
+
+    return true;
   }
 
   ref& operator= (const T* t)
   {
-    if(this->t == t) return *this;
+    ptr.reset();
 
-    release();
-
-    this->t = (T*)t;
-    this->t->refs.push_back((ref<enable_ref>*)this);
+    if(t != NULL)
+    {
+      ptr = t->self;
+    }
 
     return *this;
   }
 
   ref& operator= (const ref& other)
   {
-    if(this->t == other.t) return *this;
-
-    release();
-
-    t = other.t;
-    t->refs.push_back((ref<enable_ref>*)this);
+    ptr = other.ptr;
 
     return *this;
   }
 
   ref& operator= (const shared<T>& other)
   {
-    if(this->t == other.get()) return *this;
+    ptr.reset();
 
-    release();
-
-    t = other.get();
-    t->refs.push_back((ref<enable_ref>*)this);
+    if(other.get() != NULL)
+    {
+      ptr = other->self;
+    }
 
     return *this;
   }
 
   T* operator->()
   {
-    if(t == NULL)
+    if(ptr.lock().get() == NULL)
     {
       throw ref_exception("Dereferencing NULL pointer");
     }
 
-    return t;
+    return (T*)ptr.lock().get();
   }
 
   bool expired()
   {
-    if(t == NULL)
+    if(ptr.lock().get() == NULL)
     {
       return true;
     }
 
     return false;
-  }
-
-//private:
-  T* t;
-
-  void release()
-  {
-    if(t == NULL)
-    {
-      return;
-    }
-
-    for(size_t i = 0; i < t->refs.size(); i++)
-    {
-      if(t->refs.at(i) == (ref<enable_ref>*)this)
-      {
-        ((T*)t)->refs.erase(t->refs.begin() + i);
-        break;
-      }
-    }
-
-    t = NULL;
   }
 
 };

@@ -8,7 +8,7 @@ void mutiny_main()
 {
   Application::loadLevel("introduction");
 
-  GameObject* smGo = GameObject::create();
+  ref<GameObject> smGo = GameObject::create();
   smGo->addComponent<SceneManager>();
 }
 

@@ -2,6 +2,7 @@
 #include "MeshFilter.h"
 #include "GameObject.h"
 #include "Debug.h"
+#include "Mesh.h"
 
 namespace mutiny
 {
@@ -18,9 +19,9 @@ void MeshCollider::awake()
 {
   Debug::log("MeshCollider awaken");
 
-  MeshFilter* meshFilter = getGameObject()->getComponent<MeshFilter>();
+  ref<MeshFilter> meshFilter = getGameObject()->getComponent<MeshFilter>();
 
-  if(meshFilter != NULL)
+  if(meshFilter.valid())
   {
     mesh = meshFilter->getMesh();
     Debug::log("Added mesh");
@@ -29,12 +30,12 @@ void MeshCollider::awake()
   Collider::awake();
 }
 
-void MeshCollider::setMesh(Mesh* mesh)
+void MeshCollider::setMesh(ref<Mesh> mesh)
 {
   this->mesh = mesh;
 }
 
-Mesh* MeshCollider::getMesh()
+ref<Mesh> MeshCollider::getMesh()
 {
   return mesh;
 }

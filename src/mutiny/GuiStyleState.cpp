@@ -12,21 +12,19 @@ namespace engine
 
 GuiStyleState::GuiStyleState()
 {
-  background = NULL;
-  Texture2d* tex = Texture2d::create(1, 1);
-  defaultBackground = tex;
-  tex->setPixel(0, 0, Color(0, 0, 1, 1));
-  tex->apply();
+  defaultBackground = Texture2d::create(1, 1);
+  defaultBackground->setPixel(0, 0, Color(0, 0, 1, 1));
+  defaultBackground->apply();
 }
 
-void GuiStyleState::setBackground(Texture2d* background)
+void GuiStyleState::setBackground(ref<Texture2d> background)
 {
   this->background = background;
 }
 
-Texture2d* GuiStyleState::getBackground()
+ref<Texture2d> GuiStyleState::getBackground()
 {
-  if(background == NULL)
+  if(background.expired())
   {
     return defaultBackground;
   }

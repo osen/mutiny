@@ -7,20 +7,19 @@
 
 using namespace mutiny::engine;
 
-Audio* Audio::self = NULL;
+ref<Audio> Audio::singleton;
 
 void Audio::initialize()
 {
-  if(self == NULL)
+  if(singleton.expired())
   {
-    GameObject* audioGo = gcnew<GameObject>("AudioSystem");
-    Audio* audio = audioGo->addComponent<Audio>();
-    audio->sounds = gcnewlist<AudioClip*>();
+    ref<GameObject> audioGo = GameObject::create("AudioSystem");
+    ref<Audio> audio = audioGo->addComponent<Audio>();
     Object::dontDestroyOnLoad(audioGo);
-    self = audio;
+    singleton = audio;
   }
 
-  self->sounds->clear();
+  singleton->sounds.clear();
   // Load audio files
   addSound("audio/Ambient_2");
   addSound("audio/Ambient_1");
@@ -62,19 +61,19 @@ void Audio::initialize()
 
 void Audio::addSound(std::string path)
 {
-  AudioClip* clip = Resources::load<AudioClip>(path);
+  ref<AudioClip> clip = Resources::load<AudioClip>(path);
 
-  if(clip == NULL)
+  if(clip.expired())
   {
     throw std::exception();
   }
 
-  self->sounds->push_back(clip);
+  singleton->sounds.push_back(clip);
 }
 
 void Audio::playSound(int sound)
 {
-  AudioSource::playClipAtPoint(self->sounds->at(sound), Vector3());
+  AudioSource::playClipAtPoint(singleton->sounds.at(sound), Vector3());
 }
 
 void Audio::playMusic()

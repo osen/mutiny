@@ -4,10 +4,10 @@
 
 using namespace mutiny::engine;
 
-BloomCamera* BloomCamera::create()
+ref<BloomCamera> BloomCamera::create()
 {
-  GameObject* cameraGo = GameObject::create("BloomCamera");
-  BloomCamera* camera = cameraGo->addComponent<BloomCamera>();
+  ref<GameObject> cameraGo = GameObject::create("BloomCamera");
+  ref<BloomCamera> camera = cameraGo->addComponent<BloomCamera>();
 
   return camera;
 }
@@ -16,7 +16,7 @@ void BloomCamera::onAwake()
 {
   Debug::log("BloomCamera awoken");
 
-  Camera* camera = getGameObject()->addComponent<Camera>();
+  ref<Camera> camera = getGameObject()->addComponent<Camera>();
   camera->setBackgroundColor(Color(0, 0, 0, 1));
 
   regenRenderTextures();
@@ -39,7 +39,7 @@ void BloomCamera::regenRenderTextures()
   int idealWidth = Mathf::nextPowerOfTwo(Screen::getWidth());
   int idealHeight = Mathf::nextPowerOfTwo(Screen::getHeight());
 
-  if(originalPass != NULL)
+  if(originalPass.get() != NULL)
   {
     if(originalPass->getWidth() == idealWidth &&
        originalPass->getHeight() == idealHeight)
@@ -56,7 +56,7 @@ void BloomCamera::regenRenderTextures()
   blurPass2 = RenderTexture::create(idealWidth, idealHeight);
   mergePass = RenderTexture::create(idealWidth, idealHeight);
 
-  getGameObject()->getComponent<Camera>()->setTargetTexture(originalPass);
+  getGameObject()->getComponent<Camera>()->setTargetTexture(originalPass.get());
 }
 
 void BloomCamera::onUpdate()
@@ -69,12 +69,12 @@ void BloomCamera::onPostRender()
 {
   Rect rect(0, 0, 1, 1);
 
-  Graphics::setRenderTarget(lightKeyPass);
-  Graphics::drawTexture(rect, originalPass, lightKeyMaterial);
+  Graphics::setRenderTarget(lightKeyPass.get());
+  Graphics::drawTexture(rect, originalPass.get(), lightKeyMaterial.get());
   Graphics::setRenderTarget(NULL);
 
-  Graphics::setRenderTarget(blurPass1);
-  Graphics::drawTexture(rect, lightKeyPass, texturedMaterial);
+  Graphics::setRenderTarget(blurPass1.get());
+  Graphics::drawTexture(rect, lightKeyPass.get(), texturedMaterial.get());
   Graphics::setRenderTarget(NULL);
 
   bool swap = false;
@@ -86,26 +86,26 @@ void BloomCamera::onPostRender()
     if(swap == false)
     {
       texturedMaterial->setVector("in_Scale", Vector2(1.0f / ((float)idealWidth * 0.4f), 0));
-      Graphics::setRenderTarget(blurPass2);
-      Graphics::drawTexture(rect, blurPass1, texturedMaterial);
+      Graphics::setRenderTarget(blurPass2.get());
+      Graphics::drawTexture(rect, blurPass1.get(), texturedMaterial.get());
       swap = true;
     }
     else
     {
       texturedMaterial->setVector("in_Scale", Vector2(0, 1.0f / ((float)idealHeight * 0.4f)));
-      Graphics::setRenderTarget(blurPass1);
-      Graphics::drawTexture(rect, blurPass2, texturedMaterial);
+      Graphics::setRenderTarget(blurPass1.get());
+      Graphics::drawTexture(rect, blurPass2.get(), texturedMaterial.get());
       swap = false;
     }
 
     Graphics::setRenderTarget(NULL);
   }
 
-  Graphics::setRenderTarget(mergePass);
-  mergeMaterial->setTexture("in_Merge", blurPass1);
-  Graphics::drawTexture(rect, originalPass, mergeMaterial);
+  Graphics::setRenderTarget(mergePass.get());
+  mergeMaterial->setTexture("in_Merge", blurPass1.get());
+  Graphics::drawTexture(rect, originalPass.get(), mergeMaterial.get());
   Graphics::setRenderTarget(NULL);
 
-  Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), mergePass);
+  Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), mergePass.get());
 }
 

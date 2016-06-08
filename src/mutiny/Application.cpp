@@ -15,9 +15,9 @@
 #include "Gui.h"
 #include "Graphics.h"
 #include "Transform.h"
+#include "Mesh.h"
 #include "Exception.h"
 #include "internal/platform.h"
-#include "internal/gcmm.h"
 
 #include "internal/Util.h"
 #include "internal/CWrapper.h"
@@ -54,16 +54,12 @@ namespace mutiny
 namespace engine
 {
 
-Context* Application::context = NULL;
+shared<Context> Application::context;
 
 void Application::init(int argc, char* argv[])
 {
-  internal::gc::context* gc_ctx = new internal::gc::context();
-  context = gc_ctx->gc_new<Context>();
-  context->gc_ctx = gc_ctx;
+  context.reset(new Context());
 
-  context->objects = gc_ctx->gc_list<Object*>();
-  context->gameObjects = gc_ctx->gc_list<GameObject*>();
   context->running = false;
   context->argc = argc;
 
@@ -134,7 +130,7 @@ void Application::init(int argc, char* argv[])
 #endif
 
   context->defaultTexture = Texture2d::create(24, 24);
-  Object::dontDestroyOnLoad(context->defaultTexture);
+  Object::dontDestroyOnLoad(context->defaultTexture.get());
 
   for(int y = 0; y < 23; y+=2)
   {
@@ -150,32 +146,28 @@ void Application::init(int argc, char* argv[])
   context->defaultTexture->apply();
   context->graphicsCache = GraphicsCache::create();
 
-  Shader* shader = Resources::load<Shader>("shaders/internal-mesh-normal");
-  if(shader == NULL) { throw Exception("Failed to load default shader"); }
-  Object::dontDestroyOnLoad(shader);
+  ref<Shader> shader = Resources::load<Shader>("shaders/internal-mesh-normal");
+  if(shader.expired()) { throw Exception("Failed to load default shader"); }
+  Object::dontDestroyOnLoad(shader.get());
   context->meshNormalMaterial = Material::create(shader);
-  Object::dontDestroyOnLoad(context->meshNormalMaterial);
 
   shader = Resources::load<Shader>("shaders/internal-mesh-normal-texture");
-  if(shader == NULL) { Exception("Failed to load default shader"); }
-  Object::dontDestroyOnLoad(shader);
+  if(shader.expired()) { Exception("Failed to load default shader"); }
+  Object::dontDestroyOnLoad(shader.get());
   context->meshNormalTextureMaterial = Material::create(shader);
-  Object::dontDestroyOnLoad(context->meshNormalTextureMaterial);
 
   context->guiMaterial = Resources::load<Material>("shaders/default_gui");
-  Object::dontDestroyOnLoad(context->guiMaterial);
+  Object::dontDestroyOnLoad(context->guiMaterial.get());
 
   context->particleMaterial = Resources::load<Material>("shaders/default_particle");
-  Object::dontDestroyOnLoad(context->particleMaterial);
+  Object::dontDestroyOnLoad(context->particleMaterial.get());
 
   context->defaultMaterial = Resources::load<Material>("shaders/Internal-GUITexture");
-  Object::dontDestroyOnLoad(context->defaultMaterial);
+  Object::dontDestroyOnLoad(context->defaultMaterial.get());
 
-  context->defaultGuiSkin = getGC()->gc_new<GuiSkin>();
-  context->currentGuiSkin = NULL;
+  Object::dontDestroyOnLoad(Resources::load<Texture2d>("fonts/default").get());
 
-  Camera::current = NULL;
-  Camera::_main = NULL;
+  context->defaultGuiSkin.reset(new GuiSkin());
 }
 
 void Application::setTitle(std::string title)
@@ -297,16 +289,11 @@ void Application::destroy()
     throw Exception("Immediate shutdown not supported");
   }
 
-  Camera::allCameras.clear();
-  context->gameObjects->clear();
-  context->paths.clear();
-  context->objects->clear();
+  context.reset();
 
 #ifdef USE_SDL
   SDL_Quit();
 #endif
-
-  delete context->gc_ctx;
 }
 
 void Application::run()
@@ -335,9 +322,9 @@ void Application::run()
 
   context->running = false;
 
-  for(size_t i = 0; i < context->gameObjects->size(); i++)
+  for(size_t i = 0; i < context->gameObjects.size(); i++)
   {
-    context->gameObjects->at(i)->destroy();
+    context->gameObjects.at(i)->destroy();
   }
 
 #endif
@@ -442,36 +429,31 @@ void Application::quit()
   glutLeaveMainLoop();
 }
 
-internal::gc::context* Application::getGC()
-{
-  return context->gc_ctx;
-}
-
 void Application::loadLevel()
 {
-  for(size_t i = 0; i < context->gameObjects->size(); i++)
+  for(size_t i = 0; i < context->gameObjects.size(); i++)
   {
-    if(context->gameObjects->at(i)->destroyOnLoad == true)
+    if(context->gameObjects.at(i)->destroyOnLoad == true)
     {
-      context->gameObjects->at(i)->destroy();
-      context->gameObjects->remove_at(i);
+      context->gameObjects.at(i)->destroy();
+      context->gameObjects.erase(context->gameObjects.begin() + i);
       i--;
     }
   }
 
-  for(size_t i = 0; i < context->objects->size(); i++)
+  for(size_t i = 0; i < context->objects.size(); i++)
   {
-    if(context->objects->at(i)->destroyOnLoad == true)
+    if(context->objects.at(i)->destroyOnLoad == true)
     {
-      context->objects->remove_at(i);
+      context->objects.erase(context->objects.begin() + i);
       context->paths.erase(context->paths.begin() + i);
       i--;
     }
   }
 
-  for(size_t i = 0; i < context->gameObjects->size(); i++)
+  for(size_t i = 0; i < context->gameObjects.size(); i++)
   {
-    context->gameObjects->at(i)->levelWasLoaded();
+    context->gameObjects.at(i)->levelWasLoaded();
   }
 }
 
@@ -480,13 +462,11 @@ void Application::loadLevel(std::string path)
   if(context->running == true)
   {
     context->levelChange = path;
-    context->fullCollect = 1;
   }
   else
   {
     context->loadedLevelName = path;
     loadLevel();
-    context->fullCollect = 1;
   }
 }
 
@@ -505,7 +485,7 @@ std::string Application::getEngineDataPath()
   return context->engineDataPath;
 }
 
-internal::gc::list<GameObject*>* Application::getGameObjects()
+std::vector<shared<GameObject> >& Application::getGameObjects()
 {
   return context->gameObjects;
 }
@@ -537,16 +517,16 @@ void Application::display()
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glViewport(0, 0, Screen::getWidth(), Screen::getHeight());
 
-  for(size_t h = 0; h < Camera::getAllCameras()->size(); h++)
+  for(size_t h = 0; h < Camera::getAllCameras().size(); h++)
   {
-    if(Camera::getAllCameras()->at(h)->getGameObject()->getActive() == false)
+    if(Camera::getAllCameras().at(h)->getGameObject()->getActive() == false)
     {
       continue;
     }
 
-    Camera::current = Camera::getAllCameras()->at(h);
+    context->current = Camera::getAllCameras().at(h);
 
-    if(Camera::getCurrent()->targetTexture != NULL)
+    if(Camera::getCurrent()->targetTexture.valid())
     {
       RenderTexture::setActive(Camera::getCurrent()->targetTexture);
     }
@@ -556,31 +536,31 @@ void Application::display()
     glClearColor(clearColor.r, clearColor.g, clearColor.b, clearColor.a);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    for(size_t i = 0; i < context->gameObjects->size(); i++)
+    for(size_t i = 0; i < context->gameObjects.size(); i++)
     {
-      if((Camera::getCurrent()->getCullMask() & context->gameObjects->at(i)->getLayer()) !=
-        context->gameObjects->at(i)->getLayer())
+      if((Camera::getCurrent()->getCullMask() & context->gameObjects.at(i)->getLayer()) !=
+        context->gameObjects.at(i)->getLayer())
       {
         continue;
       }
 
-      context->gameObjects->at(i)->render();
+      context->gameObjects.at(i)->render();
     }
 
-    if(Camera::getCurrent()->targetTexture != NULL)
+    if(Camera::getCurrent()->targetTexture.valid())
     {
       RenderTexture::setActive(NULL);
     }
   }
 
-  for(size_t i = 0; i < context->gameObjects->size(); i++)
+  for(size_t i = 0; i < context->gameObjects.size(); i++)
   {
-    context->gameObjects->at(i)->postRender();
+    context->gameObjects.at(i)->postRender();
   }
 
-  for(size_t i = 0; i < context->gameObjects->size(); i++)
+  for(size_t i = 0; i < context->gameObjects.size(); i++)
   {
-    context->gameObjects->at(i)->gui();
+    context->gameObjects.at(i)->gui();
   }
 
 #ifdef USE_SDL
@@ -625,17 +605,17 @@ void Application::idle()
   lastTime = glutGet(GLUT_ELAPSED_TIME);
 #endif
 
-  for(size_t i = 0; i < context->gameObjects->size(); i++)
+  for(size_t i = 0; i < context->gameObjects.size(); i++)
   {
-    context->gameObjects->at(i)->update();
+    context->gameObjects.at(i)->update();
   }
 
-  for(size_t i = 0; i < context->gameObjects->size(); i++)
+  for(size_t i = 0; i < context->gameObjects.size(); i++)
   {
-    if(context->gameObjects->at(i)->destroyed == true)
+    if(context->gameObjects.at(i)->destroyed == true)
     {
-      context->gameObjects->at(i)->destroy();
-      context->gameObjects->remove_at(i);
+      context->gameObjects.at(i)->destroy();
+      context->gameObjects.erase(context->gameObjects.begin() + i);
       i--;
     }
   }
@@ -648,16 +628,6 @@ void Application::idle()
   Input::upMouseButtons.clear();
 
   context->graphicsCache->sweepUnused();
-
-  if(context->fullCollect > 0)
-  {
-    context->gc_ctx->gc_collect();
-    context->fullCollect--;
-  }
-  else
-  {
-    context->gc_ctx->gc_collect_incr();
-  }
 }
 
 void Application::motion(int x, int y)

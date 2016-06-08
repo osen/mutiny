@@ -2,6 +2,7 @@
 #define MUTINY_ENGINE_INTERNAL_CWRAPPER_H
 
 #include "lodepng.h"
+#include "../ref.h"
 
 #include <GL/glew.h>
 
@@ -23,7 +24,7 @@ namespace internal
 
 struct PngData
 {
-  static PngData* create();
+  static shared<PngData> create();
   ~PngData();
 
   unsigned char* image;

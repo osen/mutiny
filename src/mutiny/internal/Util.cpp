@@ -14,12 +14,12 @@ double Util::deg2Rad(double input)
   return input * (3.14159265359f / 180);
 }
 
-void Util::splitString(std::string input, std::vector<std::string>* output)
+void Util::splitString(std::string input, std::vector<std::string>& output)
 {
   splitString(input, ' ', output);
 }
 
-void Util::splitString(std::string input, char separator, std::vector<std::string>* output)
+void Util::splitString(std::string input, char separator, std::vector<std::string>& output)
 {
   std::string current;
 
@@ -32,7 +32,7 @@ void Util::splitString(std::string input, char separator, std::vector<std::strin
 
     if(input[i] == separator)
     {
-      output->push_back(current);
+      output.push_back(current);
       current = "";
     }
     else
@@ -43,11 +43,11 @@ void Util::splitString(std::string input, char separator, std::vector<std::strin
 
   if(current.length() > 0)
   {
-    output->push_back(current);
+    output.push_back(current);
   }
 }
 
-void Util::splitStringWhitespace(std::string line, std::vector<std::string>* output)
+void Util::splitStringWhitespace(std::string line, std::vector<std::string>& output)
 {
   bool lastWasWhiteSpace = true;
   std::string current;
@@ -63,7 +63,7 @@ void Util::splitStringWhitespace(std::string line, std::vector<std::string>* out
     {
       if(lastWasWhiteSpace == false)
       {
-        output->push_back(current);
+        output.push_back(current);
         current = "";
         lastWasWhiteSpace = true;
       }
@@ -77,7 +77,7 @@ void Util::splitStringWhitespace(std::string line, std::vector<std::string>* out
 
   if(current.length() > 0)
   {
-    output->push_back(current);
+    output.push_back(current);
   }
 }
 

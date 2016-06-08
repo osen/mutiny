@@ -27,39 +27,41 @@ class GameObject : public Object
   friend class mutiny::engine::RidgedBody;
 
 public:
-  static GameObject* createPrimitive(int primitiveType);
-  static GameObject* createModel(std::string path);
+  static ref<GameObject> createPrimitive(int primitiveType);
+  static ref<GameObject> createModel(std::string path);
 
-  template<class T> static std::vector<Object*> findObjectsOfType()
+  template<class T> static std::vector<ref<T> > findObjectsOfType()
   {
-    internal::gc::list<GameObject*>* gameObjects = Application::getGameObjects();
-    std::vector<Object*> objects;
+    std::vector<shared<GameObject> >& gameObjects = Application::getGameObjects();
+    std::vector<ref<T> > objects;
 
-    for(int i = 0; i < gameObjects->size(); i++)
+    for(int i = 0; i < gameObjects.size(); i++)
     {
-      void* gameObject =
-        dynamic_cast<T*>(gameObjects->at(i));
+      ref<GameObject> gameObject = gameObjects.at(i);
 
-      if(gameObject != NULL)
+      ref<T> testGameObject =
+        dynamic_cast<T*>(gameObject.get());
+
+      if(testGameObject.valid())
       {
-        objects.push_back((Object*)gameObject);
+        objects.push_back(testGameObject);
       }
 
-      void* component =
-        dynamic_cast<T*>(gameObjects->at(i)->getComponent<T>());
+      ref<T> testComponent =
+        dynamic_cast<T*>(gameObject->getComponent<T>().try_get());
 
-      if(component != NULL)
+      if(testComponent.valid())
       {
-        objects.push_back((Object*)component);
+        objects.push_back(testComponent);
       }
     }
 
     return objects;
   }
 
-  static void findGameObjectsWithTag(std::string tag, std::vector<GameObject*>* gameObjects);
-  static GameObject* create();
-  static GameObject* create(std::string name);
+  static void findGameObjectsWithTag(std::string tag, std::vector<ref<GameObject> >& gameObjects);
+  static ref<GameObject> create();
+  static ref<GameObject> create(std::string name);
 
   GameObject();
   GameObject(std::string name);
@@ -71,16 +73,16 @@ public:
   bool getActiveSelf();
   int getLayer();
   void setLayer(int layer);
-  Transform* getTransform();
+  ref<Transform> getTransform();
   void setTag(std::string tag);
   std::string getTag();
 
   template <class T>
-  T* addComponent()
+  ref<T> addComponent()
   {
-    T* c = Application::getGC()->gc_new<T>();
+    shared<T> c(new T());
 
-    components->push_back(c);
+    components.push_back(c);
     c->gameObject = this;
     c->awake();
 
@@ -88,23 +90,23 @@ public:
   }
 
   template<class T>
-  T* getComponent()
+  ref<T> getComponent()
   {
-    for(int i = 0; i < components->size(); i++)
+    for(int i = 0; i < components.size(); i++)
     {
-      T* t = dynamic_cast<T*>(components->at(i));
+      ref<T> t = dynamic_cast<T*>(components.at(i).get());
 
-      if(t != NULL)
+      if(t.valid())
       {
         return t;
       }
     }
 
-    return NULL;
+    return ref<T>();
   }
 
 private:
-  internal::gc::list<Component*>* components;
+  std::vector<shared<Component> > components;
   bool activeSelf;
   int layer;
   std::string tag;

@@ -10,7 +10,7 @@ using namespace mutiny::engine;
 class WaterCamera : public Behaviour
 {
 public:
-  static WaterCamera* create();
+  static ref<WaterCamera> create();
 
   virtual void onAwake();
   virtual void onUpdate();

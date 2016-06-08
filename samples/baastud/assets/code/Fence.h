@@ -8,7 +8,7 @@ using namespace mutiny::engine;
 class Fence : public Behaviour
 {
 public:
-  static GameObject* create();
+  static ref<GameObject> create();
 
   virtual void onAwake();
 
@@ -16,7 +16,7 @@ public:
   static const int FENCE_X_WIDTH = 12;
   static const int FENCE_Z_WIDTH = 8;
 
-  Mesh* mesh;
+  ref<Mesh> mesh;
   Bounds getBounds();
 
 };

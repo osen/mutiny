@@ -8,15 +8,15 @@ using namespace mutiny::engine;
 class LayerScreen : public Behaviour
 {
 public:
-  static GameObject* create();
+  static ref<GameObject> create();
 
   virtual void onAwake();
   virtual void onUpdate();
   virtual void onGui();
 
 private:
-  GameObject* playerGo;
-  GameObject* cameraGo;
+  ref<GameObject> playerGo;
+  ref<GameObject> cameraGo;
 
 
 };

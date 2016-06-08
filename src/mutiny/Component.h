@@ -22,10 +22,10 @@ class Component : public Object
 public:
   virtual ~Component();
 
-  GameObject* getGameObject();
+  ref<GameObject> getGameObject();
 
 private:
-  GameObject* gameObject;
+  ref<GameObject> gameObject;
 
   virtual void awake();
   virtual void start();

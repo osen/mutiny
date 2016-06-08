@@ -22,12 +22,12 @@ class GuiSkin : public Object
 public:
   GuiSkin();
 
-  GuiStyle* getButton();
-  GuiStyle* getBox();
+  ref<GuiStyle> getButton();
+  ref<GuiStyle> getBox();
 
 private:
-  GuiStyle* button;
-  GuiStyle* box;
+  shared<GuiStyle> button;
+  shared<GuiStyle> box;
 
 };
 

@@ -22,9 +22,9 @@ class Camera : public Behaviour
   friend class mutiny::engine::Application;
 
 public:
-  static Camera* getMain();
-  static Camera* getCurrent();
-  static std::vector<Camera*>* getAllCameras();
+  static ref<Camera> getMain();
+  static ref<Camera> getCurrent();
+  static std::vector<ref<Camera> >& getAllCameras();
 
   virtual ~Camera();
 
@@ -32,17 +32,13 @@ public:
   //Matrix4x4 getWorldToCameraMatrix();
   void setProjectionMatrix(Matrix4x4 projectionMatrix);
   void resetProjectionMatrix();
-  void setTargetTexture(RenderTexture* texture);
+  void setTargetTexture(ref<RenderTexture> texture);
   void setBackgroundColor(Color color);
   Color getBackgroundColor();
   int getCullMask();
   void setCullMask(int cullMask);
 
 private:
-  static std::vector<Camera*> allCameras;
-  static Camera* current;
-  static Camera* _main;
-
   Color backgroundColor;
   float fieldOfView;
   bool orthographic;
@@ -50,7 +46,7 @@ private:
   float nearClipPlane;
   float farClipPlane;
   Matrix4x4* projectionMatrix;
-  RenderTexture* targetTexture;
+  ref<RenderTexture> targetTexture;
   int cullMask;
 
   virtual void onAwake();

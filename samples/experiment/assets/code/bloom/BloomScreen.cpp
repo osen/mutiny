@@ -3,9 +3,9 @@
 
 using namespace mutiny::engine;
 
-GameObject* BloomScreen::create()
+ref<GameObject> BloomScreen::create()
 {
-  GameObject* mainGo = GameObject::create("BloomScreen");
+  ref<GameObject> mainGo = GameObject::create("BloomScreen");
   mainGo->addComponent<BloomScreen>();
 
   return mainGo;
@@ -17,12 +17,12 @@ void BloomScreen::onAwake()
   playerGo = GameObject::create("Player");
   playerGo->getTransform()->setPosition(Vector3(-10, 0, -10));
 
-  MeshRenderer* playerMr = playerGo->addComponent<MeshRenderer>();
+  ref<MeshRenderer> playerMr = playerGo->addComponent<MeshRenderer>();
   playerMr->setMaterial(Resources::load<Material>("shaders/Internal-MeshRendererTexture"));
   playerMr->getMaterial()->setMainTexture(Resources::load<Texture2d>("models/curuthers/Whiskers_diffuse"));
 
-  Mesh* mesh = Resources::load<Mesh>("models/curuthers/curuthers");
-  MeshFilter* playerMf = playerGo->addComponent<MeshFilter>();
+  ref<Mesh> mesh = Resources::load<Mesh>("models/curuthers/curuthers");
+  ref<MeshFilter> playerMf = playerGo->addComponent<MeshFilter>();
   playerMf->setMesh(mesh);
 }
 

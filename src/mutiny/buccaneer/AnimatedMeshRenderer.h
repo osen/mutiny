@@ -2,7 +2,6 @@
 #define MUTINY_ENGINE_ANIMATEDMESHRENDERER_H
 
 #include "../Behaviour.h"
-#include "../internal/gcmm.h"
 
 #include <vector>
 #include <memory>
@@ -21,10 +20,10 @@ class Animation;
 class AnimatedMeshRenderer : public Behaviour
 {
 public:
-  void setAnimatedMesh(AnimatedMesh* mesh);
-  AnimatedMesh* getAnimatedMesh();
-  void setAnimation(Animation* animation);
-  Animation* getAnimation();
+  void setAnimatedMesh(ref<AnimatedMesh> mesh);
+  ref<AnimatedMesh> getAnimatedMesh();
+  void setAnimation(ref<Animation> animation);
+  ref<Animation> getAnimation();
   void play();
   void playOnce();
   void stop();
@@ -32,14 +31,14 @@ public:
   float getFrame();
   void setFrame(float frame);
   void setFps(float fps);
-  GameObject* getRoot();
+  ref<GameObject> getRoot();
   void setInterpolateEnd(bool interpolateEnd);
 
 private:
-  internal::gc::list<Material*>* materials;
-  AnimatedMesh* mesh;
-  Animation* animation;
-  GameObject* rootGo;
+  std::vector<shared<Material> > materials;
+  ref<AnimatedMesh> mesh;
+  ref<Animation> animation;
+  ref<GameObject> rootGo;
   float frame;
   bool playing;
   bool once;

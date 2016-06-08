@@ -10,12 +10,13 @@ class Fence;
 class FencePanel : public Behaviour
 {
 public:
-  static GameObject* create(Fence* fence);
+  static ref<GameObject> create(ref<Fence> fence);
 
   virtual void onStart();
 
 private:
-  Fence* fence;
+  ref<Fence> fence;
+  shared<Material> material;
 };
 
 #endif

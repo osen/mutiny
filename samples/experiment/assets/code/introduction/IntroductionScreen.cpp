@@ -4,9 +4,9 @@
 
 using namespace mutiny::engine;
 
-GameObject* IntroductionScreen::create()
+ref<GameObject> IntroductionScreen::create()
 {
-  GameObject* mainGo = GameObject::create("IntroductionScreen");
+  ref<GameObject> mainGo = GameObject::create("IntroductionScreen");
   mainGo->addComponent<IntroductionScreen>();
 
   return mainGo;
@@ -15,7 +15,7 @@ GameObject* IntroductionScreen::create()
 void IntroductionScreen::onAwake()
 {
   cameraGo = GameObject::create("MainCamera");
-  Camera* camera = cameraGo->addComponent<Camera>();
+  ref<Camera> camera = cameraGo->addComponent<Camera>();
 
   //GameObject* startButtonGo = GameObject::create("StartButton");
   //Button* startButton = startButtonGo->addComponent<Button>();

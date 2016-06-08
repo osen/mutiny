@@ -26,31 +26,30 @@ namespace mutiny
 namespace engine
 {
 
-GraphicsCacheEntry* GraphicsCacheEntry::create()
+shared<GraphicsCacheEntry> GraphicsCacheEntry::create()
 {
-  GraphicsCacheEntry* rtn = NULL;
+  shared<GraphicsCacheEntry> rtn;
 
-  rtn = Application::getGC()->gc_new<GraphicsCacheEntry>();
+  rtn.reset(new GraphicsCacheEntry());
   rtn->useCount = 10;
 
   return rtn;
 }
 
-GraphicsCache* GraphicsCache::create()
+shared<GraphicsCache> GraphicsCache::create()
 {
-  GraphicsCache* rtn = NULL;
+  shared<GraphicsCache> rtn;
 
-  rtn = Application::getGC()->gc_new<GraphicsCache>();
-  rtn->entries = Application::getGC()->gc_list<GraphicsCacheEntry*>();
+  rtn.reset(new GraphicsCache());
 
   return rtn;
 }
 
-Mesh* GraphicsCache::matchMesh(std::vector<Rect>& rects, std::vector<Rect>& sourceRects)
+shared<Mesh> GraphicsCache::matchMesh(std::vector<Rect>& rects, std::vector<Rect>& sourceRects)
 {
-  for(size_t i = 0; i < entries->size(); i++)
+  for(size_t i = 0; i < entries.size(); i++)
   {
-    GraphicsCacheEntry* entry = entries->at(i);
+    ref<GraphicsCacheEntry> entry = entries.at(i);
     bool different = false;
 
     if(rects.size() != entry->rects.size() || sourceRects.size() != entry->sourceRects.size())
@@ -90,40 +89,40 @@ Mesh* GraphicsCache::matchMesh(std::vector<Rect>& rects, std::vector<Rect>& sour
     return entry->mesh;
   }
 
-  return NULL;
+  return shared<Mesh>();
 }
 
-void GraphicsCache::addMesh(std::vector<Rect>& rects, std::vector<Rect>& sourceRects, Mesh* mesh)
+void GraphicsCache::addMesh(std::vector<Rect>& rects, std::vector<Rect>& sourceRects, shared<Mesh> mesh)
 {
-  GraphicsCacheEntry* entry = GraphicsCacheEntry::create();
+  shared<GraphicsCacheEntry> entry = GraphicsCacheEntry::create();
   entry->rects = rects;
   entry->sourceRects = sourceRects;
   entry->mesh = mesh;
-  entries->push_back(entry);
+  entries.push_back(entry);
 }
 
 void GraphicsCache::sweepUnused()
 {
-  for(size_t i = 0; i < entries->size(); i++)
+  for(size_t i = 0; i < entries.size(); i++)
   {
-    entries->at(i)->useCount--;
+    entries.at(i)->useCount--;
 
-    if(entries->at(i)->useCount <= 0)
+    if(entries.at(i)->useCount <= 0)
     {
-      entries->remove_at(i);
+      entries.erase(entries.begin() + i);
       i--;
     }
   }
 }
 
 // TODO: Does this need to be re-enabled every draw?
-void Graphics::setRenderTarget(RenderTexture* renderTarget)
+void Graphics::setRenderTarget(ref<RenderTexture> renderTarget)
 {
   Application::context->renderTarget = renderTarget;
 }
 
 // if material is null, a default material with internal-GUITexture.shader is used.
-void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, Material* material)
+void Graphics::drawTexture(Rect rect, ref<Texture> texture, Rect sourceRect, ref<Material> material)
 {
   std::vector<Rect> rects;
   std::vector<Rect> sourceRects;
@@ -134,33 +133,33 @@ void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, Materia
   drawTextureBatch(rects, texture, sourceRects, material);
 }
 
-void Graphics::drawTextureBatch(std::vector<Rect> rects, Texture* texture, std::vector<Rect> sourceRects, Material* material)
+void Graphics::drawTextureBatch(std::vector<Rect> rects, ref<Texture> texture, std::vector<Rect> sourceRects, ref<Material> material)
 {
-  RenderTexture* currentRenderTexture = NULL;
+  ref<RenderTexture> currentRenderTexture;
 
   std::vector<Vector3> vertices;
   std::vector<Vector2> uv;
   std::vector<Color> colors;
   std::vector<int> triangles;
 
-  if(material == NULL)
+  if(material.expired())
   {
     // TODO: Use a unique material with MVP set
     //material = Application::context->defaultMaterial;
-    material = Application::context->guiMaterial;
+    material = Application::context->guiMaterial.get();
     //material = Material::guiMaterial;
     material->setMatrix("in_Projection", Matrix4x4::ortho(0, Screen::getWidth(), Screen::getHeight(), 0, -1, 1));
     material->setMatrix("in_View", Matrix4x4::getIdentity());
     material->setMatrix("in_Model", Matrix4x4::getIdentity());
   }
 
-  if(texture == NULL)
+  if(texture.expired())
   {
     Debug::logWarning("Texture is null");
     return;
   }
 
-  for(int i = 0; i < rects.size(); i++)
+  for(size_t i = 0; i < rects.size(); i++)
   {
     float x = (float)rects.at(i).x;
     float y = (float)rects.at(i).y;
@@ -189,18 +188,18 @@ void Graphics::drawTextureBatch(std::vector<Rect> rects, Texture* texture, std::
     uv.push_back(Vector2(sourceRects.at(i).x, sourceRects.at(i).y));
   }  
 
-  if(Application::context->tempMesh == NULL)
-  {
-    Application::context->tempMesh = Application::getGC()->gc_new<Mesh>();
-  }
+  //if(Application::context->tempMesh.expired())
+  //{
+  //  Application::context->tempMesh = new Mesh();
+  //}
 
-  GraphicsCache* cache = Application::context->graphicsCache;
-  Mesh* mesh = cache->matchMesh(rects, sourceRects);
+  ref<GraphicsCache> cache = Application::context->graphicsCache;
+  shared<Mesh> mesh = cache->matchMesh(rects, sourceRects);
 
-  if(mesh == NULL)
+  if(mesh.get() == NULL)
   {
     //mesh = Application::context->tempMesh;
-    mesh = Application::getGC()->gc_new<Mesh>();
+    mesh.reset(new Mesh());
     mesh->setVertices(vertices);
     mesh->setUv(uv);
     //mesh.setColors(colors);
@@ -217,7 +216,7 @@ void Graphics::drawTextureBatch(std::vector<Rect> rects, Texture* texture, std::
   glDisable(GL_DEPTH_TEST);
   glCullFace(GL_BACK);
 
-  for(int i = 0; i < material->getPassCount(); i++)
+  for(size_t i = 0; i < material->getPassCount(); i++)
   {
     material->setPass(i, material);
     // HACK: A matrix is required to be passed into drawMeshNow.
@@ -230,12 +229,12 @@ void Graphics::drawTextureBatch(std::vector<Rect> rects, Texture* texture, std::
   RenderTexture::setActive(currentRenderTexture);
 }
 
-void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder, Material* material)
+void Graphics::drawTexture(Rect rect, ref<Texture> texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder, ref<Material> material)
 {
   drawTexture(rect, texture, sourceRect, leftBorder, rightBorder, topBorder, bottomBorder, Color(1, 1, 1), material);
 }
 
-void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder, Color color, Material* material)
+void Graphics::drawTexture(Rect rect, ref<Texture> texture, Rect sourceRect, int leftBorder, int rightBorder, int topBorder, int bottomBorder, Color color, ref<Material> material)
 {
   float left = 1.0f / (float)leftBorder;
   float right = 1.0f / (float)rightBorder;
@@ -272,17 +271,17 @@ void Graphics::drawTexture(Rect rect, Texture* texture, Rect sourceRect, int lef
   drawTextureBatch(rects, texture, sourceRects, material);
 }
 
-void Graphics::drawTexture(Rect rect, Texture* texture, Material* material)
+void Graphics::drawTexture(Rect rect, ref<Texture> texture, ref<Material> material)
 {
   drawTexture(rect, texture, Rect(0, 0, 1, 1), material);
 }
 
-void Graphics::drawMeshNow(Mesh* mesh, Matrix4x4 matrix, int materialIndex)
+void Graphics::drawMeshNow(ref<Mesh> mesh, Matrix4x4 matrix, int materialIndex)
 {
-  Material* material = NULL;
-  Shader* shader = NULL;
+  ref<Material> material;
+  ref<Shader> shader;
 
-  if(mesh == NULL)
+  if(mesh.expired())
   {
     Debug::log("Mesh is null");
     return;
@@ -296,7 +295,7 @@ void Graphics::drawMeshNow(Mesh* mesh, Matrix4x4 matrix, int materialIndex)
 
   material = Application::context->currentMaterial;
 
-  if(material == NULL)
+  if(material.try_get() == NULL)
   {
     Debug::log("Material is NULL");
     return;
@@ -306,7 +305,7 @@ void Graphics::drawMeshNow(Mesh* mesh, Matrix4x4 matrix, int materialIndex)
 
   shader = material->getShader();
 
-  if(shader == NULL)
+  if(shader.try_get() == NULL)
   {
     Debug::log("Shader is NULL");
     return;

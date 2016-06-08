@@ -15,33 +15,33 @@ namespace engine
 
 GuiStyle::GuiStyle()
 {
-  normal = Application::getGC()->gc_new<GuiStyleState>();
-  hover = Application::getGC()->gc_new<GuiStyleState>();
-  active = Application::getGC()->gc_new<GuiStyleState>();
+  normal.reset(new GuiStyleState());
+  hover.reset(new GuiStyleState());
+  active.reset(new GuiStyleState());
 
   alignment = TextAnchor::MiddleCenter;
   border = RectOffset(10, 10, 10, 10);
   font = Resources::load<Font>("fonts/default");
 
-  if(font == NULL)
+  if(font.expired())
   {
     throw Exception("Failed to load default font");
   }
 
-  Object::dontDestroyOnLoad(font);
+  Object::dontDestroyOnLoad(font.get());
 }
 
-GuiStyleState* GuiStyle::getActive()
+ref<GuiStyleState> GuiStyle::getActive()
 {
   return active;
 }
 
-GuiStyleState* GuiStyle::getNormal()
+ref<GuiStyleState> GuiStyle::getNormal()
 {
   return normal;
 }
 
-GuiStyleState* GuiStyle::getHover()
+ref<GuiStyleState> GuiStyle::getHover()
 {
   return hover;
 }

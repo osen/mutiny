@@ -3,9 +3,9 @@
 
 using namespace mutiny::engine;
 
-GameObject* PostScreen::create()
+ref<GameObject> PostScreen::create()
 {
-  GameObject* mainGo = GameObject::create("PostScreen");
+  ref<GameObject> mainGo = GameObject::create("PostScreen");
   mainGo->addComponent<PostScreen>();
 
   return mainGo;
@@ -14,15 +14,15 @@ GameObject* PostScreen::create()
 void PostScreen::onAwake()
 {
   MainCamera::create();
-  GameObject* playerGo = GameObject::create("Player");
+  ref<GameObject> playerGo = GameObject::create("Player");
   playerGo->getTransform()->setPosition(Vector3(0, 0, 0));
 
-  MeshRenderer* playerMr = playerGo->addComponent<MeshRenderer>();
+  ref<MeshRenderer> playerMr = playerGo->addComponent<MeshRenderer>();
   playerMr->setMaterial(Resources::load<Material>("shaders/Internal-MeshRendererTexture"));
   playerMr->getMaterial()->setMainTexture(Resources::load<Texture2d>("models/curuthers/Whiskers_diffuse"));
 
-  Mesh* mesh = Resources::load<Mesh>("models/curuthers/curuthers");
-  MeshFilter* playerMf = playerGo->addComponent<MeshFilter>();
+  ref<Mesh> mesh = Resources::load<Mesh>("models/curuthers/curuthers");
+  ref<MeshFilter> playerMf = playerGo->addComponent<MeshFilter>();
   playerMf->setMesh(mesh);
 }
 

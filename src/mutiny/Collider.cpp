@@ -40,35 +40,35 @@ void Collider::awake()
 
 void Collider::updateBounds()
 {
-  Mesh* mesh = NULL;
-  MeshFilter* meshFilter = NULL;
+  ref<Mesh> mesh;
+  ref<MeshFilter> meshFilter;
 
   //bounds = Bounds(Vector3(0, 0, 0), Vector3(2, 2, 2));
   //bounds.debug();
   meshFilter = getGameObject()->getComponent<MeshFilter>();
 
-  if(meshFilter != NULL)
+  if(meshFilter.valid())
   {
     mesh = meshFilter->getMesh();
 
-    if(mesh != NULL)
+    if(mesh.valid())
     {
       bounds = mesh->getBounds();
     }
   }
   else
   {
-    AnimatedMeshRenderer* amr = NULL;
-    AnimatedMesh* animatedMesh = NULL;
+    ref<AnimatedMeshRenderer> amr;
+    ref<AnimatedMesh> animatedMesh;
 
     amr = getGameObject()->getComponent<AnimatedMeshRenderer>();
 
-    if(amr == NULL)
+    if(amr.expired())
     {
       throw Exception("Cannot add collider since there is no MeshRenderer or AnimatedMeshRenderer");
     }
 
-    if(amr->getAnimatedMesh() != NULL)
+    if(amr->getAnimatedMesh().valid())
     {
       bounds = amr->getAnimatedMesh()->getBounds();
       //bounds.debug();

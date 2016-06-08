@@ -5,6 +5,7 @@
 #include "../Vector2.h"
 #include "../Transform.h"
 #include "../Debug.h"
+#include "../Material.h"
 
 namespace mutiny
 {
@@ -18,7 +19,7 @@ void Button::onAwake()
   redraw();
 }
 
-Canvas* Button::getCanvas()
+ref<Canvas> Button::getCanvas()
 {
   return canvas;
 }
@@ -58,7 +59,7 @@ void Button::redraw()
   canvas->fillRectangle(Rect(width - 2, 1, 1, height - 2), brBevelColor);
   canvas->fillRectangle(Rect(2, height - 2, width - 3, 1), brBevelColor);
 
-  canvas->drawText(Vector2(10, 10), font, "Hello");
+  canvas->drawText(Vector2(10, 10), font.get(), "Hello");
 }
 
 void Button::onUpdate()

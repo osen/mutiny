@@ -20,7 +20,6 @@ namespace engine
 
 void AnimatedMeshRenderer::onAwake()
 {
-  materials = Application::getGC()->gc_list<Material*>();
   once = false;
   interpolateEnd = true;
   mesh = NULL;
@@ -34,14 +33,14 @@ void AnimatedMeshRenderer::onAwake()
   rootGo->getTransform()->setLocalRotation(Vector3());
 }
 
-GameObject* AnimatedMeshRenderer::getRoot()
+ref<GameObject> AnimatedMeshRenderer::getRoot()
 {
-  return rootGo;
+  return rootGo.get();
 }
 
 void AnimatedMeshRenderer::onDestroy()
 {
-  for(int i = 0; i < rootGo->getTransform()->getChildCount(); i++)
+  for(size_t i = 0; i < rootGo->getTransform()->getChildCount(); i++)
   {
     //Object::destroy(rootGo->getTransform()->getChild(i)->getGameObject());
   }
@@ -56,9 +55,9 @@ void AnimatedMeshRenderer::setFps(float fps)
 
 void AnimatedMeshRenderer::setFrame(float frame)
 {
-  if(frame >= animation->frames->size())
+  if(frame >= animation->frames.size())
   {
-    frame = animation->frames->size() - 1;
+    frame = animation->frames.size() - 1;
   }
 
   if(frame < 0)
@@ -81,7 +80,7 @@ bool AnimatedMeshRenderer::isPlaying()
 
 void AnimatedMeshRenderer::play()
 {
-  if(animation == NULL)
+  if(animation.expired())
   {
     return;
   }
@@ -104,27 +103,27 @@ void AnimatedMeshRenderer::stop()
 
 void AnimatedMeshRenderer::onUpdate()
 {
-  Transform* childTransform = NULL;
-  AnimationTransform* transformA = NULL;
-  AnimationTransform* transformB = NULL;
-  AnimationFrame* animationFrameA = NULL;
-  AnimationFrame* animationFrameB = NULL;
+  ref<Transform> childTransform;
+  ref<AnimationTransform> transformA;
+  ref<AnimationTransform> transformB;
+  ref<AnimationFrame> animationFrameA;
+  ref<AnimationFrame> animationFrameB;
 
-  for(int i = 0; i < rootGo->getTransform()->getChildCount(); i++)
+  for(size_t i = 0; i < rootGo->getTransform()->getChildCount(); i++)
   {
     childTransform = rootGo->getTransform()->getChild(i);
     childTransform->setLocalPosition(mesh->getMeshOffset(i));
     childTransform->setLocalRotation(Vector3());
   }
 
-  if(animation != NULL && animation->frames->size() > 0)
+  if(!animation.expired() && animation->frames.size() > 0)
   {
-    for(int i = 0; i < rootGo->getTransform()->getChildCount(); i++)
+    for(size_t i = 0; i < rootGo->getTransform()->getChildCount(); i++)
     {
       childTransform = rootGo->getTransform()->getChild(i);
-      animationFrameA = animation->frames->at(frame);
+      animationFrameA = animation->frames.at(frame);
 
-      if(frame + 1 >= animation->frames->size())
+      if(frame + 1 >= animation->frames.size())
       {
         if(once == true)
         {
@@ -133,45 +132,45 @@ void AnimatedMeshRenderer::onUpdate()
         }
         else if(interpolateEnd == true)
         {
-          animationFrameB = animation->frames->at(0);
+          animationFrameB = animation->frames.at(0);
         }
         else
         {
-          animationFrameB = animation->frames->at(frame);
-          animationFrameA = animation->frames->at(frame);
+          animationFrameB = animation->frames.at(frame);
+          animationFrameA = animation->frames.at(frame);
           setFrame(0);
         }
       }
       else
       {
-        animationFrameB = animation->frames->at(frame + 1);
+        animationFrameB = animation->frames.at(frame + 1);
       }
 
       transformA = NULL;
       transformB = NULL;
 
-      for(int j = 0; j < animationFrameA->transforms->size(); j++)
+      for(size_t j = 0; j < animationFrameA->transforms.size(); j++)
       {
-        if(childTransform->getGameObject()->getName() == animationFrameA->transforms->at(j)->partName)
+        if(childTransform->getGameObject()->getName() == animationFrameA->transforms.at(j)->partName)
         {
-          transformA = animationFrameA->transforms->at(j);
+          transformA = animationFrameA->transforms.at(j);
           break;
         }
       }
 
-      for(int j = 0; j < animationFrameB->transforms->size(); j++)
+      for(size_t j = 0; j < animationFrameB->transforms.size(); j++)
       {
-        if(childTransform->getGameObject()->getName() == animationFrameB->transforms->at(j)->partName)
+        if(childTransform->getGameObject()->getName() == animationFrameB->transforms.at(j)->partName)
         {
-          transformB = animationFrameB->transforms->at(j);
+          transformB = animationFrameB->transforms.at(j);
           break;
         }
       }
 
       Vector3 a;
       Vector3 b;
-      if(transformA != NULL) a = Vector3(transformA->pX, transformA->pY, transformA->pZ);
-      if(transformB != NULL) b = Vector3(transformB->pX, transformB->pY, transformB->pZ);
+      if(transformA.valid()) a = Vector3(transformA->pX, transformA->pY, transformA->pZ);
+      if(transformB.valid()) b = Vector3(transformB->pX, transformB->pY, transformB->pZ);
 
       Vector3 diff = b - a;
       float frameDiff = (float)((int)frame + 1) - frame;
@@ -182,8 +181,8 @@ void AnimatedMeshRenderer::onUpdate()
 
       a = Vector3();
       b = Vector3();
-      if(transformA != NULL) a = Vector3(transformA->rX, transformA->rY, transformA->rZ);
-      if(transformB != NULL) b = Vector3(transformB->rX, transformB->rY, transformB->rZ);
+      if(transformA.valid()) a = Vector3(transformA->rX, transformA->rY, transformA->rZ);
+      if(transformB.valid()) b = Vector3(transformB->rX, transformB->rY, transformB->rZ);
 
       diff = b - a;
       childTransform->setLocalRotation(a + (diff * (1.0f - frameDiff)));
@@ -194,36 +193,36 @@ void AnimatedMeshRenderer::onUpdate()
       frame += fps * Time::getDeltaTime();
     }
 
-    if(frame >= animation->frames->size())
+    if(frame >= animation->frames.size())
     {
       frame = 0;
     }
   }
 }
 
-void AnimatedMeshRenderer::setAnimatedMesh(AnimatedMesh* mesh)
+void AnimatedMeshRenderer::setAnimatedMesh(ref<AnimatedMesh> mesh)
 {
   this->mesh = mesh;
-  materials->clear();
+  materials.clear();
 
-  for(int i = 0; i < mesh->getMeshCount(); i++)
+  for(size_t i = 0; i < mesh->getMeshCount(); i++)
   {
-    GameObject* go = GameObject::create(mesh->getMeshName(i));
+    ref<GameObject> go = GameObject::create(mesh->getMeshName(i));
     go->getTransform()->setParent(rootGo->getTransform());
     go->getTransform()->setLocalPosition(mesh->getMeshOffset(i));
-    MeshFilter* mf = go->addComponent<MeshFilter>();
-    Mesh* m = mesh->getMesh(i);
+    ref<MeshFilter> mf = go->addComponent<MeshFilter>();
+    ref<Mesh> m = mesh->getMesh(i);
     mf->setMesh(m);
-    MeshRenderer* mr = go->addComponent<MeshRenderer>();
-    internal::gc::list<Material*>* newMaterials = Application::getGC()->gc_list<Material*>();
+    ref<MeshRenderer> mr = go->addComponent<MeshRenderer>();
+    std::vector<ref<Material> > newMaterials;
 
-    for(int x = 0; x < m->getSubmeshCount(); x++)
+    for(size_t x = 0; x < m->getSubmeshCount(); x++)
     {
-      Material* material = NULL;
+      shared<Material> material;
 
-      Texture* tex = mesh->getTexture(i, x);
+      ref<Texture> tex = mesh->getTexture(i, x).try_get();
 
-      if(tex != NULL)
+      if(tex.valid())
       {
         material = Material::create(Resources::load<Shader>("shaders/Internal-MeshRendererTexture"));
         material->setMainTexture(tex);
@@ -233,27 +232,27 @@ void AnimatedMeshRenderer::setAnimatedMesh(AnimatedMesh* mesh)
         material = Material::create(Resources::load<Shader>("shaders/Internal-DefaultDiffuseTexture"));
       }
 
-      materials->push_back(material);
-      newMaterials->push_back(material);
+      materials.push_back(material);
+      newMaterials.push_back(material);
     }
 
     mr->setMaterials(newMaterials);
   }
 }
 
-AnimatedMesh* AnimatedMeshRenderer::getAnimatedMesh()
+ref<AnimatedMesh> AnimatedMeshRenderer::getAnimatedMesh()
 {
-  return mesh;
+  return mesh.get();
 }
 
-Animation* AnimatedMeshRenderer::getAnimation()
+ref<Animation> AnimatedMeshRenderer::getAnimation()
 {
-  return animation;
+  return animation.get();
 }
 
-void AnimatedMeshRenderer::setAnimation(Animation* animation)
+void AnimatedMeshRenderer::setAnimation(ref<Animation> animation)
 {
-  if(this->animation == animation)
+  if(this->animation.try_get() == animation.try_get())
   {
     return;
   }

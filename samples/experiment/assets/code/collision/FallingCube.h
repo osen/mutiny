@@ -8,7 +8,7 @@ using namespace mutiny::engine;
 class FallingCube : public Behaviour
 {
 public:
-  static FallingCube* create();
+  static ref<FallingCube> create();
 
 private:
   virtual void onAwake();

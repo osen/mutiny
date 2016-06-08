@@ -10,22 +10,22 @@ using namespace mutiny::engine;
 class MainCamera : public Behaviour
 {
 public:
-  static MainCamera* create();
+  static ref<MainCamera> create();
 
   virtual void onAwake();
   virtual void onUpdate();
   virtual void onPostRender();
 
 private:
-  RenderTexture* originalPass;
-  RenderTexture* blurPass1;
-  RenderTexture* blurPass2;
-  RenderTexture* blurPass3;
-  RenderTexture* lightKeyPass;
-  RenderTexture* mergePass;
-  Material* texturedMaterial;
-  Material* lightKeyMaterial;
-  Material* mergeMaterial;
+  shared<RenderTexture> originalPass;
+  shared<RenderTexture> blurPass1;
+  shared<RenderTexture> blurPass2;
+  shared<RenderTexture> blurPass3;
+  shared<RenderTexture> lightKeyPass;
+  shared<RenderTexture> mergePass;
+  ref<Material> texturedMaterial;
+  ref<Material> lightKeyMaterial;
+  ref<Material> mergeMaterial;
 
 };
 

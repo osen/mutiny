@@ -8,14 +8,14 @@ using namespace mutiny::engine;
 class MutinyScreen : public Behaviour
 {
 public:
-  static GameObject* create();
+  static ref<GameObject> create();
 
   virtual void onAwake();
   virtual void onGui();
 
 private:
-  Texture2d* mutinyLogo;
-  Texture2d* background;
+  ref<Texture2d> mutinyLogo;
+  ref<Texture2d> background;
   float timeout;
 
 };

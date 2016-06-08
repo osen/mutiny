@@ -11,22 +11,22 @@
 
 using namespace mutiny::engine;
 
-GameObject* GameScreen::create()
+ref<GameObject> GameScreen::create()
 {
-  GameObject* mainGo = gcnew<GameObject>("GameScreen");
+  ref<GameObject> mainGo = GameObject::create("GameScreen");
   mainGo->addComponent<GameScreen>();
 
   return mainGo;
 }
 
-GameObject* GameScreen::getFence()
+ref<GameObject> GameScreen::getFence()
 {
   return fenceGo;
 }
 
 void GameScreen::onAwake()
 {
-  audio = gcnew<Audio>();
+  audio.reset(new Audio());
 
   if(Application::getLoadedLevelName() != "introduction")
   {
@@ -35,12 +35,12 @@ void GameScreen::onAwake()
   }
 }
 
-Audio* GameScreen::getAudio()
+ref<Audio> GameScreen::getAudio()
 {
   return audio;
 }
 
-GameCamera* GameScreen::getCamera()
+ref<GameCamera> GameScreen::getCamera()
 {
   return cameraGo->getComponent<GameCamera>();
 }
@@ -56,7 +56,7 @@ void GameScreen::onStart()
     Sheep::create(this);
  
   fenceGo = Fence::create();
-  GameObject* playerGo = Player::create(this);
+  ref<GameObject> playerGo = Player::create(this);
   SkyBox::create(playerGo);
   cameraGo = GameCamera::create(playerGo);
   Terrain::create();

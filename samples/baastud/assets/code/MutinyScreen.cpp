@@ -2,9 +2,9 @@
 
 using namespace mutiny::engine;
 
-GameObject* MutinyScreen::create()
+ref<GameObject> MutinyScreen::create()
 {
-  GameObject* mainGo = gcnew<GameObject>("MutinyScreen");
+  ref<GameObject> mainGo = GameObject::create("MutinyScreen");
   mainGo->addComponent<MutinyScreen>();
 
   return mainGo;
@@ -19,10 +19,10 @@ void MutinyScreen::onAwake()
 
 void MutinyScreen::onGui()
 {
-  Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), background);
+  Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), background.get());
   Gui::drawTexture(Rect((Screen::getWidth() / 2) - (mutinyLogo->getWidth() / 2),
                         (Screen::getHeight() / 2) - (mutinyLogo->getHeight() / 2),
-                        mutinyLogo->getWidth(), mutinyLogo->getHeight()), mutinyLogo);
+                        mutinyLogo->getWidth(), mutinyLogo->getHeight()), mutinyLogo.get());
 
   timeout -= Time::getDeltaTime();
 

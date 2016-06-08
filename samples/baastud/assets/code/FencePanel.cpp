@@ -5,10 +5,10 @@
 
 using namespace mutiny::engine;
 
-GameObject* FencePanel::create(Fence* fence)
+ref<GameObject> FencePanel::create(ref<Fence> fence)
 {
-  GameObject* mainGo = gcnew<GameObject>("FencePanel");
-  FencePanel* fp = mainGo->addComponent<FencePanel>();
+  ref<GameObject> mainGo = GameObject::create("FencePanel");
+  ref<FencePanel> fp = mainGo->addComponent<FencePanel>();
   fp->fence = fence;
 
   return mainGo;
@@ -16,11 +16,11 @@ GameObject* FencePanel::create(Fence* fence)
 
 void FencePanel::onStart()
 {
-  MeshRenderer* fencePanelMr = getGameObject()->addComponent<MeshRenderer>();
-  Material* material = Material::create(Resources::load<Shader>("shaders/Internal-MeshRendererTexture"));
+  ref<MeshRenderer> fencePanelMr = getGameObject()->addComponent<MeshRenderer>();
+  material = Material::create(Resources::load<Shader>("shaders/Internal-MeshRendererTexture"));
   material->setMainTexture(Resources::load<Texture2d>("models/fence/fence"));
   
-  MeshFilter* mf = getGameObject()->addComponent<MeshFilter>();
+  ref<MeshFilter> mf = getGameObject()->addComponent<MeshFilter>();
 
   mf->setMesh(fence->mesh);
 

@@ -3,7 +3,6 @@
 
 #include "Behaviour.h"
 #include "Vector3.h"
-#include "internal/gcmm.h"
 
 #include <vector>
 
@@ -32,12 +31,12 @@ public:
   void setLocalScale(Vector3 scale);
 
   void detachChildren();
-  Transform* getParent();
-  void setParent(Transform* transform);
+  ref<Transform> getParent();
+  void setParent(ref<Transform> transform);
   int getChildCount();
-  Transform* getChild(int index);
-  Transform* getRoot();
-  Transform* find(std::string name);
+  ref<Transform> getChild(int index);
+  ref<Transform> getRoot();
+  ref<Transform> find(std::string name);
 
   void rotate(Vector3 eulerAngles);
   void translate(Vector3 translation);
@@ -51,8 +50,8 @@ private:
   Vector3 localPosition;
   Vector3 localRotation;
   Vector3 localScale;
-  Transform* parent;
-  internal::gc::list<Transform*>* children;
+  ref<Transform> parent;
+  std::vector<ref<Transform> > children;
 
   virtual void onAwake();
   virtual void onDestroy();

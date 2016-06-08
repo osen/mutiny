@@ -10,13 +10,13 @@ using namespace mutiny::engine;
 class IntroductionScreen : public Behaviour
 {
 public:
-  static GameObject* create();
+  static ref<GameObject> create();
 
   virtual void onAwake();
   virtual void onGui();
 
 private:
-  GameObject* cameraGo;
+  ref<GameObject> cameraGo;
 
 
 };

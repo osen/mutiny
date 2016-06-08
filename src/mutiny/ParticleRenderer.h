@@ -23,14 +23,14 @@ class ParticleRenderer : public Component
 public:
   virtual ~ParticleRenderer();
 
-  void setMaterial(Material* material);
-  Material* getMaterial();
+  void setMaterial(ref<Material> material);
+  ref<Material> getMaterial();
 
 private:
   GLuint positionBufferId; GLuint* _positionBufferId;
   GLuint uvBufferId; GLuint* _uvBufferId;
 
-  Material* material;
+  ref<Material> material;
 
   virtual void render();
   virtual void awake();

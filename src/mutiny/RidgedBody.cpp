@@ -31,13 +31,13 @@ RidgedBody::~RidgedBody()
 void RidgedBody::update()
 {
   getGameObject()->getTransform()->translate(Vector3(0, -10, 0) * Time::getDeltaTime());
-  std::vector<Object*> collidableObjects = GameObject::findObjectsOfType<MeshCollider>();
+  std::vector<ref<MeshCollider> > collidableObjects = GameObject::findObjectsOfType<MeshCollider>();
 
-  for(int i = 0; i < collidableObjects.size(); i++)
+  for(size_t i = 0; i < collidableObjects.size(); i++)
   {
-    MeshCollider* meshCollider = ((MeshCollider*)collidableObjects.at(i));
+    ref<MeshCollider> meshCollider = collidableObjects.at(i).get();
     Vector3 position = getGameObject()->getTransform()->getPosition();
-    Mesh* mesh = meshCollider->getMesh();
+    ref<Mesh> mesh = meshCollider->getMesh();
     std::vector<Vector3>& vertices = mesh->getVertices();
 
     Matrix4x4 colliderItrs = Matrix4x4::getTrs(meshCollider->getGameObject()->getTransform()->getPosition(),
@@ -49,7 +49,7 @@ void RidgedBody::update()
 
     bool isColliding = false;
 
-    for(int v = 0; v < vertices.size(); v+=3)
+    for(size_t v = 0; v < vertices.size(); v+=3)
     {
       Vector3 a = vertices.at(v);
       Vector3 b = vertices.at(v+1);
@@ -65,9 +65,9 @@ void RidgedBody::update()
     if(isColliding == true)
     {
       bool found = false;
-      for(int c = 0; c < collisions.size(); c++)
+      for(size_t c = 0; c < collisions.size(); c++)
       {
-        if(collisions.at(c).collider == meshCollider)
+        if(collisions.at(c).collider.get() == meshCollider.get())
         {
           //std::cout << "Stay" << std::endl;
           getGameObject()->collisionStay(collisions.at(c));
@@ -79,7 +79,7 @@ void RidgedBody::update()
       if(found == false)
       {
         Collision collision;
-        collision.collider = meshCollider;
+        collision.collider = meshCollider.get();
         collisions.push_back(collision);
         //std::cout << "Enter" << std::endl;
         getGameObject()->collisionEnter(collision);
@@ -87,9 +87,9 @@ void RidgedBody::update()
     }
     else
     {
-      for(int c = 0; c < collisions.size(); c++)
+      for(size_t c = 0; c < collisions.size(); c++)
       {
-        if(collisions.at(c).collider == meshCollider)
+        if(collisions.at(c).collider.get() == meshCollider.get())
         {
           //std::cout << "Exit" << std::endl;
           getGameObject()->collisionExit(collisions.at(c));

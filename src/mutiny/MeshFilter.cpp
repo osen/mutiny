@@ -1,5 +1,6 @@
 #include "MeshFilter.h"
 #include "Debug.h"
+#include "Mesh.h"
 
 namespace mutiny
 {
@@ -12,12 +13,12 @@ MeshFilter::~MeshFilter()
 
 }
 
-void MeshFilter::setMesh(Mesh* mesh)
+void MeshFilter::setMesh(ref<Mesh> mesh)
 {
   this->mesh = mesh;
 }
 
-Mesh* MeshFilter::getMesh()
+ref<Mesh> MeshFilter::getMesh()
 {
   return mesh;
 }

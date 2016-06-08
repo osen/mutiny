@@ -4,10 +4,10 @@
 
 using namespace mutiny::engine;
 
-SkyBox* SkyBox::create(GameObject* playerGo)
+ref<SkyBox> SkyBox::create(ref<GameObject> playerGo)
 {
-  GameObject* skyboxGo = GameObject::create("SkyBox");
-  SkyBox* skybox = skyboxGo->addComponent<SkyBox>();
+  ref<GameObject> skyboxGo = GameObject::create("SkyBox");
+  ref<SkyBox> skybox = skyboxGo->addComponent<SkyBox>();
   skybox->playerGo = playerGo;
 
   return skybox;
@@ -41,26 +41,25 @@ void SkyBox::onAwake()
   triangles.push_back(4);
   triangles.push_back(5);
 
-  Mesh* mesh = Application::getGC()->gc_new<Mesh>();
+  ref<Mesh> mesh = new Mesh();
   mesh->setVertices(vertices);
   mesh->setUv(uv);
   mesh->setTriangles(triangles, 0);
 
-  MeshFilter* meshFilter = getGameObject()->addComponent<MeshFilter>();
+  ref<MeshFilter> meshFilter = getGameObject()->addComponent<MeshFilter>();
   meshFilter->setMesh(mesh);
 
-  Texture2d* texture = Resources::load<Texture2d>("textures/clouds");
+  ref<Texture2d> texture = Resources::load<Texture2d>("textures/clouds");
 
   //Texture2d* texture = new Texture2d(1, 1);
   //texture->setPixel(0, 0, Color(1, 0, 0));
   //texture->apply();
 
-  Material* material = NULL;
   material = Material::create(Resources::load<Shader>("shaders/Internal-SkyboxTexture"));
   material->setMainTexture(texture);
 
-  MeshRenderer* meshRenderer = getGameObject()->addComponent<MeshRenderer>();
-  meshRenderer->setMaterial(material);
+  ref<MeshRenderer> meshRenderer = getGameObject()->addComponent<MeshRenderer>();
+  meshRenderer->setMaterial(material.get());
 
   //getGameObject()->getTransform()->translate(Vector3(0, 0, 10));
   //getGameObject()->getTransform()->rotate(Vector3(0, 180, 0));

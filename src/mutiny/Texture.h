@@ -30,6 +30,7 @@ protected:
   int height;
 
   shared<gl::Uint> nativeTexture;
+  //ref<gl::Uint> nativeTexture;
 
 };
 

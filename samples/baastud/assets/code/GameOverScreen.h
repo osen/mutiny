@@ -12,14 +12,14 @@ class GameOverScreen : public Behaviour
 public:
   static int score;
 
-  static GameObject* create();
+  static ref<GameObject> create();
 
   virtual void onAwake();
   virtual void onGui();
 
 private:
-  QuickNumber* qn;
-  Texture2d* background;
+  shared<QuickNumber> qn;
+  ref<Texture2d> background;
   float timeout;
 
 };

@@ -4,6 +4,7 @@
 #include "Vector2.h"
 #include "Debug.h"
 #include "Application.h"
+#include "Resources.h"
 
 #include <string>
 #include <fstream>
@@ -15,16 +16,15 @@ namespace mutiny
 namespace engine
 {
 
-Font* Font::load(std::string path)
+ref<Font> Font::load(std::string path)
 {
-  // TODO:
-  //arc<Font> font = arc<Font>::alloc();
-  Font* font = Application::getGC()->gc_new<Font>();
+  ref<Font> font = new Font();
 
   //Debug::log("Loading font from '" + path + "'");
-  font->texture = Texture2d::load(path);
+  //font->texture = Resources::load<Texture2d>(path);
+  font->texture.reset(Texture2d::load(path).try_get());
 
-  if(font->texture == NULL)
+  if(font->texture.get() == NULL)
   {
     return NULL;
   }
@@ -63,13 +63,13 @@ Font* Font::load(std::string path)
   return font;
 }
 
-bool Font::getCharacterInfo(char character, CharacterInfo* characterInfo)
+bool Font::getCharacterInfo(char character, CharacterInfo& characterInfo)
 {
   for(int i = 0; i < this->characterInfo.size(); i++)
   {
     if(this->characterInfo.at(i).index == character)
     {
-      *characterInfo = this->characterInfo.at(i);
+      characterInfo = this->characterInfo.at(i);
       return true;
     }
   }

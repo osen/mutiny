@@ -10,17 +10,17 @@ using namespace mutiny::engine;
 class TransformScreen : public Behaviour
 {
 public:
-  static GameObject* create();
+  static ref<GameObject> create();
 
   virtual void onAwake();
   virtual void onUpdate();
   virtual void onGui();
 
 private:
-  GameObject* cameraGo;
-  GameObject* cube1Go;
-  GameObject* cube2Go;
-  GameObject* centerGo;
+  ref<GameObject> cameraGo;
+  ref<GameObject> cube1Go;
+  ref<GameObject> cube2Go;
+  ref<GameObject> centerGo;
 
 
 };

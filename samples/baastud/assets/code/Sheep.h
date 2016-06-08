@@ -10,7 +10,7 @@ class GameScreen;
 class Sheep : public Behaviour
 {
 public:
-  static GameObject* create(GameScreen* gameScreen);
+  static ref<GameObject> create(ref<GameScreen> gameScreen);
 
   virtual void onUpdate();
   virtual void onStart();
@@ -19,12 +19,12 @@ public:
   bool isWolf();
 
 private:
-  GameScreen* gameScreen;
-  Animation* walkAnimation;
-  Animation* eatAnimation;
+  ref<GameScreen> gameScreen;
+  ref<Animation> walkAnimation;
+  ref<Animation> eatAnimation;
   int state;
   float stateTimeout;
-  AnimatedMeshRenderer* sheepMr;
+  ref<AnimatedMeshRenderer> sheepMr;
   int random(int min, int max);
   bool wolf;
 

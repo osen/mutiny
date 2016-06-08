@@ -5,7 +5,7 @@
 #include "../Object.h"
 #include "../Bounds.h"
 #include "../Vector3.h"
-#include "../internal/gcmm.h"
+#include "../ref.h"
 
 #include <GL/glew.h>
 
@@ -28,19 +28,20 @@ class AnimatedMesh : public Object
 
 public:
   AnimatedMesh();
+  ~AnimatedMesh();
   void recalculateBounds();
-  Mesh* getMesh(int index);
+  ref<Mesh> getMesh(int index);
   Bounds getBounds();
   int getMeshCount();
-  Texture2d* getTexture(int mesh, int submesh);
+  ref<Texture2d> getTexture(int mesh, int submesh);
   std::string getMeshName(int mesh);
   Vector3 getMeshOffset(int mesh);
 
 private:
-  static AnimatedMesh* load(std::string path);
+  static ref<AnimatedMesh> load(std::string path);
 
-  internal::gc::list<internal::gc::list<Texture2d*>*>* textures;
-  internal::gc::list<Mesh*>* meshes;
+  std::vector<std::vector<ref<Texture2d> > > textures;
+  std::vector<shared<Mesh> > meshes;
   std::vector<std::string> meshNames;
   std::vector<Vector3> meshOffsets;
   Bounds bounds;

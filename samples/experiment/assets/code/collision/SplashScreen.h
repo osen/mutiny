@@ -14,8 +14,8 @@ public:
   virtual void onGui();
 
 private:
-  Texture2d* background;
-  Texture2d* splashLogo;
+  shared<Texture2d> background;
+  ref<Texture2d> splashLogo;
   float timeout;
 
 

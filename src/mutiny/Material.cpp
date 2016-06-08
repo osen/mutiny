@@ -3,6 +3,7 @@
 #include "Shader.h"
 #include "Matrix4x4.h"
 #include "Texture.h"
+#include "Texture2d.h"
 #include "Resources.h"
 #include "Debug.h"
 #include "Exception.h"
@@ -19,7 +20,7 @@ namespace mutiny
 namespace engine
 {
 
-Material* Material::load(std::string path)
+ref<Material> Material::load(std::string path)
 {
   std::string vertPath = path + ".vert";
   std::string fragPath = path + ".frag";
@@ -56,14 +57,13 @@ Material* Material::load(std::string path)
     fragContents += line + '\n';
   }
 
-  Material* material = Material::create(vertContents, fragContents);
+  ref<Material> material = new Material(vertContents, fragContents);
 
   return material;
 }
 
 Material::Material(std::string vertContents, std::string fragContents)
 {
-  textures = Application::getGC()->gc_list<Texture*>();
   managedShader = Shader::create(vertContents, fragContents);
   indexesDirty = true;
   refreshIds();
@@ -71,12 +71,11 @@ Material::Material(std::string vertContents, std::string fragContents)
 
 Material::Material()
 {
-  textures = Application::getGC()->gc_list<Texture*>();
 }
 
-Material* Material::create(std::string vertContents, std::string fragContents)
+shared<Material> Material::create(std::string vertContents, std::string fragContents)
 {
-  Material* rtn = Application::getGC()->gc_new<Material>();
+  shared<Material> rtn(new Material());
   rtn->managedShader = Shader::create(vertContents, fragContents);
   rtn->indexesDirty = true;
   rtn->refreshIds();
@@ -84,9 +83,9 @@ Material* Material::create(std::string vertContents, std::string fragContents)
   return rtn;
 }
 
-Material* Material::create(Shader* shader)
+shared<Material> Material::create(ref<Shader> shader)
 {
-  Material* rtn = Application::getGC()->gc_new<Material>();
+  shared<Material> rtn(new Material());
   rtn->shader = shader;
   rtn->indexesDirty = true;
   rtn->refreshIds();
@@ -94,47 +93,51 @@ Material* Material::create(Shader* shader)
   return rtn;
 }
 
-Material::Material(Material* material)
+Material::Material(ref<Material> material)
 {
-  textures = Application::getGC()->gc_list<Texture*>();
   shader = material->getShader();
   indexesDirty = true;
   refreshIds();
 }
 
-Material::Material(Shader* shader)
+Material::Material(ref<Shader> shader)
 {
-  textures = Application::getGC()->gc_list<Texture*>();
   this->shader = shader;
   indexesDirty = true;
   refreshIds();
 }
 
-Texture* Material::getTexture(std::string propertyName)
+ref<Texture> Material::getTexture(std::string propertyName)
 {
-  for(int i = 0; i < textureNames.size(); i++)
+  for(size_t i = 0; i < textureNames.size(); i++)
   {
     if(textureNames.at(i) == propertyName)
     {
-      return textures->at(i);
+      return textures.at(i).get();
     }
   }
 
   return NULL;
 }
 
-void Material::setTexture(std::string propertyName, Texture* texture)
+void Material::setTexture(std::string propertyName, ref<Texture2d> texture)
 {
-  for(int i = 0; i < textureNames.size(); i++)
+  ref<Texture> tex = texture.get();
+  setTexture(propertyName, tex);
+}
+
+void Material::setTexture(std::string propertyName, ref<Texture> texture)
+{
+  for(size_t i = 0; i < textureNames.size(); i++)
   {
     if(textureNames.at(i) == propertyName)
     {
-      textures->at(i) = texture;
+      textures.at(i) = texture;
       return;
     }
   }
 
-  textures->push_back(texture);
+  textures.push_back(texture);
   textureIndexes.push_back(-1);
   textureNames.push_back(propertyName);
   indexesDirty = true;
@@ -142,7 +145,7 @@ void Material::setTexture(std::string propertyName, Texture* texture)
 
 void Material::setVector(std::string propertyName, Vector2 value)
 {
-  for(int i = 0; i < vector2Names.size(); i++)
+  for(size_t i = 0; i < vector2Names.size(); i++)
   {
     if(vector2Names.at(i) == propertyName)
     {
@@ -159,7 +162,7 @@ void Material::setVector(std::string propertyName, Vector2 value)
 
 void Material::setFloat(std::string propertyName, float value)
 {
-  for(int i = 0; i < floatNames.size(); i++)
+  for(size_t i = 0; i < floatNames.size(); i++)
   {
     if(floatNames.at(i) == propertyName)
     {
@@ -176,7 +179,7 @@ void Material::setFloat(std::string propertyName, float value)
 
 void Material::setMatrix(std::string propertyName, Matrix4x4 matrix)
 {
-  for(int i = 0; i < matrixNames.size(); i++)
+  for(size_t i = 0; i < matrixNames.size(); i++)
   {
     if(matrixNames.at(i) == propertyName)
     {
@@ -193,7 +196,7 @@ void Material::setMatrix(std::string propertyName, Matrix4x4 matrix)
 
 Matrix4x4 Material::getMatrix(std::string propertyName)
 {
-  for(int i = 0; i < matrixNames.size(); i++)
+  for(size_t i = 0; i < matrixNames.size(); i++)
   {
     if(matrixNames.at(i) == propertyName)
     {
@@ -207,7 +210,7 @@ Matrix4x4 Material::getMatrix(std::string propertyName)
 
 void Material::refreshIndexes()
 {
-  for(int i = 0; i < matrixNames.size(); i++)
+  for(size_t i = 0; i < matrixNames.size(); i++)
   {
     GLuint uniformId = glGetUniformLocation(getShader()->programId->getGLuint(), matrixNames.at(i).c_str());
 
@@ -220,7 +223,7 @@ void Material::refreshIndexes()
     matrixIndexes[i] = uniformId;
   }
 
-  for(int i = 0; i < vector2Names.size(); i++)
+  for(size_t i = 0; i < vector2Names.size(); i++)
   {
     GLuint uniformId = glGetUniformLocation(getShader()->programId->getGLuint(), vector2Names.at(i).c_str());
 
@@ -233,7 +236,7 @@ void Material::refreshIndexes()
     vector2Indexes[i] = uniformId;
   }
 
-  for(int i = 0; i < floatNames.size(); i++)
+  for(size_t i = 0; i < floatNames.size(); i++)
   {
     GLuint uniformId = glGetUniformLocation(getShader()->programId->getGLuint(), floatNames.at(i).c_str());
 
@@ -246,7 +249,7 @@ void Material::refreshIndexes()
     floatIndexes[i] = uniformId;
   }
 
-  for(int i = 0; i < textureNames.size(); i++)
+  for(size_t i = 0; i < textureNames.size(); i++)
   {
     GLint uniformId = glGetUniformLocation(getShader()->programId->getGLuint(), textureNames.at(i).c_str());
 
@@ -262,21 +265,26 @@ void Material::refreshIndexes()
   refreshIds();
 }
 
-Texture* Material::getMainTexture()
+ref<Texture> Material::getMainTexture()
 {
   return getTexture("in_Texture");
 }
 
-void Material::setMainTexture(Texture* texture)
+void Material::setMainTexture(ref<Texture> texture)
 {
   setTexture("in_Texture", texture);
 }
 
-Shader* Material::getShader()
+void Material::setMainTexture(ref<Texture2d> texture)
 {
-  Shader* rtn = shader;
+  setTexture("in_Texture", texture);
+}
 
-  if(rtn == NULL)
+ref<Shader> Material::getShader()
+{
+  ref<Shader> rtn = shader;
+
+  if(rtn.expired())
   {
     rtn = managedShader;
   }
@@ -284,7 +292,7 @@ Shader* Material::getShader()
   return rtn;
 }
 
-void Material::setShader(Shader* shader)
+void Material::setShader(ref<Shader> shader)
 {
   this->shader = shader;
   indexesDirty = true;
@@ -304,7 +312,7 @@ int Material::getPassCount()
   return 1;
 }
 
-void Material::setPass(int pass, Material* _this)
+void Material::setPass(int pass, ref<Material> _this)
 {
   Application::context->currentMaterial = _this;
   glUseProgram(getShader()->programId->getGLuint());
@@ -314,26 +322,26 @@ void Material::setPass(int pass, Material* _this)
     refreshIndexes();
   }
 
-  for(int i = 0; i < matrixNames.size(); i++)
+  for(size_t i = 0; i < matrixNames.size(); i++)
   {
     glUniformMatrix4fv(matrixIndexes[i], 1, GL_FALSE, matrices[i].getValue());
   }
 
-  for(int i = 0; i < vector2Names.size(); i++)
+  for(size_t i = 0; i < vector2Names.size(); i++)
   {
     glUniform2f(vector2Indexes[i], vector2s[i].x, vector2s[i].y);
   }
 
-  for(int i = 0; i < floatNames.size(); i++)
+  for(size_t i = 0; i < floatNames.size(); i++)
   {
     glUniform1f(floatIndexes[i], floats[i]);
   }
 
-  for(int i = 0; i < textureNames.size(); i++)
+  for(size_t i = 0; i < textureNames.size(); i++)
   {
     glUniform1i(textureIndexes[i], i);
     glActiveTexture(GL_TEXTURE0 + i);
-    glBindTexture(GL_TEXTURE_2D, textures->at(i)->getNativeTexture());
+    glBindTexture(GL_TEXTURE_2D, textures.at(i)->getNativeTexture());
   }
 }
 

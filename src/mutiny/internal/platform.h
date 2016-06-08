@@ -18,6 +18,7 @@
 #ifdef HAS_TR1_NAMESPACE
   #include <tr1/memory>
   #define shared std::tr1::shared_ptr
+  #define weak std::tr1::weak_ptr
 #endif
 
 #endif

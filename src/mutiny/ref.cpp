@@ -15,28 +15,18 @@ const char* ref_exception::what() const throw()
   return message.c_str();
 }
 
-enable_ref::enable_ref()
+void enable_ref::dummy(void *ptr)
 {
 
 }
 
-enable_ref::enable_ref(const enable_ref& other)
+enable_ref::enable_ref()
 {
-  // Do nothing. We want to keep references to this
+  self.reset(this, dummy);
 }
 
 enable_ref::~enable_ref()
 {
-  // Tell all the references to drop
-  while(refs.size() > 0)
-  {
-    refs.at(0)->release();
-  }
-}
 
-enable_ref& enable_ref::operator=(const enable_ref& other)
-{
-  // Do nothing. We want to keep references to this
-  return *this;
 }
 

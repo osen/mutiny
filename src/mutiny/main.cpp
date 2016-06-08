@@ -33,11 +33,14 @@ void safe_main(int argc, char* argv[])
 
 int main(int argc, char* argv[])
 {
+/*
   try
   {
+*/
     mutiny::engine::safe_main(argc, argv);
 
     return 0;
+/*
   }
   catch(mutiny::engine::Exception& e)
   {
@@ -63,4 +66,5 @@ int main(int argc, char* argv[])
 
     return 1;
   }
+*/
 }

@@ -8,7 +8,7 @@ using namespace mutiny::engine;
 class PostScreen : public Behaviour
 {
 public:
-  static GameObject* create();
+  static ref<GameObject> create();
 
   virtual void onAwake();
   virtual void onGui();

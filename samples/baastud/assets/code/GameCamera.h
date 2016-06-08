@@ -11,7 +11,7 @@ using namespace mutiny::engine;
 class GameCamera : public Behaviour
 {
 public:
-  static GameObject* create(GameObject* playerGo);
+  static ref<GameObject> create(ref<GameObject> playerGo);
 
   virtual void onAwake();
   virtual void onStart();
@@ -21,17 +21,16 @@ public:
   void toggleEventMode();
 
 private:
-  RenderTexture* originalPass;
-  RenderTexture* blurPass1;
-  RenderTexture* blurPass2;
-  RenderTexture* blurPass3;
-  RenderTexture* lightKeyPass;
-  RenderTexture* mergePass;
-  Material* texturedMaterial;
-  Material* lightKeyMaterial;
-  Material* mergeMaterial;
-  Camera* camera;
-  GameObject* playerGo;
+  shared<RenderTexture> originalPass;
+  shared<RenderTexture> blurPass1;
+  shared<RenderTexture> blurPass2;
+  shared<RenderTexture> blurPass3;
+  shared<RenderTexture> lightKeyPass;
+  shared<RenderTexture> mergePass;
+  ref<Material> texturedMaterial;
+  ref<Material> mergeMaterial;
+  ref<Camera> camera;
+  ref<GameObject> playerGo;
   std::vector<Vector3> positionBuffer;
   std::vector<Vector3> rotationBuffer;
   bool eventMode;

@@ -16,8 +16,8 @@ public:
   void drawW(int number, int x, int y);
 
 private:
-  Texture2d* fontTexture;
-  Texture2d* wFontTexture;
+  ref<Texture2d> fontTexture;
+  ref<Texture2d> wFontTexture;
 
 };
 

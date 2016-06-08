@@ -2,7 +2,7 @@
 #define MUTINY_ENGINE_MESHRENDERER_H
 
 #include "Component.h"
-#include "internal/gcmm.h"
+#include "ref.h"
 
 #include <GL/glew.h>
 
@@ -27,15 +27,15 @@ public:
   MeshRenderer();
   virtual ~MeshRenderer();
 
-  void setMaterial(Material* material);
-  void setMaterials(internal::gc::list<Material*>* materials);
-  internal::gc::list<Material*>* getMaterials();
-  Material* getMaterial();
+  void setMaterial(ref<Material> material);
+  void setMaterials(std::vector<ref<Material> > materials);
+  std::vector<ref<Material> > getMaterials();
+  ref<Material> getMaterial();
 
 private:
   virtual void render();
 
-  internal::gc::list<Material*>* materials;
+  std::vector<ref<Material> > materials;
 
 };
 

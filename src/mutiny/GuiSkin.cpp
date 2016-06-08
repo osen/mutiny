@@ -14,34 +14,34 @@ namespace engine
 
 GuiSkin::GuiSkin()
 {
-  Texture2d* tex = NULL;
+  ref<Texture2d> tex;
 
-  button = Application::getGC()->gc_new<GuiStyle>();
+  button.reset(new GuiStyle());
 
   tex = Resources::load<Texture2d>("gui/button_normal");
-  Object::dontDestroyOnLoad(tex);
+  Object::dontDestroyOnLoad(tex.get());
   button->getNormal()->setBackground(tex);
 
   tex = Resources::load<Texture2d>("gui/button_hover");
-  Object::dontDestroyOnLoad(tex);
+  Object::dontDestroyOnLoad(tex.get());
   button->getHover()->setBackground(tex);
 
   tex = Resources::load<Texture2d>("gui/button_active");
-  Object::dontDestroyOnLoad(tex);
+  Object::dontDestroyOnLoad(tex.get());
   button->getActive()->setBackground(tex);
 
-  box = Application::getGC()->gc_new<GuiStyle>();
+  box.reset(new GuiStyle());
   tex = Resources::load<Texture2d>("gui/box_normal");
-  Object::dontDestroyOnLoad(tex);
+  Object::dontDestroyOnLoad(tex.get());
   box->getNormal()->setBackground(tex);
 }
 
-GuiStyle* GuiSkin::getButton()
+ref<GuiStyle> GuiSkin::getButton()
 {
   return button;
 }
 
-GuiStyle* GuiSkin::getBox()
+ref<GuiStyle> GuiSkin::getBox()
 {
   return box;
 }

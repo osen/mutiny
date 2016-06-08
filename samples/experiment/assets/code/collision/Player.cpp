@@ -4,11 +4,11 @@
 
 using namespace mutiny::engine;
 
-Player* Player::create()
+ref<Player> Player::create()
 {
   //GameObject* playerGo = new GameObject("Player");
-  GameObject* playerGo = GameObject::createPrimitive(PrimitiveType::CUBE);
-  Player* player = playerGo->addComponent<Player>();
+  ref<GameObject> playerGo = GameObject::createPrimitive(PrimitiveType::CUBE);
+  ref<Player> player = playerGo->addComponent<Player>();
 
   return player;
 }
@@ -17,20 +17,20 @@ void Player::onAwake()
 {
   Debug::log("Player awoken");
 
-  Texture2d* texture = Resources::load<Texture2d>("textures/box");
+  ref<Texture2d> texture = Resources::load<Texture2d>("textures/box");
   material = Material::create(Resources::load<Shader>("shaders/mower"));
   //material->setFloat("in_Replace", 1.0f);
   material->setMainTexture(texture);
-  getGameObject()->getComponent<MeshRenderer>()->setMaterial(material);
+  getGameObject()->getComponent<MeshRenderer>()->setMaterial(material.get());
 
   getGameObject()->getTransform()->setPosition(Vector3(0, 10, 0));
   getGameObject()->getTransform()->setRotation(Vector3(0, 90, 0));
   getGameObject()->addComponent<CharacterController>();
 
   getGameObject()->addComponent<ParticleEmitter>();
-  Material* particleMaterial = Material::create(Resources::load<Shader>("shaders/Internal-MeshRendererTexture"));
+  particleMaterial = Material::create(Resources::load<Shader>("shaders/Internal-MeshRendererTexture"));
   particleMaterial->setMainTexture(Resources::load<Texture2d>("particles/grass"));
-  getGameObject()->addComponent<ParticleRenderer>()->setMaterial(particleMaterial);
+  getGameObject()->addComponent<ParticleRenderer>()->setMaterial(particleMaterial.get());
 }
 
 void Player::onUpdate()
@@ -38,7 +38,7 @@ void Player::onUpdate()
   Vector3 pos = getGameObject()->getTransform()->getPosition();
   static float up = 0.0f;
 
-  CharacterController* cc = getGameObject()->getComponent<CharacterController>();
+  ref<CharacterController> cc = getGameObject()->getComponent<CharacterController>();
 
   Vector3 movement;
 

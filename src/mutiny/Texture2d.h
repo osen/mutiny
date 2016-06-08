@@ -25,7 +25,7 @@ class Texture2d : public Texture
   friend class MeshRenderer;
 
 public:
-  static Texture2d* create(int width, int height);
+  static shared<Texture2d> create(int width, int height);
   Texture2d();
   Texture2d(int width, int height);
   virtual ~Texture2d();
@@ -35,7 +35,7 @@ public:
   void apply();
 
 private:
-  static Texture2d* load(std::string path);
+  static ref<Texture2d> load(std::string path);
 
   std::vector<std::vector<Color> > pixels;
 

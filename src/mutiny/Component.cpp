@@ -11,7 +11,7 @@ Component::~Component()
 
 }
 
-GameObject* Component::getGameObject()
+ref<GameObject> Component::getGameObject()
 {
   return gameObject;
 }

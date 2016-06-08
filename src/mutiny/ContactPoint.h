@@ -16,8 +16,8 @@ class ContactPoint
 public:
   Vector3 point;
   Vector3 normal;
-  Collider* thisCollider;
-  Collider* otherCollider;
+  ref<Collider> thisCollider;
+  ref<Collider> otherCollider;
   Vector3 a;
   Vector3 b;
   Vector3 c;

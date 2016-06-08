@@ -22,8 +22,8 @@ public:
   static void stopMusic();
 
 private:
-  static Audio* self;
-  internal::gc::list<AudioClip*>* sounds;
+  static ref<Audio> singleton;
+  std::vector<ref<AudioClip> > sounds;
   //static Mix_Music* music;
   //static Mix_Music* musicA;
   //static Mix_Music* breathing;

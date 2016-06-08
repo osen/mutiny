@@ -19,7 +19,7 @@ class Collision
 public:
   Vector3 relativeVelocity;
   std::vector<ContactPoint> contacts;
-  Collider* collider;
+  ref<Collider> collider;
 
 };
 

@@ -7,9 +7,9 @@
 
 using namespace mutiny::engine;
 
-GameObject* CollisionScreen::create()
+ref<GameObject> CollisionScreen::create()
 {
-  GameObject* mainGo = GameObject::create("CollisionScreen");
+  ref<GameObject> mainGo = GameObject::create("CollisionScreen");
   mainGo->addComponent<CollisionScreen>();
 
   return mainGo;
@@ -17,10 +17,10 @@ GameObject* CollisionScreen::create()
 
 void CollisionScreen::onAwake()
 {
-  Material* levelMaterial = NULL;
-  Mesh* levelMesh = NULL;
+  ref<Material> levelMaterial;
+  ref<Mesh> levelMesh;
 
-  Camera* camera = NULL;
+  ref<Camera> camera = NULL;
   cameraGo = GameObject::create("MainCamera");
   camera = cameraGo->addComponent<Camera>();
   cameraGo->getTransform()->translate(Vector3(0, 7.5, -20));
@@ -28,7 +28,7 @@ void CollisionScreen::onAwake()
 
   //renderTexture = new RenderTexture(Screen::getHeight() / 5, Screen::getWidth() / 5);
   renderTexture = RenderTexture::create(128, 128);
-  camera->setTargetTexture(renderTexture);
+  camera->setTargetTexture(renderTexture.get());
 
   camera2Go = GameObject::create("SubCamera");
   camera = camera2Go->addComponent<Camera>();
@@ -44,14 +44,14 @@ void CollisionScreen::onAwake()
 
   levelGo = GameObject::create("Level");
   levelGo->addComponent<MeshFilter>()->setMesh(levelMesh);
-  levelGo->addComponent<MeshRenderer>()->setMaterial(levelMaterial);
+  levelGo->addComponent<MeshRenderer>()->setMaterial(levelMaterial.get());
   levelGo->addComponent<MeshCollider>();
   levelGo->getTransform()->translate(Vector3(-20, 0, 0));
   levelGo->getTransform()->rotate(Vector3(0, -5, -10));
 
   level2Go = GameObject::create("Level");
   level2Go->addComponent<MeshFilter>()->setMesh(levelMesh);
-  level2Go->addComponent<MeshRenderer>()->setMaterial(levelMaterial);
+  level2Go->addComponent<MeshRenderer>()->setMaterial(levelMaterial.get());
   level2Go->addComponent<MeshCollider>();
   //level2Go->getTransform()->translate(Vector3(20, 0, 0));
   //level2Go->getTransform()->rotate(Vector3(0, -5, -10));
@@ -81,7 +81,7 @@ void CollisionScreen::onUpdate()
 void CollisionScreen::onGui()
 {
   //Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), renderTexture);
-  Gui::drawTexture(Rect(100, 100, 200, 200), renderTexture);
+  Gui::drawTexture(Rect(100, 100, 200, 200), renderTexture.get());
   //Gui::drawTexture(Rect(0, 200, 100, 100), levelTexture);
 
   if(Gui::button(Rect(Screen::getWidth() - 210, 10, 200, 50), "Back") == true)

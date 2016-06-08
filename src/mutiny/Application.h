@@ -2,8 +2,9 @@
 #define MUTINY_ENGINE_APPLICATION_H
 
 #include "internal/platform.h"
-#include "internal/gcmm.h"
 #include "Object.h"
+#include "ref.h"
+#include "Matrix4x4.h"
 
 #ifdef USE_SDL
   #include <SDL/SDL.h>
@@ -35,47 +36,56 @@ class ParticleRenderer;
 class GuiSkin;
 class Texture2d;
 class GraphicsCache;
+class Texture2d;
 
 struct Context
 {
-  internal::gc::context* gc_ctx;
 #ifdef USE_SDL
   SDL_Surface* screen;
 #endif
-  int fullCollect;
   bool running;
   std::string loadedLevelName;
   std::string levelChange;
   std::string dataPath;
   std::string engineDataPath;
-  internal::gc::list<GameObject*>* gameObjects;
+  std::vector<shared<GameObject> > gameObjects;
 
   int argc;
   std::vector<std::string> argv;
 
   // Resources
   std::vector<std::string> paths;
-  internal::gc::list<Object*>* objects;
+  std::vector<shared<Object> > objects;
 
   // Graphics
-  Material* defaultMaterial;
-  RenderTexture* renderTarget;
-  Mesh* tempMesh;
-  GraphicsCache* graphicsCache;
+  ref<Material> defaultMaterial;
+  ref<RenderTexture> renderTarget;
+  ref<Mesh> tempMesh; // TODO: For?
+  shared<GraphicsCache> graphicsCache;
 
   // Material
-  Material* currentMaterial;
-  Material* meshNormalTextureMaterial;
-  Material* meshNormalMaterial;
-  Material* guiMaterial;
-  Material* particleMaterial;
+  ref<Material> currentMaterial;
+  ref<Material> guiMaterial;
+  ref<Material> particleMaterial;
+  shared<Material> meshNormalTextureMaterial;
+  shared<Material> meshNormalMaterial;
 
   // GUI
-  GuiSkin* currentGuiSkin;
-  GuiSkin* defaultGuiSkin;
+  ref<GuiSkin> currentGuiSkin;
+  shared<GuiSkin> defaultGuiSkin;
+  Matrix4x4 matrix;
 
   // Texture2d
-  Texture2d* defaultTexture;
+  shared<Texture2d> defaultTexture;
+
+  // Camera
+  std::vector<ref<Camera> > allCameras;
+  ref<Camera> current;
+  ref<Camera> _main;
+
+  // RenderTexture
+  ref<RenderTexture> active;
+
 };
 
 class Application
@@ -91,6 +101,7 @@ class Application
   friend class mutiny::engine::Screen;
   friend class mutiny::engine::MeshRenderer;
   friend class mutiny::engine::ParticleRenderer;
+  friend class mutiny::engine::Texture2d;
 
 public:
   static void init(int argc, char* argv[]);
@@ -104,16 +115,15 @@ public:
   static int getArgc();
   static std::string getArgv(int i);
   static void setTitle(std::string title);
-  static internal::gc::context* getGC();
 
 private:
-  static Context* context;
+  static shared<Context> context;
 
   static void loadLevel();
   static void loop();
   static void setupPaths();
   static bool isValidPrefix(std::string path, std::string basename);
-  static internal::gc::list<GameObject*>* getGameObjects();
+  static std::vector<shared<GameObject> >& getGameObjects();
 
   static void reshape(int width, int height);
   static void display();

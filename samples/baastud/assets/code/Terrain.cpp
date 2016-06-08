@@ -4,9 +4,9 @@
 
 using namespace mutiny::engine;
 
-GameObject* Terrain::create()
+ref<GameObject> Terrain::create()
 {
-  GameObject* mainGo = gcnew<GameObject>("Terrain");
+  ref<GameObject> mainGo = GameObject::create("Terrain");
   mainGo->addComponent<Terrain>();
 
   return mainGo;
@@ -14,18 +14,18 @@ GameObject* Terrain::create()
 
 void Terrain::onAwake()
 {
-  MeshRenderer* mr = getGameObject()->addComponent<MeshRenderer>();
-  MeshFilter* mf = getGameObject()->addComponent<MeshFilter>();
-  Mesh* mesh = Resources::load<Mesh>("models/terrain/terrain");
-  Texture2d* tex = Resources::load<Texture2d>("models/terrain/terrain");
+  ref<MeshRenderer> mr = getGameObject()->addComponent<MeshRenderer>();
+  ref<MeshFilter> mf = getGameObject()->addComponent<MeshFilter>();
+  ref<Mesh> mesh = Resources::load<Mesh>("models/terrain/terrain");
+  ref<Texture2d> tex = Resources::load<Texture2d>("models/terrain/terrain");
 
-  Material* material = Material::create(Resources::load<Shader>("shaders/Internal-MeshRendererTexture"));
+  material = Material::create(Resources::load<Shader>("shaders/Internal-MeshRendererTexture"));
   material->setMainTexture(tex);
 
   mr->setMaterial(material);
   mf->setMesh(mesh);
 
-  MeshCollider* meshCollider = getGameObject()->addComponent<MeshCollider>();
+  ref<MeshCollider> meshCollider = getGameObject()->addComponent<MeshCollider>();
 
   getGameObject()->getTransform()->setPosition(Vector3(0, -1, 25));
 }

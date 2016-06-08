@@ -43,7 +43,7 @@ void ParticleRenderer::awake()
   vertices.push_back(Vector3(1, 1, 0));
   vertices.push_back(Vector3(-1, 1, 0));
 
-  for(int i = 0; i < vertices.size(); i++)
+  for(size_t i = 0; i < vertices.size(); i++)
   {
     values.push_back(vertices.at(i).x);
     values.push_back(vertices.at(i).y);
@@ -63,7 +63,7 @@ void ParticleRenderer::awake()
   uv.push_back(Vector2(1, 1));
   uv.push_back(Vector2(0, 1));
 
-  for(int i = 0; i < uv.size(); i++)
+  for(size_t i = 0; i < uv.size(); i++)
   {
     values.push_back(uv.at(i).x);
     values.push_back(uv.at(i).y);
@@ -75,23 +75,23 @@ void ParticleRenderer::awake()
 
 void ParticleRenderer::render()
 {
-  Shader* shader = NULL;
-  Transform* transform = getGameObject()->getTransform();
-  ParticleEmitter* emitter = getGameObject()->getComponent<ParticleEmitter>();
+  ref<Shader> shader;
+  ref<Transform> transform = getGameObject()->getTransform();
+  ref<ParticleEmitter> emitter = getGameObject()->getComponent<ParticleEmitter>();
 
-  if(emitter == NULL)
+  if(emitter.expired())
   {
     Debug::logWarning("No particle emitter attached");
     return;
   }
 
-  if(transform == NULL)
+  if(transform.expired())
   {
     Debug::log("Failed to find Transform");
     return;
   }
 
-  if(material == NULL)
+  if(material.expired())
   {
     material = Application::context->particleMaterial;
     //Debug::log("ParticleRenderer set to default material");
@@ -132,7 +132,7 @@ void ParticleRenderer::render()
   }
 
   glDisable(GL_DEPTH_TEST);
-  for(int i = 0; i < emitter->particles.size(); i++)
+  for(size_t i = 0; i < emitter->particles.size(); i++)
   {
     Matrix4x4 modelMat = Matrix4x4::getIdentity();
     axisMod = emitter->particles.at(i).position;
@@ -158,12 +158,12 @@ void ParticleRenderer::render()
   }
 }
 
-void ParticleRenderer::setMaterial(Material* material)
+void ParticleRenderer::setMaterial(ref<Material> material)
 {
   this->material = material;
 }
 
-Material* ParticleRenderer::getMaterial()
+ref<Material> ParticleRenderer::getMaterial()
 {
   return material;
 }

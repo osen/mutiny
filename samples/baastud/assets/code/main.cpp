@@ -11,7 +11,7 @@ void mutiny_main()
   srand(time(NULL));
   Application::setTitle("Baastud - The quadrupedal, copulation game");
 
-  GameObject* smGo = gcnew<GameObject>();
+  ref<GameObject> smGo = GameObject::create();
   smGo->addComponent<SceneManager>();
 
   Application::loadLevel("mutiny");

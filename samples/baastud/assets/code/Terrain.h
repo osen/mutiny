@@ -8,9 +8,12 @@ using namespace mutiny::engine;
 class Terrain : public Behaviour
 {
 public:
-  static GameObject* create();
+  static ref<GameObject> create();
 
   virtual void onAwake();
+
+private:
+  shared<Material> material;
 
 };
 

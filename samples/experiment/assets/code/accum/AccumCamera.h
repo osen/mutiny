@@ -10,27 +10,27 @@ using namespace mutiny::engine;
 class AccumCamera : public Behaviour
 {
 public:
-  static AccumCamera* create();
+  static ref<AccumCamera> create();
 
   virtual void onAwake();
   virtual void onUpdate();
   virtual void onPostRender();
 
 private:
-  RenderTexture* originalPass;
-  RenderTexture* blurPass1;
-  RenderTexture* blurPass2;
-  RenderTexture* lightKeyPass;
-  RenderTexture* mergePass;
-  RenderTexture* accumPass;
-  RenderTexture* deaccumPass;
-  Material* texturedMaterial;
-  Material* lightKeyMaterial;
-  Material* mergeMaterial;
-  Material* accumMaterial;
-  Material* deaccumMaterial;
-  RenderTexture* accumA;
-  RenderTexture* accumB;
+  shared<RenderTexture> originalPass;
+  shared<RenderTexture> blurPass1;
+  shared<RenderTexture> blurPass2;
+  shared<RenderTexture> lightKeyPass;
+  shared<RenderTexture> mergePass;
+  shared<RenderTexture> accumPass;
+  shared<RenderTexture> deaccumPass;
+  ref<Material> texturedMaterial;
+  ref<Material> lightKeyMaterial;
+  ref<Material> mergeMaterial;
+  ref<Material> accumMaterial;
+  ref<Material> deaccumMaterial;
+  shared<RenderTexture> accumA;
+  shared<RenderTexture> accumB;
 
   void regenRenderTextures();
 

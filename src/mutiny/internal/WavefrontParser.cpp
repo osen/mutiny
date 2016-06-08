@@ -29,10 +29,10 @@ WavefrontParser::WavefrontParser(std::string path)
   std::vector<Vector2> vertexCoords;
   std::ifstream file;
 
-  MaterialData* currentMaterial = NULL;
-  PartData* currentPart = NULL;
-  MaterialGroupData* currentMaterialGroup = NULL;
-  FaceData* currentFace = NULL;
+  shared<MaterialData> currentMaterial;
+  shared<PartData> currentPart;
+  shared<MaterialGroupData> currentMaterialGroup;
+  ref<FaceData> currentFace;
 
   _hasCoords = false;
   _hasNormals = false;
@@ -43,18 +43,19 @@ WavefrontParser::WavefrontParser(std::string path)
 
   // Setup defaults
 
-  currentPart = Application::getGC()->gc_new<PartData>();
-  modelData.parts->push_back(currentPart);
+  currentPart.reset(new PartData());
+  modelData.reset(new ModelData());
+  modelData->parts.push_back(currentPart);
   currentPart->name = "";
 
-  currentMaterial = Application::getGC()->gc_new<MaterialData>();
-  modelData.materials->push_back(currentMaterial);
+  currentMaterial.reset(new MaterialData());
+  modelData->materials.push_back(currentMaterial);
   currentMaterial->name = "";
   currentMaterial->color = Vector4(1, 1, 1, 1);
   currentMaterial->texture = "";
 
-  currentMaterialGroup = Application::getGC()->gc_new<MaterialGroupData>();
-  currentPart->materialGroups->push_back(currentMaterialGroup);
+  currentMaterialGroup.reset(new MaterialGroupData());
+  currentPart->materialGroups.push_back(currentMaterialGroup);
   currentMaterialGroup->material = currentMaterial;
 
   // Start parsing file
@@ -70,7 +71,7 @@ WavefrontParser::WavefrontParser(std::string path)
   {
     getline(file, line);
     splitLine.clear();
-    Util::splitStringWhitespace(line, &splitLine);
+    Util::splitStringWhitespace(line, splitLine);
 
     if(splitLine.size() < 1)
     {
@@ -100,16 +101,16 @@ WavefrontParser::WavefrontParser(std::string path)
     }
     else if(splitLine.at(0) == "g" || splitLine.at(0) == "o")
     {
-      currentPart = Application::getGC()->gc_new<PartData>();
-      modelData.parts->push_back(currentPart);
+      currentPart.reset(new PartData());
+      modelData->parts.push_back(currentPart);
 
       if(splitLine.size() >= 2)
       {
         currentPart->name = splitLine.at(1);
       }
 
-      currentMaterialGroup = Application::getGC()->gc_new<MaterialGroupData>();
-      currentPart->materialGroups->push_back(currentMaterialGroup);
+      currentMaterialGroup.reset(new MaterialGroupData());
+      currentPart->materialGroups.push_back(currentMaterialGroup);
       currentMaterialGroup->material = currentMaterial;
     }
     else if(splitLine.at(0) == "usemtl")
@@ -123,16 +124,16 @@ WavefrontParser::WavefrontParser(std::string path)
         currentMaterial = getMaterialData("noname");
       }
 
-      currentMaterialGroup = Application::getGC()->gc_new<MaterialGroupData>();
-      currentPart->materialGroups->push_back(currentMaterialGroup);
+      currentMaterialGroup.reset(new MaterialGroupData());
+      currentPart->materialGroups.push_back(currentMaterialGroup);
       currentMaterialGroup->material = currentMaterial;
     }
     else if(splitLine.at(0) == "f")
     {
       splitLine = mungeSplitLine(splitLine);
-      currentMaterialGroup->faces.push_back(FaceData());
-      FaceData* currentFace = &currentMaterialGroup->faces.at(currentMaterialGroup->faces.size() - 1);
-      subSplit.clear(); Util::splitString(splitLine.at(1), '/', &subSplit);
+      shared<FaceData> currentFace(new FaceData());
+      currentMaterialGroup->faces.push_back(shared<FaceData>(currentFace));
+      subSplit.clear(); Util::splitString(splitLine.at(1), '/', subSplit);
 
       currentFace->a.position = Vector3(vertexPositions.at(atoi(subSplit.at(0).c_str()) - 1));
 
@@ -148,7 +149,7 @@ WavefrontParser::WavefrontParser(std::string path)
         currentFace->a.normal = Vector3(vertexNormals.at(atoi(subSplit.at(2).c_str()) - 1));
       }
 
-      subSplit.clear(); Util::splitString(splitLine.at(2), '/', &subSplit);
+      subSplit.clear(); Util::splitString(splitLine.at(2), '/', subSplit);
 
       currentFace->b.position = Vector3(vertexPositions.at(atoi(subSplit.at(0).c_str()) - 1));
 
@@ -162,7 +163,7 @@ WavefrontParser::WavefrontParser(std::string path)
         currentFace->b.normal = Vector3(vertexNormals.at(atoi(subSplit.at(2).c_str()) - 1));
       }
 
-      subSplit.clear(); Util::splitString(splitLine.at(3), '/', &subSplit);
+      subSplit.clear(); Util::splitString(splitLine.at(3), '/', subSplit);
 
       currentFace->c.position = Vector3(vertexPositions.at(atoi(subSplit.at(0).c_str()) - 1));
 
@@ -178,9 +179,9 @@ WavefrontParser::WavefrontParser(std::string path)
 
       if(splitLine.size() >= 5)
       {
-        currentMaterialGroup->faces.push_back(FaceData());
-        FaceData* currentFace = &currentMaterialGroup->faces.at(currentMaterialGroup->faces.size() - 1);
-        subSplit.clear(); Util::splitString(splitLine.at(3), '/', &subSplit);
+        shared<FaceData> currentFace(new FaceData());
+        currentMaterialGroup->faces.push_back(shared<FaceData>(currentFace));
+        subSplit.clear(); Util::splitString(splitLine.at(3), '/', subSplit);
 
         currentFace->a.position = Vector3(vertexPositions.at(atoi(subSplit.at(0).c_str()) - 1));
 
@@ -194,7 +195,7 @@ WavefrontParser::WavefrontParser(std::string path)
           currentFace->a.normal = Vector3(vertexNormals.at(atoi(subSplit.at(2).c_str()) - 1));
         }
 
-        subSplit.clear(); Util::splitString(splitLine.at(4), '/', &subSplit);
+        subSplit.clear(); Util::splitString(splitLine.at(4), '/', subSplit);
 
         currentFace->b.position = Vector3(vertexPositions.at(atoi(subSplit.at(0).c_str()) - 1));
 
@@ -208,7 +209,7 @@ WavefrontParser::WavefrontParser(std::string path)
           currentFace->b.normal = Vector3(vertexNormals.at(atoi(subSplit.at(2).c_str()) - 1));
         }
 
-        subSplit.clear(); Util::splitString(splitLine.at(1), '/', &subSplit);
+        subSplit.clear(); Util::splitString(splitLine.at(1), '/', subSplit);
 
         currentFace->c.position = Vector3(vertexPositions.at(atoi(subSplit.at(0).c_str()) - 1));
 
@@ -225,20 +226,22 @@ WavefrontParser::WavefrontParser(std::string path)
     }
   }
 
-  for(int a = 0; a < modelData.parts->size(); a++)
+  for(size_t a = 0; a < modelData->parts.size(); a++)
   {
-    for(int b = 0; b < modelData.parts->at(a)->materialGroups->size(); b++)
+    for(size_t b = 0; b < modelData->parts.at(a)->materialGroups.size(); b++)
     {
-      if(modelData.parts->at(a)->materialGroups->at(b)->faces.size() < 1)
+      if(modelData->parts.at(a)->materialGroups.at(b)->faces.size() < 1)
       {
-        modelData.parts->at(a)->materialGroups->remove_at(b);
+        modelData->parts.at(a)->materialGroups.erase(
+          modelData->parts.at(a)->materialGroups.begin() + b);
+
         b--;
       }
     }
 
-    if(modelData.parts->at(a)->materialGroups->size() < 1)
+    if(modelData->parts.at(a)->materialGroups.size() < 1)
     {
-      modelData.parts->remove_at(a);
+      modelData->parts.erase(modelData->parts.begin() + a);
       a--;
     }
   }
@@ -246,22 +249,6 @@ WavefrontParser::WavefrontParser(std::string path)
   // TODO: Go through each part and get max / min.
   // work out size and offset from 0, 0 so we can rotate around center of part.
   obtainSizes();
-}
-
-MaterialGroupData::MaterialGroupData()
-{
-
-}
-
-PartData::PartData()
-{
-  materialGroups = Application::getGC()->gc_list<MaterialGroupData*>();
-}
-
-ModelData::ModelData()
-{
-  parts = Application::getGC()->gc_list<PartData*>();
-  materials = Application::getGC()->gc_list<MaterialData*>();
 }
 
 bool WavefrontParser::hasNormals()
@@ -276,8 +263,8 @@ bool WavefrontParser::hasCoords()
 
 void WavefrontParser::obtainSizes()
 {
-  PartData* part = NULL;
-  MaterialGroupData* materialGroup = NULL;
+  ref<PartData> part;
+  ref<MaterialGroupData> materialGroup;
   float maxX = 0; float minX = 0;
   float maxY = 0; float minY = 0;
   float maxZ = 0; float minZ = 0;
@@ -286,53 +273,53 @@ void WavefrontParser::obtainSizes()
   float modelMaxZ = 0; float modelMinZ = 0;
   bool initialSet = false;
   bool modelInitialSet = false;
-  Vector3* current = NULL;
+  Vector3 current;
 
-  for(int a = 0; a < modelData.parts->size(); a++)
+  for(size_t a = 0; a < modelData->parts.size(); a++)
   {
-    part = modelData.parts->at(a);
+    part = modelData->parts.at(a);
     initialSet = false;
 
-    for(int b = 0; b < part->materialGroups->size(); b++)
+    for(size_t b = 0; b < part->materialGroups.size(); b++)
     {
-      materialGroup = part->materialGroups->at(b);
+      materialGroup = part->materialGroups.at(b);
 
-      for(int c = 0; c < materialGroup->faces.size(); c++)
+      for(size_t c = 0; c < materialGroup->faces.size(); c++)
       {
-        for(int d = 0; d < 3; d++)
+        for(size_t d = 0; d < 3; d++)
         {
           if(d == 0)
           {
-            current = &materialGroup->faces.at(c).a.position;
+            current = materialGroup->faces.at(c)->a.position;
           }
           else if(d == 1)
           {
-            current = &materialGroup->faces.at(c).b.position;
+            current = materialGroup->faces.at(c)->b.position;
           }
           else
           {
-            current = &materialGroup->faces.at(c).c.position;
+            current = materialGroup->faces.at(c)->c.position;
           }
         }
 
         if(initialSet == false)
         {
-          maxX = current->x;
-          minX = current->x;
-          maxY = current->y;
-          minY = current->y;
-          maxZ = current->z;
-          minZ = current->z;
+          maxX = current.x;
+          minX = current.x;
+          maxY = current.y;
+          minY = current.y;
+          maxZ = current.z;
+          minZ = current.z;
           initialSet = true;
         }
         else
         {
-          if(current->x > maxX) maxX = current->x;
-          if(current->x < minX) minX = current->x;
-          if(current->y > maxY) maxY = current->y;
-          if(current->y < minY) minY = current->y;
-          if(current->z > maxZ) maxZ = current->z;
-          if(current->z < minZ) minZ = current->z;
+          if(current.x > maxX) maxX = current.x;
+          if(current.x < minX) minX = current.x;
+          if(current.y > maxY) maxY = current.y;
+          if(current.y < minY) minY = current.y;
+          if(current.z > maxZ) maxZ = current.z;
+          if(current.z < minZ) minZ = current.z;
         }
       }
     }
@@ -363,12 +350,12 @@ void WavefrontParser::obtainSizes()
     }
   }
 
-  modelData.size = absVec3(Vector3(modelMaxX - modelMinX, modelMaxY - modelMinY, modelMaxZ - modelMinZ));
-  modelData.center.x = (modelMaxX + modelMinX) / 2;
-  modelData.center.y = (modelMaxY + modelMinY) / 2;
-  modelData.center.z = (modelMaxZ + modelMinZ) / 2;
-  //std::cout << modelData.size.x << " " << modelData.size.y << " " << modelData.size.z << std::endl;
-  //std::cout << modelData.center.x << " " << modelData.center.y << " " << modelData.center.z << std::endl;
+  modelData->size = absVec3(Vector3(modelMaxX - modelMinX, modelMaxY - modelMinY, modelMaxZ - modelMinZ));
+  modelData->center.x = (modelMaxX + modelMinX) / 2;
+  modelData->center.y = (modelMaxY + modelMinY) / 2;
+  modelData->center.z = (modelMaxZ + modelMinZ) / 2;
+  //std::cout << modelData->size.x << " " << modelData->size.y << " " << modelData->size.z << std::endl;
+  //std::cout << modelData->center.x << " " << modelData->center.y << " " << modelData->center.z << std::endl;
 }
 
 Vector3 WavefrontParser::absVec3(Vector3 input)
@@ -407,7 +394,7 @@ Vector3 WavefrontParser::absVec3(Vector3 input)
 
 void WavefrontParser::parseMtl(std::string filename)
 {
-  MaterialData* currentMaterial = NULL;
+  shared<MaterialData> currentMaterial;
   std::string line;
   std::vector<std::string> splitLine;
   std::vector<std::string> subSplit;
@@ -425,7 +412,7 @@ void WavefrontParser::parseMtl(std::string filename)
   {
     getline(file, line);
     splitLine.clear();
-    Util::splitStringWhitespace(line, &splitLine);
+    Util::splitStringWhitespace(line, splitLine);
 
     if(splitLine.size() < 1)
     {
@@ -434,8 +421,8 @@ void WavefrontParser::parseMtl(std::string filename)
 
     if(splitLine.at(0) == "newmtl")
     {
-      currentMaterial = Application::getGC()->gc_new<MaterialData>();
-      modelData.materials->push_back(currentMaterial);
+      currentMaterial.reset(new MaterialData());
+      modelData->materials.push_back(currentMaterial);
 
       if(splitLine.size() > 1)
       {
@@ -461,26 +448,26 @@ void WavefrontParser::parseMtl(std::string filename)
   }
 }
 
-ModelData* WavefrontParser::getModelData()
+ref<ModelData> WavefrontParser::getModelData()
 {
-  return &modelData;
+  return modelData;
 }
 
 void WavefrontParser::output()
 {
-  std::cout << "Materials: " << modelData.materials->size() << std::endl;
+  std::cout << "Materials: " << modelData->materials.size() << std::endl;
 
-  for(int a = 0; a < modelData.materials->size(); a++)
+  for(size_t a = 0; a < modelData->materials.size(); a++)
   {
-    std::cout << "  Material: " << modelData.materials->at(a)->name << std::endl;
-    std::cout << "    R: " << modelData.materials->at(a)->color.x << std::endl;
-    std::cout << "    G: " << modelData.materials->at(a)->color.y << std::endl;
-    std::cout << "    B: " << modelData.materials->at(a)->color.z << std::endl;
-    std::cout << "    A: " << modelData.materials->at(a)->color.w << std::endl;
+    std::cout << "  Material: " << modelData->materials.at(a)->name << std::endl;
+    std::cout << "    R: " << modelData->materials.at(a)->color.x << std::endl;
+    std::cout << "    G: " << modelData->materials.at(a)->color.y << std::endl;
+    std::cout << "    B: " << modelData->materials.at(a)->color.z << std::endl;
+    std::cout << "    A: " << modelData->materials.at(a)->color.w << std::endl;
 
-    if(modelData.materials->at(a)->texture != "")
+    if(modelData->materials.at(a)->texture != "")
     {
-      std::cout << "    Texture: " << modelData.materials->at(a)->texture << std::endl;
+      std::cout << "    Texture: " << modelData->materials.at(a)->texture << std::endl;
     }
     else
     {
@@ -488,21 +475,21 @@ void WavefrontParser::output()
     }
   }
 
-  std::cout << "Parts: " << modelData.parts->size() << std::endl;
+  std::cout << "Parts: " << modelData->parts.size() << std::endl;
 
 /*
-  for(int a = 0; a < modelData.parts.size(); a++)
+  for(size_t a = 0; a < modelData->parts.size(); a++)
   {
-    std::cout << "  Part: " << modelData.parts.at(a)->name << std::endl;
-    std::cout << "    Material Groups: " << modelData.parts.at(a)->materialGroups.size() << std::endl;
+    std::cout << "  Part: " << modelData->parts.at(a)->name << std::endl;
+    std::cout << "    Material Groups: " << modelData->parts.at(a)->materialGroups.size() << std::endl;
 
-    for(int b = 0; b < modelData.parts.at(a)->materialGroups.size(); b++)
+    for(size_t b = 0; b < modelData->parts.at(a)->materialGroups.size(); b++)
     {
       std::cout << "      Material Group: " << b << std::endl;
-      std::cout << "        Faces: " << modelData.parts.at(a)->materialGroups.at(b)->faces.size() << std::endl;
-      std::cout << "        Material: " << modelData.parts.at(a)->materialGroups.at(b)->material->name << std::endl;
+      std::cout << "        Faces: " << modelData->parts.at(a)->materialGroups.at(b)->faces.size() << std::endl;
+      std::cout << "        Material: " << modelData->parts.at(a)->materialGroups.at(b)->material->name << std::endl;
 
-      //if(modelData.parts.at(a)->materialGroups.at(b)->faces.size() > 0)
+      //if(modelData->parts.at(a)->materialGroups.at(b)->faces.size() > 0)
       //{
 
       //}
@@ -511,19 +498,19 @@ void WavefrontParser::output()
 */
 }
 
-MaterialData* WavefrontParser::getMaterialData(std::string name)
+shared<MaterialData> WavefrontParser::getMaterialData(std::string name)
 {
-  for(int i = 0; i < modelData.materials->size(); i++)
+  for(size_t i = 0; i < modelData->materials.size(); i++)
   {
-    if(modelData.materials->at(i)->name == name)
+    if(modelData->materials.at(i)->name == name)
     {
-      return modelData.materials->at(i);
+      return modelData->materials.at(i);
     }
   }
 
   //throw Exception("Failed to obtain material \"" + name + "\"");
   std::cout << "Warning: Failed to obtain material \"" << name << "\"" << std::endl;
-  return modelData.materials->at(0);
+  return modelData->materials.at(0);
 }
 
 std::vector<std::string> WavefrontParser::mungeSplitLine(std::vector<std::string> splitLine)

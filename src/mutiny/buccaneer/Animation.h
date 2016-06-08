@@ -2,7 +2,7 @@
 #define MUTINY_ENGINE_ANIMATION_H
 
 #include "../Object.h"
-#include "../internal/gcmm.h"
+#include "../ref.h"
 
 #include <string>
 #include <vector>
@@ -19,7 +19,7 @@ namespace engine
 class Resources;
 class AnimatedMeshRenderer;
 
-class AnimationTransform
+class AnimationTransform : public enable_ref
 {
 public:
   std::string partName;
@@ -35,12 +35,12 @@ public:
 
 };
 
-class AnimationFrame
+class AnimationFrame : public enable_ref
 {
 public:
   static AnimationFrame* copy(AnimationFrame* other);
   AnimationFrame();
-  internal::gc::list<AnimationTransform*>* transforms;
+  std::vector<AnimationTransform*> transforms;
 
 };
 
@@ -59,7 +59,7 @@ public:
 private:
   static Animation* load(std::string path);
 
-  internal::gc::list<AnimationFrame*>* frames;
+  std::vector<AnimationFrame*> frames;
 
 };
 

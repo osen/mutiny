@@ -8,14 +8,14 @@ using namespace mutiny::engine;
 class BloomScreen : public Behaviour
 {
 public:
-  static GameObject* create();
+  static ref<GameObject> create();
 
   virtual void onAwake();
   virtual void onUpdate();
   virtual void onGui();
 
 private:
-  GameObject* playerGo;
+  ref<GameObject> playerGo;
 
 };
 

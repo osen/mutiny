@@ -8,13 +8,14 @@ using namespace mutiny::engine;
 class Player : public Behaviour
 {
 public:
-  static Player* create();
+  static ref<Player> create();
 
   virtual void onAwake();
   virtual void onUpdate();
 
 private:
-  Material* material;
+  shared<Material> material;
+  shared<Material> particleMaterial;
 
 };
 

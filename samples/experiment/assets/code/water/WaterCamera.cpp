@@ -4,10 +4,10 @@
 
 using namespace mutiny::engine;
 
-WaterCamera* WaterCamera::create()
+ref<WaterCamera> WaterCamera::create()
 {
-  GameObject* cameraGo = GameObject::create("WaterCamera");
-  WaterCamera* camera = cameraGo->addComponent<WaterCamera>();
+  ref<GameObject> cameraGo = GameObject::create("WaterCamera");
+  ref<WaterCamera> camera = cameraGo->addComponent<WaterCamera>();
 
   return camera;
 }
@@ -16,7 +16,7 @@ void WaterCamera::onAwake()
 {
   Debug::log("WaterCamera awoken");
 
-  Camera* camera = getGameObject()->addComponent<Camera>();
+  ref<Camera> camera = getGameObject()->addComponent<Camera>();
   camera->setBackgroundColor(Color(0.5f, 0.5f, 1.0f, 1));
 
   getGameObject()->getTransform()->setPosition(Vector3(0, 3, 13));

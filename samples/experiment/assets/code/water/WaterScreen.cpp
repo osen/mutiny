@@ -5,10 +5,10 @@ using namespace mutiny::engine;
 
 GameObject* WaterScreen::create()
 {
-  GameObject* mainGo = GameObject::create("WaterScreen");
+  ref<GameObject> mainGo = GameObject::create("WaterScreen");
   mainGo->addComponent<WaterScreen>();
 
-  return mainGo;
+  return mainGo.get();
 }
 
 void WaterScreen::onAwake()
@@ -23,11 +23,11 @@ void WaterScreen::onAwake()
   waterGo->getTransform()->rotate(Vector3(0, 180, 0));
   waterGo->getTransform()->translate(Vector3(0, -1, 0));
   waterMr = waterGo->addComponent<MeshRenderer>();
-  MeshFilter* waterMf = waterGo->addComponent<MeshFilter>();
+  ref<MeshFilter> waterMf = waterGo->addComponent<MeshFilter>();
   waterMf->setMesh(Resources::load<Mesh>("models/water/water"));
   waterMaterial = Resources::load<Material>("shaders/water");
-  waterMr->setMaterial(waterMaterial);
-  Texture2d* waterTexture = Resources::load<Texture2d>("models/water/water");
+  waterMr->setMaterial(waterMaterial.get());
+  ref<Texture2d> waterTexture = Resources::load<Texture2d>("models/water/water");
   waterMaterial->setMainTexture(waterTexture);
 
   playerGo = GameObject::create("Player");
@@ -35,19 +35,27 @@ void WaterScreen::onAwake()
 
   playerMr = playerGo->addComponent<AnimatedMeshRenderer>();
 
-  AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/captain/captain");
+  ref<AnimatedMesh> mesh = Resources::load<AnimatedMesh>("models/captain/captain");
+
+  if(mesh.expired())
+  {
+    throw Exception("Failed to load mesh");
+  }
+
   playerMr->setAnimatedMesh(mesh);
 
+/*
   for(int i = 0; i < playerMr->getRoot()->getTransform()->getChildCount(); i++)
   {
     if(playerMr->getRoot()->getTransform()->getChild(i)->getGameObject()->getName() == "Lightsaber")
     {
-      Material* fullRed = Resources::load<Material>("shaders/accum/full_red");
+      ref<Material> fullRed = Resources::load<Material>("shaders/accum/full_red");
       fullRed->setMainTexture(Resources::load<Texture2d>("models/captain/captain"));
       playerMr->getRoot()->getTransform()->getChild(i)->getGameObject()->getComponent<MeshRenderer>()
-        ->setMaterial(fullRed);
+        ->setMaterial(fullRed.get());
     }
   }
+*/
 
   runAnimation = Resources::load<Animation>("models/captain/run.anm");
   idleAnimation = Resources::load<Animation>("models/captain/idle.anm");
@@ -55,10 +63,6 @@ void WaterScreen::onAwake()
   playerMr->setAnimation(idleAnimation);
   playerMr->setFps(1);
   playerMr->play();
-
-  //Mesh* mesh = Resources::load<Mesh>("models/captain/captain");
-  //MeshFilter* playerMf = playerGo->addComponent<MeshFilter>();
-  //playerMf->setMesh(mesh);
 }
 
 void WaterScreen::onUpdate()

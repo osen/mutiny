@@ -58,11 +58,5 @@
 #include "buccaneer/buccaneer.h"
 #include "parrot/parrot.h"
 
-#include "internal/gcmm.h"
-
-#define gclist internal::gc::list
-#define gcnewlist Application::getGC()->gc_list
-#define gcnew Application::getGC()->gc_new
-
 #endif
 

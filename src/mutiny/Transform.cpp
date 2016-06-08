@@ -20,7 +20,6 @@ void Transform::onAwake()
   //Debug::log("Transform awake");
   parent = NULL;
   localScale = Vector3(1, 1, 1);
-  children = Application::getGC()->gc_list<Transform*>();
 }
 
 void Transform::onDestroy()
@@ -57,7 +56,7 @@ Vector3 Transform::getLocalRotation()
 
 void Transform::setRotation(Vector3 rotation)
 {
-  if(getParent() != NULL)
+  if(getParent().valid())
   {
     localRotation = rotation - getParent()->getRotation();
   }
@@ -69,12 +68,12 @@ void Transform::setRotation(Vector3 rotation)
 
 void Transform::setPosition(Vector3 position)
 {
-  if(getParent() != NULL)
+  if(getParent().valid())
   {
     Matrix4x4 trs = Matrix4x4::getIdentity();
-    Transform* trans = getParent();
+    ref<Transform> trans = getParent();
 
-    while(trans != NULL)
+    while(trans.valid())
     {
       trs = Matrix4x4::getTrs(trans->localPosition, trans->localRotation, Vector3(1, 1, 1)) * trs;
       trans = trans->getParent();
@@ -90,12 +89,12 @@ void Transform::setPosition(Vector3 position)
 
 void Transform::setScale(Vector3 scale)
 {
-  if(getParent() != NULL)
+  if(getParent().valid())
   {
     Matrix4x4 trs = Matrix4x4::getIdentity();
-    Transform* trans = getParent();
+    ref<Transform> trans = getParent();
 
-    while(trans != NULL)
+    while(trans.valid())
     {
       trs = Matrix4x4::getTrs(trans->localPosition, trans->localRotation, trans->localScale) * trs;
       trans = trans->getParent();
@@ -112,9 +111,9 @@ void Transform::setScale(Vector3 scale)
 Vector3 Transform::getPosition()
 {
   Matrix4x4 trs = Matrix4x4::getIdentity();
-  Transform* trans = this;
+  ref<Transform> trans = this;
 
-  while(trans != NULL)
+  while(trans.valid())
   {
     trs = Matrix4x4::getTrs(trans->localPosition, trans->localRotation, Vector3(1, 1, 1)) * trs;
     trans = trans->getParent();
@@ -125,10 +124,10 @@ Vector3 Transform::getPosition()
 
 Vector3 Transform::getRotation()
 {
-  Transform* trans = this;
+  ref<Transform> trans = this;
   Vector3 rotation;
 
-  while(trans != NULL)
+  while(trans.valid())
   {
     rotation = rotation + trans->localRotation;
     trans = trans->getParent();
@@ -144,59 +143,59 @@ Vector3 Transform::getScale()
 
 void Transform::detachChildren()
 {
-  while(children->size() > 0)
+  while(children.size() > 0)
   {
-    Transform* child = children->at(0);
+    ref<Transform> child = children.at(0);
     child->setParent(NULL);
     Object::destroy(child->getGameObject());
   }
 
-  //for(int i = 0; i < children->size(); i++)
+  //for(int i = 0; i < children.size(); i++)
   //{
-  //  Transform* child = children->at(i);
+  //  Transform* child = children.at(i);
   //  child->setParent(NULL);
   //  // Dont just detach.. destroy
   //  Object::destroy(child->getGameObject());
   //}
 
-  children->clear();
+  children.clear();
 }
 
-Transform* Transform::find(std::string name)
+ref<Transform> Transform::find(std::string name)
 {
-  for(int i = 0; i < children->size(); i++)
+  for(int i = 0; i < children.size(); i++)
   {
-    if(children->at(i)->getGameObject()->getName() == name)
+    if(children.at(i)->getGameObject()->getName() == name)
     {
-      return children->at(i);
+      return children.at(i);
     }
   }
 
   return NULL;
 }
 
-Transform* Transform::getParent()
+ref<Transform> Transform::getParent()
 {
   return parent;
 }
 
-void Transform::setParent(Transform* transform)
+void Transform::setParent(ref<Transform> transform)
 {
-  if(this->parent != NULL)
+  if(this->parent.valid())
   {
-    for(int i = 0; i < this->parent->children->size(); i++)
+    for(int i = 0; i < this->parent->children.size(); i++)
     {
-      if(this->parent->children->at(i) == this)
+      if(this->parent->children.at(i).get() == this)
       {
-        this->parent->children->remove_at(i);
+        this->parent->children.erase(this->parent->children.begin() + i);
         break;
       }
     }
   }
 
-  if(transform != NULL)
+  if(transform.valid())
   {
-    transform->children->push_back(this);
+    transform->children.push_back(this);
   }
 
   setLocalPosition(getPosition());
@@ -208,20 +207,20 @@ void Transform::setParent(Transform* transform)
 
 int Transform::getChildCount()
 {
-  return children->size();
+  return children.size();
 }
 
-Transform* Transform::getChild(int index)
+ref<Transform> Transform::getChild(int index)
 {
-  return children->at(index);
+  return children.at(index);
 }
 
-Transform* Transform::getRoot()
+ref<Transform> Transform::getRoot()
 {
-  Transform* root = this;
-  Transform* trans = parent;
+  ref<Transform> root = this;
+  ref<Transform> trans = parent;
 
-  while(trans != NULL)
+  while(trans.valid())
   {
     root = trans;
     trans = trans->getParent();

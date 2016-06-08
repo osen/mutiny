@@ -35,13 +35,15 @@ class Shader : public Object
 
 private:
   static void deleteVertexArray(GLuint id);
-  static Shader* load(std::string path);
+  static ref<Shader> load(std::string path);
+
+  Shader(std::string vertContents, std::string fragContents);
 
   shared<gl::Uint> vertexShaderId;
   shared<gl::Uint> fragmentShaderId;
   shared<gl::Uint> programId;
 
-  static Shader* create(std::string vertContents, std::string fragContents);
+  static shared<Shader> create(std::string vertContents, std::string fragContents);
 
 };
 

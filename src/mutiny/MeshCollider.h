@@ -2,6 +2,7 @@
 #define MUTINY_ENGINE_MESHCOLLIDER_H
 
 #include "Collider.h"
+#include "ref.h"
 
 namespace mutiny
 {
@@ -19,11 +20,11 @@ class MeshCollider : public Collider
 public:
   virtual ~MeshCollider();
 
-  void setMesh(Mesh* mesh);
-  Mesh* getMesh();
+  void setMesh(ref<Mesh> mesh);
+  ref<Mesh> getMesh();
 
 private:
-  Mesh* mesh;
+  ref<Mesh> mesh;
 
   virtual void awake();
 

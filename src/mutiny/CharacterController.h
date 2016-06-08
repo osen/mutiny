@@ -31,8 +31,8 @@ private:
   virtual void awake();
   virtual void update();
 
-  void checkCollision(MeshCollider* collider);
-  Vector3 crossProduct(float *a, float *b);
+  void checkCollision(ref<MeshCollider> collider);
+  Vector3 crossProduct(Vector3& a, Vector3& b);
   Vector3 findNormal(Vector3 a, Vector3 b, Vector3 c);
   bool colliding(Vector3 center, Vector3 half, Vector3 a, Vector3 b, Vector3 c);
   Vector3 handleCollision(Collision collision, Vector3 pos, Vector3 bounds);

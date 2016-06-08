@@ -17,21 +17,16 @@ namespace mutiny
 namespace engine
 {
 
-RenderTexture* RenderTexture::active = NULL;
-
-//RenderTexture::RenderTexture(int width, int height)
-RenderTexture* RenderTexture::create(int width, int height)
+shared<RenderTexture> RenderTexture::create(int width, int height)
 {
-  RenderTexture* rtn = Application::getGC()->gc_new<RenderTexture>();
+  shared<RenderTexture> rtn(new RenderTexture());
   rtn->width = width;
   rtn->height = height;
 
   rtn->nativeFrameBuffer = gl::Uint::genFramebuffer();
-  // TODO:
-  //_nativeFrameBuffer.reset(&nativeFrameBuffer, std::bind(deleteFramebuffer, nativeFrameBuffer));
   glBindFramebuffer(GL_FRAMEBUFFER, rtn->nativeFrameBuffer->getGLuint());
 
-  if(rtn->nativeTexture == NULL)
+  if(rtn->nativeTexture.get() == NULL)
   {
     rtn->nativeTexture = gl::Uint::genTexture();
   }
@@ -75,14 +70,14 @@ RenderTexture::~RenderTexture()
 
 }
 
-void RenderTexture::setActive(RenderTexture* renderTexture)
+void RenderTexture::setActive(ref<RenderTexture> renderTexture)
 {
-  if(active == renderTexture)
+  if(Application::context->active.try_get() == renderTexture.try_get())
   {
     return;
   }
 
-  if(renderTexture != NULL)
+  if(renderTexture.valid())
   {
     glBindFramebuffer(GL_FRAMEBUFFER, renderTexture->nativeFrameBuffer->getGLuint());
     glViewport(0, 0, renderTexture->width, renderTexture->height);
@@ -93,12 +88,12 @@ void RenderTexture::setActive(RenderTexture* renderTexture)
     glViewport(0, 0, Screen::getWidth(), Screen::getHeight());
   }
 
-  active = renderTexture;
+  Application::context->active = renderTexture;
 }
 
-RenderTexture* RenderTexture::getActive()
+ref<RenderTexture> RenderTexture::getActive()
 {
-  return active;
+  return Application::context->active;
 }
 
 }

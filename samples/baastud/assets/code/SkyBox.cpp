@@ -4,10 +4,10 @@
 
 using namespace mutiny::engine;
 
-SkyBox* SkyBox::create(GameObject* playerGo)
+ref<SkyBox> SkyBox::create(ref<GameObject> playerGo)
 {
-  GameObject* skyboxGo = gcnew<GameObject>("SkyBox");
-  SkyBox* skybox = skyboxGo->addComponent<SkyBox>();
+  ref<GameObject> skyboxGo = GameObject::create("SkyBox");
+  ref<SkyBox> skybox = skyboxGo->addComponent<SkyBox>();
   skybox->playerGo = playerGo;
 
   return skybox;
@@ -105,24 +105,24 @@ void SkyBox::onAwake()
   triangles.push_back(22);
   triangles.push_back(23);
 
-  Mesh* mesh = gcnew<Mesh>();
+  mesh.reset(new Mesh());
   mesh->setVertices(vertices);
   mesh->setUv(uv);
   mesh->setTriangles(triangles, 0);
 
-  MeshFilter* meshFilter = getGameObject()->addComponent<MeshFilter>();
+  ref<MeshFilter> meshFilter = getGameObject()->addComponent<MeshFilter>();
   meshFilter->setMesh(mesh);
 
-  Texture2d* texture = Resources::load<Texture2d>("textures/clouds");
+  ref<Texture2d> texture = Resources::load<Texture2d>("textures/clouds");
 
   //Texture2d* texture = gcnew<Texture2d>(1, 1);
   //texture->setPixel(0, 0, Color(1, 0, 0));
   //texture->apply();
 
-  Material* material = Material::create(Resources::load<Shader>("shaders/Internal-MeshRendererTexture"));
+  material = Material::create(Resources::load<Shader>("shaders/Internal-MeshRendererTexture"));
   material->setMainTexture(texture);
 
-  MeshRenderer* meshRenderer = getGameObject()->addComponent<MeshRenderer>();
+  ref<MeshRenderer> meshRenderer = getGameObject()->addComponent<MeshRenderer>();
   meshRenderer->setMaterial(material);
 
   //getGameObject()->getTransform()->translate(Vector3(0, 0, 10));

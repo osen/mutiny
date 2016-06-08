@@ -21,7 +21,7 @@ namespace engine
 
 MeshRenderer::MeshRenderer()
 {
-  materials = Application::getGC()->gc_list<Material*>();
+
 }
 
 MeshRenderer::~MeshRenderer()
@@ -31,17 +31,17 @@ MeshRenderer::~MeshRenderer()
 
 void MeshRenderer::render()
 {
-  MeshFilter* meshFilter = getGameObject()->getComponent<MeshFilter>();
-  Mesh* mesh;
-  Transform* transform = getGameObject()->getTransform();
+  ref<MeshFilter> meshFilter = getGameObject()->getComponent<MeshFilter>();
+  ref<Mesh> mesh;
+  ref<Transform> transform = getGameObject()->getTransform();
 
-  if(transform == NULL)
+  if(transform.expired())
   {
     Debug::log("Failed to find Transform");
     return;
   }
 
-  if(meshFilter == NULL)
+  if(meshFilter.expired())
   {
     Debug::log("Failed to find MeshFilter");
     return;
@@ -49,7 +49,7 @@ void MeshRenderer::render()
 
   mesh = meshFilter->getMesh();
 
-  if(mesh == NULL)
+  if(mesh.expired())
   {
     Debug::log("No mesh bound");
     return;
@@ -69,16 +69,16 @@ void MeshRenderer::render()
     Vector3(1, 1, 1) * Vector3(1, 1, 1)
   );
 
-  for(int i = 0; i < mesh->getSubmeshCount(); i++)
+  for(size_t i = 0; i < mesh->getSubmeshCount(); i++)
   {
-    Material* material = getMaterial();
+    ref<Material> material = getMaterial();
 
-    if(materials->size() > i)
+    if(materials.size() > i)
     {
-      material = materials->at(i);
+      material = materials.at(i);
     }
 
-    if(material == NULL)
+    if(material.expired())
     {
       if(mesh->getNormals().size() > 0 && mesh->getUv().size() > 0)
       {
@@ -87,11 +87,11 @@ void MeshRenderer::render()
       }
       else if(mesh->getNormals().size() > 0)
       {
-        material = material = Application::context->meshNormalMaterial;
+        material = Application::context->meshNormalMaterial;
       }
       else
       {
-        material = material = Application::context->meshNormalMaterial;
+        material = Application::context->meshNormalMaterial;
       }
     }
 
@@ -99,42 +99,42 @@ void MeshRenderer::render()
     material->setMatrix("in_View", viewMat);
     material->setMatrix("in_NormalMatrix", (viewMat * modelMat.inverse()).transpose());
 
-    for(int j = 0; j < material->getPassCount(); j++)
+    for(size_t j = 0; j < material->getPassCount(); j++)
     {
-      material->setPass(j, material);
+      material->setPass(j, material.get());
       Graphics::drawMeshNow(mesh, modelMat, i);
     }
   }
 }
 
-void MeshRenderer::setMaterials(internal::gc::list<Material*>* materials)
+void MeshRenderer::setMaterials(std::vector<ref<Material> > materials)
 {
   this->materials = materials;
 }
 
-void MeshRenderer::setMaterial(Material* material)
+void MeshRenderer::setMaterial(ref<Material> material)
 {
-  if(materials->size() < 1)
+  if(materials.size() < 1)
   {
-    materials->push_back(material);
+    materials.push_back(material);
   }
   else
   {
-    materials->at(0) = material;
+    materials.at(0) = material;
   }
 }
 
-Material* MeshRenderer::getMaterial()
+ref<Material> MeshRenderer::getMaterial()
 {
-  if(materials->size() < 1)
+  if(materials.size() < 1)
   {
     return NULL;
   }
 
-  return materials->at(0);
+  return materials.at(0).get();
 }
 
-internal::gc::list<Material*>* MeshRenderer::getMaterials()
+std::vector<ref<Material> > MeshRenderer::getMaterials()
 {
   return materials;
 }

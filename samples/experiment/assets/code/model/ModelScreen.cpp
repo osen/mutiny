@@ -4,9 +4,9 @@
 
 using namespace mutiny::engine;
 
-GameObject* ModelScreen::create()
+ref<GameObject> ModelScreen::create()
 {
-  GameObject* mainGo = GameObject::create("ModelScreen");
+  ref<GameObject> mainGo = GameObject::create("ModelScreen");
   mainGo->addComponent<ModelScreen>();
 
   return mainGo;
@@ -15,14 +15,14 @@ GameObject* ModelScreen::create()
 void ModelScreen::onStart()
 {
   cameraGo = GameObject::create("MainCamera");
-  Camera* camera = cameraGo->addComponent<Camera>();
+  ref<Camera> camera = cameraGo->addComponent<Camera>();
   cameraGo->getTransform()->setPosition(Vector3(0, 1, -10));
 
   modelGo = GameObject::create("Model");
   modelGo->getTransform()->setPosition(Vector3(0, 0, 10));
 
-  AnimatedMeshRenderer* playerMr = modelGo->addComponent<AnimatedMeshRenderer>();
-  AnimatedMesh* mesh = Resources::load<AnimatedMesh>("models/al/al");
+  ref<AnimatedMeshRenderer> playerMr = modelGo->addComponent<AnimatedMeshRenderer>();
+  ref<AnimatedMesh> mesh = Resources::load<AnimatedMesh>("models/al/al");
   playerMr->setAnimatedMesh(mesh);
   //modelGo->getTransform()->setPosition(Vector3(0, 0, 10));
 }

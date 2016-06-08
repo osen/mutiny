@@ -27,7 +27,7 @@ class Chunk
 public:
   static Chunk* LoadWAV(std::string path)
   {
-    Chunk* rtn = Application::getGC()->gc_new<Chunk>();
+    Chunk* rtn = new Chunk();
     rtn->data = Mix_LoadWAV(path.c_str());
 
     if(rtn->data == NULL)
@@ -58,7 +58,7 @@ class AudioClip : public Object
   friend class mutiny::engine::AudioSource;
 
 private:
-  static AudioClip* load(std::string path);
+  static ref<AudioClip> load(std::string path);
 
 #ifdef USE_SDL
   Chunk* data;

@@ -2,6 +2,8 @@
 #include "../Exception.h"
 #include "../Application.h"
 
+#include <cstdlib>
+
 namespace mutiny
 {
 
@@ -11,9 +13,12 @@ namespace engine
 namespace internal
 {
 
-PngData* PngData::create()
+shared<PngData> PngData::create()
 {
-  PngData* rtn = Application::getGC()->gc_new<PngData>();
+  shared<PngData> rtn(new PngData());
+  rtn->image = NULL;
+  rtn->width = 0;
+  rtn->height = 0;
 
   return rtn;
 }
@@ -26,7 +31,7 @@ PngData::~PngData()
 #ifdef _WIN32
 Win32FindData* Win32FindData::create()
 {
-  Win32FindData* rtn = Application::getGC()->gc_new<Win32FindData>();
+  Win32FindData* rtn = new Win32FindData();
 
   return rtn;
 }
@@ -41,7 +46,7 @@ FindHandle::~FindHandle()
 
 FindHandle* FindHandle::FindFirstFile(std::string path, Win32FindData* findData)
 {
-  FindHandle* rtn = Application::getGC()->gc_new<FindHandle>();
+  FindHandle* rtn = new FindHandle();
   rtn->hFind = INVALID_HANDLE_VALUE;
   rtn->findData = findData;
   rtn->hFind = ::FindFirstFile(path.c_str(), &rtn->findData->ffd);

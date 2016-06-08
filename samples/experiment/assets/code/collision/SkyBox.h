@@ -8,13 +8,14 @@ using namespace mutiny::engine;
 class SkyBox : public Behaviour
 {
 public:
-  static SkyBox* create(GameObject* playerGo);
+  static ref<SkyBox> create(ref<GameObject> playerGo);
 
   virtual void onAwake();
   virtual void onUpdate();
 
 private:
-  GameObject* playerGo;
+  ref<GameObject> playerGo;
+  shared<Material> material;
 
 };
 

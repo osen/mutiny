@@ -12,10 +12,10 @@ int Sheep::random(int min, int max)
   return rand() % ((max + 1) - min) + min;
 }
 
-GameObject* Sheep::create(GameScreen* gameScreen)
+ref<GameObject> Sheep::create(ref<GameScreen> gameScreen)
 {
-  GameObject* mainGo = gcnew<GameObject>("Sheep");
-  Sheep* sheep = mainGo->addComponent<Sheep>();
+  ref<GameObject> mainGo = GameObject::create("Sheep");
+  ref<Sheep> sheep = mainGo->addComponent<Sheep>();
   sheep->gameScreen = gameScreen;
 
   return mainGo;
@@ -28,7 +28,7 @@ bool Sheep::isWolf()
 
 void Sheep::onStart()
 {
-  AnimatedMesh* mesh = NULL;
+  ref<AnimatedMesh> mesh;
 
   wolf = false;
   getGameObject()->setTag("sheep");
@@ -79,7 +79,7 @@ void Sheep::onUpdate()
     getGameObject()->getTransform()->rotate(Vector3(0, 1, 0));
   }
 
-  CharacterController* cc = getGameObject()->getComponent<CharacterController>();
+  ref<CharacterController> cc = getGameObject()->getComponent<CharacterController>();
 
   cc->simpleMove(Vector3(0, -5, 0) * Time::getDeltaTime());
   stateTimeout -= Time::getDeltaTime() * 1000.0f;
@@ -148,8 +148,8 @@ void Sheep::onUpdate()
     }
   }
 
-  Fence* fence = gameScreen->getFence()->getComponent<Fence>();
-  Transform* transform = getGameObject()->getTransform();
+  ref<Fence> fence = gameScreen->getFence()->getComponent<Fence>();
+  ref<Transform> transform = getGameObject()->getTransform();
 
   while(transform->getPosition().x > fence->getBounds().extents.x - 1)
   {

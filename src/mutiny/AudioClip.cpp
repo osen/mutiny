@@ -9,9 +9,9 @@ namespace mutiny
 namespace engine
 {
 
-AudioClip* AudioClip::load(std::string path)
+ref<AudioClip> AudioClip::load(std::string path)
 {
-  AudioClip* audioClip = Application::getGC()->gc_new<AudioClip>();
+  ref<AudioClip> audioClip = new AudioClip();
 #ifdef USE_SDL
   audioClip->data = Chunk::LoadWAV(path + ".ogg");
 #endif

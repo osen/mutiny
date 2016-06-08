@@ -11,22 +11,22 @@ class QuickNumber;
 class Player : public Behaviour
 {
 public:
-  static GameObject* create(GameScreen* gameScreen);
+  static ref<GameObject> create(ref<GameScreen> gameScreen);
 
   virtual void onAwake();
   virtual void onUpdate();
   virtual void onGui();
 
 private:
-  GameScreen* gameScreen;
-  AnimatedMeshRenderer* mr;
-  Animation* walkAnimation;
-  Animation* idleAnimation;
-  Animation* sprintAnimation;
-  Animation* humpAnimation;
-  Texture2d* censoredTexture;
-  Texture2d* sheepIconTexture;
-  QuickNumber* quickNumber;
+  ref<GameScreen> gameScreen;
+  ref<AnimatedMeshRenderer> mr;
+  ref<Animation> walkAnimation;
+  ref<Animation> idleAnimation;
+  ref<Animation> sprintAnimation;
+  ref<Animation> humpAnimation;
+  ref<Texture2d> censoredTexture;
+  ref<Texture2d> sheepIconTexture;
+  shared<QuickNumber> quickNumber;
 
 
   bool firstTime;
@@ -34,7 +34,7 @@ private:
   int state;
   float hTimeout;
   float speed;
-  GameObject* hTarget;
+  ref<GameObject> hTarget;
 
 };
 

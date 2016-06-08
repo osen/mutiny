@@ -46,11 +46,11 @@ void CharacterController::update()
 {
   grounded = false;
 
-  std::vector<Object*> collidableObjects = GameObject::findObjectsOfType<MeshCollider>();
+  std::vector<ref<MeshCollider> > collidableObjects = GameObject::findObjectsOfType<MeshCollider>();
 
-  for(int i = 0; i < collidableObjects.size(); i++)
+  for(size_t i = 0; i < collidableObjects.size(); i++)
   {
-    MeshCollider* meshCollider = ((MeshCollider*)collidableObjects.at(i));
+    ref<MeshCollider> meshCollider = collidableObjects.at(i);
 
     if(meshCollider->getBounds().intersects(bounds) == true)
     {
@@ -61,11 +61,11 @@ void CharacterController::update()
   Collider::update();
 }
 
-void CharacterController::checkCollision(MeshCollider* collider)
+void CharacterController::checkCollision(ref<MeshCollider> collider)
 {
   Vector3 pos = getGameObject()->getTransform()->getPosition();
 
-  Mesh* mesh = collider->getMesh();
+  ref<Mesh> mesh = collider->getMesh();
   std::vector<Vector3>& vertices = mesh->getVertices();
 
   // We basically want to set the mesh to the origin, including its rotation.
@@ -87,7 +87,7 @@ void CharacterController::checkCollision(MeshCollider* collider)
   Collision collision;
   //collision.relativeVelocity = frameMoveSpeed;
 
-  for(int v = 0; v < vertices.size(); v+=3)
+  for(size_t v = 0; v < vertices.size(); v+=3)
   {
     Vector3 a = vertices.at(v);
     Vector3 b = vertices.at(v+1);
@@ -99,7 +99,7 @@ void CharacterController::checkCollision(MeshCollider* collider)
 
       contact.normal = findNormal(a, b, c);
       contact.thisCollider = this;
-      contact.otherCollider = collider;
+      contact.otherCollider = collider.get();
       contact.a = a;
       contact.b = b;
       contact.c = c;
@@ -126,7 +126,7 @@ void CharacterController::checkCollision(MeshCollider* collider)
   stepExtents.z = stepExtents.z / 2.0f;
   stepExtents.y = stepExtents.y + 0.01f;
 
-  for(int v = 0; v < vertices.size(); v+=3)
+  for(size_t v = 0; v < vertices.size(); v+=3)
   {
     Vector3 a = vertices.at(v);
     Vector3 b = vertices.at(v+1);
@@ -138,7 +138,7 @@ void CharacterController::checkCollision(MeshCollider* collider)
 
       contact.normal = findNormal(a, b, c);
       contact.thisCollider = this;
-      contact.otherCollider = collider;
+      contact.otherCollider = collider.get();
       contact.a = a;
       contact.b = b;
       contact.c = c;
@@ -174,7 +174,7 @@ Vector3 CharacterController::handleStep(Collision collision, Vector3 pos, Vector
     stillColliding = false;
     change.y += 0.01f;
 
-    for(int i = 0; i < collision.contacts.size(); i++)
+    for(size_t i = 0; i < collision.contacts.size(); i++)
     {
       ContactPoint c = collision.contacts.at(i);
 
@@ -200,7 +200,7 @@ Vector3 CharacterController::handleCollision(Collision collision, Vector3 pos, V
     stillColliding = false;
     amount += 0.025f;
 
-    for(int i = 0; i < collision.contacts.size(); i++)
+    for(size_t i = 0; i < collision.contacts.size(); i++)
     {
       ContactPoint c = collision.contacts.at(i);
       newPos = pos - (c.normal * amount);
@@ -223,30 +223,23 @@ Vector3 CharacterController::handleCollision(Collision collision, Vector3 pos, V
   //return pos;
 }
 
-Vector3 CharacterController::crossProduct(float *a, float *b)
+Vector3 CharacterController::crossProduct(Vector3& a, Vector3& b)
 {
   Vector3 product;
 
-  product.x = (a[1] * b[2]) - (a[2] * b[1]);
-  product.y = (a[2] * b[0]) - (a[0] * b[2]);
-  product.z = (a[0] * b[1]) - (a[1] * b[0]);
+  product.x = (a.y * b.z) - (a.z * b.y);
+  product.y = (a.z * b.x) - (a.x * b.z);
+  product.z = (a.x * b.y) - (a.y * b.x);
 
   return product;
 }
 
 Vector3 CharacterController::findNormal(Vector3 a, Vector3 b, Vector3 c)
 {
-  float Vector[3], Vector2[3];
+  Vector3 d = c - a;
+  Vector3 e = b - a;
 
-  Vector[0] = c.x - a.x;
-  Vector[1] = c.y - a.y;
-  Vector[2] = c.z - a.z;
-
-  Vector2[0] = b.x - a.x;
-  Vector2[1] = b.y - a.y;
-  Vector2[2] = b.z - a.z;
-
-  Vector3 normal = crossProduct(Vector,Vector2);
+  Vector3 normal = crossProduct(d, e);
   normal = normal.getNormalized();
 
   return normal;

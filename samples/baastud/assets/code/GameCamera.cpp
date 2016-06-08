@@ -4,10 +4,10 @@
 
 using namespace mutiny::engine;
 
-GameObject* GameCamera::create(GameObject* playerGo)
+ref<GameObject> GameCamera::create(ref<GameObject> playerGo)
 {
-  GameObject* mainGo = gcnew<GameObject>("GameCamera");
-  GameCamera* gameCamera = mainGo->addComponent<GameCamera>();
+  ref<GameObject> mainGo = GameObject::create("GameCamera");
+  ref<GameCamera> gameCamera = mainGo->addComponent<GameCamera>();
   gameCamera->playerGo = playerGo;
 
   return mainGo;
@@ -99,22 +99,22 @@ void GameCamera::onPostRender()
 {
   Graphics::setRenderTarget(blurPass1);
   Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), 
-    originalPass, texturedMaterial);
+    originalPass.get(), texturedMaterial);
 
   Graphics::setRenderTarget(blurPass2);
   Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), 
-    blurPass1, texturedMaterial);
+    blurPass1.get(), texturedMaterial);
 
   Graphics::setRenderTarget(blurPass3);
   Graphics::drawTexture(Rect(-2, -2, Screen::getWidth() + 5, Screen::getHeight() + 5), 
-    blurPass2, texturedMaterial);
+    blurPass2.get(), texturedMaterial);
 
   Graphics::setRenderTarget(mergePass);
-  mergeMaterial->setTexture("in_Merge", blurPass3);
+  mergeMaterial->setTexture("in_Merge", blurPass3.get());
   Graphics::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), 
-    originalPass, mergeMaterial);
+    originalPass.get(), mergeMaterial);
   Graphics::setRenderTarget(NULL);
 
-  Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), mergePass);
+  Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), mergePass.get());
 }
 

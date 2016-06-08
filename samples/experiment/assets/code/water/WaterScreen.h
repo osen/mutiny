@@ -15,16 +15,16 @@ public:
   virtual void onGui();
 
 private:
-  GameObject* playerGo;
-  AnimatedMeshRenderer* playerMr;
-  Animation* runAnimation;
-  Animation* idleAnimation;
-  Animation* jumpAnimation;
+  ref<GameObject> playerGo;
+  ref<AnimatedMeshRenderer> playerMr;
+  ref<Animation> runAnimation;
+  ref<Animation> idleAnimation;
+  ref<Animation> jumpAnimation;
   float accel;
 
-  GameObject* waterGo;
-  MeshRenderer* waterMr;
-  Material* waterMaterial;
+  ref<GameObject> waterGo;
+  ref<MeshRenderer> waterMr;
+  ref<Material> waterMaterial;
   float effectOffset;
   float texOffset;
   bool effectUp;

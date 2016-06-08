@@ -10,13 +10,13 @@ using namespace mutiny::engine;
 class AudioTest : public Behaviour
 {
 public:
-  static GameObject* create();
+  static ref<GameObject> create();
 
   virtual void onAwake();
   virtual void onGui();
 
 private:
-  Audio* audio;
+  shared<Audio> audio;
 };
 
 #endif

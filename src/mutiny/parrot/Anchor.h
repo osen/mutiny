@@ -22,7 +22,7 @@ public:
   Vector2 getOffset();
 
 private:
-  Canvas* canvas;
+  ref<Canvas> canvas;
   int options;
   Vector2 referenceScreenSize;
   Vector2 resizeDelta;

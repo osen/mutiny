@@ -22,6 +22,7 @@ class Material;
 class Canvas : public Behaviour
 {
 public:
+  virtual ~Canvas();
   void setSize(int width, int height);
   void setPosition(int x, int y);
 
@@ -37,9 +38,9 @@ public:
 private:
   static Canvas* currentActive;
 
-  Texture2d* texture;
+  shared<Texture2d> texture;
   Mesh* mesh;
-  Material* material;
+  ref<Material> material;
 
   bool needsApply;
 

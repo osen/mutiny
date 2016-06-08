@@ -10,18 +10,18 @@ using namespace mutiny::engine;
 class MenuScreen : public Behaviour
 {
 public:
-  static GameObject* create();
+  static ref<GameObject> create();
 
   virtual void onAwake();
   virtual void onGui();
 
 private:
-  Texture2d* wwwTexture;
-  Texture2d* titleTexture;
-  GameObject* cameraGo;
+  ref<Texture2d> wwwTexture;
+  ref<Texture2d> titleTexture;
+  ref<GameObject> cameraGo;
 
-  Button* closeButton;
-  Button* startButton;
+  ref<Button> closeButton;
+  ref<Button> startButton;
 
 };
 

@@ -16,10 +16,10 @@ namespace mutiny
 namespace engine
 {
 
-Mesh* Mesh::load(std::string path)
+ref<Mesh> Mesh::load(std::string path)
 {
   internal::WavefrontParser parser(path + ".obj");
-  internal::ModelData* modelData = parser.getModelData();
+  ref<internal::ModelData> modelData = parser.getModelData();
   std::vector<Vector3> vertices;
   std::vector<Vector3> normals;
   std::vector<Vector2> uv;
@@ -27,18 +27,18 @@ Mesh* Mesh::load(std::string path)
   std::vector<std::vector<int> > triangles;
   int currentSubmesh = 0;
 
-  for(int p = 0; p < modelData->parts->size(); p++)
+  for(size_t p = 0; p < modelData->parts.size(); p++)
   {
-    internal::PartData* part = modelData->parts->at(p);
+    ref<internal::PartData> part = modelData->parts.at(p);
 
-    for(int m = 0; m < part->materialGroups->size(); m++)
+    for(size_t m = 0; m < part->materialGroups.size(); m++)
     {
-      internal::MaterialGroupData* materialGroup = part->materialGroups->at(m);
+      ref<internal::MaterialGroupData> materialGroup = part->materialGroups.at(m);
       triangles.push_back(std::vector<int>());
 
-      for(int f = 0; f < materialGroup->faces.size(); f++)
+      for(size_t f = 0; f < materialGroup->faces.size(); f++)
       {
-        internal::FaceData* face = &materialGroup->faces.at(f);
+        ref<internal::FaceData> face = materialGroup->faces.at(f);
 
         triangles.at(currentSubmesh).push_back(vertices.size());
         vertices.push_back(Vector3(face->a.position.x, face->a.position.y, face->a.position.z));
@@ -73,13 +73,13 @@ Mesh* Mesh::load(std::string path)
   }
 
 
-  Mesh* mesh = Application::getGC()->gc_new<Mesh>();
+  ref<Mesh> mesh = new Mesh();
   mesh->setVertices(vertices);
   mesh->setNormals(normals);
   mesh->setUv(uv);
   mesh->setColors(colors);
 
-  for(int i = 0; i < triangles.size(); i++)
+  for(size_t i = 0; i < triangles.size(); i++)
   {
     mesh->setTriangles(triangles.at(i), i);
   }
@@ -87,11 +87,6 @@ Mesh* Mesh::load(std::string path)
   Debug::log("Loading mesh");
 
   return mesh;
-}
-
-void Mesh::freeBuffer(GLuint bufferId)
-{
-  glDeleteBuffers(1, &bufferId);
 }
 
 void Mesh::setVertices(std::vector<Vector3> vertices)
@@ -126,7 +121,7 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
 
   std::vector<float> values;
 
-  for(int i = 0; i < triangles.size(); i++)
+  for(size_t i = 0; i < triangles.size(); i++)
   {
     values.push_back(vertices.at(triangles.at(i)).x);
     values.push_back(vertices.at(triangles.at(i)).y);
@@ -156,7 +151,7 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
   {
     values.clear();
 
-    for(int i = 0; i < triangles.size(); i++)
+    for(size_t i = 0; i < triangles.size(); i++)
     {
       values.push_back(normals.at(triangles.at(i)).x);
       values.push_back(normals.at(triangles.at(i)).y);
@@ -187,7 +182,7 @@ void Mesh::setTriangles(std::vector<int> triangles, int submesh)
   {
     values.clear();
 
-    for(int i = 0; i < triangles.size(); i++)
+    for(size_t i = 0; i < triangles.size(); i++)
     {
       values.push_back(uv.at(triangles.at(i)).x);
       values.push_back(uv.at(triangles.at(i)).y);
@@ -258,7 +253,7 @@ void Mesh::recalculateBounds()
   float minY = vertices.at(0).y; float maxY = vertices.at(0).y;
   float minZ = vertices.at(0).z; float maxZ = vertices.at(0).z;
 
-  for(int i = 0; i < vertices.size(); i++)
+  for(size_t i = 0; i < vertices.size(); i++)
   {
     if(vertices.at(i).x < minX)
     {

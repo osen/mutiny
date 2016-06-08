@@ -13,20 +13,20 @@ class GameCamera;
 class GameScreen : public Behaviour
 {
 public:
-  static GameObject* create();
+  static ref<GameObject> create();
 
   virtual void onAwake();
   virtual void onGui();
   virtual void onStart();
 
-  GameObject* getFence();
-  Audio* getAudio();
-  GameCamera* getCamera();
+  ref<GameObject> getFence();
+  ref<Audio> getAudio();
+  ref<GameCamera> getCamera();
 
 private:
-  GameObject* cameraGo;
-  GameObject* fenceGo;
-  Audio* audio;
+  ref<GameObject> cameraGo;
+  ref<GameObject> fenceGo;
+  shared<Audio> audio;
 
 };
 

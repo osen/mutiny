@@ -13,11 +13,11 @@ void SplashScreen::onAwake()
 
 void SplashScreen::onGui()
 {
-  Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), background);
+  Gui::drawTexture(Rect(0, 0, Screen::getWidth(), Screen::getHeight()), background.get());
 
   Gui::drawTexture(Rect((Screen::getWidth() / 2) - (splashLogo->getWidth() / 2),
                         (Screen::getHeight() / 2) - (splashLogo->getHeight() / 2),
-                        splashLogo->getWidth(), splashLogo->getHeight()), splashLogo);
+                        splashLogo->getWidth(), splashLogo->getHeight()), splashLogo.get());
 
   timeout -= Time::getDeltaTime();
 

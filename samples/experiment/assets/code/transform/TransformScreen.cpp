@@ -4,10 +4,10 @@
 
 using namespace mutiny::engine;
 
-GameObject* TransformScreen::create()
+ref<GameObject> TransformScreen::create()
 {
   Debug::log("onAwake()");
-  GameObject* mainGo = GameObject::create("IntroductionScreen");
+  ref<GameObject> mainGo = GameObject::create("IntroductionScreen");
   mainGo->addComponent<TransformScreen>();
 
   return mainGo;
@@ -16,7 +16,7 @@ GameObject* TransformScreen::create()
 void TransformScreen::onAwake()
 {
   cameraGo = GameObject::create("MainCamera");
-  Camera* camera = cameraGo->addComponent<Camera>();
+  ref<Camera> camera = cameraGo->addComponent<Camera>();
   cameraGo->getTransform()->setPosition(Vector3(0, 1, -10));
 
   cube1Go = GameObject::createPrimitive(PrimitiveType::CUBE);
@@ -40,7 +40,7 @@ void TransformScreen::onGui()
     Application::loadLevel("introduction");
   }
 
-  if(cube1Go->getTransform()->getParent() == NULL)
+  if(cube1Go->getTransform()->getParent().expired())
   {
     if(Gui::button(Rect(10, 300, 200, 50), "Attach") == true)
     {

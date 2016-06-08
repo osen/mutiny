@@ -27,6 +27,11 @@ namespace engine
 
 Canvas* Canvas::currentActive = NULL;
 
+Canvas::~Canvas()
+{
+
+}
+
 void Canvas::onAwake()
 {
   texture = Texture2d::create(64, 64);
@@ -65,14 +70,14 @@ void Canvas::onAwake()
   uv.push_back(Vector2(1, 0));
   uv.push_back(Vector2(0, 0));
 
-  mesh = Application::getGC()->gc_new<Mesh>();
+  mesh = new Mesh();
   mesh->setVertices(vertices);
   mesh->setUv(uv);
   mesh->setTriangles(triangles, 0);
 
-  Shader* shader = Resources::load<Shader>("shaders/internal-gui-texture");
+  ref<Shader> shader = Resources::load<Shader>("shaders/internal-gui-texture");
 
-  if(shader == NULL)
+  if(shader.expired())
   {
     throw Exception("Failed to load GUI shader");
   }
@@ -125,11 +130,11 @@ void Canvas::onUpdate()
   released = false;
   repaint = false;
 
-  Anchor* anchor = getGameObject()->getComponent<Anchor>();
+  ref<Anchor> anchor = getGameObject()->getComponent<Anchor>();
 
   Vector2 anchorOffset;
 
-  if(anchor != NULL)
+  if(anchor.valid())
   {
     anchorOffset = anchor->getOffset();
   }
@@ -199,11 +204,11 @@ void Canvas::onUpdate()
 
 void Canvas::onGui()
 {
-  Anchor* anchor = getGameObject()->getComponent<Anchor>();
+  ref<Anchor> anchor = getGameObject()->getComponent<Anchor>();
 
   Vector2 anchorOffset;
 
-  if(anchor != NULL)
+  if(anchor.valid())
   {
     anchorOffset = anchor->getOffset();
   }

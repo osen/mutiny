@@ -16,11 +16,11 @@ class Canvas;
 class Button : public Behaviour
 {
 public:
-  Canvas* getCanvas();
+  ref<Canvas> getCanvas();
 
 private:
-  Canvas* canvas;
-  Font* font;
+  ref<Canvas> canvas;
+  ref<Font> font;
 
   void redraw();
   virtual void onAwake();

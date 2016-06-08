@@ -1,10 +1,10 @@
 #ifndef MUTINY_ENGINE_INTERNAL_WAVEFRONTPARSER_H
 #define MUTINY_ENGINE_INTERNAL_WAVEFRONTPARSER_H
 
-#include "gcmm.h"
 #include "../Vector2.h"
 #include "../Vector3.h"
 #include "../Vector4.h"
+#include "../ref.h"
 
 #include <string>
 #include <vector>
@@ -19,7 +19,7 @@ namespace engine
 namespace internal
 {
 
-struct MaterialData
+struct MaterialData : public enable_ref
 {
   Vector4 color;
   std::string texture;
@@ -27,7 +27,7 @@ struct MaterialData
 
 };
 
-struct VertexData
+struct VertexData : public enable_ref
 {
   Vector3 position;
   Vector3 normal;
@@ -35,7 +35,7 @@ struct VertexData
 
 };
 
-struct FaceData
+struct FaceData : public enable_ref
 {
   VertexData a;
   VertexData b;
@@ -43,47 +43,41 @@ struct FaceData
 
 };
 
-struct MaterialGroupData
+struct MaterialGroupData : public enable_ref
 {
-  MaterialGroupData();
-
-  MaterialData* material;
-  std::vector<FaceData> faces;
+  ref<MaterialData> material;
+  std::vector<shared<FaceData> > faces;
   
 };
 
-struct PartData
+struct PartData : public enable_ref
 {
-  PartData();
-
-  internal::gc::list<MaterialGroupData*>* materialGroups;
+  std::vector<shared<MaterialGroupData> > materialGroups;
   std::string name;
   Vector3 size;
   Vector3 center;
 
 };
 
-struct ModelData
+struct ModelData : public enable_ref
 {
-  ModelData();
-
-  internal::gc::list<PartData*>* parts;
-  internal::gc::list<MaterialData*>* materials;
+  std::vector<shared<PartData> > parts;
+  std::vector<shared<MaterialData> > materials;
   Vector3 size;
   Vector3 center;
 
 };
 
-class WavefrontParser
+class WavefrontParser : public enable_ref
 {
 private:
-  ModelData modelData;
+  shared<ModelData> modelData;
   std::string filename;
   std::string foldername;
   bool _hasNormals;
   bool _hasCoords;
 
-  MaterialData* getMaterialData(std::string name);
+  shared<MaterialData> getMaterialData(std::string name);
   void parseMtl(std::string filename);
   void obtainSizes();
   Vector3 absVec3(Vector3 input);
@@ -92,7 +86,7 @@ private:
 public:
   WavefrontParser(std::string path);
 
-  ModelData* getModelData();
+  ref<ModelData> getModelData();
   void output();
 
   bool hasCoords();

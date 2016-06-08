@@ -10,15 +10,15 @@ using namespace mutiny::engine;
 class ModelScreen : public Behaviour
 {
 public:
-  static GameObject* create();
+  static ref<GameObject> create();
 
   virtual void onStart();
   virtual void onUpdate();
   virtual void onGui();
 
 private:
-  GameObject* cameraGo;
-  GameObject* modelGo;
+  ref<GameObject> cameraGo;
+  ref<GameObject> modelGo;
 
 
 };

@@ -2,10 +2,10 @@
 
 using namespace mutiny::engine;
 
-FallingCube* FallingCube::create()
+ref<FallingCube> FallingCube::create()
 {
-  GameObject* go = GameObject::createPrimitive(PrimitiveType::CUBE);
-  FallingCube* fallingCube = go->addComponent<FallingCube>();
+  ref<GameObject> go = GameObject::createPrimitive(PrimitiveType::CUBE);
+  ref<FallingCube> fallingCube = go->addComponent<FallingCube>();
 
   return fallingCube;
 }

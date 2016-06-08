@@ -2,6 +2,7 @@
 #define MUTINY_ENGINE_AUDIOSOURCE_H
 
 #include "Vector3.h"
+#include "ref.h"
 
 namespace mutiny
 {
@@ -13,7 +14,7 @@ class AudioClip;
 class AudioSource
 {
 public:
-  static void playClipAtPoint(AudioClip* audioClip, Vector3 position);
+  static void playClipAtPoint(ref<AudioClip> audioClip, Vector3 position);
 
 };
 

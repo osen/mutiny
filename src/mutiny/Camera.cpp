@@ -10,23 +10,19 @@ namespace mutiny
 namespace engine
 {
 
-std::vector<Camera*> Camera::allCameras;
-Camera* Camera::current;
-Camera* Camera::_main;
-
-Camera* Camera::getMain()
+ref<Camera> Camera::getMain()
 {
-  return Camera::_main;
+  return Application::context->_main;
 }
 
-Camera* Camera::getCurrent()
+ref<Camera> Camera::getCurrent()
 {
-  return current;
+  return Application::context->current;
 }
 
-std::vector<Camera*>* Camera::getAllCameras()
+std::vector<ref<Camera> >& Camera::getAllCameras()
 {
-  return &allCameras;
+  return Application::context->allCameras;
 }
 
 Camera::~Camera()
@@ -58,7 +54,7 @@ Matrix4x4 Camera::getProjectionMatrix()
 
 void Camera::setProjectionMatrix(Matrix4x4 projectionMatrix)
 {
-  this->projectionMatrix = Application::getGC()->gc_new<Matrix4x4>();
+  this->projectionMatrix = new Matrix4x4();
   *this->projectionMatrix = projectionMatrix;
 }
 
@@ -89,20 +85,21 @@ int Camera::getCullMask()
   return cullMask;
 }
 
-void Camera::setTargetTexture(RenderTexture* targetTexture)
+void Camera::setTargetTexture(ref<RenderTexture> targetTexture)
 {
   this->targetTexture = targetTexture;
 }
 
 void Camera::onStart()
 {
-  if(_main == NULL && getGameObject()->getName() == "MainCamera")
+  if(Application::context->_main.expired() &&
+    getGameObject()->getName() == "MainCamera")
   {
     //Debug::log("MainCamera added");
-    _main = this;
+    Application::context->_main = this;
   }
 
-  allCameras.push_back(this);
+  Application::context->allCameras.push_back(this);
 }
 
 Color Camera::getBackgroundColor()
@@ -119,16 +116,18 @@ void Camera::onDestroy()
 {
   //Debug::log("Camera destroyed");
 
-  if(_main == this)
+  if(Application::context->_main.try_get() == this)
   {
-    _main = NULL;
+    Application::context->_main = NULL;
   }
 
-  for(int i = 0; i < allCameras.size(); i++)
+  for(int i = 0; i < Application::context->allCameras.size(); i++)
   {
-    if(allCameras.at(i) == this)
+    if(Application::context->allCameras.at(i).get() == this)
     {
-      allCameras.erase(allCameras.begin() + i);
+      Application::context->allCameras.erase(
+        Application::context->allCameras.begin() + i);
+
       i--;
     }
   }

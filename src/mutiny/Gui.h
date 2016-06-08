@@ -3,6 +3,7 @@
 
 #include "Rect.h"
 #include "Matrix4x4.h"
+#include "ref.h"
 
 #include <GL/glew.h>
 
@@ -27,20 +28,20 @@ class Gui
 public:
   static Matrix4x4 getMatrix();
   static void setMatrix(Matrix4x4 matrix);
-  static GuiSkin* getSkin();
+  static ref<GuiSkin> getSkin();
 
   static void label(Rect rect, std::string text);
   static bool button(Rect rect, std::string text);
-  static bool button(Rect rect, Texture* image);
+  static bool button(Rect rect, ref<Texture> image);
   static void box(Rect rect, std::string text);
-  static void drawTexture(Rect rect, Texture* texture);
-  static void drawTextureWithTexCoords(Rect position, Texture* texture, Rect texCoords);
+  static void drawTexture(Rect rect, ref<Texture> texture);
+  static void drawTextureWithTexCoords(Rect position, ref<Texture> texture, Rect texCoords);
 
 private:
-  static Matrix4x4 matrix;
+  static void drawUi(Rect rect, ref<Texture> texture, ref<GuiStyle> style);
 
-  static void drawUi(Rect rect, Texture* texture, GuiStyle* style);
-  static void drawTextureWithTexCoords(std::vector<Rect> positions, Texture* texture, std::vector<Rect> texCoords);
+  static void drawTextureWithTexCoords(std::vector<Rect> positions,
+    ref<Texture> texture, std::vector<Rect> texCoords);
 
 };
 

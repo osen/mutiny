@@ -7,7 +7,6 @@
 #include "Bounds.h"
 #include "Color.h"
 #include "internal/CWrapper.h"
-#include "internal/gcmm.h"
 #include "internal/glmm.h"
 
 #include <GL/glew.h>
@@ -52,8 +51,7 @@ public:
   int getSubmeshCount();
 
 private:
-  static Mesh* load(std::string path);
-  static void freeBuffer(GLuint bufferId);
+  static ref<Mesh> load(std::string path);
 
   std::vector<Vector3> vertices;
   std::vector<std::vector<int> > triangles;

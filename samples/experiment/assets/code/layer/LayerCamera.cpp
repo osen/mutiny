@@ -4,9 +4,9 @@
 
 using namespace mutiny::engine;
 
-GameObject* LayerCamera::create()
+ref<GameObject> LayerCamera::create()
 {
-  GameObject* cameraGo = GameObject::create("LayerCamera");
+  ref<GameObject> cameraGo = GameObject::create("LayerCamera");
   cameraGo->addComponent<LayerCamera>();
 
   return cameraGo;
@@ -16,7 +16,7 @@ void LayerCamera::onAwake()
 {
   Debug::log("LayerCamera awoken");
 
-  Camera* camera = getGameObject()->addComponent<Camera>();
+  ref<Camera> camera = getGameObject()->addComponent<Camera>();
   camera->setBackgroundColor(Color(0, 0, 0, 1));
 
   getGameObject()->getTransform()->setPosition(Vector3(0, 0, 8));

@@ -27,7 +27,7 @@ class Resources
   friend class mutiny::engine::Application;
 
 public:
-  template<class T> static T* load(std::string path)
+  template<class T> static ref<T> load(std::string path)
   {
     std::stringstream ss;
     ss << path << "_" << typeid(T).name();
@@ -36,11 +36,11 @@ public:
     {
       if(ss.str() == Application::context->paths.at(i))
       {
-        return dynamic_cast<T*>(Application::context->objects->at(i));
+        return ref<T>(dynamic_cast<T*>(Application::context->objects.at(i).get()));
       }
     }
 
-    T* t = NULL;
+    ref<T> t;
 
     // Game specific resources
     try
@@ -50,7 +50,7 @@ public:
     catch(std::exception& e){}
 
     // Internal engine files
-    if(t == NULL)
+    if(t.expired())
     {
       try
       {
@@ -60,7 +60,7 @@ public:
     }
 
     // Absolute path
-    if(t == NULL)
+    if(t.expired())
     {
       try
       {
@@ -69,17 +69,18 @@ public:
       catch(std::exception& e){}
     }
 
-    if(t == NULL)
+    if(t.expired())
     {
-      std::cout << "Loading: " << path << "... Failed" << std::endl;
+      //std::cout << "Loading: " << path << "... Failed " << typeid(T).name() << std::endl;
       //Debug::logError("Failed to load '" + path + "'");
       return NULL;
     }
 
     Application::context->paths.push_back(ss.str());
-    Application::context->objects->push_back(t);
+    Application::context->objects.push_back(shared<T>(t.get()));
 
-    std::cout << "Loading: " << path << "... Success" << std::endl;
+    //std::cout << "Loading: " << path << "... Success" << std::endl;
+
     return t;
   }
 

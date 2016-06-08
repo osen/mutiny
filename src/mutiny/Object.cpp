@@ -1,4 +1,5 @@
 #include "Object.h"
+#include "GameObject.h"
 
 namespace mutiny
 {
@@ -6,12 +7,22 @@ namespace mutiny
 namespace engine
 {
 
-void Object::dontDestroyOnLoad(Object* object)
+void Object::dontDestroyOnLoad(ref<Object> object)
 {
   object->destroyOnLoad = false;
 }
 
-void Object::destroy(Object* object)
+void Object::dontDestroyOnLoad(ref<GameObject> object)
+{
+  object->destroyOnLoad = false;
+}
+
+void Object::destroy(ref<Object> object)
+{
+  object->destroyed = true;
+}
+
+void Object::destroy(ref<GameObject> object)
 {
   object->destroyed = true;
 }
