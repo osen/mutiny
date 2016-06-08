@@ -6,8 +6,10 @@
 #elif _MSC_VER
   //#define USE_SDL
   #define USE_GLUT
+  #define USE_OPENAL
 #else
   #define USE_GLUT
+  #define USE_OPENAL
   #define HAS_TR1_NAMESPACE
 #endif
 

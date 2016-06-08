@@ -15,7 +15,6 @@ void Audio::initialize()
   {
     ref<GameObject> audioGo = GameObject::create("AudioSystem");
     ref<Audio> audio = audioGo->addComponent<Audio>();
-    Object::dontDestroyOnLoad(audioGo);
     singleton = audio;
   }
 

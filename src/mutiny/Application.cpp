@@ -87,6 +87,30 @@ void Application::init(int argc, char* argv[])
   setTitle("Mutiny Engine");
 #endif
 
+#ifdef USE_OPENAL
+  context->device = alcOpenDevice(NULL);
+
+  if(context->device == NULL)
+  {
+    throw Exception("Failed to open audio device");
+  }
+
+  context->context = alcCreateContext(context->device, NULL);
+
+  if(context->context == NULL)
+  {
+    alcCloseDevice(context->device);
+    throw Exception("Failed to create audio context");
+  }
+
+  if(!alcMakeContextCurrent(context->context))
+  {
+    alcDestroyContext(context->context);
+    alcCloseDevice(context->device);
+    throw Exception("Failed to make audio context current");
+  }
+#endif
+
 #ifdef USE_GLUT
   glutInit(&argc, argv);
   glutInitWindowSize(800, 600);
@@ -288,6 +312,14 @@ void Application::destroy()
   {
     throw Exception("Immediate shutdown not supported");
   }
+
+#ifdef USE_OPENAL
+
+  alcMakeContextCurrent(NULL);
+  alcDestroyContext(context->context);
+  alcCloseDevice(context->device);
+
+#endif
 
   context.reset();
 

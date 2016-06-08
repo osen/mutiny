@@ -10,6 +10,11 @@
   #include <SDL/SDL.h>
 #endif
 
+#ifdef USE_OPENAL
+  #include <AL/al.h>
+  #include <AL/alc.h>
+#endif
+
 #include <memory>
 #include <vector>
 #include <string>
@@ -42,6 +47,10 @@ struct Context
 {
 #ifdef USE_SDL
   SDL_Surface* screen;
+#endif
+#ifdef USE_OPENAL
+  ALCdevice *device;
+  ALCcontext *context;
 #endif
   bool running;
   std::string loadedLevelName;

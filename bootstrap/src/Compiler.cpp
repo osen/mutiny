@@ -281,7 +281,7 @@ void Compiler::link(std::string output)
     }
     else
     {
-      libsFragment += " -lGL -lGLEW -lglut";
+      libsFragment += " -lGL -lGLEW -lglut -logg -lvorbis -lvorbisfile -lopenal";
     }
   }
 
