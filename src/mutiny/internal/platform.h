@@ -21,6 +21,10 @@
   #include <tr1/memory>
   #define shared std::tr1::shared_ptr
   #define weak std::tr1::weak_ptr
+#else
+  #include <memory>
+  #define shared std::shared_ptr
+  #define weak std::weak_ptr
 #endif
 
 #endif

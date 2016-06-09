@@ -1,6 +1,6 @@
 @echo off
 
-set CMAKE_ROOT=cmake-3.4.1-win32-x86
+set CMAKE_ROOT=cmake-3.6.0-rc1-win32-x86
 set CMAKE_PACKAGE=%CMAKE_ROOT%.zip
 
 set FREEGLUT_ROOT=freeglut-3.0.0
@@ -18,9 +18,9 @@ set LIBOGG_PACKAGE=%LIBOGG_ROOT%.zip
 set LIBVORBIS_ROOT=libvorbis-1.3.5
 set LIBVORBIS_PACKAGE=%LIBVORBIS_ROOT%.zip
 
-cmd /C unzip.bat %CMAKE_PACKAGE%
+unzip %CMAKE_PACKAGE%
 
-cmd /C unzip.bat %FREEGLUT_PACKAGE%
+unzip %FREEGLUT_PACKAGE%
 cd %FREEGLUT_ROOT%
 mkdir build
 cd build
@@ -32,7 +32,7 @@ xcopy /s /e ..\include\GL ..\..\..\..\include\GL
 cd ..
 cd ..
 
-cmd /C unzip.bat %OPENAL_PACKAGE%
+unzip %OPENAL_PACKAGE%
 cd %OPENAL_ROOT%
 mkdir build
 cd build
@@ -44,7 +44,7 @@ xcopy /s /e ..\include\AL ..\..\..\..\include\AL
 cd ..
 cd ..
 
-cmd /C unzip.bat %GLEW_PACKAGE%
+unzip %GLEW_PACKAGE%
 cd %GLEW_ROOT%
 cd build\cmake
 mkdir build
@@ -58,7 +58,7 @@ cd ..
 cd ..
 cd ..
 
-cmd /C unzip.bat %LIBOGG_PACKAGE%
+unzip %LIBOGG_PACKAGE%
 copy libogg.cmake %LIBOGG_ROOT%\CMakeLists.txt
 cd %LIBOGG_ROOT%
 mkdir build
@@ -71,7 +71,7 @@ xcopy /s /e ..\include\ogg\*.h ..\..\..\..\include\ogg
 cd ..
 cd ..
 
-cmd /C unzip.bat %LIBVORBIS_PACKAGE%
+unzip %LIBVORBIS_PACKAGE%
 copy libvorbis.cmake %LIBVORBIS_ROOT%\CMakeLists.txt
 cd %LIBVORBIS_ROOT%
 mkdir build
