@@ -36,7 +36,7 @@ unzip %OPENAL_PACKAGE%
 cd %OPENAL_ROOT%
 mkdir build
 cd build
-..\..\%CMAKE_ROOT%\bin\cmake ..
+..\..\%CMAKE_ROOT%\bin\cmake -DLIBTYPE=STATIC ..
 ..\..\%CMAKE_ROOT%\bin\cmake --build . --config Release
 copy Release\OpenAL32.lib ..\..\..\..\lib\openal.lib
 mkdir ..\..\..\..\include\AL

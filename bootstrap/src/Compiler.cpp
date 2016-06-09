@@ -143,6 +143,7 @@ void Compiler::compile(std::string sourceUnit, std::string output)
       //{
         defines.push_back("FREEGLUT_STATIC");
         defines.push_back("GLEW_STATIC");
+        defines.push_back("AL_LIBTYPE_STATIC");
       //}
     }
   }
@@ -273,7 +274,7 @@ void Compiler::link(std::string output)
     else if(name == "cl")
     {
       //libsFragment += " SDL.lib SDLmain.lib SDL_mixer.lib glew32.lib opengl32.lib user32.lib";
-      libsFragment += " freeglut.lib glew.lib openal.lib ogg.lib vorbis.lib vorbisfile.lib opengl32.lib user32.lib";
+      libsFragment += " freeglut.lib glew.lib openal.lib ogg.lib vorbis.lib vorbisfile.lib opengl32.lib user32.lib ole32.lib oleaut32.lib strmiids.lib shell32.lib";
     }
     else if(std::string(PLATFORM_NAME) == "windows")
     {
