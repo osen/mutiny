@@ -39,6 +39,25 @@ shared<Environment> Environment::create(std::vector<std::string>& args)
   }
   catch(std::exception& e) { }
 
+#ifdef INTERNAL_GCC
+  char *origPath = getenv("PATH");
+  std::string origPathStr;
+
+  if(origPath != NULL)
+  {
+    origPathStr += origPath;
+  }
+
+  if(origPathStr.length() > 0)
+  {
+    origPathStr += ";";
+  }
+
+  origPathStr += rtn->prefix + "\\bootstrap\\windows\\mingw32\\bin";
+
+  SetEnvironmentVariable("PATH", origPathStr.c_str());
+#endif
+
   rtn->compilerName = DEFAULT_CXX;
 
   for(int i = 0; i < args.size(); i++)

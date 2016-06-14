@@ -278,7 +278,7 @@ void Compiler::link(std::string output)
     }
     else if(std::string(PLATFORM_NAME) == "windows")
     {
-      libsFragment += " -lglew32 -lfreeglut -lopengl32 -logg -lvorbis -lvorbisfile -lopenal32 -lgdi32 -lwinmm -luser32";
+      libsFragment += " -lglew -lfreeglut -lopengl32 -lvorbisfile -lvorbis -logg -lopenal -lgdi32 -lwinmm -luser32 -lole32";
     }
     else
     {

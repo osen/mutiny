@@ -1,13 +1,19 @@
 #ifndef FEATURES_H
 #define FEATURES_H
 
+// INTERNAL_GCC
+
 #ifdef _WIN32
   #define HAS_WINAPI
   #define HAS_SYS_UTIME
   #define HAS__POPEN
   #define HAS_DIRECT
   #define DIR_CHAR '\\'
-  #define DEFAULT_CXX "cl"
+  #ifdef INTERNAL_GCC
+    #define DEFAULT_CXX "g++"
+  #else
+    #define DEFAULT_CXX "cl"
+  #endif
   #define PLATFORM_NAME "windows"
   #define EXECUTABLE_SUFFIX "exe"
 #else
