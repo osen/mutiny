@@ -55,7 +55,7 @@ echo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 echo !!! Failed to find a C++ compiler to build Mutt !!!
 echo !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 cd windows
-unzip i686-4.9.1-release-posix-dwarf-rt_v3-rev2.zip
+7z x i686-4.9.1-release-posix-dwarf-rt_v3-rev2.7z
 cd ..
 set PATH=%PATH%;%~dp0\windows\mingw32\bin
 g++ -D INTERNAL_GCC src\*.cpp -o ..\bin\mutt

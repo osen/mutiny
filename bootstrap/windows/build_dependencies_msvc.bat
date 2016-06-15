@@ -18,9 +18,9 @@ set LIBOGG_PACKAGE=%LIBOGG_ROOT%.zip
 set LIBVORBIS_ROOT=libvorbis-1.3.5
 set LIBVORBIS_PACKAGE=%LIBVORBIS_ROOT%.zip
 
-unzip %CMAKE_PACKAGE%
+7z x %CMAKE_PACKAGE%
 
-unzip %FREEGLUT_PACKAGE%
+7z x %FREEGLUT_PACKAGE%
 cd %FREEGLUT_ROOT%
 mkdir build
 cd build
@@ -32,7 +32,7 @@ xcopy /s /e ..\include\GL ..\..\..\..\include\GL
 cd ..
 cd ..
 
-unzip %OPENAL_PACKAGE%
+7z x %OPENAL_PACKAGE%
 cd %OPENAL_ROOT%
 mkdir build
 cd build
@@ -44,7 +44,7 @@ xcopy /s /e ..\include\AL ..\..\..\..\include\AL
 cd ..
 cd ..
 
-unzip %GLEW_PACKAGE%
+7z x %GLEW_PACKAGE%
 cd %GLEW_ROOT%
 cd build\cmake
 mkdir build
@@ -58,7 +58,7 @@ cd ..
 cd ..
 cd ..
 
-unzip %LIBOGG_PACKAGE%
+7z x %LIBOGG_PACKAGE%
 copy libogg.cmake %LIBOGG_ROOT%\CMakeLists.txt
 cd %LIBOGG_ROOT%
 mkdir build
@@ -71,7 +71,7 @@ xcopy /s /e ..\include\ogg\*.h ..\..\..\..\include\ogg
 cd ..
 cd ..
 
-unzip %LIBVORBIS_PACKAGE%
+7z x %LIBVORBIS_PACKAGE%
 copy libvorbis.cmake %LIBVORBIS_ROOT%\CMakeLists.txt
 cd %LIBVORBIS_ROOT%
 mkdir build
