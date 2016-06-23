@@ -55,6 +55,7 @@ public:
   Animation();
   int getFrameCount();
   void save(std::string path);
+  std::vector<shared<AnimationFrame> > copyFrames();
 
 private:
   static Animation* load(std::string path);

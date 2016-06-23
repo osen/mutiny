@@ -113,6 +113,18 @@ Animation* Animation::load(std::string path)
   return animation;
 }
 
+std::vector<shared<AnimationFrame> > Animation::copyFrames()
+{
+  std::vector<shared<AnimationFrame> > rtn;
+
+  for(size_t i = 0; i < frames.size(); i++)
+  {
+    rtn.push_back(AnimationFrame::copy(frames.at(i)));
+  }
+
+  return rtn;
+}
+
 void Animation::save(std::string path)
 {
   std::ofstream file;

@@ -46,7 +46,7 @@ void MainScreen::onAwake()
   animationPath = SelectAnimationScreen::choice;
   amr->setAnimation(animation);
   animationGo->getTransform()->setParent(root->getTransform());
-  undoBuffer.push_back(animation->frames);
+  undoBuffer.push_back(animation->copyFrames());
   timeline = Timeline::create(this);
 }
 
@@ -153,7 +153,7 @@ void MainScreen::onUpdate()
   else if(changeMade == true)
   {
     changeMade = false;
-    undoBuffer.push_back(animation->frames);
+    undoBuffer.push_back(animation->copyFrames());
   }
 
   //if(selectedPart != NULL)
@@ -260,7 +260,12 @@ void MainScreen::onGui()
       animation->frames = undoBuffer.at(undoBuffer.size() - 2);
       undoBuffer.erase(undoBuffer.begin() + undoBuffer.size() - 1);
       undoBuffer.erase(undoBuffer.begin() + undoBuffer.size() - 1);
-      undoBuffer.push_back(animation->frames);
+      undoBuffer.push_back(animation->copyFrames());
+
+      if(undoBuffer.size() <= 1)
+      {
+        std::cout << "That was last" << std::endl;
+      }
 
       if(amr->getFrame() >= animation->frames.size())
       {
