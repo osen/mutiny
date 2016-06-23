@@ -31,16 +31,16 @@ public:
   float rZ;
 
   AnimationTransform();
-  static AnimationTransform* copy(AnimationTransform* other);
+  static shared<AnimationTransform> copy(ref<AnimationTransform> other);
 
 };
 
 class AnimationFrame : public enable_ref
 {
 public:
-  static AnimationFrame* copy(AnimationFrame* other);
+  static shared<AnimationFrame> copy(ref<AnimationFrame> other);
   AnimationFrame();
-  std::vector<AnimationTransform*> transforms;
+  std::vector<shared<AnimationTransform> > transforms;
 
 };
 
@@ -59,7 +59,7 @@ public:
 private:
   static Animation* load(std::string path);
 
-  std::vector<AnimationFrame*> frames;
+  std::vector<shared<AnimationFrame> > frames;
 
 };
 

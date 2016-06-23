@@ -15,9 +15,6 @@ using namespace mutiny::engine;
  ******************************************************************************/
 void MainScreen::onAwake()
 {
-  origMaterials = gcnewlist<Material*>();
-  newMaterials = gcnewlist<Material*>();
-  undoBuffer = gcnewlist<gclist<AnimationFrame*>*>();
   MainCamera::create();
 
   // Vector2(Vector3))?
@@ -29,14 +26,14 @@ void MainScreen::onAwake()
   pulseAmount = 0;
   pulseDown = false;
   selectedPart = NULL;
-  root = gcnew<GameObject>("root");
-  animationGo = gcnew<GameObject>();
+  root = GameObject::create("root");
+  animationGo = GameObject::create();
   fallbackTex = Texture2d::create(1, 1);
   fallbackTex->setPixel(0, 0, Color(0.0f, 0.5f, 1.0f));
   fallbackTex->apply();
   animatedMesh = Resources::load<AnimatedMesh>(SelectModelScreen::choice.substr(0, SelectModelScreen::choice.length() - 4));
 
-  if(animatedMesh == NULL)
+  if(animatedMesh.expired())
   {
     Debug::logError("Mesh is null :(");
     //TODO: Throw exception
@@ -49,7 +46,7 @@ void MainScreen::onAwake()
   animationPath = SelectAnimationScreen::choice;
   amr->setAnimation(animation);
   animationGo->getTransform()->setParent(root->getTransform());
-  undoBuffer->push_back(animation->frames);
+  undoBuffer.push_back(animation->frames);
   timeline = Timeline::create(this);
 }
 
@@ -60,10 +57,10 @@ void MainScreen::onAwake()
  * rotation is based losely (45 degrees) on the direction that the camera is
  * facing.
  ******************************************************************************/
-void MainScreen::modifyTransform(AnimationTransform* transform)
+void MainScreen::modifyTransform(ref<AnimationTransform> transform)
 {
   float sensitivity = 0.01f;
-  Transform* rootTransform = NULL;
+  ref<Transform> rootTransform;
   Vector3 mousePosition = Input::getMousePosition();
   Vector3 mouseDelta = mousePosition - lastMousePosition;
 
@@ -111,7 +108,7 @@ void MainScreen::modifyTransform(AnimationTransform* transform)
  ******************************************************************************/
 void MainScreen::onUpdate()
 {
-  Transform* rootTransform = NULL;
+  ref<Transform> rootTransform;
   Vector3 mousePosition = Input::getMousePosition();
   Vector3 mouseDelta = mousePosition - lastMousePosition;
 
@@ -133,35 +130,35 @@ void MainScreen::onUpdate()
   }
   else if(Input::getMouseButton(2) == true)
   {
-    if(selectedPart != NULL)
+    if(selectedPart.valid())
     {
       bool found = false;
-      for(size_t i = 0; i < animation->frames->at(amr->getFrame())->transforms->size(); i++)
+      for(size_t i = 0; i < animation->frames.at(amr->getFrame())->transforms.size(); i++)
       {
-        if(animation->frames->at(amr->getFrame())->transforms->at(i)->partName == selectedPart->getName())
+        if(animation->frames.at(amr->getFrame())->transforms.at(i)->partName == selectedPart->getName())
         {
           found = true;
-          modifyTransform(animation->frames->at(amr->getFrame())->transforms->at(i));
+          modifyTransform(animation->frames.at(amr->getFrame())->transforms.at(i));
         }
       }
 
       if(found == false)
       {
-        AnimationTransform* newTransform = gcnew<AnimationTransform>();
+        shared<AnimationTransform> newTransform(new AnimationTransform());
         newTransform->partName = selectedPart->getName();
-        animation->frames->at(amr->getFrame())->transforms->push_back(newTransform);
+        animation->frames.at(amr->getFrame())->transforms.push_back(newTransform);
       }
     }
   }
   else if(changeMade == true)
   {
     changeMade = false;
-    undoBuffer->push_back(animation->frames);
+    undoBuffer.push_back(animation->frames);
   }
 
   //if(selectedPart != NULL)
   //{
-  //  MeshRenderer* mr = selectedPart->getComponent<MeshRenderer>();
+  //  ref<MeshRenderer> mr = selectedPart->getComponent<MeshRenderer>();
   //  mr->setMaterial(selectedMaterial);
   //}
 
@@ -171,9 +168,9 @@ void MainScreen::onUpdate()
   if(pulseAmount > 1.0f) {pulseDown = true; pulseAmount = 1.0f; }
   if(pulseAmount < 0.0f) {pulseDown = false; pulseAmount = 0.0f; }
 
-  for(size_t i = 0; i < newMaterials->size(); i++)
+  for(size_t i = 0; i < newMaterials.size(); i++)
   {
-    newMaterials->at(i)->setFloat("in_Pulse", pulseAmount);
+    newMaterials.at(i)->setFloat("in_Pulse", pulseAmount);
   }
 
   lastMousePosition = Vector2(mousePosition.x, mousePosition.y);
@@ -191,9 +188,9 @@ void MainScreen::onUpdate()
  ******************************************************************************/
 void MainScreen::selectPart(std::string partName)
 {
-  Transform* rootTransform = animationGo->getTransform()->find("root");
+  ref<Transform> rootTransform = animationGo->getTransform()->find("root");
 
-  if(rootTransform == NULL)
+  if(rootTransform.expired())
   {
     return;
   }
@@ -202,7 +199,7 @@ void MainScreen::selectPart(std::string partName)
   {
     if(rootTransform->getChild(i)->getGameObject()->getName() == partName)
     {
-      if(selectedPart != NULL)
+      if(selectedPart.valid())
       {
         selectedPart->getComponent<MeshRenderer>()->setMaterials(origMaterials);
       }
@@ -210,24 +207,24 @@ void MainScreen::selectPart(std::string partName)
       selectedPart = rootTransform->getChild(i)->getGameObject();
       origMaterials = selectedPart->getComponent<MeshRenderer>()->getMaterials();
 
-      gclist<Material*>* _newMaterials = gcnewlist<Material*>();
-      newMaterials->clear();
+      std::vector<ref<Material> > _newMaterials;
+      newMaterials.clear();
 
-      for(size_t x = 0; x < origMaterials->size(); x++)
+      for(size_t x = 0; x < origMaterials.size(); x++)
       {
-        Material* newMaterial = Material::create(Resources::load<Shader>("shaders/selected"));
-        newMaterials->push_back(newMaterial);
+        shared<Material> newMaterial = Material::create(Resources::load<Shader>("shaders/selected"));
+        newMaterials.push_back(newMaterial);
 
-        if(origMaterials->at(x)->getMainTexture() != NULL)
+        if(origMaterials.at(x)->getMainTexture().valid())
         {
-          newMaterial->setMainTexture(origMaterials->at(x)->getMainTexture());
+          newMaterial->setMainTexture(origMaterials.at(x)->getMainTexture());
         }
         else
         {
           newMaterial->setMainTexture(fallbackTex);
         }
 
-        _newMaterials->push_back(newMaterial);
+        _newMaterials.push_back(newMaterial);
       }
 
       selectedPart->getComponent<MeshRenderer>()->setMaterials(_newMaterials);
@@ -256,18 +253,18 @@ void MainScreen::onGui()
     animation->save(animationPath);
   }
 
-  if(undoBuffer->size() > 1)
+  if(undoBuffer.size() > 1)
   {
     if(Gui::button(Rect(120, 10, 100, 30), "Undo") == true)
     {
-      animation->frames = undoBuffer->at(undoBuffer->size() - 2);
-      undoBuffer->remove_at(undoBuffer->size() - 1);
-      undoBuffer->remove_at(undoBuffer->size() - 1);
-      undoBuffer->push_back(animation->frames);
+      animation->frames = undoBuffer.at(undoBuffer.size() - 2);
+      undoBuffer.erase(undoBuffer.begin() + undoBuffer.size() - 1);
+      undoBuffer.erase(undoBuffer.begin() + undoBuffer.size() - 1);
+      undoBuffer.push_back(animation->frames);
 
-      if(amr->getFrame() >= animation->frames->size())
+      if(amr->getFrame() >= animation->frames.size())
       {
-        amr->setFrame(animation->frames->size() - 1);
+        amr->setFrame(animation->frames.size() - 1);
       }
     }
   }
@@ -302,9 +299,9 @@ void MainScreen::onGui()
     }
   }
 
-  Transform* rootTransform = animationGo->getTransform()->find("root");
+  ref<Transform> rootTransform = animationGo->getTransform()->find("root");
 
-  if(rootTransform == NULL)
+  if(rootTransform.expired())
   {
     return;
   }

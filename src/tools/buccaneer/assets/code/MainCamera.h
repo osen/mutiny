@@ -8,7 +8,7 @@ using namespace mutiny::engine;
 class MainCamera : public Behaviour
 {
 public:
-  static MainCamera* create();
+  static ref<MainCamera> create();
 
   virtual void onAwake();
   virtual void onUpdate();

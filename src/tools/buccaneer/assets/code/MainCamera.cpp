@@ -4,10 +4,10 @@
 
 using namespace mutiny::engine;
 
-MainCamera* MainCamera::create()
+ref<MainCamera> MainCamera::create()
 {
-  GameObject* cameraGo = gcnew<GameObject>("MainCamera");
-  MainCamera* camera = cameraGo->addComponent<MainCamera>();
+  ref<GameObject> cameraGo = GameObject::create("MainCamera");
+  ref<MainCamera> camera = cameraGo->addComponent<MainCamera>();
 
   return camera;
 }
@@ -16,7 +16,7 @@ void MainCamera::onAwake()
 {
   Debug::log("MainCamera awoken");
 
-  Camera* camera = getGameObject()->addComponent<Camera>();
+  ref<Camera> camera = getGameObject()->addComponent<Camera>();
 
   getGameObject()->getTransform()->setPosition(Vector3(0, 0, 10));
   getGameObject()->getTransform()->setRotation(Vector3(0, 180, 0));

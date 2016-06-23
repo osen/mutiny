@@ -5,11 +5,11 @@ using namespace mutiny::engine;
 
 void MenuScreen::onAwake()
 {
-  GameObject* cameraGo = gcnew<GameObject>("MainCamera");
+  ref<GameObject> cameraGo = GameObject::create("MainCamera");
   cameraGo->addComponent<Camera>();
   cameraGo->getTransform()->translate(Vector3(0, 0, -10));
 
-  GameObject* go = gcnew<GameObject>("SelectModel");
+  ref<GameObject> go = GameObject::create("SelectModel");
   go->addComponent<SelectModelScreen>();
 }
 

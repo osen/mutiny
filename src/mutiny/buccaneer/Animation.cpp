@@ -29,9 +29,9 @@ int Animation::getFrameCount()
   return frames.size();
 }
 
-AnimationTransform* AnimationTransform::copy(AnimationTransform* other)
+shared<AnimationTransform> AnimationTransform::copy(ref<AnimationTransform> other)
 {
-  AnimationTransform* rtn = new AnimationTransform();
+  shared<AnimationTransform> rtn(new AnimationTransform());
 
   rtn->partName = other->partName;
   rtn->pX = other->pX;
@@ -44,9 +44,9 @@ AnimationTransform* AnimationTransform::copy(AnimationTransform* other)
   return rtn;
 }
 
-AnimationFrame* AnimationFrame::copy(AnimationFrame* other)
+shared<AnimationFrame> AnimationFrame::copy(ref<AnimationFrame> other)
 {
-  AnimationFrame* rtn = new AnimationFrame();
+  shared<AnimationFrame> rtn(new AnimationFrame());
 
   for(size_t i = 0; i < other->transforms.size(); i++)
   {
@@ -94,11 +94,11 @@ Animation* Animation::load(std::string path)
 
     if(splitLine.at(0) == "f")
     {
-      animation->frames.push_back(new AnimationFrame());
+      animation->frames.push_back(shared<AnimationFrame>(new AnimationFrame()));
     }
     else if(splitLine.at(0) == "t")
     {
-      AnimationTransform* transform = new AnimationTransform();
+      shared<AnimationTransform> transform(new AnimationTransform());
       transform->partName = splitLine.at(1);
       transform->pX = atof(splitLine.at(2).c_str());
       transform->pY = atof(splitLine.at(3).c_str());
@@ -116,8 +116,8 @@ Animation* Animation::load(std::string path)
 void Animation::save(std::string path)
 {
   std::ofstream file;
-  AnimationFrame* frame = NULL;
-  AnimationTransform* transform = NULL;
+  ref<AnimationFrame> frame;
+  shared<AnimationTransform> transform;
 
   file.open(path.c_str());
 

@@ -6,7 +6,7 @@ using namespace mutiny::engine;
 
 void mutiny_main()
 {
-  GameObject* smGo = gcnew<GameObject>();
+  ref<GameObject> smGo = GameObject::create();
   smGo->addComponent<SceneManager>();
 }
 

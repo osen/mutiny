@@ -19,27 +19,27 @@ public:
   virtual void onGui();
 
 private:
-  AnimatedMesh* animatedMesh;
-  AnimatedMeshRenderer* amr;
+  ref<AnimatedMesh> animatedMesh;
+  ref<AnimatedMeshRenderer> amr;
   std::string animationPath;
-  Animation* animation;
-  GameObject* root;
-  GameObject* animationGo;
+  ref<Animation> animation;
+  ref<GameObject> root;
+  ref<GameObject> animationGo;
   Vector2 lastMousePosition;
-  Material* selectedMaterial;
+  ref<Material> selectedMaterial;
   float pulseAmount;
   bool pulseDown;
-  Texture2d* fallbackTex;
+  shared<Texture2d> fallbackTex;
   bool changeMade;
   int transformMode;
-  Timeline* timeline;
+  ref<Timeline> timeline;
 
-  GameObject* selectedPart;
-  gclist<Material*>* origMaterials;
-  gclist<Material*>* newMaterials;
-  gclist<gclist<AnimationFrame*>*>* undoBuffer;
+  ref<GameObject> selectedPart;
+  std::vector<ref<Material> > origMaterials;
+  std::vector<shared<Material> > newMaterials;
+  std::vector<std::vector<shared<AnimationFrame> > > undoBuffer;
 
-  void modifyTransform(AnimationTransform* transform);
+  void modifyTransform(ref<AnimationTransform> transform);
   void selectPart(std::string partName);
 
 };

@@ -18,7 +18,7 @@ public:
   virtual void onGui();
 
 private:
-  Font* titleFont;
+  ref<Font> titleFont;
   std::vector<std::string> files;
 
 };

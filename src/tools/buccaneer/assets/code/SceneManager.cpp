@@ -19,7 +19,7 @@ void SceneManager::loadLevel()
 {
   Debug::log("Level loaded: " + Application::getLoadedLevelName());
 
-  GameObject* go = GameObject::create(Application::getLoadedLevelName() + "Screen");
+  ref<GameObject> go = GameObject::create(Application::getLoadedLevelName() + "Screen");
 
   if(Application::getLoadedLevelName() == "Menu")
   {

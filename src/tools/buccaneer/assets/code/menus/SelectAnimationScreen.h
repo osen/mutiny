@@ -20,7 +20,7 @@ public:
 
 private:
   std::vector<std::string> files;
-  GameObject* modelGo;
+  ref<GameObject> modelGo;
 
 };
 

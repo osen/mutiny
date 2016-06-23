@@ -10,18 +10,18 @@ class MainScreen;
 class Timeline : public Behaviour
 {
 public:
-  static Timeline* create(MainScreen* mainScreen);
+  static ref<Timeline> create(ref<MainScreen> mainScreen);
 
   virtual void onAwake();
   virtual void onUpdate();
   virtual void onGui();
 
 private:
-  MainScreen* mainScreen;
-  AnimatedMeshRenderer* amr;
-  Texture2d* test;
-  Texture2d* whitePixel;
-  Texture2d* cursor;
+  ref<MainScreen> mainScreen;
+  ref<AnimatedMeshRenderer> amr;
+  ref<Texture2d> test;
+  ref<Texture2d> whitePixel;
+  ref<Texture2d> cursor;
 
 };
 
