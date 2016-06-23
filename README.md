@@ -15,8 +15,6 @@ For more information, have a browse through the Mutiny documentation.
 
 ![](https://raw.githubusercontent.com/osen/mutiny/master/docs/images/mutiny_editor.png)
 
-![](https://raw.githubusercontent.com/osen/mutiny/master/docs/images/bucaneer_editor.png)
-
 ![](https://raw.githubusercontent.com/osen/mutiny/master/docs/images/baastud.jpg)
 
 ![](https://raw.githubusercontent.com/osen/mutiny/master/docs/images/temporal.png)
@@ -24,6 +22,8 @@ For more information, have a browse through the Mutiny documentation.
 ![](https://raw.githubusercontent.com/osen/mutiny/master/docs/images/doe2.jpg)
 
 ![](https://raw.githubusercontent.com/osen/mutiny/master/docs/images/drunken.jpg)
+
+![](https://raw.githubusercontent.com/osen/mutiny/master/docs/images/bucaneer_editor.png)
 
 ![](https://raw.githubusercontent.com/osen/mutiny/master/docs/images/mutinytux.png)
 ![](https://raw.githubusercontent.com/osen/mutiny/master/docs/images/cppbarrel.png)
