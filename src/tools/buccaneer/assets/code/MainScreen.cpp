@@ -45,6 +45,7 @@ void MainScreen::onAwake()
   animation = Resources::load<Animation>(SelectAnimationScreen::choice);
   animationPath = SelectAnimationScreen::choice;
   amr->setAnimation(animation);
+  amr->setFps(5);
   animationGo->getTransform()->setParent(root->getTransform());
   undoBuffer.push_back(animation->copyFrames());
   timeline = Timeline::create(this);

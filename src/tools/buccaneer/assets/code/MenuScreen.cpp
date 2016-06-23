@@ -7,7 +7,8 @@ void MenuScreen::onAwake()
 {
   ref<GameObject> cameraGo = GameObject::create("MainCamera");
   cameraGo->addComponent<Camera>();
-  cameraGo->getTransform()->translate(Vector3(0, 0, -10));
+  cameraGo->getTransform()->translate(Vector3(0, 0, 10));
+  cameraGo->getTransform()->rotate(Vector3(0, 180, 0));
 
   ref<GameObject> go = GameObject::create("SelectModel");
   go->addComponent<SelectModelScreen>();
