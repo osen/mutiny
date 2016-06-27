@@ -141,7 +141,7 @@ shared<SourceFileInfo> SourceFileInfo::create(std::string absolutePath,
   if(recentModification > rtn->getModified())
   {
     //std::cout << "Need update..." << std::endl;
-    Stat::utime(absolutePath, recentModification, recentModification);
+    //Stat::utime(absolutePath, recentModification, recentModification);
     rtn->modified = recentModification;
   }
 

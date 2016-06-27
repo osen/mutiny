@@ -5,6 +5,7 @@
 #include "Util.h"
 #include "Compiler.h"
 #include "features.h"
+#include "FsSync.h"
 
 #include <iostream>
 
@@ -88,113 +89,17 @@ void ProjectBuilder::obtainOutputFilename()
   outputFilename = FileInfo::getFileName(Dir::getcwd());
 }
 
-bool ProjectBuilder::syncAssetDirectory(std::string assetDirectory)
+bool ProjectBuilder::syncAssetDirectories(std::vector<std::string> assetDirectories)
 {
-  std::vector<shared<FileInfo> > assetDirectories;
-  std::vector<shared<FileInfo> > buildAssetDirectories;
-  std::vector<std::string> directoryDeleteList;
-  bool changed = false;
+  FsSync fsSync;
 
-  std::string buildAssetDirectory = Util::fixPath("build/" +
-    std::string(PLATFORM_NAME)+"/share/" + outputFilename);
+  fsSync.sync(Util::fixPath("build/" +
+    std::string(PLATFORM_NAME)+"/share/" + outputFilename),
+    assetDirectories);
 
-  FileInfo::scanDirectory(assetDirectory, false, assetDirectories);
-  FileInfo::scanDirectory(buildAssetDirectory, false, buildAssetDirectories);
-  FileInfo::scanDirectory(assetDirectory, true, assetDirectories);
-  FileInfo::scanDirectory(buildAssetDirectory, true, buildAssetDirectories);
+  // TODO: Return true only if changed (to avoid em++ re-linking).
 
-  assetDirectory += DIR_CHAR;
-  buildAssetDirectory += DIR_CHAR;
-
-  for(int i = assetDirectories.size() - 1; i >= 0; i--)
-  {
-    bool found = false;
-
-    for(int j = 0; j < buildAssetDirectories.size(); j++)
-    {
-      if(assetDirectories.at(i)->getAbsolutePath().
-           substr(assetDirectory.length()) ==
-         buildAssetDirectories.at(j)->getAbsolutePath().
-           substr(buildAssetDirectory.length()))
-      {
-        if(assetDirectories.at(i)->getModified() <=
-           buildAssetDirectories.at(j)->getModified())
-        {
-          found = true;
-          break;
-        }
-      }
-    }
-
-    if(found == false)
-    {
-      if(Dir::isdir(assetDirectories.at(i)->getAbsolutePath()) == true)
-      {
-        if(Dir::isdir(buildAssetDirectory + assetDirectories.at(i)->
-             getAbsolutePath().substr(assetDirectory.length())) == false)
-        {
-          Dir::mkdir(buildAssetDirectory + assetDirectories.at(i)->
-            getAbsolutePath().substr(assetDirectory.length()));
-        }
-      }
-      else
-      {
-        std::cout << "Syncing Asset: " << assetDirectories.at(i)->getAbsolutePath() << std::endl;
-
-        Util::copyFile(assetDirectories.at(i)->getAbsolutePath(),
-          buildAssetDirectory + assetDirectories.at(i)->
-          getAbsolutePath().substr(assetDirectory.length()));
-
-        changed = true;
-      }
-    }
-  }
-
-  return changed;
-}
-
-void ProjectBuilder::removeOrphanedAssets()
-{
-  std::vector<shared<FileInfo> > assetDirectories;
-  std::vector<shared<FileInfo> > buildAssetDirectories;
-  std::vector<std::string> directoryDeleteList;
-
-  std::string assetDirectory = Util::fixPath("assets");
-  std::string buildAssetDirectory = Util::fixPath("build/"+std::string(PLATFORM_NAME)+"/share/" + outputFilename);
-
-  FileInfo::scanDirectory(assetDirectory, false, assetDirectories);
-  FileInfo::scanDirectory(buildAssetDirectory, false, buildAssetDirectories);
-  FileInfo::scanDirectory(assetDirectory, true, assetDirectories);
-  FileInfo::scanDirectory(buildAssetDirectory, true, buildAssetDirectories);
-
-  assetDirectory += DIR_CHAR;
-  buildAssetDirectory += DIR_CHAR;
-
-  for(int i = 0; i < buildAssetDirectories.size(); i++)
-  {
-    bool found = false;
-
-    for(int j = 0; j < assetDirectories.size(); j++)
-    {
-      if(buildAssetDirectories.at(i)->getAbsolutePath().substr(buildAssetDirectory.length()) ==
-         assetDirectories.at(j)->getAbsolutePath().substr(assetDirectory.length()))
-      {
-        found = true;
-        break;
-      }
-    }
-
-    if(found == false)
-    {
-      directoryDeleteList.push_back(buildAssetDirectories.at(i)->getAbsolutePath());
-    }
-  }
-
-  for(int i = 0; i < directoryDeleteList.size(); i++)
-  {
-    //std::cout << "Dir::remove(" << directoryDeleteList.at(i) << ");" << std::endl;
-    Dir::remove(directoryDeleteList.at(i));
-  }
+  return true;
 }
 
 void ProjectBuilder::generateOutOfDateOutput()
@@ -277,24 +182,20 @@ void ProjectBuilder::generateOutOfDateOutput()
     }
   }
 
-  removeOrphanedAssets();
+  std::vector<std::string> dirs;
 
-  if(syncAssetDirectory("assets") == true)
+  dirs.push_back("assets");
+
+  if(environment->isMutinyAvailable() == true)
+  {
+    dirs.push_back(environment->getPrefix() + Util::fixPath("/share/mutiny"));
+  }
+
+  if(syncAssetDirectories(dirs))
   {
     if(compiler->getName() == "em++")
     {
       needsRelink = true;
-    }
-  }
-
-  if(environment->isMutinyAvailable() == true)
-  {
-    if(syncAssetDirectory(environment->getPrefix() + Util::fixPath("/share/mutiny")) == true)
-    {
-      if(compiler->getName() == "em++")
-      {
-        needsRelink = true;
-      }
     }
   }
 
