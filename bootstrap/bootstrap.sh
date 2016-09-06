@@ -9,5 +9,16 @@ PREFIX=`pwd`
 cd "$CURRENT_PATH"
 mkdir -p "$PREFIX/bin"
 
-g++ -g "$ABSOLUTE_BOOTSTRAP_PATH/src/"*.cpp -o "$PREFIX/bin/mutt"
+which g++
 
+if [ $? = 0 ]; then
+  g++ -g "$ABSOLUTE_BOOTSTRAP_PATH/src/"*.cpp -o "$PREFIX/bin/mutt"
+  exit
+fi
+
+which clang++
+
+if [ $? = 0 ]; then
+  clang++ -g "$ABSOLUTE_BOOTSTRAP_PATH/src/"*.cpp -o "$PREFIX/bin/mutt"
+  exit
+fi

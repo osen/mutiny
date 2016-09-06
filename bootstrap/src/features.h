@@ -20,18 +20,27 @@
   #define HAS_DIRENT
   #define HAS_UTIME
   #define DIR_CHAR '/'
-  #define DEFAULT_CXX "g++"
 
   #ifdef __OpenBSD__
     #define PLATFORM_NAME "openbsd"
+    #define DEFAULT_CXX "g++"
+  #elif __FreeBSD__
+    #define PLATFORM_NAME "freebsd"
+    #define DEFAULT_CXX "clang++"
   #elif __linux__
     #define PLATFORM_NAME "linux"
+    #define DEFAULT_CXX "g++"
   #else
     #define PLATFORM_NAME "other"
+    #define DEFAULT_CXX "g++"
   #endif
 #endif
 
-#ifdef __GNUC__
+#ifdef __clang__
+  #include <memory>
+  #define shared std::shared_ptr
+  #define weak std::weak_ptr
+#elif __GNUC__
   #include <tr1/memory>
   #define HAS_TR1_NAMESPACE
   #define shared std::tr1::shared_ptr
